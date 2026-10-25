@@ -36,6 +36,9 @@ public:
 
 	int32 GetCurrentDay() const;
 
+	/** Hours since midnight at the start of the current day, past 24 after midnight. */
+	float GetTimeOfDay() const;
+
 	/** The latest feedback message, shown on the HUD for MessageDuration seconds. */
 	const FString& GetMessage() const { return Message; }
 	bool HasMessage() const;
@@ -62,6 +65,7 @@ protected:
 
 private:
 	AFarmTile* GetTargetTile() const;
+	void StartNextDay(const TCHAR* Reason);
 	void ShowMessage(const FString& NewMessage);
 	void AddHudIfLocalPlayer();
 	void RemoveHud();

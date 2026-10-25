@@ -89,12 +89,17 @@ void UFarmingComponent::UseTool()
 
 void UFarmingComponent::Sleep()
 {
+	StartNextDay(TEXT("You slept."));
+}
+
+void UFarmingComponent::StartNextDay(const TCHAR* Reason)
+{
 	if (!Grid)
 	{
 		return;
 	}
 	Grid->AdvanceDay();
-	ShowMessage(FString::Printf(TEXT("You slept. Day %d begins."), Grid->GetCurrentDay()));
+	ShowMessage(FString::Printf(TEXT("%s Day %d begins."), Reason, Grid->GetCurrentDay()));
 }
 
 AFarmTile* UFarmingComponent::GetTargetTile() const
@@ -112,6 +117,11 @@ int32 UFarmingComponent::GetCurrentDay() const
 	return Grid ? Grid->GetCurrentDay() : 0;
 }
 
+float UFarmingComponent::GetTimeOfDay() const
+{
+	return Grid ? Grid->GetTimeOfDay() : 0.f;
+}
+
 bool UFarmingComponent::HasMessage() const
 {
 	const UWorld* World = GetWorld();
@@ -121,6 +131,11 @@ bool UFarmingComponent::HasMessage() const
 void UFarmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (Grid && Grid->IsPastBedtime())
+	{
+		StartNextDay(TEXT("You stayed up too late and passed out."));
+	}
 
 	if (const AFarmTile* Tile = GetTargetTile())
 	{

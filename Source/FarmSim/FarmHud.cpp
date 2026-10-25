@@ -16,6 +16,18 @@ namespace FarmHudStyle
 	const FVector2D ShadowOffset(1.f, 1.f);
 }
 
+namespace
+{
+	/** Formats hours since midnight as a 12-hour clock in 10 minute steps, like "6:40 pm". */
+	FString FormatClock(float Hours)
+	{
+		const int32 TotalMinutes = FMath::FloorToInt(Hours * 6.f) * 10;
+		const int32 Hour24 = (TotalMinutes / 60) % 24;
+		const int32 Hour12 = Hour24 % 12 == 0 ? 12 : Hour24 % 12;
+		return FString::Printf(TEXT("%d:%02d %s"), Hour12, TotalMinutes % 60, Hour24 < 12 ? TEXT("am") : TEXT("pm"));
+	}
+}
+
 void SFarmHud::Construct(const FArguments& InArgs)
 {
 	Farming = InArgs._Farming;
@@ -103,8 +115,9 @@ FText SFarmHud::GetStatusText() const
 	{
 		return FText::GetEmpty();
 	}
-	return FText::FromString(FString::Printf(TEXT("Day %d   |   %s"),
-		Component->GetCurrentDay(), *UEnum::GetDisplayValueAsText(Component->GetCurrentTool()).ToString()));
+	return FText::FromString(FString::Printf(TEXT("Day %d   %s   |   %s"),
+		Component->GetCurrentDay(), *FormatClock(Component->GetTimeOfDay()),
+		*UEnum::GetDisplayValueAsText(Component->GetCurrentTool()).ToString()));
 }
 
 FText SFarmHud::GetInventoryText() const
