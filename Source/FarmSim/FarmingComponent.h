@@ -29,6 +29,7 @@ public:
 	UFarmingComponent();
 
 	void SelectTool(EFarmTool Tool);
+	EFarmTool GetCurrentTool() const { return CurrentTool; }
 	void UseTool();
 	void Sleep();
 

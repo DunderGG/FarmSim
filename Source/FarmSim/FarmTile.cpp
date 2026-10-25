@@ -15,6 +15,14 @@ namespace FarmTileColors
 	const FLinearColor Ripe(1.00f, 0.60f, 0.05f);
 }
 
+namespace FarmTilePlaceholder
+{
+	// The engine cube is 100 units wide, so this makes a thin 95x95 cm slab with a small gap between tiles.
+	const FVector SoilScale(0.95f, 0.95f, 0.04f);
+	const FVector SoilLocation(0.f, 0.f, 2.f);
+	const float SoilTop = 4.f;
+}
+
 AFarmTile::AFarmTile()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -25,18 +33,23 @@ AFarmTile::AFarmTile()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CylinderMesh(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> ShapeMaterial(TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
 
-	// The engine cube is 100 units wide, so this makes a thin 95x95 cm slab with a small gap between tiles.
+	PlaceholderSoilMesh = CubeMesh.Object;
+	PlaceholderCropMesh = CylinderMesh.Object;
+
+	// Both meshes are swapped and moved during play, which static components aren't allowed to do.
 	SoilMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SoilMesh"));
 	SoilMesh->SetupAttachment(RootComponent);
-	SoilMesh->SetStaticMesh(CubeMesh.Object);
+	SoilMesh->SetMobility(EComponentMobility::Movable);
+	SoilMesh->SetStaticMesh(PlaceholderSoilMesh);
 	SoilMesh->SetMaterial(0, ShapeMaterial.Object);
-	SoilMesh->SetRelativeScale3D(FVector(0.95f, 0.95f, 0.04f));
-	SoilMesh->SetRelativeLocation(FVector(0.f, 0.f, 2.f));
+	SoilMesh->SetRelativeScale3D(FarmTilePlaceholder::SoilScale);
+	SoilMesh->SetRelativeLocation(FarmTilePlaceholder::SoilLocation);
 	SoilMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	CropMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CropMesh"));
 	CropMesh->SetupAttachment(RootComponent);
-	CropMesh->SetStaticMesh(CylinderMesh.Object);
+	CropMesh->SetMobility(EComponentMobility::Movable);
+	CropMesh->SetStaticMesh(PlaceholderCropMesh);
 	CropMesh->SetMaterial(0, ShapeMaterial.Object);
 	CropMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CropMesh->SetVisibility(false);
@@ -109,14 +122,45 @@ void AFarmTile::AdvanceDay()
 
 void AFarmTile::RefreshVisuals()
 {
+	RefreshSoil();
+	RefreshCrop();
+}
+
+void AFarmTile::RefreshSoil()
+{
+	if (State != EFarmTileState::Grass && TilledSoilMesh)
+	{
+		SoilMesh->SetStaticMesh(TilledSoilMesh);
+		SoilMesh->SetRelativeScale3D(FVector::OneVector);
+		SoilMesh->SetRelativeLocation(FVector::ZeroVector);
+
+		// Use the mesh's own materials, or the watered material on every slot.
+		SoilMesh->EmptyOverrideMaterials();
+		if (bWatered && WateredSoilMaterial)
+		{
+			for (int32 Index = 0; Index < SoilMesh->GetNumMaterials(); ++Index)
+			{
+				SoilMesh->SetMaterial(Index, WateredSoilMaterial);
+			}
+		}
+		return;
+	}
+
+	SoilMesh->SetStaticMesh(PlaceholderSoilMesh);
+	SoilMesh->SetRelativeScale3D(FarmTilePlaceholder::SoilScale);
+	SoilMesh->SetRelativeLocation(FarmTilePlaceholder::SoilLocation);
 	if (SoilMaterial)
 	{
 		const FLinearColor SoilColor = State == EFarmTileState::Grass ? FarmTileColors::Grass
 			: bWatered ? FarmTileColors::Watered
 			: FarmTileColors::Tilled;
 		SoilMaterial->SetVectorParameterValue(TEXT("Color"), SoilColor);
+		SoilMesh->SetMaterial(0, SoilMaterial);
 	}
+}
 
+void AFarmTile::RefreshCrop()
+{
 	const bool bHasCrop = State == EFarmTileState::Planted;
 	CropMesh->SetVisibility(bHasCrop);
 	if (!bHasCrop)
@@ -124,12 +168,26 @@ void AFarmTile::RefreshVisuals()
 		return;
 	}
 
+	const float SurfaceZ = TilledSoilMesh ? SoilSurfaceHeight : FarmTilePlaceholder::SoilTop;
+	UStaticMesh* StageMesh = CropStageMeshes.IsEmpty() ? nullptr
+		: CropStageMeshes[FMath::Min(GrowthDays, CropStageMeshes.Num() - 1)].Get();
+	if (StageMesh)
+	{
+		CropMesh->SetStaticMesh(StageMesh);
+		CropMesh->EmptyOverrideMaterials();
+		CropMesh->SetRelativeScale3D(FVector::OneVector);
+		CropMesh->SetRelativeLocation(FVector(0.f, 0.f, SurfaceZ));
+		return;
+	}
+
 	// The engine cylinder is 100 units tall, centered on its origin. Grow it taller each stage.
 	const float Height = 0.15f + 0.25f * GrowthDays;
+	CropMesh->SetStaticMesh(PlaceholderCropMesh);
 	CropMesh->SetRelativeScale3D(FVector(0.3f, 0.3f, Height));
-	CropMesh->SetRelativeLocation(FVector(0.f, 0.f, 4.f + Height * 50.f));
+	CropMesh->SetRelativeLocation(FVector(0.f, 0.f, SurfaceZ + Height * 50.f));
 	if (CropMaterial)
 	{
 		CropMaterial->SetVectorParameterValue(TEXT("Color"), IsRipe() ? FarmTileColors::Ripe : FarmTileColors::Growing);
+		CropMesh->SetMaterial(0, CropMaterial);
 	}
 }
