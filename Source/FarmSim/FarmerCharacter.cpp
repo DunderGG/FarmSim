@@ -74,6 +74,6 @@ void AFarmerCharacter::SelectTool(EFarmTool Tool)
 {
 	Farming->SelectTool(Tool);
 
-	const TObjectPtr<UStaticMesh>* Mesh = ToolMeshes.Find(Tool);
-	HeldTool->SetStaticMesh(Mesh ? Mesh->Get() : nullptr);
+	const TObjectPtr<UStaticMesh>* ToolMesh = ToolMeshes.Find(Tool);
+	HeldTool->SetStaticMesh(ToolMesh ? ToolMesh->Get() : nullptr);
 }
