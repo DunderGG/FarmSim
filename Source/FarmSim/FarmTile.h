@@ -38,6 +38,10 @@ public:
 	EFarmTileState GetState() const { return State; }
 	bool IsWatered() const { return bWatered; }
 	bool IsRipe() const { return State == EFarmTileState::Planted && GrowthDays >= DaysToMature; }
+	int32 GetGrowthDays() const { return GrowthDays; }
+
+	/** Puts the tile straight into a saved state. */
+	void RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays);
 
 	/** Days of watering a crop needs before it can be harvested. */
 	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 1))

@@ -120,6 +120,14 @@ void AFarmTile::AdvanceDay()
 	RefreshVisuals();
 }
 
+void AFarmTile::RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays)
+{
+	State = SavedState;
+	bWatered = bSavedWatered && State != EFarmTileState::Grass;
+	GrowthDays = State == EFarmTileState::Planted ? FMath::Clamp(SavedGrowthDays, 0, DaysToMature) : 0;
+	RefreshVisuals();
+}
+
 void AFarmTile::RefreshVisuals()
 {
 	RefreshSoil();

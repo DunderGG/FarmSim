@@ -17,9 +17,12 @@ enum class EFarmTool : uint8
 	Hand
 };
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnFarmToolChanged, EFarmTool);
+
 /**
  * Gives its owner farming tools, a tiny inventory and the ability to sleep.
  * Uses the tile directly in front of the owner, and shows the farming HUD while a local player controls the owner.
+ * Saves the farm every time a new day starts and loads it again when play begins.
  */
 UCLASS(ClassGroup = (Farming), meta = (BlueprintSpawnableComponent))
 class UFarmingComponent : public UActorComponent
@@ -33,6 +36,12 @@ public:
 	EFarmTool GetCurrentTool() const { return CurrentTool; }
 	void UseTool();
 	void Sleep();
+
+	/** Deletes the save and reloads the level, starting the farm from day 1. */
+	void StartNewGame();
+
+	/** Broadcast whenever the current tool changes, including when a save is loaded. */
+	FOnFarmToolChanged OnToolChanged;
 
 	int32 GetCurrentDay() const;
 
@@ -66,6 +75,8 @@ protected:
 private:
 	AFarmTile* GetTargetTile() const;
 	void StartNextDay(const TCHAR* Reason);
+	void SaveFarm();
+	void LoadFarm();
 	void ShowMessage(const FString& NewMessage);
 	void AddHudIfLocalPlayer();
 	void RemoveHud();

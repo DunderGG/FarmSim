@@ -103,7 +103,7 @@ void SFarmHud::Construct(const FArguments& InArgs)
 			.Font(FCoreStyle::GetDefaultFontStyle("Regular", 13))
 			.ColorAndOpacity(FarmHudStyle::Hint)
 			.ShadowOffset(FarmHudStyle::ShadowOffset)
-			.Text(FText::FromString(TEXT("1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep")))
+			.Text(FText::FromString(TEXT("1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep   |   F9 New game")))
 		]
 	];
 }

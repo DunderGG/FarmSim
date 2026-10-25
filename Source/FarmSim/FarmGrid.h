@@ -35,6 +35,12 @@ public:
 	/** True once the clock reaches DayEndHour and the player should pass out. */
 	bool IsPastBedtime() const { return TimeOfDay >= DayEndHour; }
 
+	/** Sets the day and clock from a save without advancing any tiles. */
+	void RestoreClock(int32 SavedDay, float SavedTimeOfDay);
+
+	/** Every tile, row by row. Empty until BeginPlay has spawned them. */
+	const TArray<TObjectPtr<AFarmTile>>& GetTiles() const { return Tiles; }
+
 	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 1))
 	int32 Width = 8;
 

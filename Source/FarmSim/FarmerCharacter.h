@@ -36,6 +36,8 @@ private:
 	void SelectWateringCan();
 	void SelectHand();
 	void SelectTool(EFarmTool Tool);
+	void StartNewGame();
+	void ShowHeldTool(EFarmTool Tool);
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UFarmingComponent> Farming;

@@ -6,8 +6,11 @@
 #include "EngineUtils.h"
 #include "FarmGrid.h"
 #include "FarmHud.h"
+#include "FarmSaveGame.h"
 #include "FarmTile.h"
 #include "GameFramework/Pawn.h"
+#include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
 
 UFarmingComponent::UFarmingComponent()
 {
@@ -24,7 +27,11 @@ void UFarmingComponent::BeginPlay()
 	if (!Grid)
 	{
 		ShowMessage(TEXT("No FarmGrid in the level. Drag one in from the Place Actors panel."));
+		return;
 	}
+
+	// The grid spawns its tiles in its own BeginPlay, which may not have run yet.
+	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &UFarmingComponent::LoadFarm);
 }
 
 void UFarmingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -36,6 +43,7 @@ void UFarmingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void UFarmingComponent::SelectTool(EFarmTool Tool)
 {
 	CurrentTool = Tool;
+	OnToolChanged.Broadcast(Tool);
 }
 
 void UFarmingComponent::UseTool()
@@ -99,7 +107,72 @@ void UFarmingComponent::StartNextDay(const TCHAR* Reason)
 		return;
 	}
 	Grid->AdvanceDay();
-	ShowMessage(FString::Printf(TEXT("%s Day %d begins."), Reason, Grid->GetCurrentDay()));
+	SaveFarm();
+	ShowMessage(FString::Printf(TEXT("%s Day %d begins. Game saved."), Reason, Grid->GetCurrentDay()));
+}
+
+void UFarmingComponent::StartNewGame()
+{
+	UGameplayStatics::DeleteGameInSlot(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex);
+	UGameplayStatics::OpenLevel(this, FName(*UGameplayStatics::GetCurrentLevelName(this)));
+}
+
+void UFarmingComponent::SaveFarm()
+{
+	UFarmSaveGame* Save = Cast<UFarmSaveGame>(UGameplayStatics::CreateSaveGameObject(UFarmSaveGame::StaticClass()));
+	Save->Day = Grid->GetCurrentDay();
+	Save->TimeOfDay = Grid->GetTimeOfDay();
+	Save->Seeds = Seeds;
+	Save->HarvestedCrops = HarvestedCrops;
+	Save->CurrentTool = CurrentTool;
+	for (const AFarmTile* Tile : Grid->GetTiles())
+	{
+		FFarmTileSaveData& TileData = Save->Tiles.AddDefaulted_GetRef();
+		if (Tile)
+		{
+			TileData.State = Tile->GetState();
+			TileData.bWatered = Tile->IsWatered();
+			TileData.GrowthDays = Tile->GetGrowthDays();
+		}
+	}
+
+	if (!UGameplayStatics::SaveGameToSlot(Save, UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex))
+	{
+		ShowMessage(TEXT("Couldn't save the game."));
+	}
+}
+
+void UFarmingComponent::LoadFarm()
+{
+	if (!Grid || !UGameplayStatics::DoesSaveGameExist(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex))
+	{
+		return;
+	}
+
+	const UFarmSaveGame* Save = Cast<UFarmSaveGame>(UGameplayStatics::LoadGameFromSlot(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex));
+	if (!Save)
+	{
+		ShowMessage(TEXT("Couldn't load the save. Press F9 to start a new game."));
+		return;
+	}
+
+	Grid->RestoreClock(Save->Day, Save->TimeOfDay);
+	Seeds = Save->Seeds;
+	HarvestedCrops = Save->HarvestedCrops;
+	SelectTool(Save->CurrentTool);
+
+	// If the grid's size changed since saving, tiles beyond the saved ones stay as grass.
+	const TArray<TObjectPtr<AFarmTile>>& Tiles = Grid->GetTiles();
+	for (int32 Index = 0; Index < FMath::Min(Tiles.Num(), Save->Tiles.Num()); ++Index)
+	{
+		if (AFarmTile* Tile = Tiles[Index])
+		{
+			const FFarmTileSaveData& TileData = Save->Tiles[Index];
+			Tile->RestoreState(TileData.State, TileData.bWatered, TileData.GrowthDays);
+		}
+	}
+
+	ShowMessage(FString::Printf(TEXT("Welcome back. Day %d."), Save->Day));
 }
 
 AFarmTile* UFarmingComponent::GetTargetTile() const

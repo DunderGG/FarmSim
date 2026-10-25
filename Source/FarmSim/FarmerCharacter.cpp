@@ -25,7 +25,9 @@ void AFarmerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SelectTool(Farming->GetCurrentTool());
+	// Follow the component's tool so the hand also updates when a save is loaded.
+	Farming->OnToolChanged.AddUObject(this, &AFarmerCharacter::ShowHeldTool);
+	ShowHeldTool(Farming->GetCurrentTool());
 }
 
 void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -55,6 +57,7 @@ void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	EnhancedInput->BindAction(MakeAction(EKeys::Two), ETriggerEvent::Started, this, &AFarmerCharacter::SelectSeeds);
 	EnhancedInput->BindAction(MakeAction(EKeys::Three), ETriggerEvent::Started, this, &AFarmerCharacter::SelectWateringCan);
 	EnhancedInput->BindAction(MakeAction(EKeys::Four), ETriggerEvent::Started, this, &AFarmerCharacter::SelectHand);
+	EnhancedInput->BindAction(MakeAction(EKeys::F9), ETriggerEvent::Started, this, &AFarmerCharacter::StartNewGame);
 
 	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -73,7 +76,15 @@ void AFarmerCharacter::SelectHand() { SelectTool(EFarmTool::Hand); }
 void AFarmerCharacter::SelectTool(EFarmTool Tool)
 {
 	Farming->SelectTool(Tool);
+}
 
+void AFarmerCharacter::StartNewGame()
+{
+	Farming->StartNewGame();
+}
+
+void AFarmerCharacter::ShowHeldTool(EFarmTool Tool)
+{
 	const TObjectPtr<UStaticMesh>* ToolMesh = ToolMeshes.Find(Tool);
 	HeldTool->SetStaticMesh(ToolMesh ? ToolMesh->Get() : nullptr);
 }

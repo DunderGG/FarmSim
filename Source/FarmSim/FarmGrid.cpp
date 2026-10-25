@@ -93,6 +93,13 @@ void AFarmGrid::AdvanceDay()
 	}
 }
 
+void AFarmGrid::RestoreClock(int32 SavedDay, float SavedTimeOfDay)
+{
+	CurrentDay = FMath::Max(1, SavedDay);
+	TimeOfDay = FMath::Clamp(SavedTimeOfDay, DayStartHour, DayEndHour);
+	UpdateLighting();
+}
+
 void AFarmGrid::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
