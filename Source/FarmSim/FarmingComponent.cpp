@@ -1,17 +1,13 @@
 #include "FarmingComponent.h"
 
 #include "DrawDebugHelpers.h"
-#include "Engine/Engine.h"
+#include "Engine/GameViewportClient.h"
+#include "Engine/World.h"
 #include "EngineUtils.h"
 #include "FarmGrid.h"
+#include "FarmHud.h"
 #include "FarmTile.h"
-
-namespace
-{
-	// Fixed keys so the HUD lines update in place instead of stacking up.
-	constexpr uint64 HudStatusKey = 0xFA4D0001;
-	constexpr uint64 HudControlsKey = 0xFA4D0002;
-}
+#include "GameFramework/Pawn.h"
 
 UFarmingComponent::UFarmingComponent()
 {
@@ -29,6 +25,12 @@ void UFarmingComponent::BeginPlay()
 	{
 		ShowMessage(TEXT("No FarmGrid in the level. Drag one in from the Place Actors panel."));
 	}
+}
+
+void UFarmingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	RemoveHud();
+	Super::EndPlay(EndPlayReason);
 }
 
 void UFarmingComponent::SelectTool(EFarmTool Tool)
@@ -105,6 +107,17 @@ AFarmTile* UFarmingComponent::GetTargetTile() const
 	return Grid->GetTileAtLocation(Owner->GetActorLocation() + Owner->GetActorForwardVector() * ReachDistance);
 }
 
+int32 UFarmingComponent::GetCurrentDay() const
+{
+	return Grid ? Grid->GetCurrentDay() : 0;
+}
+
+bool UFarmingComponent::HasMessage() const
+{
+	const UWorld* World = GetWorld();
+	return !Message.IsEmpty() && World && World->GetTimeSeconds() < MessageEndTime;
+}
+
 void UFarmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -116,21 +129,41 @@ void UFarmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 		DrawDebugBox(GetWorld(), Origin, Extent + FVector(2.f), FColor::Yellow, false, -1.f, 0, 2.f);
 	}
 
-	if (GEngine)
+	// Possession can happen before or after BeginPlay, so keep checking until the HUD is up.
+	if (!Hud)
 	{
-		const int32 Day = Grid ? Grid->GetCurrentDay() : 0;
-		const FString ToolName = UEnum::GetDisplayValueAsText(CurrentTool).ToString();
-		GEngine->AddOnScreenDebugMessage(HudControlsKey, 0.f, FColor::Silver,
-			TEXT("1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep"));
-		GEngine->AddOnScreenDebugMessage(HudStatusKey, 0.f, FColor::White,
-			FString::Printf(TEXT("Day %d   Tool: %s   Seeds: %d   Harvested: %d"), Day, *ToolName, Seeds, HarvestedCrops));
+		AddHudIfLocalPlayer();
 	}
 }
 
-void UFarmingComponent::ShowMessage(const FString& Message) const
+void UFarmingComponent::ShowMessage(const FString& NewMessage)
 {
-	if (GEngine)
+	Message = NewMessage;
+	MessageEndTime = GetWorld() ? GetWorld()->GetTimeSeconds() + MessageDuration : 0.0;
+}
+
+void UFarmingComponent::AddHudIfLocalPlayer()
+{
+	const APawn* Pawn = Cast<APawn>(GetOwner());
+	UGameViewportClient* Viewport = GetWorld() ? GetWorld()->GetGameViewport() : nullptr;
+	if (!Pawn || !Pawn->IsPlayerControlled() || !Pawn->IsLocallyControlled() || !Viewport)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Green, Message);
+		return;
 	}
+
+	Hud = SNew(SFarmHud).Farming(this);
+	Viewport->AddViewportWidgetContent(Hud.ToSharedRef());
+}
+
+void UFarmingComponent::RemoveHud()
+{
+	if (!Hud)
+	{
+		return;
+	}
+	if (UGameViewportClient* Viewport = GetWorld() ? GetWorld()->GetGameViewport() : nullptr)
+	{
+		Viewport->RemoveViewportWidgetContent(Hud.ToSharedRef());
+	}
+	Hud.Reset();
 }
