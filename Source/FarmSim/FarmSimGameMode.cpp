@@ -2,7 +2,9 @@
 
 #include "FarmSimGameMode.h"
 
+#include "FarmHUD.h"
+
 AFarmSimGameMode::AFarmSimGameMode()
 {
-	// stub
+	HUDClass = AFarmHUD::StaticClass();
 }

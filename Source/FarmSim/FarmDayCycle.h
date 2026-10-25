@@ -25,6 +25,9 @@ public:
 	/** Returns the level's day cycle, spawning one if the level has none. */
 	static AFarmDayCycle* Get(UWorld* World);
 
+	/** Returns the level's day cycle, or nullptr if there is none yet. Never spawns one. */
+	static AFarmDayCycle* Find(const UWorld* World);
+
 	/** Ends the current day and sets the clock to the next morning, then broadcasts OnNewDay. */
 	void StartNextDay();
 
@@ -39,8 +42,11 @@ public:
 	/** True once the clock reaches DayEndHour and the player should pass out. */
 	bool IsPastBedtime() const { return TimeOfDay >= DayEndHour; }
 
-	/** Broadcast with the new day's number every time a new day starts. */
+	/** Broadcast with the new day's number every time a new day starts. The farm reacts here, e.g. crops grow. */
 	FOnFarmNewDay OnNewDay;
+
+	/** Broadcast right after OnNewDay, once everything has reacted to the new day. Saving listens here. */
+	FOnFarmNewDay OnNewDayFinished;
 
 	/** Real seconds per in-game hour. */
 	UPROPERTY(EditAnywhere, Category = "Farming|Time", meta = (ClampMin = 0.1))

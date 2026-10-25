@@ -6,6 +6,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "Engine/StaticMesh.h"
+#include "Engine/World.h"
+#include "FarmSaveSubsystem.h"
 #include "GameFramework/PlayerController.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
@@ -80,7 +82,10 @@ void AFarmerCharacter::SelectTool(EFarmTool Tool)
 
 void AFarmerCharacter::StartNewGame()
 {
-	Farming->StartNewGame();
+	if (UFarmSaveSubsystem* Saves = GetWorld()->GetSubsystem<UFarmSaveSubsystem>())
+	{
+		Saves->StartNewGame();
+	}
 }
 
 void AFarmerCharacter::ShowHeldTool(EFarmTool Tool)

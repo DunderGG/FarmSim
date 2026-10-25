@@ -21,6 +21,15 @@ AFarmDayCycle::AFarmDayCycle()
 
 AFarmDayCycle* AFarmDayCycle::Get(UWorld* World)
 {
+	if (AFarmDayCycle* Existing = Find(World))
+	{
+		return Existing;
+	}
+	return World ? World->SpawnActor<AFarmDayCycle>() : nullptr;
+}
+
+AFarmDayCycle* AFarmDayCycle::Find(const UWorld* World)
+{
 	if (!World)
 	{
 		return nullptr;
@@ -28,11 +37,7 @@ AFarmDayCycle* AFarmDayCycle::Get(UWorld* World)
 
 	// The prototype has a single day cycle, so just use the first one in the level.
 	TActorIterator<AFarmDayCycle> It(World);
-	if (It)
-	{
-		return *It;
-	}
-	return World->SpawnActor<AFarmDayCycle>();
+	return It ? *It : nullptr;
 }
 
 void AFarmDayCycle::BeginPlay()
@@ -50,6 +55,7 @@ void AFarmDayCycle::StartNextDay()
 	TimeOfDay = DayStartHour;
 	UpdateLighting();
 	OnNewDay.Broadcast(CurrentDay);
+	OnNewDayFinished.Broadcast(CurrentDay);
 }
 
 void AFarmDayCycle::RestoreClock(int32 SavedDay, float SavedTimeOfDay)

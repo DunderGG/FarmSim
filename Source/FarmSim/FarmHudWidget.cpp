@@ -1,4 +1,7 @@
-#include "FarmHud.h"
+#include "FarmHudWidget.h"
+
+#include "FarmDayCycle.h"
+#include "FarmHUD.h"
 
 #include "FarmingComponent.h"
 #include "Styling/CoreStyle.h"
@@ -26,9 +29,9 @@ namespace
 	}
 }
 
-void SFarmHud::Construct(const FArguments& InArgs)
+void SFarmHudWidget::Construct(const FArguments& InArgs)
 {
-	Farming = InArgs._Farming;
+	Hud = InArgs._Hud;
 
 	const FSlateBrush* Backdrop = FCoreStyle::Get().GetBrush("WhiteBrush");
 
@@ -56,7 +59,7 @@ void SFarmHud::Construct(const FArguments& InArgs)
 					.Font(FCoreStyle::GetDefaultFontStyle("Bold", 20))
 					.ColorAndOpacity(FarmHudStyle::Text)
 					.ShadowOffset(FarmHudStyle::ShadowOffset)
-					.Text(this, &SFarmHud::GetStatusText)
+					.Text(this, &SFarmHudWidget::GetStatusText)
 				]
 				+ SVerticalBox::Slot()
 				.AutoHeight()
@@ -66,7 +69,7 @@ void SFarmHud::Construct(const FArguments& InArgs)
 					.Font(FCoreStyle::GetDefaultFontStyle("Regular", 16))
 					.ColorAndOpacity(FarmHudStyle::Text)
 					.ShadowOffset(FarmHudStyle::ShadowOffset)
-					.Text(this, &SFarmHud::GetInventoryText)
+					.Text(this, &SFarmHudWidget::GetInventoryText)
 				]
 			]
 		]
@@ -78,7 +81,7 @@ void SFarmHud::Construct(const FArguments& InArgs)
 		.Padding(FMargin(0.f, 0.f, 0.f, 80.f))
 		[
 			SNew(SBorder)
-			.Visibility(this, &SFarmHud::GetMessageVisibility)
+			.Visibility(this, &SFarmHudWidget::GetMessageVisibility)
 			.BorderImage(Backdrop)
 			.BorderBackgroundColor(FarmHudStyle::Backdrop)
 			.Padding(FMargin(16.f, 8.f))
@@ -87,7 +90,7 @@ void SFarmHud::Construct(const FArguments& InArgs)
 				.Font(FCoreStyle::GetDefaultFontStyle("Bold", 18))
 				.ColorAndOpacity(FarmHudStyle::Message)
 				.ShadowOffset(FarmHudStyle::ShadowOffset)
-				.Text(this, &SFarmHud::GetMessageText)
+				.Text(this, &SFarmHudWidget::GetMessageText)
 			]
 		]
 
@@ -106,36 +109,39 @@ void SFarmHud::Construct(const FArguments& InArgs)
 	];
 }
 
-FText SFarmHud::GetStatusText() const
+FText SFarmHudWidget::GetStatusText() const
 {
-	const UFarmingComponent* Component = Farming.Get();
-	if (!Component)
+	const AFarmHUD* FarmHud = Hud.Get();
+	const AFarmDayCycle* DayCycle = FarmHud ? FarmHud->GetDayCycle() : nullptr;
+	const UFarmingComponent* Farming = FarmHud ? FarmHud->GetFarming() : nullptr;
+	if (!DayCycle || !Farming)
 	{
 		return FText::GetEmpty();
 	}
 	return FText::FromString(FString::Printf(TEXT("Day %d   %s   |   %s"),
-		Component->GetCurrentDay(), *FormatClock(Component->GetTimeOfDay()),
-		*UEnum::GetDisplayValueAsText(Component->GetCurrentTool()).ToString()));
+		DayCycle->GetCurrentDay(), *FormatClock(DayCycle->GetTimeOfDay()),
+		*UEnum::GetDisplayValueAsText(Farming->GetCurrentTool()).ToString()));
 }
 
-FText SFarmHud::GetInventoryText() const
+FText SFarmHudWidget::GetInventoryText() const
 {
-	const UFarmingComponent* Component = Farming.Get();
-	if (!Component)
+	const AFarmHUD* FarmHud = Hud.Get();
+	const UFarmingComponent* Farming = FarmHud ? FarmHud->GetFarming() : nullptr;
+	if (!Farming)
 	{
 		return FText::GetEmpty();
 	}
-	return FText::FromString(FString::Printf(TEXT("Seeds: %d   Harvested: %d"), Component->Seeds, Component->HarvestedCrops));
+	return FText::FromString(FString::Printf(TEXT("Seeds: %d   Harvested: %d"), Farming->Seeds, Farming->HarvestedCrops));
 }
 
-FText SFarmHud::GetMessageText() const
+FText SFarmHudWidget::GetMessageText() const
 {
-	const UFarmingComponent* Component = Farming.Get();
-	return Component ? FText::FromString(Component->GetMessage()) : FText::GetEmpty();
+	const AFarmHUD* FarmHud = Hud.Get();
+	return FarmHud ? FText::FromString(FarmHud->GetMessage()) : FText::GetEmpty();
 }
 
-EVisibility SFarmHud::GetMessageVisibility() const
+EVisibility SFarmHudWidget::GetMessageVisibility() const
 {
-	const UFarmingComponent* Component = Farming.Get();
-	return Component && Component->HasMessage() ? EVisibility::HitTestInvisible : EVisibility::Collapsed;
+	const AFarmHUD* FarmHud = Hud.Get();
+	return FarmHud && FarmHud->HasMessage() ? EVisibility::HitTestInvisible : EVisibility::Collapsed;
 }
