@@ -1,0 +1,58 @@
+# Formatting for FarmSim's C++ code, following Epic's C++ Coding Standard.
+# Visual Studio picks this file up automatically (Tools > Options > Text Editor > C/C++ > Code Style > Formatting).
+# Format a file with Ctrl+K, Ctrl+D.
+BasedOnStyle: Microsoft
+Language: Cpp
+Standard: c++20
+
+UseTab: ForContinuationAndIndentation
+IndentWidth: 4
+TabWidth: 4
+ContinuationIndentWidth: 4
+ColumnLimit: 140
+
+BreakBeforeBraces: Allman
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+AllowShortEnumsOnASingleLine: false
+InsertBraces: true
+
+AccessModifierOffset: -4
+IndentCaseLabels: false
+NamespaceIndentation: All
+PointerAlignment: Left
+SpaceBeforeParens: ControlStatements
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeTernaryOperators: true
+AlignAfterOpenBracket: DontAlign
+AlignOperands: DontAlign
+AlignTrailingComments: false
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+BinPackArguments: true
+BinPackParameters: true
+LambdaBodyIndentation: Signature
+SortIncludes: Never
+IncludeBlocks: Preserve
+ReflowComments: false
+FixNamespaceComments: false
+MaxEmptyLinesToKeep: 1
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+# Unreal's reflection macros are not statements; keep them on their own lines untouched.
+StatementMacros:
+  - GENERATED_BODY
+  - GENERATED_UCLASS_BODY
+  - GENERATED_USTRUCT_BODY
+  - UPROPERTY
+  - UFUNCTION
+  - UCLASS
+  - USTRUCT
+  - UENUM
+  - UINTERFACE
+
+# clang-format can't lay out Slate argument blocks (SLATE_BEGIN_ARGS ... SLATE_END_ARGS).
+# Wrap them in // clang-format off and // clang-format on.

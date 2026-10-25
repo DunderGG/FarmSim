@@ -6,6 +6,8 @@ How code in this project should look and be organized. It builds on three source
 2. **The Lyra Starter Game** sample. We borrow its architecture (small components, subsystems, data assets, events) but not its full machinery. See [section 4](#4-architecture-patterns-borrowed-from-lyra).
 3. **Clean code**: small focused units, intention-revealing names, no duplication, no dead code.
 
+Other official references are listed under [Further reading](#18-further-reading).
+
 The top priority is that the project stays **easy to read and easy to change** for one developer coming back to it after weeks away. When a rule here gets in the way of that, raise it and change the rule rather than quietly ignoring it.
 
 Contents
@@ -22,10 +24,12 @@ Contents
 10. [Errors, logging and assertions](#10-errors-logging-and-assertions)
 11. [Comments and documentation](#11-comments-and-documentation)
 12. [Performance and ticking](#12-performance-and-ticking)
-13. [Project layout and assets](#13-project-layout-and-assets)
-14. [Git workflow](#14-git-workflow)
-15. [Known deviations to clean up](#15-known-deviations-to-clean-up)
-16. [Review checklist](#16-review-checklist)
+13. [Testing](#13-testing)
+14. [Project layout and assets](#14-project-layout-and-assets)
+15. [Git workflow](#15-git-workflow)
+16. [Known deviations to clean up](#16-known-deviations-to-clean-up)
+17. [Review checklist](#17-review-checklist)
+18. [Further reading](#18-further-reading)
 
 ---
 
@@ -126,6 +130,13 @@ Other common traps in actors and pawns: `Controller`, `Owner`, `Tags`, `Instigat
 
 ## 3. Formatting
 
+The repo has a **`.clang-format`** file that encodes these rules, so formatting is automatic rather than something to review.
+
+- In Visual Studio, check *Tools > Options > Text Editor > C/C++ > Code Style > Formatting > Enable ClangFormat support*. VS then uses the repo's file. Format a document with *Ctrl+K, Ctrl+D*.
+- Format the files you change. Don't reformat files you aren't otherwise touching, and don't mix a first-time reformat of a file with behavior changes in the same commit.
+- clang-format can't lay out Slate argument blocks. Wrap `SLATE_BEGIN_ARGS` ... `SLATE_END_ARGS()` in `// clang-format off` and `// clang-format on`.
+- The rules below still apply where the formatter has no opinion (blank lines between groups, where to break long expressions).
+
 - **Tabs for indentation**, 4 spaces wide. No trailing whitespace.
 - **Braces on their own line** (Allman style), for every block:
 
@@ -147,8 +158,9 @@ bool AFarmTile::Till()
 - `else if` stays on one line. Don't write `else` after a branch that returns.
 - A space after `if`, `for`, `while`, `switch` and around binary operators. No space between a function name and its `(`.
 - Pointer and reference symbols attach to the type: `AFarmTile* Tile`, `const FVector& WorldLocation`.
-- Keep lines under about 140 characters. Break long argument lists after a comma and indent one extra tab.
-- Multi-line ternaries put the operator at the start of the next line, as in `AFarmTile::RefreshSoil`.
+- Keep lines under 140 characters. Break long argument lists after a comma and indent one extra tab.
+- When a ternary breaks over lines, the `?` and `:` start the new lines, as in `AFarmTile::RefreshSoil`.
+- Function bodies in `.cpp` files always go on their own lines, even one-liners.
 - One blank line between functions. Group related statements inside a function and separate groups with a blank line.
 
 ## 4. Architecture patterns borrowed from Lyra
@@ -380,9 +392,21 @@ UE_LOG(LogFarmSim, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 - Don't load assets with `ConstructorHelpers` outside constructors, and don't load synchronously during gameplay.
 - Optimize when something is measurably slow. Clear code first.
 
-## 13. Project layout and assets
+## 13. Testing
 
-### 13.1 Source
+Game rules get automated tests. They run in seconds without playing the game, and they catch a broken rule the moment it breaks instead of three play sessions later.
+
+- **Framework: CQTest**, Epic's newest C++ test framework (https://dev.epicgames.com/documentation/unreal-engine/cqtest-test-framework-for-unreal-engine). It wraps the engine's automation system with `TEST_CLASS` / `TEST` macros and automatic setup and teardown. Use it for all new tests. Don't mix in the older Automation Spec or `IMPLEMENT_SIMPLE_AUTOMATION_TEST` styles.
+- **Setup** (once, with the first test): add `"CQTest"` to `PrivateDependencyModuleNames` in `FarmSim.Build.cs`, and enable the CQTest plugin in `FarmSim.uproject` if the editor reports the module as missing.
+- **What to test**: rules and data, not visuals. Tile transitions (grass, tilled, planted, ripe), growth only when watered, harvesting, tool use with no seeds left, the day clock rolling over, and save data round-tripping.
+- **Where**: `Source/FarmSim/Tests/<ClassName>Tests.cpp`, wrapped in `#if WITH_DEV_AUTOMATION_TESTS` so tests never ship. Name tests `FarmSim.<Area>.<Behavior>`, for example `FarmSim.Tile.WateredCropGrowsOneStage`.
+- **Running**: from the editor's Test Automation window (Tools menu), filtered on `FarmSim`, or from the command line with `-ExecCmds="Automation RunTests FarmSim"`.
+- **Design for testability**: keep rules in code that doesn't need a running level. When rule code is tangled with visuals or actor setup, that's a sign to separate them (see [section 16](#16-known-deviations-to-clean-up)).
+- Run the tests before committing a change to game rules. A bug fix gets a test that would have caught it.
+
+## 14. Project layout and assets
+
+### 14.1 Source
 
 ```
 Source/FarmSim/
@@ -406,7 +430,9 @@ Source/FarmSim/
 
 Do that move in its own commit with no other changes, and add the folders to `PublicIncludePaths` in `FarmSim.Build.cs`.
 
-### 13.2 Content and asset naming
+### 14.2 Content and asset naming
+
+Follow Epic's **Recommended Asset Naming Conventions** (https://dev.epicgames.com/documentation/en-us/unreal-engine/recommended-asset-naming-conventions-in-unreal-engine-projects): `Prefix_BaseAssetName_Variant_Suffix`. The table below lists the prefixes we use most; for any other asset type, use the prefix from Epic's page.
 
 Our assets live under `Content/Farm/`, split by type. Leave the template's folders (`Characters`, `ThirdPerson`, `LevelPrototyping`) alone.
 
@@ -429,7 +455,7 @@ Variants go after the base name with underscores: `SM_Crop_Stage0`, `SM_Crop_Sta
 
 Blender sources go in `Art/Blender/`, exported FBX files in `Art/Export/`, with the same names as the imported assets.
 
-## 14. Git workflow
+## 15. Git workflow
 
 - **Small, focused commits.** One logical change per commit. Refactors and moves go in their own commits, separate from behavior changes.
 - **Commit messages**: an imperative subject line under about 70 characters (`Move lighting from FarmGrid to FarmDayCycle`), a blank line, then a short body saying *what* changed and *why*.
@@ -440,27 +466,45 @@ Blender sources go in `Art/Blender/`, exported FBX files in `Art/Export/`, with 
 - Never commit `Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/` or `.vs/`.
 - Code must **compile and be play-tested** in the editor before it is pushed.
 
-## 15. Known deviations to clean up
+## 16. Known deviations to clean up
 
 Existing code that doesn't yet match these guidelines. Fix them when touching the code nearby, each in a small commit. Don't do a sweeping cleanup in the middle of a feature.
 
 - `UFarmingComponent::Seeds` and `HarvestedCrops` are public mutable properties, and `UFarmSaveSubsystem` writes them directly. Make them private with getters and a `RestoreInventory(...)` function.
 - Tunable properties on `AFarmTile`, `AFarmGrid` and `AFarmDayCycle` are public. Move them to `protected` / `private` with `AllowPrivateAccess` and add getters where other classes read them.
 - `TActorIterator` lookups for "the first grid in the level" appear in more than one class. Give `AFarmGrid` a static `Find(const UWorld*)` like `AFarmDayCycle::Find`.
+- `AFarmTile` mixes its rules (state, growth) with its visuals. Before writing its first tests, consider moving the rules into a plain `FFarmTileState` struct that the actor owns, so tests don't need to spawn actors.
+- `FarmHudWidget.h` needs `// clang-format off` / `on` around its Slate argument block.
 - The `Variant_Combat`, `Variant_Platforming` and `Variant_SideScrolling` template folders (code and content) are unused. Decide whether to delete them; removing them also shortens `PublicIncludePaths` and drops the AI and StateTree module dependencies.
 
-## 16. Review checklist
+## 17. Review checklist
 
 Before committing, check:
 
 - [ ] Each change lives on the class that owns that responsibility ([section 1](#1-ownership-and-separation-of-concerns)).
 - [ ] Names follow the prefixes, the `Farm` prefix and PascalCase, and nothing shadows a base class member.
-- [ ] Braces on their own lines, always present, tabs for indentation.
+- [ ] Changed files are formatted with clang-format.
 - [ ] Headers forward declare; `.cpp` files include what they use, own header first.
 - [ ] `UObject` members are `UPROPERTY() TObjectPtr<>`. Pointers that can be null are checked.
 - [ ] Runtime state is private. Nothing new is exposed to Blueprints without a reason.
 - [ ] No magic numbers, no duplicated logic, no commented-out code, no stray debug messages.
 - [ ] Ticking is off unless needed. No per-frame searches of the level.
 - [ ] Classes and non-obvious public members have `/** */` comments.
+- [ ] Changed game rules have tests, and the `FarmSim` tests pass.
 - [ ] It compiles and works in Play in Editor.
 - [ ] The commit message is clear and has no tool attribution lines.
+
+## 18. Further reading
+
+Official Epic references, checked against UE5:
+
+- [Epic C++ Coding Standard](https://dev.epicgames.com/documentation/unreal-engine/epic-cplusplus-coding-standard-for-unreal-engine): the baseline for this document.
+- [Recommended Asset Naming Conventions](https://dev.epicgames.com/documentation/en-us/unreal-engine/recommended-asset-naming-conventions-in-unreal-engine-projects): asset prefixes and naming.
+- [Class Specifiers](https://dev.epicgames.com/documentation/en-us/unreal-engine/class-specifiers), [UProperties](https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-uproperties), [UFunctions](https://dev.epicgames.com/documentation/en-us/unreal-engine/ufunctions-in-unreal-engine) and [Metadata Specifiers](https://dev.epicgames.com/documentation/en-us/unreal-engine/metadata-specifiers-in-unreal-engine): what every `UCLASS`, `UPROPERTY`, `UFUNCTION` and `meta=` option does.
+- [CQTest](https://dev.epicgames.com/documentation/unreal-engine/cqtest-test-framework-for-unreal-engine) and the [Automation Test Framework](https://dev.epicgames.com/documentation/en-us/unreal-engine/automation-test-framework-in-unreal-engine): writing and running tests.
+- The Lyra Starter Game documentation and source: architecture reference (see [section 4](#4-architecture-patterns-borrowed-from-lyra)).
+
+Beyond Epic:
+
+- [Tom Looman](https://www.tomlooman.com/): practical Unreal C++ articles on the gameplay framework, subsystems and performance, kept up to date with recent engine versions.
+- [Game Programming Patterns](https://gameprogrammingpatterns.com/) by Robert Nystrom: not Unreal-specific, but its chapters on State, Observer, Component and Update Method describe patterns this project already uses. Older, but the patterns haven't aged.

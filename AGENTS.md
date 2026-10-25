@@ -26,17 +26,19 @@ Instructions for AI coding agents working in this repository. Humans can read it
    - `UFarmSaveSubsystem` / `UFarmSaveGame`: saving and loading.
 2. **Epic naming.** `A`/`U`/`S`/`F`/`E`/`I`/`T` type prefixes, `b` for booleans, PascalCase everywhere, and the `Farm` project prefix on every new type (`AFarmShop`, `EFarmSeason`, `FOnFarmNewDay`).
 3. **No shadowing.** The build treats MSVC C4458 as an error. Never give a local or parameter the name of a member of the class or any engine base class (`Mesh` in a character, `Owner`, `Controller`, `Tags`...).
-4. **Formatting.** Tabs, braces on their own lines, braces on every block.
+4. **Formatting.** Tabs, braces on their own lines, braces on every block. Format changed files with the repo's `.clang-format`; don't reformat untouched files.
 5. **UObject pointers.** Members are `UPROPERTY() TObjectPtr<T>`. Check pointers that can be null. No `new`/`delete` on UObjects.
 6. **Encapsulation.** Runtime state is private with getters. Don't add public mutable data members. Expose to Blueprints only when a Blueprint needs it.
 7. **Communicate through delegates and small functions**, not by reaching into another class's state.
 8. **Keep it simple.** Small functions, early returns, named constants instead of magic numbers, no duplicated logic, no commented-out code, no new debug-only on-screen messages. Don't add Lyra machinery (GAS, Experiences, Game Features, Common UI) or replication unless asked.
 9. **Ticking off by default.** Use events and timers instead of per-frame polling.
+10. **Tests for rules.** Game rule changes get CQTest tests in `Source/FarmSim/Tests/`, named `FarmSim.<Area>.<Behavior>`. A bug fix gets a test that would have caught it.
 
 ## Building and testing
 
 - C++ can only be compiled on David's Windows machine with Unreal Engine installed. Cloud containers have no engine.
 - If you can build (for example in a session on David's PC), build the `FarmSimEditor` target (Development Editor, Win64) before committing and fix every error and warning you introduced.
+- Run the `FarmSim` automation tests when you can build.
 - If you can't build, say clearly that the change is uncompiled, and list what David should test in Play in Editor.
 - Live Coding can't add new `UPROPERTY`s, `UFUNCTION`s or classes. Tell David when a change needs the editor closed and the project rebuilt.
 
