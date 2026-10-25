@@ -4,6 +4,7 @@
 #include "Engine/GameViewportClient.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "FarmDayCycle.h"
 #include "FarmGrid.h"
 #include "FarmHud.h"
 #include "FarmSaveGame.h"
@@ -20,6 +21,8 @@ UFarmingComponent::UFarmingComponent()
 void UFarmingComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	DayCycle = AFarmDayCycle::Get(GetWorld());
 
 	// The prototype has a single field, so just use the first grid in the level.
 	TActorIterator<AFarmGrid> It(GetWorld());
@@ -102,13 +105,13 @@ void UFarmingComponent::Sleep()
 
 void UFarmingComponent::StartNextDay(const TCHAR* Reason)
 {
-	if (!Grid)
+	if (!Grid || !DayCycle)
 	{
 		return;
 	}
-	Grid->AdvanceDay();
+	DayCycle->StartNextDay();
 	SaveFarm();
-	ShowMessage(FString::Printf(TEXT("%s Day %d begins. Game saved."), Reason, Grid->GetCurrentDay()));
+	ShowMessage(FString::Printf(TEXT("%s Day %d begins. Game saved."), Reason, DayCycle->GetCurrentDay()));
 }
 
 void UFarmingComponent::StartNewGame()
@@ -120,8 +123,8 @@ void UFarmingComponent::StartNewGame()
 void UFarmingComponent::SaveFarm()
 {
 	UFarmSaveGame* Save = Cast<UFarmSaveGame>(UGameplayStatics::CreateSaveGameObject(UFarmSaveGame::StaticClass()));
-	Save->Day = Grid->GetCurrentDay();
-	Save->TimeOfDay = Grid->GetTimeOfDay();
+	Save->Day = DayCycle->GetCurrentDay();
+	Save->TimeOfDay = DayCycle->GetTimeOfDay();
 	Save->Seeds = Seeds;
 	Save->HarvestedCrops = HarvestedCrops;
 	Save->CurrentTool = CurrentTool;
@@ -144,7 +147,7 @@ void UFarmingComponent::SaveFarm()
 
 void UFarmingComponent::LoadFarm()
 {
-	if (!Grid || !UGameplayStatics::DoesSaveGameExist(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex))
+	if (!Grid || !DayCycle || !UGameplayStatics::DoesSaveGameExist(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex))
 	{
 		return;
 	}
@@ -156,7 +159,7 @@ void UFarmingComponent::LoadFarm()
 		return;
 	}
 
-	Grid->RestoreClock(Save->Day, Save->TimeOfDay);
+	DayCycle->RestoreClock(Save->Day, Save->TimeOfDay);
 	Seeds = Save->Seeds;
 	HarvestedCrops = Save->HarvestedCrops;
 	SelectTool(Save->CurrentTool);
@@ -187,12 +190,12 @@ AFarmTile* UFarmingComponent::GetTargetTile() const
 
 int32 UFarmingComponent::GetCurrentDay() const
 {
-	return Grid ? Grid->GetCurrentDay() : 0;
+	return DayCycle ? DayCycle->GetCurrentDay() : 0;
 }
 
 float UFarmingComponent::GetTimeOfDay() const
 {
-	return Grid ? Grid->GetTimeOfDay() : 0.f;
+	return DayCycle ? DayCycle->GetTimeOfDay() : 0.f;
 }
 
 bool UFarmingComponent::HasMessage() const
@@ -205,7 +208,7 @@ void UFarmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (Grid && Grid->IsPastBedtime())
+	if (DayCycle && DayCycle->IsPastBedtime())
 	{
 		StartNextDay(TEXT("You stayed up too late and passed out."));
 	}

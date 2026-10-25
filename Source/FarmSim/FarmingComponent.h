@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "FarmingComponent.generated.h"
 
+class AFarmDayCycle;
 class AFarmGrid;
 class AFarmTile;
 class SFarmHud;
@@ -83,6 +84,9 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<AFarmGrid> Grid;
+
+	UPROPERTY()
+	TObjectPtr<AFarmDayCycle> DayCycle;
 
 	EFarmTool CurrentTool = EFarmTool::Hoe;
 
