@@ -2,9 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "FarmSimCharacter.h"
+#include "FarmingComponent.h"
 #include "FarmerCharacter.generated.h"
 
-class UFarmingComponent;
+class UStaticMesh;
+class UStaticMeshComponent;
 class UInputAction;
 class UInputMappingContext;
 
@@ -21,16 +23,26 @@ public:
 	AFarmerCharacter();
 
 protected:
+	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	/** Mesh shown in the hand for each tool. Tools without an entry show nothing. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming")
+	TMap<EFarmTool, TObjectPtr<UStaticMesh>> ToolMeshes;
 
 private:
 	void SelectHoe();
 	void SelectSeeds();
 	void SelectWateringCan();
 	void SelectHand();
+	void SelectTool(EFarmTool Tool);
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UFarmingComponent> Farming;
+
+	/** Attached to the right hand. Move and rotate it in the Blueprint to line up each tool's grip. */
+	UPROPERTY(VisibleAnywhere, Category = "Farming")
+	TObjectPtr<UStaticMeshComponent> HeldTool;
 
 	// Input is created in code so no input assets are needed yet. These can move to editor assets later.
 	UPROPERTY()

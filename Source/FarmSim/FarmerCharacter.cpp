@@ -1,9 +1,11 @@
 #include "FarmerCharacter.h"
 
+#include "Components/SkeletalMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
-#include "FarmingComponent.h"
+#include "Engine/StaticMesh.h"
 #include "GameFramework/PlayerController.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
@@ -11,6 +13,19 @@
 AFarmerCharacter::AFarmerCharacter()
 {
 	Farming = CreateDefaultSubobject<UFarmingComponent>(TEXT("Farming"));
+
+	// hand_r is the right hand bone on the UE5 mannequin skeleton.
+	HeldTool = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HeldTool"));
+	HeldTool->SetupAttachment(GetMesh(), TEXT("hand_r"));
+	HeldTool->SetMobility(EComponentMobility::Movable);
+	HeldTool->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void AFarmerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SelectTool(Farming->GetCurrentTool());
 }
 
 void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -50,7 +65,15 @@ void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
-void AFarmerCharacter::SelectHoe() { Farming->SelectTool(EFarmTool::Hoe); }
-void AFarmerCharacter::SelectSeeds() { Farming->SelectTool(EFarmTool::Seeds); }
-void AFarmerCharacter::SelectWateringCan() { Farming->SelectTool(EFarmTool::WateringCan); }
-void AFarmerCharacter::SelectHand() { Farming->SelectTool(EFarmTool::Hand); }
+void AFarmerCharacter::SelectHoe() { SelectTool(EFarmTool::Hoe); }
+void AFarmerCharacter::SelectSeeds() { SelectTool(EFarmTool::Seeds); }
+void AFarmerCharacter::SelectWateringCan() { SelectTool(EFarmTool::WateringCan); }
+void AFarmerCharacter::SelectHand() { SelectTool(EFarmTool::Hand); }
+
+void AFarmerCharacter::SelectTool(EFarmTool Tool)
+{
+	Farming->SelectTool(Tool);
+
+	const TObjectPtr<UStaticMesh>* Mesh = ToolMeshes.Find(Tool);
+	HeldTool->SetStaticMesh(Mesh ? Mesh->Get() : nullptr);
+}
