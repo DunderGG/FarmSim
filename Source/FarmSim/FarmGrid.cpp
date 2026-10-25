@@ -2,6 +2,7 @@
 
 #include "Components/BoxComponent.h"
 #include "Components/LightComponent.h"
+#include "Components/PostProcessComponent.h"
 #include "Components/SkyLightComponent.h"
 #include "Engine/DirectionalLight.h"
 #include "Engine/SkyLight.h"
@@ -19,6 +20,12 @@ AFarmGrid::AFarmGrid()
 	Bounds->SetupAttachment(RootComponent);
 	Bounds->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Bounds->SetHiddenInGame(true);
+
+	NightPostProcess = CreateDefaultSubobject<UPostProcessComponent>(TEXT("NightPostProcess"));
+	NightPostProcess->SetupAttachment(RootComponent);
+	NightPostProcess->bUnbound = true;
+	NightPostProcess->Settings.bOverride_AutoExposureBias = true;
+	NightPostProcess->Settings.AutoExposureBias = 0.f;
 
 	TileClass = AFarmTile::StaticClass();
 }
@@ -172,4 +179,9 @@ void AFarmGrid::UpdateLighting()
 	{
 		SkyLight->GetLightComponent()->SetIntensity(DaySkyIntensity * Brightness);
 	}
+
+	// Darken the exposure over the first part of the night and ease it off again toward sunrise,
+	// so daytime, mornings and evenings keep the normal exposure.
+	const float Darkness = bDaytime ? 0.f : FMath::Clamp(Arc * 6.f, 0.f, 1.f);
+	NightPostProcess->Settings.AutoExposureBias = NightExposureBias * Darkness;
 }

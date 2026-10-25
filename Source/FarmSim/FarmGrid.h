@@ -8,6 +8,7 @@ class AFarmTile;
 class ADirectionalLight;
 class ASkyLight;
 class UBoxComponent;
+class UPostProcessComponent;
 
 /**
  * A rectangle of farm tiles, spawned at BeginPlay with the actor's location as one corner.
@@ -87,7 +88,14 @@ public:
 
 	/** Share of the daytime light intensity left at night, for moonlight. */
 	UPROPERTY(EditAnywhere, Category = "Farming|Lighting", meta = (ClampMin = 0, ClampMax = 1))
-	float NightLightFraction = 0.05f;
+	float NightLightFraction = 0.03f;
+
+	/**
+	 * Exposure change at night, in stops. Auto-exposure brightens dark scenes back up,
+	 * so this pulls it down again. More negative is darker; 0 turns it off.
+	 */
+	UPROPERTY(EditAnywhere, Category = "Farming|Lighting", meta = (ClampMin = -8, ClampMax = 0))
+	float NightExposureBias = -2.5f;
 
 	UPROPERTY(EditAnywhere, Category = "Farming|Lighting")
 	FLinearColor SunriseColor = FLinearColor(1.f, 0.55f, 0.3f);
@@ -108,6 +116,10 @@ private:
 	/** Outlines the grid in the editor so it's easy to place. Hidden in game. */
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UBoxComponent> Bounds;
+
+	/** Covers the whole level and darkens the exposure at night. */
+	UPROPERTY(VisibleAnywhere, Category = "Farming")
+	TObjectPtr<UPostProcessComponent> NightPostProcess;
 
 	UPROPERTY()
 	TArray<TObjectPtr<AFarmTile>> Tiles;
