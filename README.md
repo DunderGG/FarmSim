@@ -1,1 +1,41 @@
 # FarmSim
+
+A cozy 3D farming and life-sim game set in a retro-futuristic, post-apocalyptic world. You wake from decades of cryosleep under an overgrown homestead. Humans have almost vanished, and robots carry on with the jobs people gave them. You bring the farm back to life, help the robot town next door, and slowly push out into the wasteland.
+
+Built with **Unreal Engine 5.7** (C++ first, Blueprints for content) and **Blender**.
+
+> **Status: early prototype.** You can till, plant, water, sleep and harvest on a small field, with a day/night clock and saving. The next goal is a one-season vertical slice. See the [roadmap](Docs/Roadmap.md).
+
+## Getting started
+
+You need Windows 10 or 11, Unreal Engine 5.7, Git with **Git LFS**, and Visual Studio 2022 for C++ work.
+
+```
+git lfs install
+git clone https://github.com/DunderGG/FarmSim.git
+```
+
+Then double-click `FarmSim.uproject`, let Unreal build the C++ modules, open `Content/Maps/L_Farm` and press **Play**. [CONTRIBUTING.md](CONTRIBUTING.md) has the full setup, the controls and troubleshooting.
+
+## Documentation
+
+| Document | What's in it |
+|---|---|
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Setup, project layout, and how to contribute code, art, audio and ideas |
+| [Docs/GameDesign.md](Docs/GameDesign.md) | What the game is, how it plays and why |
+| [Docs/Lore.md](Docs/Lore.md) | The story, the world and its characters (spoilers) |
+| [Docs/Roadmap.md](Docs/Roadmap.md) | What's done and what comes next |
+| [Docs/Architecture.md](Docs/Architecture.md) | How the code fits together, who owns what, and the decision log |
+| [Docs/CodingGuidelines.md](Docs/CodingGuidelines.md) | How the code looks |
+
+## Contributing
+
+Contributions are welcome: gameplay code, 3D art, audio, testing, documentation and mods. Start with [CONTRIBUTING.md](CONTRIBUTING.md), and open an issue to say what you'd like to work on.
+
+## License
+
+- **Code** (`Source/`, `Config/`, scripts): [GPL-3.0-or-later](LICENSE), with an additional permission to link with Unreal Engine.
+- **Assets and documentation**: [CC BY-NC-SA 4.0](LICENSE-ASSETS.txt).
+- **Epic Games template material** stays under the [Unreal Engine EULA](https://www.unrealengine.com/eula).
+
+[LICENSING.md](LICENSING.md) explains what this means in practice. Contributors are listed in [CREDITS.md](CREDITS.md).
