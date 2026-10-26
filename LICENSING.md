@@ -33,8 +33,8 @@ This permission covers only the engine and platform components. Our own code sta
 
 These parts of the repository come from Epic Games' Third Person template. They are used under the [Unreal Engine EULA](https://www.unrealengine.com/eula), not under our licenses:
 
-- Source files that carry the line `Copyright Epic Games, Inc. All Rights Reserved.`: currently `Source/FarmSim.Target.cs`, `Source/FarmSimEditor.Target.cs`, `Source/FarmSim/FarmSim.Build.cs`, `FarmSim.h/.cpp`, `FarmSimCharacter.h/.cpp`, `FarmSimGameMode.h/.cpp`, `FarmSimPlayerController.h/.cpp`, and everything in `Source/FarmSim/Variant_*`.
-- Template content: `Content/Characters`, `Content/ThirdPerson`, `Content/LevelPrototyping`, `Content/Input` and `Content/Variant_*`.
+- Source files that carry the line `Copyright Epic Games, Inc. All Rights Reserved.`: currently `Source/FarmSim.Target.cs`, `Source/FarmSimEditor.Target.cs`, `Source/FarmSim/FarmSim.Build.cs`, `FarmSim.h/.cpp`, `FarmSimCharacter.h/.cpp`, `FarmSimGameMode.h/.cpp`, and `FarmSimPlayerController.h/.cpp`.
+- Template content: `Content/Characters`, `Content/ThirdPerson` and `Content/Input`.
 
 Changes we make to these files are ours, but the original Epic material stays under Epic's terms. The plan is to replace template code and content with our own over time; see [Docs/Architecture.md](Docs/Architecture.md).
 

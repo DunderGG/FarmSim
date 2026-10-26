@@ -97,8 +97,8 @@ Small things to finish before milestone 2 starts.
 - [x] Force-push the rewritten Git history to GitHub
 - [ ] Push the newer local commits (a normal `git push`)
 - [ ] Delete the local backup branch `backup/before-history-rewrite`
-- [ ] Delete the merged pull request branches on GitHub (`step2-farming-loop`, `step3-asset-script`, `step3-custom-meshes`, `fix-held-tool-shadowing`)
-- [ ] Decide whether to delete the unused template folders `Variant_Combat`, `Variant_Platforming` and `Variant_SideScrolling` *(decide)*
+- [x] Delete the merged pull request branches on GitHub (`step2-farming-loop`, `step3-asset-script`, `step3-custom-meshes`, `fix-held-tool-shadowing`)
+- [x] Delete the unused template code and content (`Variant_*`, `LevelPrototyping`, `Lvl_ThirdPerson` and the unused mannequin assets)
 - [ ] Remove the leftover redirector `Content/L_Farm` at the content root (right-click > Fix Up Redirectors)
 
 ## 4. Milestone 2: vertical slice
@@ -295,4 +295,3 @@ Collected from the other documents. Each one is settled in its own document and 
 - **Multiplayer:** shared farm or separate farms, shared clock and sleep. ([GameDesign.md](GameDesign.md#15-open-questions))
 - **Names:** the game, the world, the town, the coin, the caretaker, the robot makers. ([Lore.md](Lore.md#14-open-questions))
 - **Story:** what the sealed message says, whether the sibling exists, and whether the story ever says who struck first. ([Lore.md](Lore.md#14-open-questions))
-- **Template folders:** keep or delete the unused `Variant_*` folders. ([CodingGuidelines.md](CodingGuidelines.md#16-known-deviations-to-clean-up))

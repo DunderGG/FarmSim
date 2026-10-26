@@ -347,7 +347,6 @@ Source/FarmSim/
     FarmSim.Build.cs, FarmSim.h/.cpp   Module, log category
     FarmSim*.h/.cpp                     Template classes (character, game mode, player controller)
     Farm*.h/.cpp                        Our gameplay code
-    Variant_*/                          Unused template variants
 ```
 
 The folder is flat while there are only a handful of files. **When it passes about 20 of our own files**, move to feature folders the way Lyra does (`Character/`, `UI/`, `System/`...):
@@ -368,7 +367,7 @@ Do that move in its own commit with no other changes, and add the folders to `Pu
 
 Follow Epic's **Recommended Asset Naming Conventions** (https://dev.epicgames.com/documentation/en-us/unreal-engine/recommended-asset-naming-conventions-in-unreal-engine-projects): `Prefix_BaseAssetName_Variant_Suffix`. The table below lists the prefixes we use most; for any other asset type, use the prefix from Epic's page.
 
-Our assets live under `Content/Farm/`, split by type. Leave the template's folders (`Characters`, `ThirdPerson`, `LevelPrototyping`) alone.
+Our assets live under `Content/Farm/`, split by type. Leave the template's folders (`Characters`, `ThirdPerson`, `Input`) alone.
 
 | Prefix | Asset type | Example |
 |---|---|---|
@@ -407,7 +406,6 @@ Existing code that doesn't yet match these guidelines. Fix them when touching th
 - `UFarmingComponent::Seeds` and `HarvestedCrops` are public mutable properties, and `UFarmSaveSubsystem` writes them directly. Make them private with getters and a `RestoreInventory(...)` function.
 - Tunable properties on `AFarmTile`, `AFarmGrid` and `AFarmDayCycle` are public. Move them to `protected` / `private` with `AllowPrivateAccess` and add getters where other classes read them.
 - `FarmHudWidget.h` needs `// clang-format off` / `on` around its Slate argument block.
-- The `Variant_Combat`, `Variant_Platforming` and `Variant_SideScrolling` template folders (code and content) are unused. Decide whether to delete them; removing them also shortens `PublicIncludePaths` and drops the AI and StateTree module dependencies.
 
 ## 17. Review checklist
 

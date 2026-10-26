@@ -83,7 +83,7 @@ FarmSim/
     Content/                Unreal assets
         Farm/               Our game assets (meshes, materials, Blueprints)
         Maps/               Levels (L_Farm is the main one)
-        Characters/, ThirdPerson/, LevelPrototyping/, Input/
+        Characters/, ThirdPerson/, Input/
                             From Epic's Third Person template
     Art/
         Blender/            Blender source files and scripts
