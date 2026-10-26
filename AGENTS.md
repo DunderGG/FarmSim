@@ -15,7 +15,9 @@ Instructions for AI coding agents working in this repository. Humans can read it
 - **[Docs/CodingGuidelines.md](Docs/CodingGuidelines.md)** is the coding standard: how code looks. It is based on Epic's C++ Coding Standard and clean code principles.
 - **[Docs/Architecture.md](Docs/Architecture.md)** is the design: principles, where things go in Unreal's framework, who owns what, how systems talk, and the decision log.
 
-Follow both for every change. The rules below are the ones most often broken; the documents have the details.
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** covers setup, art and audio pipelines, and the workflow for outside contributors.
+
+Follow the two Docs files for every change. The rules below are the ones most often broken; the documents have the details.
 
 ## Hard rules
 
@@ -49,6 +51,8 @@ Follow both for every change. The rules below are the ones most often broken; th
 - Live Coding can't add new `UPROPERTY`s, `UFUNCTION`s or classes. Tell David when a change needs the editor closed and the project rebuilt.
 
 ## Git
+
+These rules are for agents working for David, the maintainer. If you are helping another contributor, follow the pull request workflow in [CONTRIBUTING.md](CONTRIBUTING.md) instead, with that contributor as the author.
 
 - **Do not open pull requests and do not push.** Commit locally on `main` on David's machine; David reviews and pushes himself.
 - **Author and committer: `David Bennehag <david.bennehag@gmail.com>`.**
