@@ -94,8 +94,10 @@ A third-person farmer on a small field who can till, plant, water and harvest, w
 Small things to finish before milestone 2 starts.
 
 - [ ] Play-test the latest changes: the HUD looks the same, sleeping saves the game, stopping and playing again restores the farm, and F9 starts a new game
-- [ ] Push the local commits. The Git history was rewritten, so this push needs `git push --force-with-lease origin main`
-- [ ] Delete the backup branch `backup/before-history-rewrite` once the push is done
+- [x] Force-push the rewritten Git history to GitHub
+- [ ] Push the newer local commits (a normal `git push`)
+- [ ] Delete the local backup branch `backup/before-history-rewrite`
+- [ ] Delete the merged pull request branches on GitHub (`step2-farming-loop`, `step3-asset-script`, `step3-custom-meshes`, `fix-held-tool-shadowing`)
 - [ ] Decide whether to delete the unused template folders `Variant_Combat`, `Variant_Platforming` and `Variant_SideScrolling` *(decide)*
 - [ ] Remove the leftover redirector `Content/L_Farm` at the content root (right-click > Fix Up Redirectors)
 
