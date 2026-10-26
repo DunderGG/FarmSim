@@ -1,0 +1,23 @@
+name: Idea
+description: Suggest a feature, content or a change to the game.
+labels: ["idea"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: Describe it as concretely as you can. Small, concrete ideas are the easiest to act on.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it would make the game better
+      description: Which part of the game it improves. The pillars in Docs/GameDesign.md are a good reference.
+    validations:
+      required: true
+  - type: textarea
+    id: help
+    attributes:
+      label: Can you help build it?
+      description: Optional. Say if you'd like to work on it (code, art, audio, content).

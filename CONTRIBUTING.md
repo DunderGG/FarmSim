@@ -153,6 +153,7 @@ The data asset types for this (`UFarmCropData` and friends) are planned but not 
 - **Bugs:** open an issue with what you did, what you expected, what happened, and the engine version. Attach the log from `Saved/Logs/FarmSim.log` and a screenshot if it helps.
 - **Ideas:** open an issue describing the idea and why it would make the game better. Small, concrete ideas are easiest to act on.
 - **Questions:** open an issue too. If something in the docs confused you, that's a bug in the docs.
+- **Security problems:** report them privately, not as an issue. See [SECURITY.md](SECURITY.md).
 
 ## 9. Git workflow and pull requests
 

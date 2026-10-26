@@ -1,0 +1,33 @@
+name: Bug report
+description: Something in the game or the project doesn't work as it should.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open L_Farm and press Play
+        2. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit and engine version
+      description: The commit you built (`git log -1 --oneline`) and your Unreal Engine version.
+      placeholder: abc1234, Unreal Engine 5.7.0
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log and screenshots
+      description: Attach `Saved/Logs/FarmSim.log` and a screenshot or short clip if it helps.
