@@ -21,6 +21,8 @@ Different parts of the repository are under different licenses:
 
 FarmSim is built on Unreal Engine, which is not free software. Without this permission, the GPL would not allow anyone, including the maintainer, to distribute a build of the game, because it links GPL code with the engine.
 
+**This permission is part of the license terms for the code.** The code is licensed under the GPL in [LICENSE](LICENSE) together with the following additional permission, granted by the copyright holders:
+
 > **Additional permission under GNU GPL version 3 section 7**
 >
 > If you modify this Program, or any covered work, by linking or combining it with Unreal Engine (or a modified version of it), or with the libraries and SDKs of a game distribution platform or console that are needed to publish the game there (together, the "Non-GPL Components"), containing parts covered by the terms of their own licenses, the licensors of this Program grant you additional permission to convey the resulting work. Corresponding Source for a non-source form of such a combination shall not include the source code for the parts of the Non-GPL Components used, but shall include the source code for the parts of this Program that are used.
@@ -42,4 +44,4 @@ By submitting a contribution (code, assets, documentation or anything else) you 
 
 ## Questions
 
-Licensing is a legal matter and this page is a summary, not legal advice. The license files are what count. If something is unclear, open an issue.
+The binding terms are [LICENSE](LICENSE) together with the additional permission above for the code, and [LICENSE-ASSETS.txt](LICENSE-ASSETS.txt) for everything else. The rest of this page is a plain-language summary, not legal advice. If something is unclear, open an issue.
