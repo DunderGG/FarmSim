@@ -275,7 +275,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 ## 6. Before a public release
 
 - [ ] Realistic art direction: Lumen, Nanite and Megascans for the world, custom Blender work for robots, machines and crops. Replace the low-poly placeholders
-- [ ] Replace the Epic template code and content (character, animations, input, level prototyping) with our own
+- [ ] Replace the Epic template code and content (character, animations, input) with our own
 - [ ] Main menu, settings and save slots
 - [ ] Music and sound effects
 - [ ] Final names for the game, the world, the town, the coin, the caretaker and the robot makers
