@@ -1,9 +1,11 @@
 # FarmSim coding guidelines
 
-How code in this project should look and be organized. It builds on three sources:
+How code in this project should look. How the systems fit together, who owns what and why, is in [Architecture.md](Architecture.md).
+
+This document builds on three sources:
 
 1. **Epic's C++ Coding Standard** (https://dev.epicgames.com/documentation/unreal-engine/epic-cplusplus-coding-standard-for-unreal-engine). It is the baseline. Where this document says nothing, follow Epic.
-2. **The Lyra Starter Game** sample. We borrow its architecture (small components, subsystems, data assets, events) but not its full machinery. See [section 4](#4-architecture-patterns-borrowed-from-lyra).
+2. **The Lyra Starter Game** sample. We borrow its structure and patterns but not its full machinery. See [Architecture.md](Architecture.md#11-patterns-borrowed-from-lyra).
 3. **Clean code**: small focused units, intention-revealing names, no duplication, no dead code.
 
 Other official references are listed under [Further reading](#18-further-reading).
@@ -15,7 +17,7 @@ Contents
 1. [Ownership and separation of concerns](#1-ownership-and-separation-of-concerns)
 2. [Naming](#2-naming)
 3. [Formatting](#3-formatting)
-4. [Architecture patterns borrowed from Lyra](#4-architecture-patterns-borrowed-from-lyra)
+4. [Architecture](#4-architecture)
 5. [Classes and headers](#5-classes-and-headers)
 6. [UPROPERTY, UFUNCTION and Blueprint exposure](#6-uproperty-ufunction-and-blueprint-exposure)
 7. [Memory, pointers and object lifetime](#7-memory-pointers-and-object-lifetime)
@@ -39,44 +41,14 @@ This is the most important rule in the project.
 
 **Every actor, component and subsystem has one job. Logic, components and settings live on the class whose job they are, never on whichever class happens to be convenient.**
 
-Current owners:
-
-| Class | Kind | Owns | Does not own |
-|---|---|---|---|
-| `AFarmTile` | Actor | One tile's state (grass, tilled, planted, watered, growth) and its visuals | Time, input, saving |
-| `AFarmGrid` | Actor | Spawning tiles, looking up a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
-| `AFarmDayCycle` | Actor | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay` then `OnNewDayFinished` | Tiles, saving, HUD |
-| `UFarmingComponent` | Actor component | Current tool, seeds, harvest count, tile targeting, using a tool, sleeping and passing out | Drawing UI, input bindings, meshes |
-| `AFarmerCharacter` | Character | Input bindings and the held tool mesh | Farming rules (delegates to `UFarmingComponent`) |
-| `AFarmHUD` + `SFarmHudWidget` | HUD + Slate widget | Display only. Reads state from the day cycle and farming component | Any game state except fading messages |
-| `UFarmSaveSubsystem` | World subsystem | Saving on `OnNewDayFinished`, loading on play start, starting a new game | Game rules |
-| `UFarmSaveGame` | Save game | The saved data layout | Logic |
-
 Before adding a component, property, timer or `Tick` logic to an existing class, ask: *is this that class's job?*
 
 - If yes, add it there.
-- If no, put it on the class that does own it, or create a new actor, component or subsystem for it. Say so explicitly in the commit message.
+- If no, put it on the class that does own it, or create a new actor, component or subsystem for it. Say so explicitly in the commit message and add it to the ownership table.
 
 A real example from this project: night post-processing and sun control were first put on `AFarmGrid` because the grid was already in the level. They were moved to a dedicated `AFarmDayCycle`, which is auto-spawned if the level doesn't have one. That is the pattern to follow.
 
-How to choose the right kind of owner:
-
-| Need | Use |
-|---|---|
-| Something placed in the level, with a transform or editor-tweakable settings | `AActor` |
-| A reusable behavior that attaches to an actor (the player, an NPC) | `UActorComponent` / `USceneComponent` |
-| A single service per level that needs no transform (saving, lookups) | `UWorldSubsystem` |
-| A service that must survive level loads (settings, profile, audio volume) | `UGameInstanceSubsystem` |
-| Per-player UI, input or camera services | `ULocalPlayerSubsystem` |
-| Static data describing content (a crop type, a tool, an item) | `UPrimaryDataAsset` (see [4.3](#43-data-assets-for-content)) |
-| Plain data passed around or saved | `USTRUCT` |
-
-Communication between owners goes **one way, through narrow interfaces**:
-
-- Owners expose small public functions (`AFarmGrid::GetTileAtLocation`, `AFarmDayCycle::StartNextDay`) and read-only getters.
-- Owners announce changes with delegates (`AFarmDayCycle::OnNewDay`, `UFarmingComponent::OnToolChanged`). Listeners subscribe. The broadcaster never knows who listens.
-- Display code reads state; it never changes it. `AFarmHUD` reads from `UFarmingComponent` and `AFarmDayCycle`, but nothing in game logic depends on the HUD except to report messages.
-- Never reach into another class to change its private state. If you need to, that class is missing a function.
+The current ownership table is in [Architecture.md, section 13](Architecture.md#13-systems-and-ownership). How to choose the right kind of owner (actor, component, subsystem, data asset) is in [section 2](Architecture.md#2-unreals-gameplay-framework-where-things-go) and how owners communicate is in [section 4](Architecture.md#4-how-systems-talk-to-each-other).
 
 ## 2. Naming
 
@@ -163,49 +135,11 @@ bool AFarmTile::Till()
 - Function bodies in `.cpp` files always go on their own lines, even one-liners.
 - One blank line between functions. Group related statements inside a function and separate groups with a blank line.
 
-## 4. Architecture patterns borrowed from Lyra
+## 4. Architecture
 
-Lyra is Epic's reference for a well-structured UE5 game. It is also built for a large team and multiplayer, so we take its ideas at the scale of a solo prototype. **Adopt a Lyra pattern when we have a concrete need for it, not before.**
+Architecture lives in its own document, [Architecture.md](Architecture.md): design principles, where things go in Unreal's gameplay framework, lifetimes and initialization order, communication between systems, data, saving, presentation, the C++/Blueprint split, the Lyra patterns we use, FarmSim's current design and the decision log.
 
-### 4.1 Composition over inheritance
-
-Lyra keeps actor classes thin and puts behavior in components (`ULyraHealthComponent`, `ULyraHeroComponent`). We do the same: the farmer is a template character plus a `UFarmingComponent`. New player abilities (fishing, an inventory, stamina) become new components rather than more code in `AFarmerCharacter`.
-
-Keep inheritance trees shallow: engine base class, then at most one or two of our own levels.
-
-### 4.2 Subsystems instead of singletons and managers
-
-Lyra uses engine subsystems for global services. We use them instead of static globals, singletons or "manager" actors that only exist to be found. `UFarmSaveSubsystem` is the model: it is created automatically for every game world and found with `GetWorld()->GetSubsystem<UFarmSaveSubsystem>()`.
-
-Use an actor instead when the thing needs a place in the level or settings a designer tweaks per level, like `AFarmDayCycle`.
-
-### 4.3 Data assets for content
-
-Lyra describes content in data assets (`ULyraPawnData`, `ULyraExperienceDefinition`) rather than hard-coding it. When we add more than one of something (crop types, tools, items, shop stock), describe each one in a `UPrimaryDataAsset` subclass such as `UFarmCropData` with its meshes, growth days and sell price. Code then works with any crop instead of having per-crop branches.
-
-Until then, small tunables are `EditAnywhere` / `EditDefaultsOnly` properties on the owning class, as they are today.
-
-### 4.4 Events over polling and direct calls
-
-Lyra decouples systems with delegates and its gameplay message router. We use plain multicast delegates:
-
-- `AFarmDayCycle` broadcasts `OnNewDay`; `AFarmGrid` listens and advances tiles.
-- `OnNewDayFinished` fires after everything has reacted; `UFarmSaveSubsystem` listens and saves.
-- `UFarmingComponent::OnToolChanged` lets `AFarmerCharacter` update the held mesh, including after a load.
-
-Prefer non-dynamic delegates (`DECLARE_MULTICAST_DELEGATE_*`) for C++-only events. Use `DECLARE_DYNAMIC_MULTICAST_DELEGATE_*` only when Blueprints need to bind. Always unbind in `EndPlay` or `Deinitialize` when the broadcaster can outlive the listener.
-
-### 4.5 Gameplay tags (later)
-
-Lyra identifies almost everything with `FGameplayTag`. When we need open-ended categories that designers extend (item types, crop seasons, interaction types), switch from enums to gameplay tags. Small closed sets like `EFarmTool` stay enums.
-
-### 4.6 Input
-
-Lyra maps input actions to gameplay tags through data assets. For now, `AFarmerCharacter` creates its input actions in code so no assets are needed. When input grows, move to `UInputAction` and `UInputMappingContext` assets under `Content/Input`, and keep binding them in the character. Input handlers stay thin: they call into the owning component and contain no game rules.
-
-### 4.7 What we deliberately do not adopt yet
-
-The Gameplay Ability System, Experiences, Game Feature plugins, Common UI, the modular gameplay framework, and replication. Each adds a lot of setup that a single-player prototype doesn't need. Revisit when a concrete feature calls for one.
+Code that changes the design must follow it, and update its Part B and decision log in the same commit.
 
 ## 5. Classes and headers
 
@@ -302,7 +236,7 @@ TObjectPtr<AFarmGrid> Grid;
 
 - Always give edited properties a `Category`. Use `"Farming"` and subcategories with `|`: `"Farming|Time"`, `"Farming|Lighting"`, `"Farming|Visuals"`.
 - Add `ClampMin` / `ClampMax` meta where a value has a sensible range.
-- Expose to Blueprints (`BlueprintReadOnly`, `BlueprintCallable`, `BlueprintPure`) **only when a Blueprint actually needs it**. Everything exposed becomes an API we have to keep stable. Prefer `BlueprintReadOnly` to `BlueprintReadWrite`.
+- Expose to Blueprints (`BlueprintReadOnly`, `BlueprintCallable`, `BlueprintPure`) **only when a Blueprint actually needs it, or as a deliberate modding extension point** marked `/** Extension point: ... */` (see [Architecture.md, Designing for mods](Architecture.md#12-designing-for-mods)). Everything exposed becomes an API we have to keep stable. Prefer `BlueprintReadOnly` to `BlueprintReadWrite`.
 - Core rules live in C++. Blueprints are for content: picking meshes, tuning values, laying out levels, small visual-only behavior.
 - Mark components created with `CreateDefaultSubobject` as `VisibleAnywhere`, and create them only in the constructor.
 
@@ -401,7 +335,7 @@ Game rules get automated tests. They run in seconds without playing the game, an
 - **What to test**: rules and data, not visuals. Tile transitions (grass, tilled, planted, ripe), growth only when watered, harvesting, tool use with no seeds left, the day clock rolling over, and save data round-tripping.
 - **Where**: `Source/FarmSim/Tests/<ClassName>Tests.cpp`, wrapped in `#if WITH_DEV_AUTOMATION_TESTS` so tests never ship. Name tests `FarmSim.<Area>.<Behavior>`, for example `FarmSim.Tile.WateredCropGrowsOneStage`.
 - **Running**: from the editor's Test Automation window (Tools menu), filtered on `FarmSim`, or from the command line with `-ExecCmds="Automation RunTests FarmSim"`.
-- **Design for testability**: keep rules in code that doesn't need a running level. When rule code is tangled with visuals or actor setup, that's a sign to separate them (see [section 16](#16-known-deviations-to-clean-up)).
+- **Design for testability**: keep rules in code that doesn't need a running level. When rule code is tangled with visuals or actor setup, that's a sign to separate them (see [Architecture.md, Known gaps](Architecture.md#17-known-gaps)).
 - Run the tests before committing a change to game rules. A bug fix gets a test that would have caught it.
 
 ## 14. Project layout and assets
@@ -468,12 +402,10 @@ Blender sources go in `Art/Blender/`, exported FBX files in `Art/Export/`, with 
 
 ## 16. Known deviations to clean up
 
-Existing code that doesn't yet match these guidelines. Fix them when touching the code nearby, each in a small commit. Don't do a sweeping cleanup in the middle of a feature.
+Existing code that doesn't yet match these guidelines. Fix them when touching the code nearby, each in a small commit. Don't do a sweeping cleanup in the middle of a feature. Design-level gaps are listed in [Architecture.md, Known gaps](Architecture.md#17-known-gaps).
 
 - `UFarmingComponent::Seeds` and `HarvestedCrops` are public mutable properties, and `UFarmSaveSubsystem` writes them directly. Make them private with getters and a `RestoreInventory(...)` function.
 - Tunable properties on `AFarmTile`, `AFarmGrid` and `AFarmDayCycle` are public. Move them to `protected` / `private` with `AllowPrivateAccess` and add getters where other classes read them.
-- `TActorIterator` lookups for "the first grid in the level" appear in more than one class. Give `AFarmGrid` a static `Find(const UWorld*)` like `AFarmDayCycle::Find`.
-- `AFarmTile` mixes its rules (state, growth) with its visuals. Before writing its first tests, consider moving the rules into a plain `FFarmTileState` struct that the actor owns, so tests don't need to spawn actors.
 - `FarmHudWidget.h` needs `// clang-format off` / `on` around its Slate argument block.
 - The `Variant_Combat`, `Variant_Platforming` and `Variant_SideScrolling` template folders (code and content) are unused. Decide whether to delete them; removing them also shortens `PublicIncludePaths` and drops the AI and StateTree module dependencies.
 
@@ -482,6 +414,7 @@ Existing code that doesn't yet match these guidelines. Fix them when touching th
 Before committing, check:
 
 - [ ] Each change lives on the class that owns that responsibility ([section 1](#1-ownership-and-separation-of-concerns)).
+- [ ] Design changes are reflected in [Architecture.md](Architecture.md) (ownership table, decision log).
 - [ ] Names follow the prefixes, the `Farm` prefix and PascalCase, and nothing shadows a base class member.
 - [ ] Changed files are formatted with clang-format.
 - [ ] Headers forward declare; `.cpp` files include what they use, own header first.
@@ -502,7 +435,7 @@ Official Epic references, checked against UE5:
 - [Recommended Asset Naming Conventions](https://dev.epicgames.com/documentation/en-us/unreal-engine/recommended-asset-naming-conventions-in-unreal-engine-projects): asset prefixes and naming.
 - [Class Specifiers](https://dev.epicgames.com/documentation/en-us/unreal-engine/class-specifiers), [UProperties](https://dev.epicgames.com/documentation/unreal-engine/unreal-engine-uproperties), [UFunctions](https://dev.epicgames.com/documentation/en-us/unreal-engine/ufunctions-in-unreal-engine) and [Metadata Specifiers](https://dev.epicgames.com/documentation/en-us/unreal-engine/metadata-specifiers-in-unreal-engine): what every `UCLASS`, `UPROPERTY`, `UFUNCTION` and `meta=` option does.
 - [CQTest](https://dev.epicgames.com/documentation/unreal-engine/cqtest-test-framework-for-unreal-engine) and the [Automation Test Framework](https://dev.epicgames.com/documentation/en-us/unreal-engine/automation-test-framework-in-unreal-engine): writing and running tests.
-- The Lyra Starter Game documentation and source: architecture reference (see [section 4](#4-architecture-patterns-borrowed-from-lyra)).
+- The Lyra Starter Game documentation and source: architecture reference (see [Architecture.md](Architecture.md#11-patterns-borrowed-from-lyra)).
 
 Beyond Epic:
 
