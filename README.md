@@ -23,7 +23,7 @@ Then double-click `FarmSim.uproject`, let Unreal build the C++ modules, open `Co
 |---|---|
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Setup, project layout, and how to contribute code, art, audio and ideas |
 | [Docs/GameDesign.md](Docs/GameDesign.md) | What the game is, how it plays and why |
-| [Docs/Lore.md](Docs/Lore.md) | The story, the world and its characters (spoilers) |
+| [Docs/Spoilers/Lore.md](Docs/Spoilers/Lore.md) | The story, the world and its characters (spoilers) |
 | [Docs/Roadmap.md](Docs/Roadmap.md) | What's done and what comes next |
 | [Docs/Architecture.md](Docs/Architecture.md) | How the code fits together, who owns what, and the decision log |
 | [Docs/CodingGuidelines.md](Docs/CodingGuidelines.md) | How the code looks |

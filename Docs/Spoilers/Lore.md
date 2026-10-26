@@ -1,8 +1,10 @@
 # FarmSim lore
 
+> **Spoilers.** This document reveals the story, its secrets and the characters' backstories.
+
 The story and the world: its history, the people and robots in it, the money and the companies. This is the source of truth for anything a character says, an item description, a letter found in a ruin or a festival in town.
 
-- [GameDesign.md](GameDesign.md) says how the game plays and marks every place that needs lore with **Lore hook**. This document answers those hooks.
+- [GameDesign.md](../GameDesign.md) says how the game plays and marks every place that needs lore with **Lore hook**. This document answers those hooks.
 - Names marked *(working name)* are proposals and can still change. Search for that tag before a name goes into content.
 - The world is our own. Don't borrow names, iconography or signature ideas from other games or franchises.
 
@@ -92,7 +94,7 @@ The machines didn't just do the physical work. By the last pre-war decades they 
 - **Solar power is the world's main clean energy.** Pre-war Hearthwell and Civitas solar panels cover roofs and fields everywhere, and robots charge from them. Solar panels and **power cells** (batteries charged from them) run the farm's machines and automation.
 - **The haze limits it.** Sunstone dust in the sky dims the sun, so a panel gives a fraction of its pre-war output.
 - **Living land clears the sky.** Healthy soil and plants bind Sunstone dust and pull it out of the air, and some mutated crops absorb it especially well. Where the land recovers, the haze thins and the sun comes back. Where land is poisoned further, by dirty water, burnt scrap or stripped soil, the dust rises again and the haze thickens.
-- This is the lore behind **land health** in [GameDesign.md section 6](GameDesign.md#6-farming): the player's actions slowly improve or damage the local environment, which raises or lowers solar output. A restored farm is literally a brighter place.
+- This is the lore behind **land health** in [GameDesign.md section 6](../GameDesign.md#6-farming): the player's actions slowly improve or damage the local environment, which raises or lowers solar output. A restored farm is literally a brighter place.
 - Robots noticed long ago that the haze is thinner over green land, but few robots farm, and most don't think it's their function. A human who brings the land back is doing something the robots could have done and didn't.
 
 ## 5. How robots came to run society

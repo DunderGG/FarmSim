@@ -4,7 +4,7 @@ What we have built so far, and everything we know we still have to build, in the
 
 - [GameDesign.md](GameDesign.md) says what the game is and why. This roadmap only tracks the work, and links to the design for details.
 - [Architecture.md](Architecture.md) says how the code fits together. Many items in the foundations section come from its known gaps and expected changes.
-- [Lore.md](Lore.md) holds the story, characters and names.
+- [Lore.md](Spoilers/Lore.md) holds the story, characters and names.
 
 **Keep this document up to date.** Tick an item in the same commit that finishes it. When new work turns up, add it under the right milestone. When the plan changes, move items rather than deleting them, and record the reason in the design or architecture decision log.
 
@@ -293,5 +293,5 @@ Collected from the other documents. Each one is settled in its own document and 
 - **Mutated crops:** which effects are good and which are risky, and how often normal crops mutate. ([GameDesign.md](GameDesign.md#15-open-questions))
 - **Knock-out penalty:** what exactly is lost. ([GameDesign.md](GameDesign.md#15-open-questions))
 - **Multiplayer:** shared farm or separate farms, shared clock and sleep. ([GameDesign.md](GameDesign.md#15-open-questions))
-- **Names:** the game, the world, the town, the coin, the caretaker, the robot makers. ([Lore.md](Lore.md#14-open-questions))
-- **Story:** what the sealed message says, whether the sibling exists, and whether the story ever says who struck first. ([Lore.md](Lore.md#14-open-questions))
+- **Names:** the game, the world, the town, the coin, the caretaker, the robot makers. ([Lore.md](Spoilers/Lore.md#14-open-questions))
+- **Story:** what the sealed message says, whether the sibling exists, and whether the story ever says who struck first. ([Lore.md](Spoilers/Lore.md#14-open-questions))

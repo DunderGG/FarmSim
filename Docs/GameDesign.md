@@ -3,7 +3,7 @@
 What the game is, how it plays and why. This document steers development: when a feature idea comes up, check it against the pillars and the scope here first.
 
 - [Architecture.md](Architecture.md) covers how the code is put together. [CodingGuidelines.md](CodingGuidelines.md) covers how the code looks.
-- The story, the world's history, the currency and each character's backstory go in the separate lore document, [Lore.md](Lore.md). This document only says where the game needs lore, and marks those places with **Lore hook**.
+- The story, the world's history, the currency and each character's backstory go in the separate lore document, [Lore.md](Spoilers/Lore.md). This document only says where the game needs lore, and marks those places with **Lore hook**.
 
 Keep this document up to date. When a design choice is made or changed, update the relevant section and add a line to the [decision log](#14-decision-log).
 
@@ -136,7 +136,7 @@ A farm tile has a state (grass, tilled, planted), and on top of that:
 - A panel's daily output depends on the time of day (nothing at night), the weather (dust storms block most of it) and **the haze** over the farm (see below).
 - Machines draw a set amount of charge to run. When the stored charge runs out, they stop until it's recharged. Early tools and simple sprinklers don't need power, so a new player isn't blocked by energy.
 - Energy sources (panels, later other generators) and consumers are data assets, so mods can add both.
-- **Lore hook:** Sunstone dust and the haze, see [Lore.md section 4](Lore.md#energy-after-the-war).
+- **Lore hook:** Sunstone dust and the haze, see [Lore.md section 4](Spoilers/Lore.md#energy-after-the-war).
 
 ### Land health and the haze
 
@@ -296,7 +296,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 To be decided later. Move each one into the relevant section and the decision log when it's settled.
 
-- **Lore:** the details still open in [Lore.md](Lore.md), such as names marked as working names.
+- **Lore:** the details still open in [Lore.md](Spoilers/Lore.md), such as names marked as working names.
 - **Multiplayer:** co-op is wanted, but [Architecture.md](Architecture.md#16-decision-log) currently says single-player only. When we start, decide what shared state looks like (shared farm or separate farms, shared clock and sleep) and update the architecture.
 - **Land health:** whether it is one value per map or varies across a map, how fast it changes, and whether damage spreads to neighbouring tiles.
 - **Energy balance:** how much charge panels give and machines use, and whether the vertical slice needs any of it (probably not).
