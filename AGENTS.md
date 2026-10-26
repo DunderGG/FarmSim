@@ -14,6 +14,7 @@ Instructions for AI coding agents working in this repository. Humans can read it
 
 - **[Docs/CodingGuidelines.md](Docs/CodingGuidelines.md)** is the coding standard: how code looks. It is based on Epic's C++ Coding Standard and clean code principles.
 - **[Docs/Architecture.md](Docs/Architecture.md)** is the design: principles, where things go in Unreal's framework, who owns what, how systems talk, and the decision log.
+- **[Docs/Roadmap.md](Docs/Roadmap.md)**: what's done and what's next. Tick items in the same commit that finishes them.
 
 - **[LICENSING.md](LICENSING.md)**: code is GPL-3.0-or-later with an Unreal Engine linking permission, assets are CC BY-NC-SA 4.0, Epic template material is under the UE EULA. Never add third-party code or assets without checking their license is compatible, and note where they came from.
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** covers setup, art and audio pipelines, and the workflow for outside contributors.

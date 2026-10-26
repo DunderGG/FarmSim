@@ -1,0 +1,296 @@
+# FarmSim roadmap
+
+What we have built so far, and everything we know we still have to build, in the order we plan to build it.
+
+- [GameDesign.md](GameDesign.md) says what the game is and why. This roadmap only tracks the work, and links to the design for details.
+- [Architecture.md](Architecture.md) says how the code fits together. Many items in the foundations section come from its known gaps and expected changes.
+- [Lore.md](Lore.md) holds the story, characters and names.
+
+**Keep this document up to date.** Tick an item in the same commit that finishes it. When new work turns up, add it under the right milestone. When the plan changes, move items rather than deleting them, and record the reason in the design or architecture decision log.
+
+Legend: `[x]` done, `[ ]` to do. Items marked *(decide)* need a decision before work starts.
+
+Contents
+
+1. [Where we are](#1-where-we-are)
+2. [Milestone 1: playable prototype (done)](#2-milestone-1-playable-prototype-done)
+3. [Housekeeping](#3-housekeeping)
+4. [Milestone 2: vertical slice](#4-milestone-2-vertical-slice)
+5. [Milestone 3 and later](#5-milestone-3-and-later)
+6. [Before a public release](#6-before-a-public-release)
+7. [Open decisions](#7-open-decisions)
+
+---
+
+## 1. Where we are
+
+- **Done:** milestone 1, the playable prototype, plus the project's documents and rules.
+- **Now:** housekeeping (push, play-test), then milestone 2.
+- **Next up**, in order:
+  1. Crops as data assets, with the current turnip as the first one (`Base.Turnip`).
+  2. Tile rules separated from tile visuals, with the first automated tests.
+  3. Tools and items as data assets, replacing the hard-coded tool list.
+
+## 2. Milestone 1: playable prototype (done)
+
+A third-person farmer on a small field who can till, plant, water and harvest, with a day and night cycle, a HUD and saving.
+
+### Project setup
+
+- [x] Unreal Engine 5.7 C++ project from the Third Person template
+- [x] Git with Git LFS for binary files, private GitHub repository
+- [x] Test level `L_Farm` with a farm grid placed in it
+- [x] Disabled the VisualStudioTools plugin, which was missing from the engine and broke the build
+
+### Core farming loop (C++)
+
+- [x] Farm tiles with three states: grass, tilled, planted
+- [x] 8 by 8 farm grid that spawns its tiles at play start
+- [x] Four tools: hoe, seeds, watering can, hand (keys 1 to 4, E to use)
+- [x] Watered crops grow one stage per day and can be harvested when ripe
+- [x] Seed count and harvest count
+- [x] Highlight on the tile the player is facing
+- [x] Sleep with N to start a new day
+
+### First art
+
+- [x] Blender script that builds the first meshes: tilled soil, four turnip growth stages and a watering can
+- [x] Meshes imported into Unreal and used by tiles and crops
+- [x] The current tool is shown in the farmer's hand
+- [x] Early Blender assets brought into the game
+
+### HUD, day and night, saving
+
+- [x] On-screen HUD: day, clock, current tool, seeds, harvest count, key hints and short messages
+- [x] Day and night clock from 06:00, sun and sky light follow the time
+- [x] 24-hour clock display
+- [x] Properly dark nights
+- [x] Day cycle speed tuned
+- [x] Pass out at 02:00 (to be replaced, see [stamina and late nights](#43-stamina-and-late-nights))
+- [x] Save at the start of each new day, load on play start, F9 starts a new game
+
+### Clean-up after the prototype
+
+- [x] Clock, lighting and night exposure moved off the grid into their own day cycle actor
+- [x] HUD moved into its own HUD class, saving into its own save subsystem
+- [x] Farming component trimmed to tools, inventory, targeting, tool use and sleep
+- [x] Recovered the level file after a script corrupted it, and fixed the script
+
+### Documents and rules
+
+- [x] Coding guidelines, code formatting rules (`.clang-format`) and instructions for AI agents (`AGENTS.md`, `CLAUDE.md`)
+- [x] Architecture document with the ownership table, decision log, known gaps and expected changes
+- [x] Rules for designing the game so it can be modded later
+- [x] Contributing guide, and Git LFS for more file types
+- [x] Game design document
+- [x] Lore document
+- [x] Licenses: GPL-3.0 with an Unreal Engine permission for code, CC BY-NC-SA 4.0 for assets, and a credits file
+- [x] The Unreal Engine permission stated as part of the code's license terms
+- [x] Names of other games removed from the documents and from the Git history
+- [x] This roadmap
+
+## 3. Housekeeping
+
+Small things to finish before milestone 2 starts.
+
+- [ ] Play-test the latest changes: the HUD looks the same, sleeping saves the game, stopping and playing again restores the farm, and F9 starts a new game
+- [ ] Push the local commits. The Git history was rewritten, so this push needs `git push --force-with-lease origin main`
+- [ ] Delete the backup branch `backup/before-history-rewrite` once the push is done
+- [ ] Decide whether to delete the unused template folders `Variant_Combat`, `Variant_Platforming` and `Variant_SideScrolling` *(decide)*
+- [ ] Remove the leftover redirector `Content/L_Farm` at the content root (right-click > Fix Up Redirectors)
+
+## 4. Milestone 2: vertical slice
+
+**Goal:** one full 28-day season that shows every pillar in a small form. See [GameDesign.md section 13](GameDesign.md#13-scope-and-milestones).
+
+**Done when** a player can start a new game, meet the caretaker robot, grow three or four crops (one of them mutated) in soil with water and radiation to manage, run out of stamina, pay for staying up late, set up a sprinkler, sell the harvest, and play through to the end of the season.
+
+### 4.1 Foundations
+
+The code changes that the slice's content depends on. Doing them first means adding a crop, tool or item later is a new data asset, not new code. Details in [Architecture.md sections 12, 17 and 18](Architecture.md#17-known-gaps).
+
+**Content as data**
+
+- [ ] Crop data assets (`UFarmCropData`) found through the Asset Manager: ID, name, seasons, growth stage meshes, days per stage, water need, radiation tolerance, yield, seed price and sell price
+- [ ] The current turnip becomes the first crop asset, `Base.Turnip`, and its settings move off the tile Blueprint
+- [ ] Tool data assets (`UFarmToolData`), replacing the hard-coded tool list (`EFarmTool`)
+- [ ] Item data assets (`UFarmItemData`) for seeds, harvested crops and other things the player can carry
+- [ ] All content uses namespaced IDs (`Base.<Name>`)
+
+**Tiles and the farm grid**
+
+- [ ] Tile rules in a plain state struct, separate from the tile actor that shows them
+- [ ] A shared way to find the grid (`AFarmGrid::Find`), replacing the repeated searches
+- [ ] The grid announces when its tiles are ready, so loading no longer waits a frame
+
+**Saving**
+
+- [ ] Each owner saves and restores its own state, instead of the save subsystem writing into other classes
+- [ ] Tiles are saved with their grid coordinates, not by position in a list
+- [ ] Saves store content IDs, and skip content that no longer exists with a warning
+- [ ] A save version number
+
+**Communication and extension points**
+
+- [ ] A feedback event for player messages, so gameplay code stops calling the HUD directly
+- [ ] Blueprint events for key moments (new day, crop harvested, tool used), marked as extension points
+- [ ] An interaction interface (`IFarmInteractable`) for anything the player can use: bed, shipping bin, water source, robots
+
+**Player data**
+
+- [ ] Inventory and money move into an inventory component on the player state, so they outlive the character
+- [ ] Seed and harvest counts become private, with a restore function for loading
+- [ ] Tunable settings on the tile, grid and day cycle become protected or private
+
+**Tests**
+
+- [ ] Set up CQTest in the project
+- [ ] Tile rule tests: tilling, planting, watered crops grow, dry crops don't, harvesting only when ripe
+- [ ] Day clock tests: the time and day roll over correctly
+- [ ] Save tests: save data survives a save and load round trip
+
+### 4.2 Farming depth
+
+- [ ] Three or four crops for the season, each with its own meshes
+- [ ] One mutated crop that grows in irradiated soil
+- [ ] Normal crops can mutate in irradiated soil *(decide how often)*
+- [ ] Radiation level on each tile: slows or stops growth, and can be cleaned
+- [ ] A way to clean radiation, such as a tool, fertilizer or a crop that absorbs it
+- [ ] Water level on each tile, so watering is a state the tile tracks
+- [ ] Clean water as a resource: a water source on the farm that the watering can fills from
+- [ ] Dirty water: easy to get, but raises tile radiation
+- [ ] A 28-day season with the date shown on the HUD
+
+### 4.3 Stamina and late nights
+
+- [ ] Stamina: tool actions cost stamina, shown on the HUD
+- [ ] At zero stamina the player can still move but works slowly
+- [ ] No forced sleep: remove the pass-out at 02:00
+- [ ] After midnight, stamina drains faster
+- [ ] Going to bed late makes the next day start "exhausted" with less stamina
+- [ ] A bed in the farmhouse to sleep in, instead of a key that works anywhere
+- [ ] Hostile robots at night wait until combat exists ([milestone 3](#combat-and-the-wasteland))
+
+### 4.4 The caretaker robot
+
+- [ ] Hob *(working name)* in the game: placeholder body first, then a Blender model
+- [ ] Simple data-driven dialogue
+- [ ] Characters as data assets, so more robots and humans can be added the same way
+- [ ] One relationship track: robots start with a low opinion of the player, which grows through talking and gifts
+- [ ] Hob guides the player through the first days as a tutorial
+
+### 4.5 Automation and selling
+
+- [ ] Placing objects on the farm grid
+- [ ] A sprinkler that waters nearby tiles each morning from the farm's water store
+- [ ] A shipping bin: crops put in it are sold overnight
+- [ ] The currency (brass gear coins, name still open) on the HUD
+- [ ] A simple way to buy seeds
+
+### 4.6 Interface and input
+
+- [ ] An inventory or hotbar for several seed and crop types, built in UMG with C++ base classes
+- [ ] Input actions as assets once there are more keys than the prototype's handful *(decide when)*
+- [ ] A real highlight on the targeted tile (a decal or outline material), because the current debug box doesn't show in packaged builds
+- [ ] Meshes for the new crops, the sprinkler, the shipping bin, the water source and the bed
+
+## 5. Milestone 3 and later
+
+Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-milestones). Each group becomes its own milestone with a short plan when we get to it.
+
+### Seasons and weather
+
+- [ ] All four seasons (spring, summer, autumn, winter) of 28 days each
+- [ ] Crops that don't fit the new season die when it changes
+- [ ] More crops for each season
+- [ ] Weather: clear, rain that waters crops, dust storms, and radiation storms that raise tile radiation
+- [ ] A forecast for the next day, read by the robot weather broadcaster
+- [ ] One festival per season in town
+- [ ] Crops that regrow, or span several seasons
+
+### Energy and the land
+
+- [ ] Solar panels that charge power cells, with output depending on time of day, weather and haze
+- [ ] Machines that draw charge and stop when it runs out
+- [ ] Land health for each map, raised by healthy farming and lowered by pollution
+- [ ] The haze: thinner with healthy land, giving more solar power and a brighter sky
+- [ ] An easy-to-read land health meter
+- [ ] "Dirty" shortcuts (dirty water, polluting machines) that are faster now and costlier later
+
+### The robot town
+
+- [ ] Separate maps with loading between them: the farm, the town, later the wasteland zones
+- [ ] The robot town map
+- [ ] Townsfolk with schedules, likes and dislikes, and their own backstories (starting with the administrator, the clinic robot, the mail carrier, the pump engineer and the weather broadcaster)
+- [ ] Gifts, requests and personal events
+- [ ] Romance, dating and marriage with robots and humans; a partner moves to the farm
+- [ ] Recruiting befriended robots to work on the farm
+- [ ] Town restoration, the main story: repair the water pump, power, clinic and market, each unlocking something new
+- [ ] Shops
+
+### Progression
+
+- [ ] Skills that level up by doing: farming, engineering, scavenging, combat
+- [ ] Tool tiers: rusty, pre-war and high-tech
+- [ ] The tech tree, as data assets, with branches for automation, tools, water and soil machines, energy and robot upgrades
+- [ ] Automation from sprinklers to robot farmhands to a fully automated farm
+
+### Building and crafting
+
+- [ ] Buildings and machines on the farm grid: greenhouse, water purifier, rain collector, robot charging station, storage
+- [ ] Crafting stations and recipes, as data assets
+- [ ] Decorating the house
+
+### Survival needs
+
+- [ ] Hunger, thirst and radiation sickness, kept in check by eating crops and drinking clean water
+- [ ] Neglected needs lower stamina and work speed, but never kill the player
+- [ ] A setting to switch survival needs off, with nothing else depending on them
+
+### Combat and the wasteland
+
+- [ ] Simple real-time melee combat, starting with a wrench; ranged weapons later
+- [ ] Hostile robots on the farm at night that attack the player, never crops or buildings
+- [ ] Losing a fight: wake at home with a penalty
+- [ ] The first wasteland zone
+- [ ] Scavenging for materials
+- [ ] More zones, each with a reason in the history: a ruined city, a research facility, a Sunstone mine, a dam
+
+### Story
+
+- [ ] The family mystery: letters, recordings and Hob's returning memories
+- [ ] The rare humans, about four to six, each found as a story moment
+- [ ] The parents' sealed message, delivered when the farm is whole again
+- [ ] The opening: waking from the cryo pod under the farmhouse
+
+### Later still
+
+- [ ] Animals: mutated livestock
+- [ ] Other camera angles, such as a higher angled view
+- [ ] Mod support: base content as a Game Feature plugin, loading mods from a folder, load order, a mod kit, and letting mods override base content
+- [ ] Co-op multiplayer, which needs its own design and changes to the architecture
+
+## 6. Before a public release
+
+- [ ] Realistic art direction: Lumen, Nanite and Megascans for the world, custom Blender work for robots, machines and crops. Replace the low-poly placeholders
+- [ ] Replace the Epic template code and content (character, animations, input, level prototyping) with our own
+- [ ] Main menu, settings and save slots
+- [ ] Music and sound effects
+- [ ] Final names for the game, the world, the town, the coin, the caretaker and the robot makers
+- [ ] License headers (an SPDX line) in our own source files *(decide)*
+- [ ] A lawyer's check of the licensing setup
+- [ ] Make the GitHub repository public, so contributors can work on it as the licensing intends
+- [ ] Packaged builds and store pages
+
+## 7. Open decisions
+
+Collected from the other documents. Each one is settled in its own document and decision log.
+
+- **Land health:** one value per map or varying across it, how fast it changes, and whether damage spreads. ([GameDesign.md](GameDesign.md#15-open-questions))
+- **Energy balance:** how much charge panels give and machines use. ([GameDesign.md](GameDesign.md#15-open-questions))
+- **Mutated crops:** which effects are good and which are risky, and how often normal crops mutate. ([GameDesign.md](GameDesign.md#15-open-questions))
+- **Knock-out penalty:** what exactly is lost. ([GameDesign.md](GameDesign.md#15-open-questions))
+- **Multiplayer:** shared farm or separate farms, shared clock and sleep. ([GameDesign.md](GameDesign.md#15-open-questions))
+- **Names:** the game, the world, the town, the coin, the caretaker, the robot makers. ([Lore.md](Lore.md#14-open-questions))
+- **Story:** what the sealed message says, whether the sibling exists, and whether the story ever says who struck first. ([Lore.md](Lore.md#14-open-questions))
+- **Template folders:** keep or delete the unused `Variant_*` folders. ([CodingGuidelines.md](CodingGuidelines.md#16-known-deviations-to-clean-up))
