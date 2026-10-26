@@ -1,3 +1,5 @@
+<p align="center"><img src="Images/FarmSim-Social-Preview-Detailed.png" alt="Hob, a weathered Hearthwell farm robot, tends the garden beneath a rising Pinion gear sun" width="100%"></p>
+
 # FarmSim
 
 A cozy 3D farming and life-sim game set in a retro-futuristic, post-apocalyptic world. You wake from decades of cryosleep under an overgrown homestead. Humans have almost vanished, and robots carry on with the jobs people gave them. You bring the farm back to life, help the robot town next door, and slowly push out into the wasteland.

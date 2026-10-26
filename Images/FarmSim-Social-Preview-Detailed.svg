@@ -1,0 +1,763 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title description">
+	<title id="title">FarmSim: A Second Sunrise</title>
+	<desc id="description">Hob, the faithful Hearthwell HB-7 caretaker robot, tends a thriving bioluminescent garden beneath a radiant brass Pinion gear sun rising over the post-war wasteland.</desc>
+
+	<defs>
+		<!-- ================= SKY & ATMOSPHERE GRADIENTS ================= -->
+		<linearGradient id="skyHaze" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0%" stop-color="#16272e"/>
+			<stop offset="35%" stop-color="#2a3e42"/>
+			<stop offset="58%" stop-color="#725844"/>
+			<stop offset="78%" stop-color="#c88748"/>
+			<stop offset="92%" stop-color="#f5cd82"/>
+			<stop offset="100%" stop-color="#ffeed0"/>
+		</linearGradient>
+
+		<!-- Radial glow of the celestial Pinion Sun -->
+		<radialGradient id="sunBloom" cx="0.5" cy="0.5" r="0.5">
+			<stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+			<stop offset="25%" stop-color="#fff2b2" stop-opacity="0.95"/>
+			<stop offset="50%" stop-color="#f7b74f" stop-opacity="0.8"/>
+			<stop offset="76%" stop-color="#d66e2c" stop-opacity="0.4"/>
+			<stop offset="100%" stop-color="#a6441f" stop-opacity="0"/>
+		</radialGradient>
+
+		<!-- Volumetric Crepuscular God Rays -->
+		<linearGradient id="godRayGrad" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0%" stop-color="#fff8dc" stop-opacity="0.45"/>
+			<stop offset="30%" stop-color="#fad482" stop-opacity="0.25"/>
+			<stop offset="70%" stop-color="#df914b" stop-opacity="0.08"/>
+			<stop offset="100%" stop-color="#aa5329" stop-opacity="0"/>
+		</linearGradient>
+
+		<!-- ================= METALLIC BRASS & COPPER GRADIENTS ================= -->
+		<linearGradient id="brassBevel" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0%" stop-color="#fff8db"/>
+			<stop offset="22%" stop-color="#f3cc77"/>
+			<stop offset="48%" stop-color="#ae7c39"/>
+			<stop offset="74%" stop-color="#fedc8f"/>
+			<stop offset="100%" stop-color="#673f1a"/>
+		</linearGradient>
+
+		<radialGradient id="brassPlate" cx="0.38" cy="0.35" r="0.62">
+			<stop offset="0%" stop-color="#fff4c6"/>
+			<stop offset="28%" stop-color="#f3c46e"/>
+			<stop offset="65%" stop-color="#b87f3b"/>
+			<stop offset="88%" stop-color="#7d4b20"/>
+			<stop offset="100%" stop-color="#512c10"/>
+		</radialGradient>
+
+		<linearGradient id="copperPipe" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0%" stop-color="#f2a887"/>
+			<stop offset="35%" stop-color="#ffcaa8"/>
+			<stop offset="70%" stop-color="#b86140"/>
+			<stop offset="100%" stop-color="#612d18"/>
+		</linearGradient>
+
+		<linearGradient id="darkSteel" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0%" stop-color="#556565"/>
+			<stop offset="45%" stop-color="#354040"/>
+			<stop offset="85%" stop-color="#1f2728"/>
+			<stop offset="100%" stop-color="#13191a"/>
+		</linearGradient>
+
+		<!-- ================= HEARTHWELL ENAMEL & SALVAGED ARMOR ================= -->
+		<radialGradient id="creamEnamel" cx="0.33" cy="0.3" r="0.7">
+			<stop offset="0%" stop-color="#ffffff"/>
+			<stop offset="30%" stop-color="#fff4df"/>
+			<stop offset="68%" stop-color="#e3d4b8"/>
+			<stop offset="90%" stop-color="#b3a284"/>
+			<stop offset="100%" stop-color="#76674e"/>
+		</radialGradient>
+
+		<linearGradient id="mintSalvage" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0%" stop-color="#b8dcce"/>
+			<stop offset="50%" stop-color="#6f988b"/>
+			<stop offset="100%" stop-color="#3c5c52"/>
+		</linearGradient>
+
+		<linearGradient id="ironsideOlive" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0%" stop-color="#718059"/>
+			<stop offset="50%" stop-color="#495537"/>
+			<stop offset="100%" stop-color="#2a331d"/>
+		</linearGradient>
+
+		<!-- ================= SOIL & VEGETATION ================= -->
+		<linearGradient id="soilField" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0%" stop-color="#43392b"/>
+			<stop offset="28%" stop-color="#2c241a"/>
+			<stop offset="68%" stop-color="#1e1811"/>
+			<stop offset="100%" stop-color="#110d09"/>
+		</linearGradient>
+
+		<linearGradient id="ridgeBack" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0%" stop-color="#485953"/>
+			<stop offset="100%" stop-color="#24322f"/>
+		</linearGradient>
+
+		<linearGradient id="ridgeFront" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0%" stop-color="#34453e"/>
+			<stop offset="100%" stop-color="#17221f"/>
+		</linearGradient>
+
+		<!-- Bioluminescent glowing crop gradients -->
+		<radialGradient id="bioGlowAmber" cx="0.5" cy="0.5" r="0.5">
+			<stop offset="0%" stop-color="#fff9df"/>
+			<stop offset="35%" stop-color="#f7c25d"/>
+			<stop offset="75%" stop-color="#e27c24"/>
+			<stop offset="100%" stop-color="#e27c24" stop-opacity="0"/>
+		</radialGradient>
+
+		<radialGradient id="bioGlowTeal" cx="0.5" cy="0.5" r="0.5">
+			<stop offset="0%" stop-color="#ebfffa"/>
+			<stop offset="38%" stop-color="#55e8ce"/>
+			<stop offset="78%" stop-color="#1a8f7c"/>
+			<stop offset="100%" stop-color="#1a8f7c" stop-opacity="0"/>
+		</radialGradient>
+
+		<!-- Vacuum Tube Glow -->
+		<radialGradient id="tubeGlow" cx="0.5" cy="0.4" r="0.55">
+			<stop offset="0%" stop-color="#ffffff"/>
+			<stop offset="25%" stop-color="#ffe49a"/>
+			<stop offset="60%" stop-color="#ff7b18"/>
+			<stop offset="88%" stop-color="#b63400"/>
+			<stop offset="100%" stop-color="#540f00" stop-opacity="0"/>
+		</radialGradient>
+
+		<!-- ================= FILTERS ================= -->
+		<filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+			<feGaussianBlur stdDeviation="7" result="blur"/>
+			<feMerge>
+				<feMergeNode in="blur"/>
+				<feMergeNode in="SourceGraphic"/>
+			</feMerge>
+		</filter>
+
+		<filter id="bloomIntense" x="-60%" y="-60%" width="220%" height="220%">
+			<feGaussianBlur in="SourceGraphic" stdDeviation="16" result="blur1"/>
+			<feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur2"/>
+			<feMerge>
+				<feMergeNode in="blur1"/>
+				<feMergeNode in="blur2"/>
+				<feMergeNode in="SourceGraphic"/>
+			</feMerge>
+		</filter>
+
+		<filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+			<feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+			<feOffset dx="0" dy="7" result="offsetblur"/>
+			<feFlood flood-color="#070e10" flood-opacity="0.6"/>
+			<feComposite in2="offsetblur" operator="in"/>
+			<feMerge>
+				<feMergeNode/>
+				<feMergeNode in="SourceGraphic"/>
+			</feMerge>
+		</filter>
+
+		<pattern id="filmGrain" width="70" height="70" patternUnits="userSpaceOnUse">
+			<circle cx="10" cy="15" r="0.8" fill="#ffffff" opacity="0.07"/>
+			<circle cx="42" cy="18" r="0.6" fill="#ffffff" opacity="0.05"/>
+			<circle cx="62" cy="48" r="0.8" fill="#ffffff" opacity="0.06"/>
+			<circle cx="24" cy="54" r="0.7" fill="#ffffff" opacity="0.05"/>
+			<circle cx="52" cy="6" r="0.6" fill="#0d1412" opacity="0.07"/>
+			<circle cx="18" cy="36" r="0.7" fill="#0d1412" opacity="0.06"/>
+		</pattern>
+
+		<clipPath id="frameClip">
+			<rect x="0" y="0" width="1280" height="640"/>
+		</clipPath>
+
+		<!-- ================= REUSABLE ASSETS ================= -->
+		<!-- Mathematically Precision-Engineered 16-Tooth Pinion Cogwheel Path (R_outer=168, R_root=134) -->
+		<path id="pinionGear" d="M 134.0 0.0 L 133.7 9.5 L 166.7 21.1 L 162.0 44.3 L 127.1 42.4 L 123.8 51.3 L 119.9 59.9 L 145.9 83.2 L 132.7 103.0 L 101.2 87.8 L 94.8 94.8 L 87.8 101.2 L 103.0 132.7 L 83.2 145.9 L 59.9 119.9 L 51.3 123.8 L 42.4 127.1 L 44.3 162.0 L 21.1 166.7 L 9.5 133.7 L 0.0 134.0 L -9.5 133.7 L -21.1 166.7 L -44.3 162.0 L -42.4 127.1 L -51.3 123.8 L -59.9 119.9 L -83.2 145.9 L -103.0 132.7 L -87.8 101.2 L -94.8 94.8 L -101.2 87.8 L -132.7 103.0 L -145.9 83.2 L -119.9 59.9 L -123.8 51.3 L -127.1 42.4 L -162.0 44.3 L -166.7 21.1 L -133.7 9.5 L -134.0 0.0 L -133.7 -9.5 L -166.7 -21.1 L -162.0 -44.3 L -127.1 -42.4 L -123.8 -51.3 L -119.9 -59.9 L -145.9 -83.2 L -132.7 -103.0 L -101.2 -87.8 L -94.8 -94.8 L -87.8 -101.2 L -103.0 -132.7 L -83.2 -145.9 L -59.9 -119.9 L -51.3 -123.8 L -42.4 -127.1 L -44.3 -162.0 L -21.1 -166.7 L -9.5 -133.7 L -0.0 -134.0 L 9.5 -133.7 L 21.1 -166.7 L 44.3 -162.0 L 42.4 -127.1 L 51.3 -123.8 L 59.9 -119.9 L 83.2 -145.9 L 103.0 -132.7 L 87.8 -101.2 L 94.8 -94.8 L 101.2 -87.8 L 132.7 -103.0 L 145.9 -83.2 L 119.9 -59.9 L 123.8 -51.3 L 127.1 -42.4 L 162.0 -44.3 L 166.7 -21.1 L 133.7 -9.5 Z"/>
+
+		<!-- Detailed Mutated Parsnip/Turnip Leaf -->
+		<g id="cropLeaf">
+			<path d="M0 0 C-10 -25 -28 -44 -20 -68 C-10 -52 2 -36 0 0" fill="#58793b" stroke="#354e20" stroke-width="1.8"/>
+			<path d="M0 0 C12 -28 32 -46 24 -72 C12 -54 -2 -38 0 0" fill="#759a4f" stroke="#416127" stroke-width="1.8"/>
+			<path d="M0 0 C-3 -34 0 -64 2 -85" fill="none" stroke="#a4cd6e" stroke-width="2.2" stroke-linecap="round"/>
+			<!-- Glowing inner Sunstone veins -->
+			<path d="M0 -12 C-7 -30 -14 -42 -12 -54" fill="none" stroke="#f6d56d" stroke-width="1.5" opacity="0.85"/>
+			<path d="M0 -22 C7 -36 15 -48 14 -60" fill="none" stroke="#f6d56d" stroke-width="1.5" opacity="0.85"/>
+		</g>
+
+		<!-- Glowing Sunstone Spore Particle -->
+		<g id="spore">
+			<circle cx="0" cy="0" r="5" fill="url(#bioGlowAmber)"/>
+			<circle cx="0" cy="0" r="1.6" fill="#ffffff"/>
+		</g>
+	</defs>
+
+	<!-- ================= MAIN SCENE ================= -->
+	<g clip-path="url(#frameClip)">
+
+		<!-- 1. HAZY POST-WAR SKY -->
+		<rect width="1280" height="640" fill="url(#skyHaze)"/>
+
+		<!-- Coppery Sunstone dust streaks in upper atmosphere -->
+		<path d="M -50 130 Q 300 70 650 110 T 1340 60" fill="none" stroke="#de8f50" stroke-width="48" opacity="0.14"/>
+		<path d="M -50 170 Q 340 110 760 150 T 1340 110" fill="none" stroke="#f0b870" stroke-width="24" opacity="0.18"/>
+		<path d="M 120 210 Q 540 160 940 190 T 1340 155" fill="none" stroke="#ffe2a0" stroke-width="9" opacity="0.25"/>
+
+		<!-- 2. VOLUMETRIC CREPUSCULAR GOD RAYS FROM PINION SUN (Center: 1060, 180) -->
+		<g opacity="0.55">
+			<polygon points="1060,180 -100,-40 -100,60" fill="url(#godRayGrad)"/>
+			<polygon points="1060,180 -100,120 -100,240" fill="url(#godRayGrad)"/>
+			<polygon points="1060,180 -100,340 50,640" fill="url(#godRayGrad)"/>
+			<polygon points="1060,180 180,640 440,640" fill="url(#godRayGrad)"/>
+			<polygon points="1060,180 640,640 850,640" fill="url(#godRayGrad)"/>
+			<polygon points="1060,180 980,640 1180,640" fill="url(#godRayGrad)"/>
+			<polygon points="1060,180 1380,240 1380,420" fill="url(#godRayGrad)"/>
+			<polygon points="1060,180 1380,-60 1380,90" fill="url(#godRayGrad)"/>
+		</g>
+
+		<!-- 3. THE CELESTIAL PINION SUN (The world's currency in the sky) -->
+		<!-- Outer solar coronal bloom -->
+		<circle cx="1060" cy="180" r="330" fill="url(#sunBloom)" filter="url(#bloomIntense)"/>
+		<circle cx="1060" cy="180" r="220" fill="url(#sunBloom)"/>
+
+		<!-- Massive Brass Pinion Gear disc -->
+		<g transform="translate(1060 180) rotate(11)">
+			<!-- Outer cast gear rim with teeth -->
+			<circle cx="0" cy="0" r="170" fill="none" stroke="#79461b" stroke-width="6" opacity="0.55"/>
+			<use xlink:href="#pinionGear" fill="url(#brassBevel)" stroke="#522e10" stroke-width="4.5" stroke-linejoin="round" filter="url(#dropShadow)"/>
+
+			<!-- Inner beveled brass web / coin body -->
+			<circle cx="0" cy="0" r="130" fill="url(#brassPlate)" stroke="#fde49d" stroke-width="3"/>
+			<circle cx="0" cy="0" r="122" fill="none" stroke="#784419" stroke-width="2"/>
+
+			<!-- Concentric engraved coin ridges -->
+			<circle cx="0" cy="0" r="115" fill="none" stroke="#ebbf71" stroke-width="1.6" stroke-dasharray="4 3" opacity="0.8"/>
+			<circle cx="0" cy="0" r="78" fill="none" stroke="#754117" stroke-width="2.5"/>
+			<circle cx="0" cy="0" r="72" fill="url(#brassBevel)" stroke="#f8d58c" stroke-width="2"/>
+
+			<!-- Six circular lightening holes in the gear web showing radiant white sky through -->
+			<g fill="#fff6d2" stroke="#633814" stroke-width="3.5">
+				<circle cx="0" cy="-97" r="14.5"/>
+				<circle cx="84" cy="-48" r="14.5"/>
+				<circle cx="84" cy="48" r="14.5"/>
+				<circle cx="0" cy="97" r="14.5"/>
+				<circle cx="-84" cy="48" r="14.5"/>
+				<circle cx="-84" cy="-48" r="14.5"/>
+			</g>
+
+			<!-- Concentric Stamped Inscription on the Pinion Currency: CIVITAS AUTOMATA -->
+			<path id="currencyArc" d="M -90 0 A 90 90 0 0 1 90 0" fill="none"/>
+			<text fill="#5c3210" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="bold" letter-spacing="3.2" opacity="0.85">
+				<textPath xlink:href="#currencyArc" startOffset="50%" text-anchor="middle">★ CIVITAS AUTOMATA • 1 PINION ★</textPath>
+			</text>
+
+			<!-- Central axle hub with keyway slot -->
+			<circle cx="0" cy="0" r="50" fill="url(#darkSteel)" stroke="#e5b968" stroke-width="3.5"/>
+			<!-- Radiant center core of the sun bursting through the hub -->
+			<circle cx="0" cy="0" r="38" fill="#ffffff" filter="url(#bloomIntense)"/>
+			<circle cx="0" cy="0" r="28" fill="#fff8dc"/>
+			<!-- Keyway notch in hub -->
+			<rect x="-5" y="-44" width="10" height="15" fill="#442911" stroke="#1c0f06" stroke-width="1"/>
+		</g>
+
+		<!-- 4. DISTANT MOUNTAINS & WASTELAND RIDGES -->
+		<!-- Far rugged wasteland ridge veiled in coppery haze -->
+		<path d="M -20 375 L 85 330 L 170 355 L 290 290 L 395 350 L 510 300 L 635 365 L 750 310 L 860 345 L 980 270 L 1100 330 L 1210 285 L 1300 325 L 1300 500 L -20 500 Z" fill="url(#ridgeBack)" opacity="0.9"/>
+		<!-- Derelict power pylon silhouettes on the distant ridge -->
+		<g stroke="#222f2c" stroke-width="1.8" fill="none" opacity="0.45">
+			<path d="M 290 290 v -32 l -8 10 h 16 l -8 -10 m -10 16 h 20 m -16 10 h 12"/>
+			<path d="M 510 300 v -28 l -7 9 h 14 l -7 -9 m -9 14 h 18"/>
+			<path d="M 980 270 v -36 l -9 11 h 18 l -9 -11 m -12 18 h 24 m -18 11 h 12"/>
+		</g>
+
+		<!-- Mid ridge: beginning of returning vegetation -->
+		<path d="M -20 395 L 90 355 L 210 380 L 330 335 L 470 375 L 590 330 L 710 365 L 840 320 L 960 355 L 1090 310 L 1200 345 L 1300 315 L 1300 550 L -20 550 Z" fill="url(#ridgeFront)"/>
+
+		<!-- 5. HEARTHWELL HOMESTEAD & BARN (Coordinates: x: 670 to 880, y: 310 to 440) -->
+		<g transform="translate(670 305)" filter="url(#dropShadow)">
+			<!-- Cast shadow of building -->
+			<ellipse cx="90" cy="130" rx="125" ry="20" fill="#121b17" opacity="0.6"/>
+
+			<!-- Main Timber Barn Body -->
+			<polygon points="25,120 25,48 95,5 170,48 170,120" fill="#6a5641" stroke="#32271c" stroke-width="3"/>
+			<!-- Horizontal clapboard texture lines -->
+			<path d="M25 60 h145 M25 72 h145 M25 84 h145 M25 96 h145 M25 108 h145" stroke="#4f3e2e" stroke-width="1.8"/>
+
+			<!-- Clean Rustic Corrugated Metal Roof -->
+			<polygon points="18,52 95,3 105,3 178,52 165,58 95,12 30,58" fill="#9d5236" stroke="#441f12" stroke-width="2.5"/>
+			<path d="M 32 50 L 92 10 M 48 52 L 95 18 M 65 54 L 105 24 M 82 55 L 118 28 M 102 56 L 134 33 M 122 55 L 148 39 M 142 54 L 162 44 M 158 53 L 170 48" stroke="#dcbfa4" stroke-width="1.2" opacity="0.5"/>
+
+			<!-- Warm glowing barn window with orange cross panes -->
+			<rect x="75" y="62" width="40" height="34" rx="3" fill="#ffb444" stroke="#482e18" stroke-width="2.5" filter="url(#softGlow)"/>
+			<rect x="79" y="66" width="32" height="26" rx="2" fill="#ffdf8a"/>
+			<path d="M 95 66 v 26 M 79 79 h 32" stroke="#633a1a" stroke-width="2.5"/>
+
+			<!-- Rustic Barn Double Door with Z-bracing -->
+			<rect x="78" y="98" width="34" height="22" fill="#463628" stroke="#251c13" stroke-width="2"/>
+			<path d="M78 98 l34 22 M112 98 l-34 22" stroke="#2e2216" stroke-width="1.5"/>
+
+			<!-- Brass Chimney Flue releasing gentle puff of smoke -->
+			<rect x="135" y="15" width="10" height="28" fill="url(#brassBevel)" stroke="#3e2812" stroke-width="1.5"/>
+			<ellipse cx="140" cy="15" rx="7" ry="2.5" fill="#ecc371"/>
+			<path d="M 140 12 Q 155 -5 145 -22 T 165 -45" fill="none" stroke="#ffeed0" stroke-width="5" stroke-linecap="round" opacity="0.25"/>
+		</g>
+
+		<!-- 6. THE LIVING SOIL & CROP ROWS (Curving in perspective towards the sunrise) -->
+		<path d="M 0 415 Q 360 380 740 380 T 1280 405 L 1280 640 L 0 640 Z" fill="url(#soilField)"/>
+
+		<!-- Deep furrow ridges in rich dark loam earth -->
+		<g fill="none" stroke-linecap="round">
+			<path d="M -50 445 Q 380 410 880 395 T 1320 420" stroke="#52422f" stroke-width="8"/>
+			<path d="M -50 480 Q 420 440 920 415 T 1320 445" stroke="#1f170f" stroke-width="14"/>
+			<path d="M -50 485 Q 420 445 920 420 T 1320 450" stroke="#624e38" stroke-width="4" opacity="0.7"/>
+
+			<path d="M -50 525 Q 460 480 960 445 T 1320 480" stroke="#18110b" stroke-width="18"/>
+			<path d="M -50 532 Q 460 486 960 450 T 1320 485" stroke="#6e5941" stroke-width="4.5" opacity="0.8"/>
+
+			<path d="M -50 580 Q 480 535 990 485 T 1320 525" stroke="#140d08" stroke-width="22"/>
+			<path d="M -50 588 Q 480 542 990 492 T 1320 532" stroke="#7a6249" stroke-width="5" opacity="0.85"/>
+		</g>
+
+		<!-- Golden dawn rim-light highlights along the freshly tilled soil crests -->
+		<path d="M 210 528 Q 580 478 950 447" fill="none" stroke="#dca35a" stroke-width="2.2" opacity="0.55"/>
+		<path d="M 320 583 Q 680 532 1010 490" fill="none" stroke="#f1be73" stroke-width="2.5" opacity="0.6"/>
+
+		<!-- Iridescent Sunstone mineral dust glistening in the freshly turned dirt -->
+		<g fill="#ffe594" opacity="0.75">
+			<circle cx="340" cy="510" r="1.6"/>
+			<circle cx="480" cy="470" r="1.3"/>
+			<circle cx="560" cy="530" r="1.8"/>
+			<circle cx="720" cy="460" r="1.4"/>
+			<circle cx="810" cy="515" r="1.5"/>
+			<circle cx="940" cy="475" r="1.6"/>
+			<circle cx="1110" cy="530" r="1.8"/>
+		</g>
+
+		<!-- 7. THRIVING, MUTATED BIOLUMINESCENT CROPS (Absorbing Sunstone dust) -->
+		<!-- Placed cleanly in the midground and foreground without overlapping the left typography -->
+		
+		<!-- Wooden Seedling Stakes with Twine & Stamped Tags -->
+		<g stroke="#2d2218" stroke-width="1.8" fill="#584330" stroke-linecap="round">
+			<path d="M 525 480 L 525 435 L 531 435 L 531 480 Z"/>
+			<rect x="520" y="440" width="16" height="12" rx="2" fill="#d2ab69" stroke="#684a26" stroke-width="1.2"/>
+			<line x1="522" y1="446" x2="534" y2="446" stroke="#4f3517" stroke-width="1"/>
+
+			<path d="M 740 455 L 740 415 L 745 415 L 745 455 Z"/>
+			<rect x="736" y="420" width="14" height="10" rx="2" fill="#d2ab69" stroke="#684a26" stroke-width="1.2"/>
+		</g>
+
+		<!-- Midground planted crops (x: 540 to 860) -->
+		<g transform="translate(550 435) scale(0.65)">
+			<use xlink:href="#cropLeaf" transform="rotate(-15)"/>
+			<use xlink:href="#cropLeaf" transform="translate(60 -5) rotate(10)"/>
+			<use xlink:href="#cropLeaf" transform="translate(130 -10) rotate(-8)"/>
+			<use xlink:href="#cropLeaf" transform="translate(190 -12) rotate(12)"/>
+			<use xlink:href="#cropLeaf" transform="translate(260 -15) rotate(-5)"/>
+			<use xlink:href="#cropLeaf" transform="translate(330 -18) rotate(8)"/>
+		</g>
+
+		<!-- Foreground Mutated Sunstone Carrots / Parsnips (x: 530 to 850, y: 470) -->
+		<g transform="translate(535 480) scale(0.85)">
+			<g transform="translate(0 0)">
+				<ellipse cx="0" cy="12" rx="14" ry="7" fill="#d46b25" stroke="#773008" stroke-width="2"/>
+				<path d="M -8 10 Q 0 35 3 45 Q 6 35 8 10 Z" fill="#e47327" stroke="#7f350c" stroke-width="2"/>
+				<circle cx="2" cy="30" r="10" fill="url(#bioGlowAmber)" filter="url(#softGlow)"/>
+				<use xlink:href="#cropLeaf"/>
+			</g>
+			<g transform="translate(85 -5)">
+				<ellipse cx="0" cy="12" rx="13" ry="6" fill="#d46b25" stroke="#773008" stroke-width="2"/>
+				<path d="M -7 10 Q 0 32 2 40 Q 6 32 7 10 Z" fill="#e47327" stroke="#7f350c" stroke-width="2"/>
+				<circle cx="1" cy="28" r="9" fill="url(#bioGlowAmber)" filter="url(#softGlow)"/>
+				<use xlink:href="#cropLeaf" transform="scale(0.95) rotate(8)"/>
+			</g>
+			<g transform="translate(170 -10)">
+				<ellipse cx="0" cy="14" rx="15" ry="7" fill="#d46b25" stroke="#773008" stroke-width="2"/>
+				<path d="M -9 11 Q 0 38 3 48 Q 7 38 9 11 Z" fill="#e47327" stroke="#7f350c" stroke-width="2"/>
+				<circle cx="2" cy="32" r="11" fill="url(#bioGlowAmber)" filter="url(#softGlow)"/>
+				<use xlink:href="#cropLeaf" transform="scale(1.05) rotate(-6)"/>
+			</g>
+			<g transform="translate(255 -15)">
+				<ellipse cx="0" cy="12" rx="13" ry="6" fill="#d46b25" stroke="#773008" stroke-width="2"/>
+				<path d="M -7 10 Q 0 34 2 42 Q 6 34 7 10 Z" fill="#e47327" stroke="#7f350c" stroke-width="2"/>
+				<circle cx="1" cy="28" r="9" fill="url(#bioGlowAmber)" filter="url(#softGlow)"/>
+				<use xlink:href="#cropLeaf" transform="scale(0.9) rotate(12)"/>
+			</g>
+			<g transform="translate(340 -20)">
+				<ellipse cx="0" cy="13" rx="14" ry="6.5" fill="#d46b25" stroke="#773008" stroke-width="2"/>
+				<path d="M -8 11 Q 0 36 2 44 Q 6 36 8 11 Z" fill="#e47327" stroke="#7f350c" stroke-width="2"/>
+				<circle cx="1" cy="29" r="9.5" fill="url(#bioGlowAmber)" filter="url(#softGlow)"/>
+				<use xlink:href="#cropLeaf" transform="scale(0.98) rotate(-10)"/>
+			</g>
+		</g>
+
+		<!-- Large foreground mutated squash / pumpkin patch (Lower Right: 1040 to 1250) -->
+		<g transform="translate(1110 540)" filter="url(#dropShadow)">
+			<!-- Gnarled thick mutant vine with glowing vascular lines -->
+			<path d="M -90 30 Q -25 -15 45 25 T 145 10" fill="none" stroke="#436231" stroke-width="8" stroke-linecap="round"/>
+			<path d="M -90 30 Q -25 -15 45 25 T 145 10" fill="none" stroke="#6eb253" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+			<!-- Curling tendrils -->
+			<path d="M 45 25 Q 70 -5 65 -25 Q 60 -40 75 -35" fill="none" stroke="#9ad372" stroke-width="2.5" stroke-linecap="round"/>
+
+			<!-- Great Glowing Sunstone Pumpkin -->
+			<g transform="translate(20 15)">
+				<ellipse cx="0" cy="46" rx="55" ry="14" fill="#0b120c" opacity="0.6"/>
+				<ellipse cx="-22" cy="10" rx="24" ry="34" fill="#be5f21" stroke="#622807" stroke-width="2.5"/>
+				<ellipse cx="22" cy="10" rx="24" ry="34" fill="#be5f21" stroke="#622807" stroke-width="2.5"/>
+				<ellipse cx="-11" cy="12" rx="22" ry="36" fill="#da7428" stroke="#72300b" stroke-width="2.5"/>
+				<ellipse cx="11" cy="12" rx="22" ry="36" fill="#da7428" stroke="#72300b" stroke-width="2.5"/>
+				<ellipse cx="0" cy="14" rx="18" ry="37" fill="#ee8e32" stroke="#84390e" stroke-width="2.5"/>
+
+				<!-- Bioluminescent radiation seams glowing through the pumpkin ribs -->
+				<g filter="url(#softGlow)">
+					<path d="M -16 42 Q -24 10 -15 -18" fill="none" stroke="#ffefa0" stroke-width="3" opacity="0.9"/>
+					<path d="M 0 45 Q 0 10 0 -20" fill="none" stroke="#fff4b8" stroke-width="3.5" opacity="0.95"/>
+					<path d="M 16 42 Q 24 10 15 -18" fill="none" stroke="#ffefa0" stroke-width="3" opacity="0.9"/>
+				</g>
+
+				<path d="M 0 -20 Q 3 -36 14 -42 L 18 -38 Q 6 -32 4 -18 Z" fill="#537238" stroke="#263b17" stroke-width="2"/>
+			</g>
+			<!-- Fan leaves beside pumpkin -->
+			<path d="M -50 8 C -80 -18 -90 18 -65 38 C -40 48 -30 28 -50 8 Z" fill="#517537" stroke="#294118" stroke-width="2"/>
+			<path d="M -55 22 L -75 -2 M -55 22 L -70 28" stroke="#8bc464" stroke-width="1.8"/>
+		</g>
+
+		<!-- Floating Sunstone pollen/dust motes shimmering upwards -->
+		<use xlink:href="#spore" transform="translate(530 410) scale(0.8)"/>
+		<use xlink:href="#spore" transform="translate(620 370) scale(1.1)"/>
+		<use xlink:href="#spore" transform="translate(710 440) scale(0.9)"/>
+		<use xlink:href="#spore" transform="translate(800 390) scale(1.3)"/>
+		<use xlink:href="#spore" transform="translate(900 370) scale(1)"/>
+		<use xlink:href="#spore" transform="translate(1030 450) scale(1.4)"/>
+		<use xlink:href="#spore" transform="translate(1200 480) scale(1.2)"/>
+
+		<!-- ================= 8. HOB: THE HEARTHWELL HB-7 CARETAKER ROBOT ================= -->
+		<!-- Coordinates: Center around X=945, standing in rich soil, lovingly detailed -->
+		<g id="hobCaretaker" transform="translate(945 225)" filter="url(#dropShadow)">
+			<!-- Ground shadow -->
+			<ellipse cx="10" cy="365" rx="115" ry="22" fill="#0d1614" opacity="0.65" filter="url(#dropShadow)"/>
+
+			<!-- 8A. LEGS & LOWER LOCOMOTION -->
+			<g id="hobLegs">
+				<!-- Sturdy hips & heavy bronze pelvic bearing -->
+				<rect x="-38" y="270" width="76" height="32" rx="8" fill="url(#darkSteel)" stroke="#2d3434" stroke-width="3"/>
+				<circle cx="0" cy="286" r="16" fill="url(#brassPlate)" stroke="#472e13" stroke-width="2.5"/>
+				<circle cx="0" cy="286" r="6" fill="#181f20"/>
+
+				<!-- Left Leg (Viewer's Left) -->
+				<g transform="translate(-32 290)">
+					<rect x="-14" y="0" width="28" height="42" rx="7" fill="url(#creamEnamel)" stroke="#4e3f2e" stroke-width="3"/>
+					<polygon points="-14,0 -5,0 -14,14" fill="#32251a"/>
+					<circle cx="0" cy="45" r="14" fill="url(#brassBevel)" stroke="#482e15" stroke-width="2.5"/>
+					<circle cx="0" cy="45" r="5" fill="#1a1b19"/>
+					<rect x="-10" y="52" width="20" height="38" rx="4" fill="url(#darkSteel)" stroke="#1e2424" stroke-width="2.5"/>
+					<line x1="5" y1="52" x2="5" y2="86" stroke="#cca45d" stroke-width="3"/>
+					<path d="M -16 90 L 16 90 L 22 105 L -20 105 Z" fill="#38322c" stroke="#1b1815" stroke-width="3"/>
+					<rect x="-22" y="102" width="46" height="8" rx="2" fill="#201d1a"/>
+				</g>
+
+				<!-- Right Leg (Viewer's Right) -->
+				<g transform="translate(32 290)">
+					<rect x="-14" y="0" width="28" height="42" rx="7" fill="url(#creamEnamel)" stroke="#4e3f2e" stroke-width="3"/>
+					<circle cx="0" cy="45" r="14" fill="url(#brassBevel)" stroke="#482e15" stroke-width="2.5"/>
+					<circle cx="0" cy="45" r="5" fill="#1a1b19"/>
+					<rect x="-10" y="52" width="20" height="38" rx="4" fill="url(#darkSteel)" stroke="#1e2424" stroke-width="2.5"/>
+					<line x1="-5" y1="52" x2="-5" y2="86" stroke="#cca45d" stroke-width="3"/>
+					<path d="M -16 90 L 16 90 L 20 105 L -22 105 Z" fill="#38322c" stroke="#1b1815" stroke-width="3"/>
+					<rect x="-24" y="102" width="46" height="8" rx="2" fill="#201d1a"/>
+				</g>
+			</g>
+
+			<!-- 8B. MAIN TORSO & HEARTHWELL CHASSIS -->
+			<g id="hobTorso">
+				<rect x="-56" y="145" width="112" height="135" rx="32" fill="url(#creamEnamel)" stroke="#473829" stroke-width="4.5"/>
+
+				<!-- Chipped enamel spots -->
+				<path d="M -56 185 Q -52 178 -48 188 L -54 205 Z" fill="#342518"/>
+				<path d="M 56 220 Q 50 215 48 226 L 55 240 Z" fill="#342518"/>
+
+				<!-- Torso Open Service Hatch (Showing meshing brass gears inside) -->
+				<g transform="translate(0 238)">
+					<rect x="-32" y="-22" width="64" height="44" rx="8" fill="#182020" stroke="url(#brassBevel)" stroke-width="2.5"/>
+					<g transform="translate(-10 0)">
+						<circle cx="0" cy="0" r="14" fill="none" stroke="#d5a557" stroke-width="4" stroke-dasharray="3 2"/>
+						<circle cx="0" cy="0" r="11" fill="url(#brassPlate)"/>
+						<circle cx="0" cy="0" r="4" fill="#1d1207"/>
+					</g>
+					<g transform="translate(14 4)">
+						<circle cx="0" cy="0" r="10" fill="none" stroke="#d5a557" stroke-width="3.5" stroke-dasharray="3 2"/>
+						<circle cx="0" cy="0" r="8" fill="url(#brassPlate)"/>
+						<circle cx="0" cy="0" r="3" fill="#1d1207"/>
+					</g>
+					<rect x="-30" y="-20" width="60" height="40" rx="6" fill="#32585c" opacity="0.3"/>
+					<line x1="-24" y1="-14" x2="15" y2="15" stroke="#ffffff" stroke-width="1.5" opacity="0.5"/>
+				</g>
+
+				<!-- Braided Copper Conduit Cables looping around torso -->
+				<path d="M -54 175 C -75 205 -65 245 -40 265" fill="none" stroke="url(#copperPipe)" stroke-width="5" stroke-linecap="round"/>
+				<path d="M 54 175 C 75 205 65 245 40 265" fill="none" stroke="url(#copperPipe)" stroke-width="5" stroke-linecap="round"/>
+
+				<!-- Gardener's Heavy Canvas Over-Apron with Pockets and Stitching -->
+				<g id="apron">
+					<path d="M -48 160 L 48 160 L 52 268 C 25 278 -25 278 -52 268 Z" fill="#506758" stroke="#28342d" stroke-width="3.5"/>
+					<path d="M -45 165 L 45 165 M -48 262 C -25 272 25 272 48 262" stroke="#dcbfa4" stroke-width="1.8" stroke-dasharray="4 3"/>
+
+					<!-- Stamped Brass Model Plate: HB-7 -->
+					<rect x="-28" y="172" width="56" height="26" rx="5" fill="url(#brassBevel)" stroke="#4e3114" stroke-width="2"/>
+					<rect x="-25" y="175" width="50" height="20" rx="3" fill="#2d1c0b" stroke="#754b20" stroke-width="1"/>
+					<circle cx="-22" cy="178" r="1.3" fill="#fbe2a9"/>
+					<circle cx="22" cy="178" r="1.3" fill="#fbe2a9"/>
+					<circle cx="-22" cy="192" r="1.3" fill="#fbe2a9"/>
+					<circle cx="22" cy="192" r="1.3" fill="#fbe2a9"/>
+					<text x="0" y="190" text-anchor="middle" fill="#fde5ad" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="bold" letter-spacing="2.5">HB—7</text>
+
+					<!-- Stitched repair patch on apron -->
+					<polygon points="18,215 42,210 45,240 20,245" fill="#75634d" stroke="#413728" stroke-width="1.8"/>
+					<path d="M 17 218 l 5 5 M 24 213 l 5 5 M 32 211 l 5 5 M 40 220 l 5 5 M 38 232 l 5 5 M 28 238 l 5 5" stroke="#ffe5a3" stroke-width="1.5"/>
+				</g>
+
+				<!-- Embossed Hearthwell Maker Sunburst Emblem -->
+				<g transform="translate(0 152)">
+					<rect x="-35" y="-14" width="70" height="18" rx="4" fill="url(#brassBevel)" stroke="#4d3215" stroke-width="1.8"/>
+					<text x="0" y="-2" text-anchor="middle" fill="#351f0a" font-family="'Segoe UI', Arial, sans-serif" font-size="7.5" font-weight="900" letter-spacing="1.8">★ HEARTHWELL ★</text>
+				</g>
+			</g>
+
+			<!-- 8C. ROUND PORCELAIN/ENAMEL DOME HEAD -->
+			<g id="hobHead" transform="translate(0 92)">
+				<!-- Flexible rubber/leather neck gaiter with bronze collar ring -->
+				<rect x="-24" y="38" width="48" height="22" rx="4" fill="#1e1c19" stroke="#111" stroke-width="2"/>
+				<path d="M -22 43 h44 M -22 49 h44 M -22 55 h44" stroke="#443e37" stroke-width="2"/>
+				<ellipse cx="0" cy="58" rx="30" ry="7" fill="url(#brassBevel)" stroke="#4e3114" stroke-width="2"/>
+
+				<!-- The Spherical Head Shell (Rounded retro-futuristic dome) -->
+				<ellipse cx="0" cy="0" rx="66" ry="62" fill="url(#creamEnamel)" stroke="#443425" stroke-width="4.5"/>
+				<path d="M -42 -22 Q -15 -52 32 -32 Q 5 -42 -30 -16 Z" fill="#ffffff" opacity="0.65"/>
+
+				<!-- Brass Bezel Ring encircling the Faceplate Visor -->
+				<ellipse cx="0" cy="6" rx="48" ry="40" fill="url(#brassBevel)" stroke="#4a2e11" stroke-width="3"/>
+
+				<!-- Dark CRT / Glass Visor Screen with subtle scanlines -->
+				<ellipse cx="0" cy="6" rx="43" ry="35" fill="#122020" stroke="#081010" stroke-width="2"/>
+				<g stroke="#1a2e2e" stroke-width="1" opacity="0.4">
+					<line x1="-38" y1="-12" x2="38" y2="-12"/>
+					<line x1="-42" y1="-4" x2="42" y2="-4"/>
+					<line x1="-42" y1="4" x2="42" y2="4"/>
+					<line x1="-42" y1="12" x2="42" y2="12"/>
+					<line x1="-38" y1="20" x2="38" y2="20"/>
+				</g>
+
+				<!-- Friendly, Warm Glowing Phosphor Eyes (Curved inverted happy arcs: ^ ^) -->
+				<g filter="url(#bloomIntense)" stroke="#6fead7" stroke-width="5" stroke-linecap="round" fill="none">
+					<path d="M -26 4 Q -16 -12 -6 4"/>
+					<path d="M 6 4 Q 16 -12 26 4"/>
+				</g>
+				<g stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none">
+					<path d="M -26 4 Q -16 -12 -6 4"/>
+					<path d="M 6 4 Q 16 -12 26 4"/>
+				</g>
+
+				<!-- Gentle glowing smile arc -->
+				<path d="M -12 22 Q 0 32 12 22" fill="none" stroke="#6fead7" stroke-width="3.5" stroke-linecap="round" filter="url(#softGlow)"/>
+				<path d="M -12 22 Q 0 32 12 22" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+
+				<!-- Ear Rosettes / Audio Sensors -->
+				<g transform="translate(-64 6)">
+					<rect x="-8" y="-14" width="10" height="28" rx="3" fill="url(#brassBevel)" stroke="#442a0f" stroke-width="2"/>
+					<circle cx="-3" cy="0" r="7" fill="url(#darkSteel)" stroke="#deb864" stroke-width="1.5"/>
+					<circle cx="-3" cy="0" r="3" fill="#ffb444"/>
+				</g>
+				<g transform="translate(64 6)">
+					<rect x="-2" y="-14" width="10" height="28" rx="3" fill="url(#brassBevel)" stroke="#442a0f" stroke-width="2"/>
+					<circle cx="3" cy="0" r="7" fill="url(#darkSteel)" stroke="#deb864" stroke-width="1.5"/>
+					<circle cx="3" cy="0" r="3" fill="#ffb444"/>
+				</g>
+
+				<!-- Dual Glowing Vacuum Tubes on Collar/Crown -->
+				<g transform="translate(-32 -60)">
+					<rect x="-9" y="16" width="18" height="9" rx="2" fill="#2b1c12" stroke="#120a06" stroke-width="1.5"/>
+					<path d="M -8 16 C -14 6 -12 -12 0 -16 C 12 -12 14 6 8 16 Z" fill="#281810" stroke="#ffc970" stroke-width="1.5" opacity="0.85"/>
+					<ellipse cx="0" cy="0" rx="20" ry="24" fill="url(#tubeGlow)" filter="url(#bloomIntense)"/>
+					<path d="M -3 14 L -3 0 Q 0 -8 3 0 L 3 14" fill="none" stroke="#ffffff" stroke-width="1.8"/>
+				</g>
+
+				<!-- Antenna: bent brass rod with transmission bead -->
+				<g transform="translate(22 -62)">
+					<rect x="-5" y="14" width="10" height="8" rx="2" fill="url(#brassBevel)" stroke="#3e230b" stroke-width="1.5"/>
+					<path d="M 0 14 Q 5 -12 18 -26 Q 25 -34 22 -44" fill="none" stroke="url(#brassBevel)" stroke-width="3.5" stroke-linecap="round"/>
+					<circle cx="22" cy="-44" r="5.5" fill="#f8c868" stroke="#523212" stroke-width="2" filter="url(#softGlow)"/>
+					<circle cx="22" cy="-44" r="2.5" fill="#ffffff"/>
+				</g>
+
+				<!-- Analog Pressure/Charge Gauge Mounted on Right Cheek -->
+				<g transform="translate(48 34) scale(0.75)">
+					<circle cx="0" cy="0" r="16" fill="url(#brassPlate)" stroke="#4a2e12" stroke-width="2.5"/>
+					<circle cx="0" cy="0" r="12" fill="#fff9ea" stroke="#222" stroke-width="1"/>
+					<path d="M -8 4 A 10 10 0 1 1 8 4" fill="none" stroke="#333" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+					<path d="M 0 -10 A 10 10 0 0 1 8 4" fill="none" stroke="#3cb371" stroke-width="2"/>
+					<line x1="0" y1="0" x2="6" y2="-7" stroke="#dc143c" stroke-width="1.8" stroke-linecap="round"/>
+					<circle cx="0" cy="0" r="2.5" fill="#111"/>
+					<path d="M -8 -8 Q 0 -14 8 -8" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>
+				</g>
+			</g>
+
+			<!-- 8D. ARMS & ACTIONS -->
+			<!-- Left Arm (Holding the antique watering can, tending the soil) -->
+			<g id="hobLeftArm" transform="translate(-56 160)">
+				<circle cx="0" cy="0" r="20" fill="url(#creamEnamel)" stroke="#463628" stroke-width="3.5"/>
+				<circle cx="0" cy="0" r="11" fill="url(#brassBevel)" stroke="#37200b" stroke-width="2"/>
+
+				<path d="M -6 12 L -28 62 L -12 68 L 8 18 Z" fill="url(#creamEnamel)" stroke="#463628" stroke-width="3"/>
+				<circle cx="-20" cy="65" r="14" fill="url(#brassPlate)" stroke="#3e240e" stroke-width="2.5"/>
+				<circle cx="-20" cy="65" r="6" fill="#131a1b"/>
+
+				<path d="M -20 65 L -48 115 L -34 122 L -8 72 Z" fill="url(#darkSteel)" stroke="#1d2222" stroke-width="3"/>
+				<rect x="-56" y="112" width="22" height="12" rx="3" transform="rotate(30 -45 118)" fill="url(#brassBevel)" stroke="#43270c" stroke-width="2"/>
+
+				<!-- THE ANTIQUE BRASS WATERING CAN -->
+				<g transform="translate(-95 125) rotate(18)" filter="url(#dropShadow)">
+					<path d="M 0 10 L 14 -32 L 64 -20 L 52 24 Z" fill="url(#darkSteel)" stroke="#1f2525" stroke-width="3"/>
+					<path d="M 5 8 L 16 -28 L 60 -18 L 48 20 Z" fill="#586d6c" opacity="0.4"/>
+					<line x1="2" y1="-10" x2="58" y2="2" stroke="url(#brassBevel)" stroke-width="4"/>
+					<circle cx="30" cy="-4" r="8" fill="url(#brassPlate)" stroke="#462b0f" stroke-width="1.8"/>
+
+					<path d="M 12 -30 C 10 -65 60 -55 58 -22" fill="none" stroke="url(#brassBevel)" stroke-width="5" stroke-linecap="round"/>
+					<path d="M 0 8 C -22 8 -22 -24 8 -30" fill="none" stroke="url(#brassBevel)" stroke-width="4" stroke-linecap="round"/>
+
+					<path d="M 56 12 L 105 -22 L 108 -14 L 54 22 Z" fill="url(#copperPipe)" stroke="#3d1e11" stroke-width="2.5"/>
+					<g transform="translate(108 -18) rotate(35)">
+						<ellipse cx="0" cy="0" rx="7" ry="14" fill="url(#brassBevel)" stroke="#3f260d" stroke-width="2"/>
+						<circle cx="0" cy="-6" r="1.2" fill="#170f07"/>
+						<circle cx="0" cy="-2" r="1.2" fill="#170f07"/>
+						<circle cx="0" cy="2" r="1.2" fill="#170f07"/>
+						<circle cx="0" cy="6" r="1.2" fill="#170f07"/>
+					</g>
+
+					<!-- Shimmering fine spray of water droplets catching golden sunlight -->
+					<g stroke="#9bebf8" stroke-width="1.8" stroke-linecap="round" opacity="0.85">
+						<line x1="116" y1="-14" x2="148" y2="10" stroke-dasharray="4 6"/>
+						<line x1="118" y1="-10" x2="155" y2="22" stroke-dasharray="3 5"/>
+						<line x1="116" y1="-6" x2="145" y2="30" stroke-dasharray="4 7"/>
+						<circle cx="138" cy="4" r="2.2" fill="#ffffff" filter="url(#softGlow)"/>
+						<circle cx="152" cy="18" r="2.4" fill="#ffffff" filter="url(#softGlow)"/>
+						<circle cx="144" cy="26" r="2" fill="#ffffff" filter="url(#softGlow)"/>
+						<circle cx="160" cy="32" r="1.8" fill="#ffffff"/>
+					</g>
+				</g>
+			</g>
+
+			<!-- Right Arm (Viewer's Right: Cradling a tiny glowing sprouted seedling) -->
+			<g id="hobRightArm" transform="translate(56 160)">
+				<circle cx="0" cy="0" r="20" fill="url(#creamEnamel)" stroke="#463628" stroke-width="3.5"/>
+				<circle cx="0" cy="0" r="11" fill="url(#brassBevel)" stroke="#37200b" stroke-width="2"/>
+
+				<!-- Upper Arm: Salvaged Ironside Dynamics Armoured Plate (Olive Drab with stencil) -->
+				<path d="M 6 12 L 26 58 L 10 65 L -8 18 Z" fill="url(#ironsideOlive)" stroke="#222819" stroke-width="3"/>
+				<text x="14" y="42" transform="rotate(70 14 42)" fill="#8d9978" font-family="'Courier New', monospace" font-size="7" font-weight="bold" opacity="0.8">ID—71</text>
+
+				<circle cx="18" cy="62" r="14" fill="url(#brassPlate)" stroke="#402811" stroke-width="2.5"/>
+				<circle cx="18" cy="62" r="6" fill="#181f20"/>
+
+				<path d="M 18 62 L -12 110 L -25 102 L 6 56 Z" fill="url(#creamEnamel)" stroke="#443527" stroke-width="3"/>
+
+				<!-- Articulated three-digit mechanical hand gently held open -->
+				<g transform="translate(-25 110)">
+					<rect x="-14" y="-8" width="22" height="14" rx="4" fill="url(#brassBevel)" stroke="#41270e" stroke-width="2"/>
+					<path d="M -12 6 C -18 16 -12 28 -2 30" fill="none" stroke="url(#brassBevel)" stroke-width="4" stroke-linecap="round"/>
+					<path d="M -6 6 C -8 18 -2 29 6 30" fill="none" stroke="url(#brassBevel)" stroke-width="4" stroke-linecap="round"/>
+					<path d="M 0 6 C 2 18 8 28 14 27" fill="none" stroke="url(#brassBevel)" stroke-width="3.5" stroke-linecap="round"/>
+					<circle cx="-2" cy="30" r="2.5" fill="#2c2722"/>
+					<circle cx="6" cy="30" r="2.5" fill="#2c2722"/>
+					<circle cx="14" cy="27" r="2.5" fill="#2c2722"/>
+
+					<!-- THE NEWBORN SUNSTONE SPROUT (Symbol of hope and revived life) -->
+					<g transform="translate(4 15)">
+						<ellipse cx="0" cy="10" rx="9" ry="5" fill="#271d13"/>
+						<path d="M 0 8 Q -2 -2 0 -12" fill="none" stroke="#9de878" stroke-width="2.5" stroke-linecap="round"/>
+						<ellipse cx="-5" cy="-14" rx="6" ry="3.5" transform="rotate(-28 -5 -14)" fill="#fff1b0" stroke="#f6c24d" stroke-width="1.5" filter="url(#softGlow)"/>
+						<ellipse cx="5" cy="-15" rx="6" ry="3.5" transform="rotate(28 5 -15)" fill="#fff1b0" stroke="#f6c24d" stroke-width="1.5" filter="url(#softGlow)"/>
+						<circle cx="0" cy="-12" r="14" fill="url(#bioGlowAmber)" filter="url(#bloomIntense)"/>
+					</g>
+				</g>
+			</g>
+		</g>
+
+		<!-- ================= 9. ELEGANT POSTER TYPOGRAPHY & BRAND FRAMING ================= -->
+		<!-- Atmospheric dark vignette at corners -->
+		<rect width="1280" height="640" fill="none" stroke="#251d14" stroke-width="1" opacity="0.3"/>
+
+		<!-- Left Column Header & Content Block (Designed for GitHub 1280x640 Social Banner) -->
+		<g transform="translate(68 75)" filter="url(#dropShadow)">
+
+			<!-- Top Decorative Metadata Pill -->
+			<g transform="translate(0 0)">
+				<path d="M -18 32 L -18 0 L 26 0" fill="none" stroke="#e0b66b" stroke-width="2"/>
+				<rect x="0" y="-8" width="375" height="24" rx="12" fill="#1b2a2d" stroke="#dcb46a" stroke-width="1.4" opacity="0.95"/>
+				<circle cx="14" cy="4" r="5" fill="url(#brassBevel)"/>
+				<text x="28" y="8" fill="#fbe2a9" font-family="'Segoe UI', Arial, sans-serif" font-size="10.5" font-weight="700" letter-spacing="2.8">A HEARTHWELL HOMECOMING</text>
+				<circle cx="282" cy="4" r="2.5" fill="#dcb46a"/>
+				<text x="294" y="8" fill="#dfbe7e" font-family="'Segoe UI', Arial, sans-serif" font-size="9.5" font-weight="600" letter-spacing="1.5">YEAR 71</text>
+			</g>
+
+			<!-- Golden dividing accent line -->
+			<path d="M 0 45 L 430 45" stroke="#f2ce8a" stroke-width="1.2" opacity="0.4"/>
+			<path d="M 0 45 L 110 45" stroke="#e29b43" stroke-width="3"/>
+
+			<!-- PRIMARY GAME TITLE: FARMSIM -->
+			<g transform="translate(0 126)">
+				<text x="0" y="4" fill="#0c1517" font-family="'Palatino Linotype', 'Book Antiqua', Georgia, serif" font-size="82" font-weight="bold" letter-spacing="-1">FARMSIM</text>
+				<text x="0" y="0" fill="#fff5d8" font-family="'Palatino Linotype', 'Book Antiqua', Georgia, serif" font-size="82" font-weight="bold" letter-spacing="-1">FARMSIM</text>
+			</g>
+
+			<!-- SUBTITLE: A SECOND SUNRISE -->
+			<g transform="translate(2 168)">
+				<text x="0" y="0" fill="#f3c675" font-family="'Segoe UI', Arial, sans-serif" font-size="21" font-weight="600" letter-spacing="4.5">A SECOND SUNRISE</text>
+			</g>
+
+			<!-- Decorative three-dot gear divider -->
+			<g transform="translate(2 195)" stroke="#e4bd72" stroke-width="1.5" opacity="0.8">
+				<line x1="0" y1="0" x2="52" y2="0"/>
+				<circle cx="64" cy="0" r="3.5" fill="url(#brassBevel)" stroke="#42280d" stroke-width="1"/>
+				<line x1="76" y1="0" x2="128" y2="0"/>
+			</g>
+
+			<!-- NARRATIVE LORE HOOKS (From Lore.md) -->
+			<g transform="translate(2 235)">
+				<text x="0" y="0" fill="#ffffff" font-family="'Palatino Linotype', 'Book Antiqua', Georgia, serif" font-size="20.5" font-weight="normal" opacity="0.95">One forgotten farm. One faithful robot.</text>
+				<text x="0" y="30" fill="#ffeec7" font-family="'Palatino Linotype', 'Book Antiqua', Georgia, serif" font-size="20.5" font-weight="normal" opacity="0.95">A whole world waiting to grow again.</text>
+			</g>
+
+			<!-- CALENDAR & LORE METADATA -->
+			<g transform="translate(2 316)">
+				<circle cx="5" cy="-4" r="3.5" fill="#f0be65"/>
+				<text x="18" y="0" fill="#f5dca3" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" font-weight="600" letter-spacing="2.2">YEAR 71 OF CONTINUANCE</text>
+				<text x="238" y="0" fill="#b0c8be" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="500" letter-spacing="1">AFTER THE FOUR DAYS</text>
+			</g>
+
+			<!-- Dividing horizontal line -->
+			<path d="M 0 342 L 390 342" stroke="#f0cc86" stroke-width="1" opacity="0.35"/>
+
+			<!-- THREE CORE GAMEPLAY PILLARS (Pills) -->
+			<g transform="translate(0 376)">
+				<g fill="#dfc691" font-family="'Segoe UI', Arial, sans-serif" font-size="10" font-weight="700" letter-spacing="2.2">
+					<text x="0" y="0">TEND THE SOIL</text>
+					<circle cx="124" cy="-3.5" r="2.2" fill="#f5bd63"/>
+					<text x="138" y="0">MEND WHAT'S BROKEN</text>
+					<circle cx="328" cy="-3.5" r="2.2" fill="#f5bd63"/>
+					<text x="342" y="0">BEGIN AGAIN</text>
+				</g>
+			</g>
+
+			<!-- BOTTOM MOTTO WITH PINION ICON -->
+			<g transform="translate(0 422)">
+				<path d="M 0 0 L 320 0" stroke="#f1cb7c" stroke-width="1" opacity="0.25"/>
+				<g transform="translate(6 18) scale(0.08)">
+					<use xlink:href="#pinionGear" fill="url(#brassBevel)"/>
+				</g>
+				<text x="28" y="22" fill="#eed9ab" font-family="'Segoe UI', Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="1.5">FIND YOUR OWN WAY HOME</text>
+			</g>
+		</g>
+
+		<!-- Subtle Analog Vignette Grain Overlay -->
+		<rect width="1280" height="640" fill="url(#filmGrain)" opacity="0.8" pointer-events="none"/>
+
+		<!-- Outer Fine Presentation Border -->
+		<rect x="18" y="18" width="1244" height="604" rx="6" fill="none" stroke="#eec67e" stroke-width="1.5" opacity="0.35"/>
+		<rect x="24" y="24" width="1232" height="592" rx="4" fill="none" stroke="#eec67e" stroke-width="0.75" opacity="0.2"/>
+	</g>
+</svg>

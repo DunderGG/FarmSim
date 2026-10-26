@@ -1,0 +1,359 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title description">
+	<title id="title">FarmSim: A second sunrise</title>
+	<desc id="description">A weathered Hearthwell caretaker robot tends an overgrown farm beneath a giant gear-shaped Pinion sunset.</desc>
+	<defs>
+		<linearGradient id="sky" x2="0" y2="1">
+			<stop stop-color="#243d45"/>
+			<stop offset=".48" stop-color="#738078"/>
+			<stop offset=".73" stop-color="#dfaa71"/>
+			<stop offset="1" stop-color="#66734f"/>
+		</linearGradient>
+		<radialGradient id="sunlight" cx=".58" cy=".37">
+			<stop stop-color="#fff1bd"/>
+			<stop offset=".46" stop-color="#f4c47e"/>
+			<stop offset=".83" stop-color="#d99152"/>
+			<stop offset="1" stop-color="#ad6545"/>
+		</radialGradient>
+		<linearGradient id="ridgeBack" x2="0" y2="1">
+			<stop stop-color="#617366"/>
+			<stop offset="1" stop-color="#414f46"/>
+		</linearGradient>
+		<linearGradient id="ridgeFront" x2="0" y2="1">
+			<stop stop-color="#435847"/>
+			<stop offset="1" stop-color="#263e37"/>
+		</linearGradient>
+		<linearGradient id="field" x2=".15" y2="1">
+			<stop stop-color="#526548"/>
+			<stop offset=".56" stop-color="#384d3a"/>
+			<stop offset="1" stop-color="#233e35"/>
+		</linearGradient>
+		<linearGradient id="enamel" x1=".15" y1="0" x2=".82" y2="1">
+			<stop stop-color="#fff0cd"/>
+			<stop offset=".39" stop-color="#dfd5b7"/>
+			<stop offset=".72" stop-color="#bbbba5"/>
+			<stop offset="1" stop-color="#8a9787"/>
+		</linearGradient>
+		<linearGradient id="enamelLight" x1="0" y1="0" x2=".85" y2="1">
+			<stop stop-color="#fff4d5"/>
+			<stop offset="1" stop-color="#c8c9ae"/>
+		</linearGradient>
+		<linearGradient id="brass" x1=".05" y1=".1" x2=".88" y2=".93">
+			<stop stop-color="#f6d48a"/>
+			<stop offset=".37" stop-color="#cb9853"/>
+			<stop offset=".67" stop-color="#8f603e"/>
+			<stop offset=".86" stop-color="#d2a569"/>
+			<stop offset="1" stop-color="#77503a"/>
+		</linearGradient>
+		<linearGradient id="canMetal" x2=".1" y2="1">
+			<stop stop-color="#819797"/>
+			<stop offset=".48" stop-color="#495f61"/>
+			<stop offset="1" stop-color="#31474b"/>
+		</linearGradient>
+		<linearGradient id="shadow" x2="0" y2="1">
+			<stop stop-color="#142c30" stop-opacity="0"/>
+			<stop offset="1" stop-color="#142c30" stop-opacity=".63"/>
+		</linearGradient>
+		<radialGradient id="vignette">
+			<stop offset=".53" stop-color="#142b30" stop-opacity="0"/>
+			<stop offset="1" stop-color="#142b30" stop-opacity=".48"/>
+		</radialGradient>
+		<pattern id="grain" width="57" height="57" patternUnits="userSpaceOnUse">
+			<circle cx="5" cy="7" r=".8" fill="#fff4d9" opacity=".16"/>
+			<circle cx="28" cy="16" r=".7" fill="#fff4d9" opacity=".11"/>
+			<circle cx="47" cy="35" r=".9" fill="#fff4d9" opacity=".12"/>
+			<circle cx="17" cy="49" r=".7" fill="#142b30" opacity=".12"/>
+			<circle cx="54" cy="3" r=".6" fill="#fff4d9" opacity=".14"/>
+			<path d="M34 50h2m-25-25h1" stroke="#142b30" stroke-width=".8" opacity=".12"/>
+		</pattern>
+		<filter id="softShadow" x="-.3" y="-.3" width="1.6" height="1.7">
+			<feGaussianBlur stdDeviation="12"/>
+		</filter>
+		<clipPath id="sceneClip">
+			<rect x="0" y="0" width="1280" height="640"/>
+		</clipPath>
+		<path id="gear" d="M-13-148 0-158 13-148 19-126 41-121 55-140 72-134 79-111 99-100 118-111 132-97 125-76 139-55 161-52 167-34 151-17 154 8 173 21 168 40 145 47 136 70 147 90 133 105 111 97 91 111 90 134 72 141 54 126 31 132 18 152 0 149-9 127-31 121-51 135-67 124-65 100-85 87-106 95-119 79-106 58-117 37-139 32-142 13-123-1-126-23-145-36-139-54-117-61-108-84-119-103-105-118-83-109-64-123-64-146-47-153-30-137-8-144Z"/>
+		<g id="leaf">
+			<path d="M0 12C-4 4-5-4-3-13m3 15C3-4 8-8 12-9M-2 5C-6-2-11-5-15-5" fill="none" stroke="#778d59" stroke-width="2.2" stroke-linecap="round"/>
+			<ellipse cx="-8" cy="-5" rx="6" ry="3.2" transform="rotate(37 -8 -5)" fill="#9eaf70"/>
+			<ellipse cx="6" cy="-7" rx="6.6" ry="3.2" transform="rotate(-40 6 -7)" fill="#a5b77b"/>
+			<ellipse cx="0" cy="-12" rx="5.4" ry="3.4" transform="rotate(-69 0 -12)" fill="#80975f"/>
+		</g>
+	</defs>
+
+	<g clip-path="url(#sceneClip)">
+		<!-- Old, hazed-over evening sky -->
+		<rect width="1280" height="640" fill="url(#sky)"/>
+		<path d="M0 155c86-44 133-32 220-1s149 15 221-22 129-38 206-9 133 25 197-6 141-24 200 5 145 36 236-2" fill="none" stroke="#f5d7a9" stroke-width="38" opacity=".055"/>
+		<path d="M-26 193c103-42 176-22 246 9s153 12 232-28 139-32 195-6 130 32 206 1 154-18 209 10 143 33 248 1" fill="none" stroke="#fae8c6" stroke-width="2" opacity=".2"/>
+		<path d="M74 124q23-22 47-1 24-25 47 1 24-18 43 5H73Z" fill="#c6c6ad" opacity=".21"/>
+		<path d="M268 169q20-18 41 0 17-22 39-1 24-19 43 5H267Z" fill="#e9ddc1" opacity=".24"/>
+		<path d="M1091 108q26-23 49 0 21-20 45 1 18-18 40 5h-136Z" fill="#f5dfb6" opacity=".32"/>
+		<path d="M1135 126q20-15 41 1 22-17 40 0" fill="none" stroke="#fff0cc" stroke-width="2" opacity=".34"/>
+		<circle cx="1079" cy="77" r="2" fill="#ffe3ab" opacity=".8"/>
+		<circle cx="1181" cy="161" r="1.8" fill="#ffe3ab" opacity=".65"/>
+		<circle cx="943" cy="120" r="1.6" fill="#ffe3ab" opacity=".7"/>
+
+		<!-- The world's gear-shaped money, now the sun -->
+		<circle cx="1085" cy="173" r="180" fill="#f0bd76" opacity=".12"/>
+		<circle cx="1085" cy="173" r="164" fill="none" stroke="#f7d49b" stroke-width="1.5" opacity=".28"/>
+		<g transform="translate(1085 173) rotate(9) scale(.91)">
+			<use xlink:href="#gear" transform="scale(1.04)" fill="url(#brass)" stroke="#704c39" stroke-width="5" stroke-linejoin="round"/>
+			<circle r="119" fill="url(#sunlight)" stroke="#f6d797" stroke-width="3"/>
+			<circle r="109" fill="none" stroke="#fff0cb" stroke-width="1.5" opacity=".62"/>
+			<path d="M-70-42q69-45 140 0M-85-20q83-38 170 0M-89 12q85-32 178 0M-75 43q67-25 150 1" fill="none" stroke="#a36548" stroke-width="2" opacity=".23"/>
+			<path d="M-104-83a132 132 0 0 1 58-39m84 1a132 132 0 0 1 54 52" fill="none" stroke="#fff1c7" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+			<g fill="#80573e" stroke="#f6d18b" stroke-width="2">
+				<circle cx="0" cy="-138" r="4.4"/>
+				<circle cx="98" cy="-98" r="4.4"/>
+				<circle cx="138" cy="0" r="4.4"/>
+				<circle cx="98" cy="98" r="4.4"/>
+				<circle cx="0" cy="138" r="4.4"/>
+				<circle cx="-98" cy="98" r="4.4"/>
+				<circle cx="-138" cy="0" r="4.4"/>
+				<circle cx="-98" cy="-98" r="4.4"/>
+			</g>
+			<path d="M-17 62a65 65 0 0 0 51-33" fill="none" stroke="#fff2ce" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+		</g>
+		<path d="M809 275c46-14 88-13 127 3m174-4c49-9 104-8 172 8" fill="none" stroke="#fbda9f" stroke-width="2" opacity=".38"/>
+
+		<!-- Distant ridges, dead orchards, and the settlement beyond the farm -->
+		<path d="M0 342 104 301l64 28 137-92 100 83 107-68 116 91 127-78 88 52 132-112 108 73 113-57 129 51v207H0Z" fill="url(#ridgeBack)"/>
+		<path d="m0 362 104-38 105 29 91-53 115 45 123-31 97 40 97-55 119 38 91-51 105 35 110-43 123 48v166H0Z" fill="url(#ridgeFront)"/>
+		<path d="m144 327 92-62 58 44m151 1 66-48 72 56m326-1 86-61 84 62m74-10 48-32 62 35" fill="none" stroke="#d6b58a" stroke-width="2" opacity=".25"/>
+		<g fill="#263b34" opacity=".62">
+			<path d="m151 359 22-40 20 40Zm53 0 16-30 17 30Zm465 4 27-45 27 45Zm61-4 19-36 21 36Z"/>
+		</g>
+		<g fill="none" stroke="#332f2b" stroke-linecap="round" opacity=".5">
+			<path d="M138 346v-30m0 11-12-13m12 24 13-16M315 356v-43m0 19-15-19m15 29 17-22M592 359v-39m0 17-13-17m13 24 14-19M872 354v-33m0 17-12-17m12 24 14-19"/>
+		</g>
+
+		<!-- Hearthwell homestead: patched roof, warm windows, working solar -->
+		<g>
+			<ellipse cx="767" cy="407" rx="155" ry="26" fill="#172f30" opacity=".3"/>
+			<path d="m640 340 100-76 121 70-12 12-110-57-87 62Z" fill="#473f37" stroke="#292f2d" stroke-width="3" stroke-linejoin="round"/>
+			<path d="m651 337 91-63 103 60-9 8-94-50-78 54Z" fill="#837158"/>
+			<path d="m676 328 68-48 70 37-3-19-66-38-76 51Z" fill="#53625d"/>
+			<path d="m678 317 65-42 62 31-2-8-60-34-68 43Z" fill="#749184"/>
+			<g stroke="#c6ad78" stroke-width="2" opacity=".8">
+				<path d="m687 305 59-38m-45 31 59-39m-43 31 59-39m-42 31 53-36"/>
+				<path d="m709 287 49 24m-33-35 51 25m-36-37 52 26"/>
+			</g>
+			<path d="m660 346 83-56 109 58-2 82-192-2Z" fill="#d1c29f" stroke="#614c3b" stroke-width="4" stroke-linejoin="round"/>
+			<path d="m660 346 83-56-2 29-80 55Z" fill="#eee0bd"/>
+			<path d="m743 291 109 57-2 21-108-50Z" fill="#aa9879"/>
+			<path d="M746 363h68v65h-68Z" fill="#72573f" stroke="#544432" stroke-width="3"/>
+			<path d="M758 373h20v26h-20Zm31 0h19v26h-19Z" fill="#f1bd76"/>
+			<path d="M756 376h4v20h-4m30-20h4v20h-4" stroke="#ffe0a1" stroke-width="2" opacity=".73"/>
+			<path d="M760 428v-16q18-20 37 0v16" fill="#46514a" stroke="#594836" stroke-width="3"/>
+			<circle cx="778" cy="411" r="4" fill="#e6ba75"/>
+			<path d="M678 388h48m-48 8h48" stroke="#8b7d62" stroke-width="2" opacity=".6"/>
+			<path d="M676 369h47v-10h-47Z" fill="#bc9b64"/>
+			<path d="M672 369h55" stroke="#e6c789" stroke-width="2"/>
+			<path d="m662 353 13 3m169 15 11 7m-183 22 7 1" stroke="#fff0ce" stroke-width="2" opacity=".55"/>
+			<path d="M835 342q10-16 8-31m-10 11-10-13m17 22 13-15" fill="none" stroke="#344940" stroke-width="4" stroke-linecap="round"/>
+			<path d="M831 325v-16m0 7-8-8m8 13 9-11" stroke="#a6ad7a" stroke-width="3" stroke-linecap="round"/>
+			<path d="M729 300 738 294l6 7-7 6m91 36 9 1 3 8-9-2" fill="#89765b" opacity=".9"/>
+		</g>
+
+		<!-- Farmhouse garden, soft soil, and rows leading back to the sunrise -->
+		<path d="M0 401q163-28 328 1t317 0 318 0 317-6v244H0Z" fill="url(#field)"/>
+		<path d="M0 416q228-29 432 3t414-5 434 2" fill="none" stroke="#9e9366" stroke-width="4" opacity=".36"/>
+		<g fill="none" stroke="#bd9868" stroke-linecap="round">
+			<path d="M-24 659Q427 457 887 400" stroke-width="4" opacity=".39"/>
+			<path d="M84 670Q473 465 915 399" stroke-width="3" opacity=".34"/>
+			<path d="M203 670Q532 462 942 400" stroke-width="3.5" opacity=".32"/>
+			<path d="M348 668Q600 463 971 401" stroke-width="3" opacity=".32"/>
+			<path d="M494 668Q666 461 999 402" stroke-width="3" opacity=".35"/>
+			<path d="M642 667Q752 462 1027 400" stroke-width="3.5" opacity=".34"/>
+			<path d="M803 667Q841 461 1054 398" stroke-width="3" opacity=".32"/>
+			<path d="M973 666Q935 459 1083 399" stroke-width="3.5" opacity=".3"/>
+			<path d="M1138 670Q1052 465 1114 401" stroke-width="3" opacity=".35"/>
+			<path d="M1240 657Q1135 464 1146 399" stroke-width="3.5" opacity=".31"/>
+		</g>
+		<path d="M0 447q200-15 360 12m399-13q178-18 380 2" fill="none" stroke="#aab079" stroke-width="2" opacity=".3"/>
+		<g opacity=".43" fill="none" stroke="#252f2b">
+			<path d="M49 448v-27m0 13-9-11m9 19 10-13m148-3v-22m0 11-8-9m8 14 8-10m623 3v-24m0 13-9-10m9 16 10-13m296 5v-24m0 12-8-8m8 14 8-11"/>
+		</g>
+		<!-- Distant planted beds -->
+		<g opacity=".85">
+			<use xlink:href="#leaf" transform="translate(689 435) scale(.72)"/>
+			<use xlink:href="#leaf" transform="translate(734 432) scale(.62)"/>
+			<use xlink:href="#leaf" transform="translate(782 434) scale(.7)"/>
+			<use xlink:href="#leaf" transform="translate(1155 434) scale(.76)"/>
+			<use xlink:href="#leaf" transform="translate(1200 437) scale(.64)"/>
+		</g>
+		<g transform="translate(0 10)">
+			<use xlink:href="#leaf" transform="translate(501 465) scale(.85)"/>
+			<use xlink:href="#leaf" transform="translate(550 468) scale(.78)"/>
+			<use xlink:href="#leaf" transform="translate(600 463) scale(.85)"/>
+			<use xlink:href="#leaf" transform="translate(650 469) scale(.78)"/>
+			<use xlink:href="#leaf" transform="translate(1081 465) scale(.88)"/>
+			<use xlink:href="#leaf" transform="translate(1133 469) scale(.79)"/>
+			<use xlink:href="#leaf" transform="translate(1182 463) scale(.9)"/>
+			<use xlink:href="#leaf" transform="translate(1230 470) scale(.79)"/>
+		</g>
+		<!-- Gnarled pumpkin and vine along the front of the bed -->
+		<g>
+			<path d="M1126 579q42-37 90-2 31 21 58 8" fill="none" stroke="#91a065" stroke-width="4" stroke-linecap="round"/>
+			<path d="M1175 574q-7-27-21-31m15 33q9-31 31-30m-47 34q-18-13-28-9m68 7q21-18 35-12" fill="none" stroke="#85965f" stroke-width="3" stroke-linecap="round"/>
+			<ellipse cx="1202" cy="585" rx="33" ry="24" fill="#b96f3f" stroke="#724a36" stroke-width="2"/>
+			<path d="M1202 562q-12 22 0 45m0-45q13 19 0 45m1-45 2-7 6 1-3 8" fill="none" stroke="#e3a45e" stroke-width="3"/>
+			<path d="M1173 578q-15-12-18-4 6 12 18 10m70 0q13-12 19-4-6 12-18 11" fill="#91a065"/>
+		</g>
+
+		<!-- Little wooden gate and seed markers -->
+		<g transform="translate(175 128)" stroke="#806548" stroke-linecap="round" stroke-linejoin="round">
+			<path d="m123 422 3 58m43-59 2 54m-48-42 44 0m-43 17 43 0" fill="none" stroke-width="4"/>
+			<path d="m121 421 7-2 1 9-8 1Zm42 0 7-2 1 9-8 1Z" fill="#c6a477" stroke-width="2"/>
+			<path d="M73 478v-15l12 8m31 12v-16l11 8" fill="#c88b54" stroke-width="1.5"/>
+		</g>
+
+		<!-- Hob, the seventy-year-old Hearthwell homebody who never left -->
+		<ellipse cx="972" cy="568" rx="123" ry="23" fill="#152d30" opacity=".58" filter="url(#softShadow)"/>
+		<g>
+			<!-- little antenna, threaded lead, and bent aerial -->
+			<path d="m941 279-3-19q-1-13 12-14t13 14l-1 22" fill="none" stroke="#513f36" stroke-width="6" stroke-linecap="round"/>
+			<path d="m941 279-3-19q-1-13 12-14t13 14l-1 22" fill="none" stroke="url(#brass)" stroke-width="3.5" stroke-linecap="round"/>
+			<circle cx="950" cy="247" r="7" fill="#dba962" stroke="#72503a" stroke-width="2"/>
+			<circle cx="950" cy="247" r="2.5" fill="#fff0c6"/>
+			<path d="M969 293q18-24 22-8t-15 18" fill="none" stroke="#5b6256" stroke-width="4" stroke-linecap="round"/>
+			<circle cx="977" cy="289" r="3" fill="#c78851"/>
+
+			<!-- uneven shoulder frame and lovingly repaired arms -->
+			<path d="m891 401-31 13q-15 7-22 23l-24 52q-6 15 8 23t23-9l34-47 39-5" fill="url(#enamel)" stroke="#443f37" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+			<path d="m859 414-8 13 19 11m-30 31 16 10m17-44-17 21" fill="none" stroke="#a6734d" stroke-width="4" stroke-linecap="round"/>
+			<circle cx="851" cy="424" r="9" fill="url(#brass)" stroke="#5c4638" stroke-width="3"/>
+			<circle cx="834" cy="493" r="8" fill="url(#brass)" stroke="#5c4638" stroke-width="3"/>
+			<path d="m848 482-12 14-13-9m18-13 15 5" fill="none" stroke="#eee0bb" stroke-width="4" stroke-linecap="round"/>
+			<path d="m1011 407 24 17q12 9 17 26l14 37q5 15-9 21t-22-10l-24-37-28-8" fill="url(#enamel)" stroke="#443f37" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+			<path d="m1030 417 10 8-17 15m39 22-16 8m-20-38 15 20" fill="none" stroke="#a6734d" stroke-width="4" stroke-linecap="round"/>
+			<circle cx="1041" cy="427" r="9" fill="#87938a" stroke="#443f37" stroke-width="3"/>
+			<circle cx="1057" cy="493" r="8" fill="url(#brass)" stroke="#5c4638" stroke-width="3"/>
+			<path d="m1049 482 12 14 13-9m-17-13-15 5" fill="none" stroke="#8b9388" stroke-width="4" stroke-linecap="round"/>
+
+			<!-- old overshirt / apron patched from work clothes -->
+			<path d="m906 406-24 17-6 83q35 21 88 18l44-13-7-79-24-27Z" fill="#567064" stroke="#382f2c" stroke-width="5" stroke-linejoin="round"/>
+			<path d="m907 408 17 15-5 81-37 2 3-78Zm68-2-19 16 12 77 37 8-8-78Z" fill="#857157" opacity=".8"/>
+			<path d="m914 434 14 12-8 52-22-2Zm58-8 17 6 4 60-22-8Z" fill="#bac0a2" stroke="#534737" stroke-width="2"/>
+			<path d="m908 481 20 2m43-28 16 6m-70 29-10 1m67-5 18 7" stroke="#dbbd7c" stroke-width="2" stroke-dasharray="2 4"/>
+			<path d="m923 416 19 22 9-18m16-2-22 21" fill="none" stroke="#d6b27a" stroke-width="2.5"/>
+			<rect x="934" y="438" width="33" height="24" rx="5" fill="#bf9255" stroke="#594538" stroke-width="2"/>
+			<text x="950" y="454" text-anchor="middle" fill="#33413b" font-family="Arial,sans-serif" font-size="9" font-weight="bold" letter-spacing=".8">HB—7</text>
+			<circle cx="907" cy="431" r="4" fill="#e6c47e"/>
+			<circle cx="989" cy="428" r="4" fill="#e6c47e"/>
+			<path d="m939 485 15 2-1 15-15-1Z" fill="#dbb473" stroke="#604837" stroke-width="2"/>
+			<path d="m943 489 3 0 3 3-3 4-3-2Z" fill="none" stroke="#754937" stroke-width="1.5"/>
+
+			<!-- hip gears and mismatched, walking legs -->
+			<path d="m927 509 4 26 20 11 16-10-1-24" fill="#a47a4f" stroke="#433a33" stroke-width="4"/>
+			<circle cx="944" cy="534" r="12" fill="url(#brass)" stroke="#473b32" stroke-width="3"/>
+			<circle cx="944" cy="534" r="4" fill="#624c39"/>
+			<path d="m914 509-5 35q-1 10 10 12l13-7-2-30m31-2 4 35q1 9 11 9l13-11-7-39" fill="url(#enamel)" stroke="#433d35" stroke-width="4" stroke-linejoin="round"/>
+			<path d="m910 537 18 6m39-3 14-5" stroke="#b38152" stroke-width="4"/>
+			<path d="m922 558-15 7q-8 5-3 12l29 2q8-3 2-11l-7-9Zm52-2 12 9q9 6 3 13l-27-2q-7-4 0-11l6-8Z" fill="#716d5d" stroke="#413831" stroke-width="4" stroke-linejoin="round"/>
+			<path d="m909 573 22 2m37-2 19 2" stroke="#c19c63" stroke-width="2"/>
+
+			<!-- round porcelain head, friendly faceplate and repaired ears -->
+			<path d="M893 338q0-48 48-58 43-8 68 25 16 20 12 53l-9 38q-9 25-39 34l-40-3q-31-11-38-42Z" fill="#443b34" stroke="#3d372f" stroke-width="6"/>
+			<path d="M898 335q2-43 43-52 37-7 59 21 14 17 11 45l-8 36q-8 20-33 29l-37-3q-25-9-31-36Z" fill="url(#enamel)" stroke="url(#brass)" stroke-width="4"/>
+			<path d="M910 328q3-28 31-35t48 12q-19-8-30 3-13-10-27 1t-10 28Z" fill="#fff5d8" opacity=".5"/>
+			<path d="m895 329-13 13 2 17 18-2m104-18 15-8 8 8-7 21-17 7" fill="#9a7552" stroke="#433931" stroke-width="4" stroke-linejoin="round"/>
+			<path d="m884 341 11 3m116-3 10-6" stroke="#edce8c" stroke-width="3"/>
+			<circle cx="887" cy="353" r="10" fill="url(#brass)" stroke="#42372f" stroke-width="3"/>
+			<circle cx="887" cy="353" r="5.5" fill="#634938"/>
+			<circle cx="887" cy="353" r="2" fill="#edc77d"/>
+			<circle cx="1010" cy="349" r="9" fill="#79817b" stroke="#42372f" stroke-width="3"/>
+			<path d="M916 349q9-13 25-5m23-5q10-8 23 4" fill="none" stroke="#74634b" stroke-width="4" stroke-linecap="round"/>
+			<path d="M914 357q12-10 25 1l-2 17q-12 10-23 0Z" fill="#45595a" stroke="#584b3a" stroke-width="3"/>
+			<path d="M966 353q14-11 25 2l-1 17q-12 9-23-1Z" fill="#45595a" stroke="#584b3a" stroke-width="3"/>
+			<ellipse cx="927" cy="364" rx="5.5" ry="7" fill="#d5be86"/>
+			<ellipse cx="978" cy="364" rx="5.5" ry="7" fill="#d5be86"/>
+			<ellipse cx="928" cy="364" rx="2.4" ry="4.4" fill="#74c2b6"/>
+			<ellipse cx="979" cy="364" rx="2.4" ry="4.4" fill="#74c2b6"/>
+			<circle cx="926" cy="362" r="1.4" fill="#fff5d1"/>
+			<circle cx="977" cy="362" r="1.4" fill="#fff5d1"/>
+			<path d="m952 363-7 20q-1 7 6 7l8-3" fill="none" stroke="#8f714d" stroke-width="3" stroke-linecap="round"/>
+			<path d="M939 402q15 9 31-1" fill="none" stroke="#66513d" stroke-width="4" stroke-linecap="round"/>
+			<path d="M944 402q12 5 22-1" fill="none" stroke="#f3d99f" stroke-width="1.8" stroke-linecap="round"/>
+			<path d="m914 385-5 7m91-11 5 5" stroke="#b18053" stroke-width="2.5" stroke-linecap="round"/>
+			<path d="m901 365-1 9m-5-13-1 8m106-24 1-9m5 9 4-7" stroke="#eee0bd" stroke-width="2" opacity=".85"/>
+			<!-- charming mismatched patch and enamel cheek screws -->
+			<path d="m989 380 11-3 4 11-7 9-11-5Z" fill="#758383" stroke="#4c493c" stroke-width="2"/>
+			<path d="m990 384 8 7m-7-1 9-3" stroke="#dec282" stroke-width="1.7"/>
+			<circle cx="906" cy="374" r="2.3" fill="#ba8a54"/>
+			<circle cx="1002" cy="370" r="2.3" fill="#ba8a54"/>
+			<!-- proper little Hearthwell sunburst maker badge -->
+			<circle cx="899" cy="318" r="9" fill="#af7950" stroke="#574638" stroke-width="2"/>
+			<circle cx="899" cy="318" r="3.8" fill="#e9cb86"/>
+			<path d="M899 307v-3m0 28v-3m-11-11h-3m28 0h-3m-19-8-2-2m19 19-2-2m0-15 2-2m-19 19 2-2" stroke="#e9cb86" stroke-width="1.8"/>
+			<text x="945" y="322" text-anchor="middle" fill="#836646" font-family="Arial,sans-serif" font-size="6.5" font-weight="bold" letter-spacing="1">HEARTHWELL</text>
+			<!-- neck spring and visible repair rivets -->
+			<path d="m936 416 4 7 6-6 5 7 7-6 5 7 6-5 4 5" fill="none" stroke="#8b704c" stroke-width="3"/>
+			<circle cx="901" cy="343" r="2" fill="#f2db9f"/>
+			<circle cx="1001" cy="347" r="2" fill="#f2db9f"/>
+
+			<!-- faithful old watering can, actively returning the farm to life -->
+			<path d="m808 449 7-14 44 12-9 54q-2 8-10 5l-34-10q-8-3-5-11Z" fill="url(#canMetal)" stroke="#333a35" stroke-width="4" stroke-linejoin="round"/>
+			<path d="m849 446 40-15 12 9-36 21m-45-16 4 39m5-32 31 9m-16-12 5-11" fill="none" stroke="#333a35" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+			<path d="m852 448 37-13 5 5-32 19m-43-17 4 34m8-25 23 7m-11-16 2-7" fill="none" stroke="#aac1af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".77"/>
+			<path d="M820 464q13-3 26 4v24q-14-7-29-4Z" fill="#c99a5f" stroke="#624f39" stroke-width="2"/>
+			<path d="M820 469q12-4 24 4m-23 1q11-3 22 3" fill="none" stroke="#e8ce99" stroke-width="1.3"/>
+			<path d="M897 438q8 5 8 13t-7 11" fill="none" stroke="#9eb7ac" stroke-width="3" stroke-linecap="round"/>
+			<circle cx="804" cy="481" r="5" fill="#b1d5bb" opacity=".88"/>
+			<circle cx="795" cy="491" r="3.2" fill="#b1d5bb" opacity=".76"/>
+			<path d="M798 494q-1 8 5 8t5-8m13 1q-2 8 4 8t5-8m13 1q-2 7 4 7t4-7" fill="#93bd9b" opacity=".72"/>
+			<path d="m783 509-4 11m28-10-3 14m22-10-1 13" stroke="#a8c791" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+			<!-- patched carrying strap -->
+			<path d="M868 425q-9 21 10 37" fill="none" stroke="#c59a64" stroke-width="2" stroke-dasharray="3 3"/>
+		</g>
+
+		<!-- Living rows close to the viewer, carrots breaking through the soil -->
+		<g>
+			<use xlink:href="#leaf" transform="translate(367 535) scale(1.2)"/>
+			<use xlink:href="#leaf" transform="translate(450 516) scale(1.05)"/>
+			<use xlink:href="#leaf" transform="translate(532 540) scale(1.25)"/>
+			<use xlink:href="#leaf" transform="translate(626 515) scale(1.1)"/>
+			<use xlink:href="#leaf" transform="translate(707 544) scale(1.24)"/>
+			<use xlink:href="#leaf" transform="translate(765 529) scale(.92)"/>
+			<path d="m364 539-5 18 8 2 5-19m14-5-4 22 7 2 4-24m65-21-3 20 6 2 5-21m70 31-4 20 7 1 5-21m80-22-4 22 7 1 4-22m74 32-3 19 7 2 4-19m60-15-2 17 6 2 4-19" fill="#c47b43" stroke="#805139" stroke-width="1.8" stroke-linejoin="round"/>
+			<path d="m364 539-5 18m21-25-4 22m-109 73q19-18 36 1m77-13q17-14 33 2m386-15q18-17 35 2m-571 37q16-17 32 2" fill="none" stroke="#dd9955" stroke-width="2" opacity=".5"/>
+			<ellipse cx="551" cy="607" rx="72" ry="8" fill="#182f2c" opacity=".22"/>
+			<path d="M-20 624q62-22 114 0m251-21q45-19 97 1m548-16q40-17 76 1m94 27q50-21 107-2" fill="none" stroke="#a1ac76" stroke-width="4" opacity=".45"/>
+			<path d="M26 614q39-21 71 1m334-20q35-23 72-1m335 10q39-27 77-2m330 10q31-17 58 1" fill="none" stroke="#718857" stroke-width="3"/>
+		</g>
+
+		<!-- Vignette, poster frame, and carefully set story typography -->
+		<rect width="1280" height="640" fill="url(#shadow)"/>
+		<rect width="1280" height="640" fill="url(#vignette)"/>
+		<path d="M34 0h1212a34 34 0 0 1 34 34v572a34 34 0 0 1-34 34H34a34 34 0 0 1-34-34" fill="none" stroke="#edcf91" stroke-width="1" opacity=".2"/>
+
+		<g>
+			<path d="M69 119h7m-7 0v9m523-9h-7m7 0v9" fill="none" stroke="#e5bd78" stroke-width="2"/>
+			<circle cx="94" cy="134" r="13" fill="#334842" stroke="#dfb871" stroke-width="1.4"/>
+			<path d="m92 121 3-2 2 3 3 1 3-1 2 3-2 3 1 3 2 2-1 3-3 1-1 3-3 1-2-2-3 1-2-2v-3l-2-2 1-3 3-1Z" fill="#d5ad71"/>
+			<circle cx="95" cy="133" r="5" fill="#364941"/>
+			<path d="M94 129v8m-4-4h9" stroke="#e6c582" stroke-width="1"/>
+			<text x="119" y="139" fill="#f4dcaa" font-family="'Segoe UI',Arial,sans-serif" font-size="12" font-weight="600" letter-spacing="3.5">A HEARTHWELL HOMECOMING</text>
+			<path d="M81 173h412" stroke="#f0d199" stroke-width="1" opacity=".35"/>
+			<path d="M81 173h88" stroke="#edba70" stroke-width="2.5"/>
+			<text x="76" y="245" fill="#fff0ce" font-family="'Palatino Linotype','Book Antiqua',Georgia,serif" font-size="71" font-weight="bold" letter-spacing="-.8">FARMSIM</text>
+			<text x="82" y="284" fill="#f2cb87" font-family="'Segoe UI',Arial,sans-serif" font-size="20" font-weight="500" letter-spacing="3.1">A SECOND SUNRISE</text>
+			<path d="M84 312h41m11 0h4m11 0h4m11 0h28" stroke="#f4d395" stroke-width="1.5" opacity=".7"/>
+			<text x="82" y="346" fill="#fff0cf" font-family="'Palatino Linotype','Book Antiqua',Georgia,serif" font-size="19">One little farm. One faithful robot.</text>
+			<text x="82" y="374" fill="#fff0cf" font-family="'Palatino Linotype','Book Antiqua',Georgia,serif" font-size="19">A whole world waiting to grow again.</text>
+			<circle cx="87" cy="416" r="3" fill="#dfaa68"/>
+			<text x="100" y="420" fill="#eed5a0" font-family="'Segoe UI',Arial,sans-serif" font-size="11" letter-spacing="2.1" opacity=".9">YEAR 71 OF CONTINUANCE</text>
+			<path d="M82 454h174" stroke="#f2d6a0" stroke-width="1" opacity=".35"/>
+			<text x="82" y="480" fill="#e1c794" font-family="'Segoe UI',Arial,sans-serif" font-size="10" letter-spacing="2.5">TEND THE SOIL</text>
+			<circle cx="210" cy="476" r="2" fill="#d5a05f"/>
+			<text x="223" y="480" fill="#e1c794" font-family="'Segoe UI',Arial,sans-serif" font-size="10" letter-spacing="2.5">MEND WHAT'S BROKEN</text>
+			<circle cx="409" cy="476" r="2" fill="#d5a05f"/>
+			<text x="423" y="480" fill="#e1c794" font-family="'Segoe UI',Arial,sans-serif" font-size="10" letter-spacing="2.5">BEGIN AGAIN</text>
+			<path d="M82 510h388" stroke="#e2c18b" stroke-width="1" opacity=".27"/>
+			<path d="m82 525 3 3-3 3-3-3Z" fill="#d7ad71"/>
+			<text x="94" y="532" fill="#edd8ac" font-family="'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" letter-spacing="1">FIND YOUR OWN WAY HOME</text>
+		</g>
+
+		<rect width="1280" height="640" fill="url(#grain)" opacity=".65"/>
+	</g>
+</svg>
