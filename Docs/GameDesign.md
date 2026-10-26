@@ -3,7 +3,7 @@
 What the game is, how it plays and why. This document steers development: when a feature idea comes up, check it against the pillars and the scope here first.
 
 - [Architecture.md](Architecture.md) covers how the code is put together. [CodingGuidelines.md](CodingGuidelines.md) covers how the code looks.
-- The story, the world's history, the currency and each character's backstory go in a separate lore document (planned, `Docs/Lore.md`). This document only says where the game needs lore, and marks those places with **Lore hook**.
+- The story, the world's history, the currency and each character's backstory go in the separate lore document, [Lore.md](Lore.md). This document only says where the game needs lore, and marks those places with **Lore hook**.
 
 Keep this document up to date. When a design choice is made or changed, update the relevant section and add a line to the [decision log](#14-decision-log).
 
@@ -35,7 +35,7 @@ A 3D life and farming sim set in a retro-futuristic, post-apocalyptic world. You
 
 Every feature should serve at least one pillar. Features that serve none are cut or postponed.
 
-1. **Bring the land back.** Farming is the heart of the game. Poisoned soil, scarce water and storms make growth feel earned, and a thriving farm in a dead world is the main reward.
+1. **Bring the land back.** Farming is the heart of the game. Poisoned soil, scarce water and storms make growth feel earned, and a thriving farm in a dead world is the main reward. Healing the land also clears the sky above it and powers the farm.
 2. **Old hands, new machines.** Progress runs from rusty hand tools to pre-war tech to high-tech automation. The game mixes old-fashioned farm life with futuristic technology, and automation is a goal in itself.
 3. **A world of robots, and rare people.** Robots fill every role people used to: neighbours, friends, love interests, helpers and enemies. Each one has its own history. Humans are rare, and finding one should feel special.
 4. **Serious world, light touch.** The setting is grim and the stakes are real, but the game is warm and funny in its details: robots stuck in pre-war routines, absurd old advertising, dry humour.
@@ -130,12 +130,32 @@ A farm tile has a state (grass, tilled, planted), and on top of that:
 - The house can be decorated.
 - **Later:** animals, as mutated livestock (**Lore hook:** what they mutated from).
 
+### Energy
+
+- Solar is the main energy source. **Solar panels** charge **power cells**, and power cells run the farm's machines and automation: water purifiers, robot farmhands, the robot charging station, later machines. Power cells are a resource, not a currency.
+- A panel's daily output depends on the time of day (nothing at night), the weather (dust storms block most of it) and **the haze** over the farm (see below).
+- Machines draw a set amount of charge to run. When the stored charge runs out, they stop until it's recharged. Early tools and simple sprinklers don't need power, so a new player isn't blocked by energy.
+- Energy sources (panels, later other generators) and consumers are data assets, so mods can add both.
+- **Lore hook:** Sunstone dust and the haze, see [Lore.md section 4](Lore.md#energy-after-the-war).
+
+### Land health and the haze
+
+The player's actions slowly improve or damage the environment, and a healthier environment gives more solar energy. A restored farm is visibly a brighter place.
+
+- Each map has a **land health** value, computed from its tiles: clean, planted and healthy tiles raise it, and irradiated, polluted or bare tiles lower it. It changes slowly, over days rather than minutes.
+- **Improves land health:** growing healthy crops, cleaning radiation, using clean water, leaving ground planted or covered, and growing certain mutated crops that absorb Sunstone dust especially well.
+- **Damages land health:** dirty water, burning scrap, stripping soil without replanting, and "dirty" machines that are fast or cheap but pollute.
+- **Effects:** land health sets how thick the haze is over the map. A thinner haze means more solar output, a brighter and more colourful sky and landscape, and over time fewer radiation storm effects on that map.
+- **The trade-off:** dirty shortcuts (dirty water, polluting machines) make the farm faster now and weaker later. The game never forbids them; the player chooses.
+- Land health should be easy to read: a simple meter or sky indicator, and haze you can see.
+
 ### Implementation order
 
 1. Radiation on tiles and mutated crops.
 2. Clean water as a resource.
 3. Weather events.
-4. Scavenging (later, together with exploration).
+4. Solar energy and power cells, then land health and the haze.
+5. Scavenging (later, together with exploration).
 
 ## 7. Survival needs
 
@@ -175,7 +195,7 @@ The player grows along several tracks at once:
 
 - **Skills:** farming, engineering, scavenging and combat. They level up by doing, and each level gives a small bonus or unlock.
 - **Tool tiers:** rusty, then pre-war, then high-tech. Better tools cost less stamina, work on more tiles at once, or do new things (for example a tool that cleans radiation).
-- **Tech tree:** the backbone of engineering progress. Branches include automation (sprinklers, then robot farmhands, then full automation), tools, water and soil machines, and robot upgrades. Nodes are unlocked with materials, currency and engineering levels. Tech tree entries are data assets so mods can add branches.
+- **Tech tree:** the backbone of engineering progress. Branches include automation (sprinklers, then robot farmhands, then full automation), tools, water and soil machines, energy (solar panels and power cells), and robot upgrades. Nodes are unlocked with materials, currency and engineering levels. Tech tree entries are data assets so mods can add branches.
 - **Town restoration:** the main story progress. Each restored facility (water pump, power, clinic, market...) opens new shops, robots, areas or mechanics.
 - **Relationships:** see [section 8](#8-robots-and-people).
 
@@ -229,6 +249,7 @@ One full season that shows every pillar in a small form:
 Roughly in order, to be planned when we get there:
 
 - Weather events, more crops and all four seasons.
+- Solar energy and power cells, then land health and the haze.
 - The robot town, more robots, gifts, events and romance.
 - Skills, tool tiers and the tech tree.
 - Buildings and machines placed on the farm grid, house decoration.
@@ -252,6 +273,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-26 | Solar energy charges power cells that run machines; land health sets the haze, which sets solar output | Makes healing the land pay off in automation, and gives dirty shortcuts a long-term cost. Idea from David, lore in Lore.md |
 | 2026-10-26 | Next milestone is a one-season vertical slice ([section 13](#13-scope-and-milestones)) | Shows every pillar in a small form before building wide |
 | 2026-10-26 | Third-person camera; other angles possibly later | Fits the current prototype; other views are a nice-to-have |
 | 2026-10-26 | Aim for a realistic art style | David's preference; low-poly assets are placeholders |
@@ -274,8 +296,10 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 To be decided later. Move each one into the relevant section and the decision log when it's settled.
 
-- **Lore:** the player's backstory, the war, the currency, the robot makers, each character's history. Planned for `Docs/Lore.md`.
+- **Lore:** the details still open in [Lore.md](Lore.md), such as names marked as working names.
 - **Multiplayer:** co-op is wanted, but [Architecture.md](Architecture.md#16-decision-log) currently says single-player only. When we start, decide what shared state looks like (shared farm or separate farms, shared clock and sleep) and update the architecture.
+- **Land health:** whether it is one value per map or varies across a map, how fast it changes, and whether damage spreads to neighbouring tiles.
+- **Energy balance:** how much charge panels give and machines use, and whether the vertical slice needs any of it (probably not).
 - **Mutated crops:** exactly which effects are good and which are risky, and how often normal crops mutate.
 - **Death and knock-out penalty:** what exactly is lost.
 - **Game title** and the world's name.
