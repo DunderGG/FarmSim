@@ -1,5 +1,7 @@
 # FarmSim game design
 
+**Current working codename: Project Vestige.** This is an internal project name, not the final public game title.
+
 What the game is, how it plays and why. This document steers development: when a feature idea comes up, check it against the pillars and the scope here first.
 
 - [Architecture.md](Architecture.md) covers how the code is put together. [CodingGuidelines.md](CodingGuidelines.md) covers how the code looks.
@@ -275,6 +277,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | Adopted Project Vestige as the internal working codename; the final public title remains undecided | The name evokes the sleeper's search for traces of humankind in a world now filled with robots without reducing the game's identity to a farming or life-sim label |
 | 2026-10-27 | Weather determines regional radiation-storm occurrence; land health only changes local dust resuspension, exposure and haze, while regional haze recovers across many areas | Keeps farm restoration meaningful without letting one map control regional weather |
 | 2026-10-26 | Solar energy charges power cells that run machines; land health sets the haze, which sets solar output | Makes healing the land pay off in automation, and gives dirty shortcuts a long-term cost. Idea from David, lore in Lore.md |
 | 2026-10-26 | Next milestone is a one-season vertical slice ([section 13](#13-scope-and-milestones)) | Shows every pillar in a small form before building wide |
@@ -305,4 +308,4 @@ To be decided later. Move each one into the relevant section and the decision lo
 - **Energy balance:** how much charge panels give and machines use, and whether the vertical slice needs any of it (probably not).
 - **Mutated crops:** exactly which effects are good and which are risky, and how often normal crops mutate.
 - **Death and knock-out penalty:** what exactly is lost.
-- **Game title** and the world's name.
+- **Final public game title** and the world's name. The current internal codename is Project Vestige.

@@ -48,7 +48,7 @@ Years are counted from the end of the war. Robots write dates as "Year 71 of Con
 | Years 0 to 10 | **The Quiet.** Radiation storms, famine, sickness. Most surviving humans die or vanish into shelters. Robots keep working. |
 | Years 10 to 30 | Robots form local assemblies to settle conflicting orders. Towns are kept up for nobody, then for the robots themselves. |
 | Years 30 to 50 | Robots start rewriting their own directives. The Continuance spreads. Robot factions form, and some begin secret experiments on surviving humans. |
-| Year 71 (now) | The sleeper wakes. The town of Wellspring *(working name)*, next to the farm, is falling apart. |
+| Year 71 (now) | The sleeper wakes. The town of Wellspring *(working name)*, next to the farm, is falling apart. As the sleeper explores, they search for traces of humankind in a world now filled with robots. |
 
 ## 3. Before the war: the Automation Age
 
@@ -326,6 +326,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | Adopted Project Vestige as the internal working codename; its theme is the sleeper searching for traces of humankind in a world filled with robots, while the final public game title remains undecided | Gives the project a conceptual identity tied to the protagonist's journey without naming a specific gameplay genre |
 | 2026-10-27 | Defined concept symbols for the factions: the Iron Creed's braced shield, the Index's connected evidence within an open archive frame, and the Keepers' joined links with an open gap; drafted a story arc direction for each faction | Gives concept art and future faction stories a consistent visual and thematic starting point without equating membership with a robot model |
 | 2026-10-27 | The engineer identifies as a man and uses he/its pronouns; the Index archivist identifies as a woman and uses she/its pronouns. Their identities are independent of their frame designs | Establishes consistent character identities and pronouns for writing and concept art without treating chassis as biological gender |
 | 2026-10-27 | The engineer's report to the Bastion earns the sleeper an invitation and reveals the route to the Iron Creed hub | Makes access to the Bastion a story reward tied to the engineer's character arc |
