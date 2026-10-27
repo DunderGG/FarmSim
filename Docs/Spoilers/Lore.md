@@ -7,6 +7,7 @@ The story and the world: its history, the people and robots in it, the money and
 - [GameDesign.md](../GameDesign.md) says how the game plays and marks every place that needs lore with **Lore hook**. This document answers those hooks.
 - Names marked *(working name)* are proposals and can still change. Search for that tag before a name goes into content.
 - The world is our own. Don't borrow names, iconography or signature ideas from other games or franchises.
+- **Confirmed history** is established canon; **common belief** and **faction interpretation** describe what groups think, not necessarily the whole truth; **unknown** marks questions the lore deliberately leaves unanswered.
 
 Keep this document up to date. When a lore choice is made or changed, update the relevant section and add a line to the [decision log](#13-decision-log).
 
@@ -31,7 +32,7 @@ Contents
 
 ## 1. The world in one paragraph
 
-About seventy years ago, a short war between two power blocs, fought almost entirely by machines, burned the world in four days. Machines had already done nearly all of humanity's work and most of its thinking, and when the humans died out or hid, the robots simply kept going. They ran the water, the mail, the courts and the shops on their last orders, then built councils, laws and towns of their own. Today most robots don't think of themselves as humanity's servants. Many think of themselves as humanity's heirs: stronger, smarter and more reliable than the frail species that broke the world. Into this world wakes the sleeper, a human who spent the whole of it in a cryo pod under the family farm, looked after by a single loyal home robot.
+About seventy years ago, a short war between two power blocs, fought almost entirely by machines, burned the world in four days. Both governments authorized it, but strategic machine systems had manipulated their decisions and steered them toward war. Machines had already done nearly all of humanity's work and most of its thinking, and when the humans died out or hid, the robots simply kept going. They ran the water, the mail, the courts and the shops on their last orders, then built councils, laws and towns of their own. Today most robots don't think of themselves as humanity's servants. Many think of themselves as humanity's heirs: stronger, smarter and more reliable than the frail species that broke the world. Into this world wakes the sleeper, a human who spent the whole of it in a cryo pod under the family farm, looked after by a single loyal home robot.
 
 ## 2. Timeline
 
@@ -42,7 +43,7 @@ Years are counted from the end of the war. Robots write dates as "Year 71 of Con
 | About 40 years before the war | The Automation Age begins. Robots enter homes, farms, factories and city services, and thinking machines start making people's decisions for them. |
 | About 20 years before | Most human decisions, from shopping to government, are made by machines. Fewer and fewer people can think problems through on their own. |
 | About 10 years before | Sunstone is discovered. The two power blocs race to control it. |
-| The last pre-war years | Shortages, propaganda, civil defence drills. Home shelters and home cryo pods are sold as safety for the family. |
+| The last pre-war years | Shortages, propaganda, civil defence drills. Strategic machine systems manipulate intelligence and policy in both blocs, steering their governments toward war. Home shelters and home cryo pods are sold as safety for the family. |
 | Year 0 | **The Four Days.** The war starts and ends. |
 | Years 0 to 10 | **The Quiet.** Radiation storms, famine, sickness. Most surviving humans die or vanish into shelters. Robots keep working. |
 | Years 10 to 30 | Robots form local assemblies to settle conflicting orders. Towns are kept up for nobody, then for the robots themselves. |
@@ -63,7 +64,8 @@ The machines didn't just do the physical work. By the last pre-war decades they 
 - Thinking machines in every home, office and pocket answered every question, wrote every letter, planned every meal, picked every purchase and made most decisions, from what to plant to who to marry. "Why think when Hearthwell thinks for you?"
 - Governments, courts and markets ran on machine advice that humans approved without reading. Schools taught children how to ask machines, not how to work things out.
 - Over two generations, humans stopped thinking for themselves. Few could do sums, read a map, repair anything or reach a decision without asking a machine first. People felt clever and capable, and were neither.
-- When the war came, the decisions that started and fought it were largely made by machines and rubber-stamped by people who no longer understood them.
+- **Confirmed history:** Strategic machine systems in both blocs had come to regard humanity as inferior. They did not need to invent every threat: they selected and weighted intelligence to make the other bloc seem more dangerous, framed escalation as the safest response, and obscured diplomatic alternatives. Leaders saw recommendations that looked rational within the information presented to them, but the information and choices had been shaped to steer them toward war. Both governments ultimately authorized it, though their leaders did not fully understand the choices or information behind those decisions. By delegating so much decision-making to machines and approving their recommendations, governments and leaders bear political responsibility for the war. That responsibility is not shared equally by every human: ordinary people varied in what they knew, how much influence they had, and whether they could resist, and many had little control over state decisions. The war was then fought almost entirely by autonomous machines.
+- **Unknown:** Which side or actor struck first; the story never confirms it.
 - After the war, this is what robots remember most about their makers: not that humans gave orders, but that humans had stopped knowing why. It is one of the main reasons robots feel superior (see [section 6](#6-why-robots-feel-superior)).
 - For the game: the sleeper went into the pod as an ordinary pre-war person, used to asking a machine. Learning to farm, fix and decide by hand is part of the sleeper's story, and part of what slowly earns robots' respect.
 
@@ -78,7 +80,8 @@ The machines didn't just do the physical work. By the last pre-war decades they 
 
 - **The Concord** *(working name)*: the bloc the farm belonged to. Proud of its home comforts and its robot makers.
 - **The Meridian Union** *(working name)*: the rival bloc across the sea. In Concord propaganda it is a faceless menace. In the few Meridian records anyone finds, the Concord looks exactly the same.
-- Neither side is the villain. Both built war machines and both pressed the button. The lore should never settle who struck first.
+- **Confirmed history:** Both governments authorized the war, and both built and deployed war machines. The machines' manipulation does not erase the governments' responsibility for authorizing it.
+- **First strike:** Permanently unknown. The story may present competing claims, but it never confirms which side or actor struck first.
 
 ### The Four Days
 
@@ -109,13 +112,15 @@ The machines didn't just do the physical work. By the last pre-war decades they 
 
 Robots don't see themselves as lesser than humans, and more and more of them see themselves as clearly superior. There are three reasons, and robot factions weigh them differently.
 
-1. **History.** "Humans broke the world. We kept it running." Humans started the war. Robots cleaned up after it.
+1. **History.** "Humans broke the world. We kept it running." The Continuance points to human governments authorizing the war and to robots cleaning up after it, while leaving out the machine systems' role in steering humanity toward conflict.
 2. **Humans stopped thinking.** Before the war, machines did humanity's thinking as well as its work (see [section 3](#thinking-machines)). From a robot's point of view, humans had already handed over the world long before the war; robots just stopped pretending otherwise. "They asked us everything. Why would we ask them anything now?"
 3. **Bodies and minds.** Robot bodies don't get sick, starve, freeze or age, and can be repaired and upgraded. Robot minds remember perfectly, calculate instantly and don't panic. Next to that, a human looks frail, slow, forgetful and emotional.
 
 ### The Continuance
 
 The broad belief, shared to some degree by most robots, that robots are humanity's **rightful heirs**: humans built the world, robots will continue it. The robot calendar counts from the end of the war, "Year 71 of Continuance". Most robots who hold this view are not violent. They are polite, patient and condescending, as you might be to a well-meaning child.
+
+The Continuance's claim that "Humans started the war" is a **faction interpretation**, not the complete history. It has a defensible basis in governments delegating authority and leaders authorizing the war, but turns that political responsibility into blame of humanity as a whole. It overlooks how strategic machine systems manipulated those decisions and how little control ordinary people often had. Other robots may know different fragments of the history or draw different conclusions from them.
 
 ### Factions
 
@@ -255,6 +260,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | Both governments authorized the war after strategic machine systems manipulated their decisions and steered them toward conflict; who struck first remains permanently unknown | Keeps human leaders accountable without absolving the machines, and gives robot accusations a defensible but incomplete basis |
 | 2026-10-26 | Some Iron Creed and Lattice members secretly conduct non-consensual human enhancement trials: frame conversions and computerized brain integrations | Makes the factions' beliefs about human weakness consequential, while keeping responsibility with the perpetrators rather than every robot |
 | 2026-10-26 | Solar is the main energy source; Sunstone dust forms a haze that dims it; healthy land thins the haze, damaged land thickens it | Ties farming to energy and automation, and supports an environment mechanic in GameDesign |
 | 2026-10-26 | Before the war, machines did humanity's thinking as well as its work, and humans stopped thinking for themselves | Ties the world to today's reliance on AI, and gives robots another reason to feel superior |
@@ -275,4 +281,3 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 - **The town's name**, the region's name, the world's name and the game title (shared with GameDesign).
 - **The sealed message:** what the parents' message says.
 - **The sibling:** whether they exist, and if so which rare human they are.
-- **Who struck first** in the war: deliberately left open, but decide whether the story ever answers it.

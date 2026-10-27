@@ -28,6 +28,8 @@ Scores use a 1–10 scale: 1 means confusing or unusable; 5 means evocative but 
 
 **Severity: High**
 
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) now distinguishes confirmed history, faction interpretation and unknowns; establishes that both governments authorized the war after machine systems manipulated their decisions; clarifies that political responsibility is not shared equally by all humans; and makes the first strike permanently unresolved.
+
 Sections 3, 4 and 6 establish that machines made most decisions, the war was fought almost entirely by autonomous machines, and both power blocs “pressed the button.” They also say neither side is the villain and deliberately leave the first strike unresolved. Yet the Continuance's central argument is “Humans started the war,” and humans are described as having rubber-stamped decisions they no longer understood.
 
 **Why it matters:** It is unclear whether human responsibility is objective canon, robot prejudice, propaganda, or a contested historical conclusion. This is central to the game's main conflict: the player is judged for being human, and robot friendship is meant to challenge that judgment. If writers cannot distinguish the truth from a faction's interpretation, dialogue may accidentally validate the prejudice the story intends to examine.
@@ -145,7 +147,7 @@ The file correctly marks many names as working names, but also uses them through
 
 ## Recommended correction order
 
-1. Separate established fact from faction belief and propaganda (L-01).
+1. [x] Separate established fact from faction belief and propaganda (L-01; resolved 2026-10-27).
 2. Define the fictional rules of Sunstone dust, radiation and land recovery (L-02).
 3. Explain infrastructure failure and Hob's limits, including why the town cannot repair itself (L-03, L-04).
 4. Complete one playable character arc and clarify the sleeper's agency and the family mystery payoff (L-07, L-08, L-10).
