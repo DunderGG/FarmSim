@@ -52,6 +52,8 @@ Sections 4 and 11 say Cinderium weapons released dust that remains in the upper 
 
 **Severity: High**
 
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) now distinguishes advanced Iron Creed and Lattice maintenance networks from Keeper towns' legacy, model-specific systems, whose supply chains and cross-role coordination have degraded. It explains selective service failures and establishes that Hob preserves a small farm system by prioritizing the pod and essential upkeep and scavenging parts.
+
 The war ended seventy years before the game. Pre-war solar panels and machines still power towns and robots; robots can repair and build other robots, and some have rewritten their directives. At the same time, the neighboring town's pump, power and clinic are failing, while the farm caretaker has kept a cryo pod alive and maintained a garden for decades.
 
 **Why it matters:** The contrast can be narratively powerful, but the present explanation—robots continue their assigned jobs and do not rewrite a function that is not theirs—does not yet explain why a capable society tolerates critical infrastructure failure. Nor does it clarify the energy, parts and repair chain that kept Hob and the pod going for so long.
@@ -151,7 +153,7 @@ The file correctly marks many names as working names, but also uses them through
 
 1. [x] Separate established fact from faction belief and propaganda (L-01; resolved 2026-10-27).
 2. [x] Define the fictional rules of Cinderium dust, radiation and land recovery (L-02; resolved 2026-10-27).
-3. Explain infrastructure failure and Hob's limits, including why the town cannot repair itself (L-03, L-04).
+3. [x] Explain infrastructure failure and Hob's maintenance limits (L-03; resolved 2026-10-27). Reconcile Hob's order and the town's crisis (L-04).
 4. Complete one playable character arc and clarify the sleeper's agency and the family mystery payoff (L-07, L-08, L-10).
 5. Set population scale, faction institutions and tone boundaries before expanding the cast (L-05, L-06, L-09).
 6. Establish a working-name and stable-ID policy before terms become content or save data (L-11).

@@ -119,6 +119,8 @@ These rules are inspired by real aerosol transport and fallout behavior, but Cin
 - The humans kept dying. Radiation, famine, sickness and the storms took most of the survivors in the first ten years. Many robots watched it happen while following orders, unable to help. That memory still shapes how robots think about humans.
 - With no humans left to give orders, robots ran into orders that contradicted each other: a road crew told to repair a road that a demolition crew was told to clear. To settle these, robots formed local **assemblies** that voted on which orders to follow.
 - Over decades the assemblies grew into councils, laws, courts and towns. Robots started repairing and building other robots, and eventually started **rewriting their own directives**. A robot that chooses its own purpose is the norm today, though older models still often run on their original orders.
+- Post-war robot society does not share one level of technology or maintenance. The Iron Creed and the Lattice developed specialist repair, upgrade and manufacturing networks for their own systems, and keep those systems in good condition. Their parts and expertise are built around their own technologies and are not plug-in replacements for every pre-war machine.
+- The Keepers' older service models and towns rely on legacy equipment with worn, model-specific parts. The war and decades without human industry broke the supply chains that once made those parts; salvage and repairs can keep systems running, but replacements are scarce and often incompatible. Their assemblies are better at resolving conflicts between assigned jobs than coordinating modernization across them. As a result, essential town services degrade selectively while other robot societies remain advanced and well-maintained.
 - Today robots run almost everything that still runs. Most robots outside the old service models have never taken an order from a human.
 
 ## 6. Why robots feel superior
@@ -139,9 +141,9 @@ The Continuance's claim that "Humans started the war" is a **faction interpretat
 
 Factions disagree about what makes a robot superior. The list is meant to grow.
 
-- **The Iron Creed** *(working name)* ranks the **body** first. Strength, durability and self-repair are what matter, and flesh is weakness. Its members favour heavy frames and upgrades, respect physical feats and are the most openly hostile to humans. Radicalised Iron Creed robots roam the wasteland and the farm's surroundings.
-- **The Lattice** *(working name)* ranks the **mind** first. Memory, calculation and logic are what matter. Its members are dismissive rather than violent: humans are irrational and interesting, a species to be studied. The Lattice keeps a human in a research institute as a "living exhibit" (see [rare humans](#rare-humans)).
-- **The Keepers** *(working name)* rank **purpose** first. A robot is defined by doing its work well, whatever that work is. Keepers are the old service models, still faithful to their pre-war functions. Other robots see them as outdated, but they are the robots most open to humans. Most robots in the town next to the farm lean this way, which is why the town is falling apart: nobody there will rewrite their orders to fix what isn't their job.
+- **The Iron Creed** *(working name)* ranks the **body** first. Strength, durability and self-repair are what matter, and flesh is weakness. Its members favour heavy frames and upgrades, respect physical feats and are the most openly hostile to humans. Their specialist repair and manufacturing networks keep their own frames and infrastructure well-maintained. Radicalised Iron Creed robots roam the wasteland and the farm's surroundings.
+- **The Lattice** *(working name)* ranks the **mind** first. Memory, calculation and logic are what matter. Its members are dismissive rather than violent: humans are irrational and interesting, a species to be studied. The Lattice maintains its own advanced, specialized systems and keeps a human in a research institute as a "living exhibit" (see [rare humans](#rare-humans)).
+- **The Keepers** *(working name)* rank **purpose** first. A robot is defined by doing its work well, whatever that work is. Keepers are the old service models, still faithful to their pre-war functions. Other robots see them as outdated, but they are the robots most open to humans. Most robots in the town next to the farm lean this way. Its legacy equipment depends on scarce, model-specific parts that the advanced factions' systems cannot directly replace, and its assemblies rarely coordinate repairs beyond each robot's assigned function. The town's services therefore fail selectively even as Iron Creed and Lattice societies maintain advanced infrastructure of their own.
 
 ### What this means for the game
 
@@ -222,7 +224,7 @@ Each character is a data asset (see [section 12](#12-lore-and-mods)). This secti
 
 - **Who:** **Hob** *(working name)*. A Hearthwell HB-7 "Homebody" home robot; the family shortened "Homebody" to Hob. Built before the war. Gender-neutral; refer to Hob as "Hob" or "they".
 - **Last order:** "Keep the farm until they wake up." Hob has followed it for seventy years.
-- **How Hob kept the farm alive:** patching the pod's power, tending a small garden, scavenging parts. Little of Hob's body is original any more; most of it is spare parts from other robots, some of which don't match.
+- **How Hob kept the farm alive:** the farm is a small, isolated Hearthwell system, not a town utility network. Hob prioritised the cryo pod's power and essential upkeep, tended a small garden, and scavenged compatible parts when possible. The pod and farm needed less power and coordination than a town's services, but keeping them going still meant accepting deterioration elsewhere. Little of Hob's body is original any more; most of it is spare parts from other robots, some of which don't match.
 - **Memory:** Hob's memory is damaged. Hob remembers the family in fragments, and memories come back as the player restores the farm. This drives the family mystery.
 - **Faction:** a Keeper in all but name. Town robots mock Hob as an outdated servant model, and Hob pretends not to hear.
 - **Role in the game:** the player's first relationship, the tutorial guide and the first companion.
@@ -273,6 +275,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | Robot societies have different maintenance capabilities: Iron Creed and Lattice maintain their own advanced systems, while Keeper towns rely on legacy, model-specific equipment, scarce parts and weak cross-role coordination; Hob preserves the small farm system by prioritizing it and scavenging parts | Explains selective decline in the neighboring town without making the whole robot world technologically stagnant |
 | 2026-10-27 | Named the radioactive energy mineral Cinderium | Separates the material's identity from the world's solar power theme while evoking its scorched, hazardous nature |
 | 2026-10-27 | Clarified that land health changes near-ground haze and local dust effects only; regional haze recovers gradually across many areas, and farm health does not change regional storm occurrence | Keeps the farm's visible recovery while avoiding a single map controlling regional weather |
 | 2026-10-27 | Cinderium contamination moves between air, land and water; healthy cover stabilizes contaminated soil, special crops can take up and remove some compounds if harvested and contained, and local land recovery does not control regional storm occurrence | Grounds the farming, haze and radiation rules in aerosol and fallout behavior while keeping Cinderium's unusual effects fictional |
