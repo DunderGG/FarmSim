@@ -52,7 +52,7 @@ Sections 4 and 11 say Cinderium weapons released dust that remains in the upper 
 
 **Severity: High**
 
-**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) now distinguishes advanced Iron Creed and Lattice maintenance networks from Keeper towns' legacy, model-specific systems, whose supply chains and cross-role coordination have degraded. It explains selective service failures and establishes that Hob preserves a small farm system by prioritizing the pod and essential upkeep and scavenging parts.
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) now distinguishes advanced Iron Creed and Index maintenance networks from Keeper towns' legacy, model-specific systems, whose supply chains and cross-role coordination have degraded. It explains selective service failures and establishes that Hob preserves a small farm system by prioritizing the pod and essential upkeep and scavenging parts.
 
 The war ended seventy years before the game. Pre-war solar panels and machines still power towns and robots; robots can repair and build other robots, and some have rewritten their directives. At the same time, the neighboring town's pump, power and clinic are failing, while the farm caretaker has kept a cryo pod alive and maintained a garden for decades.
 
@@ -88,7 +88,9 @@ The war and first decade afterward kill or scatter most humans. The lore propose
 
 **Severity: Medium**
 
-The Iron Creed, Lattice and Keepers each rank body, mind or purpose. The document does not yet define their membership, governance, territory, economic role, relationships or internal disagreement. “The Keepers” are both the dominant attitude in town and a group of old service models; an Iron Creed pump engineer is described as “stuck” in a Keeper town without explaining how that situation arose.
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) defines faction membership as voluntary and ideological, distinguishes networks from their hubs and from local communities, and gives each hub a concrete role, practice, internal disagreement and relationship with the other factions. It also explains why the pump engineer came to town and why the failing legacy pump requires cooperation rather than one expert's repair.
+
+At the time of the original review, the Iron Creed, Index and Keepers each ranked body, mind or purpose, but their voluntary membership, hubs, practices, relationships and internal disagreements were not defined. The Keepers were also conflated with older service models, and an Iron Creed pump engineer was described as “stuck” in a Keeper town without explanation.
 
 **Why it matters:** Factions currently risk functioning as personality categories rather than social forces. The town's repair crisis, human treatment, and character conflicts depend on how these groups actually influence decisions.
 
@@ -159,7 +161,7 @@ The file correctly marks many names as working names, but also uses them through
 2. [x] Define the fictional rules of Cinderium dust, radiation and land recovery (L-02; resolved 2026-10-27).
 3. [x] Explain infrastructure failure and Hob's maintenance limits (L-03; resolved 2026-10-27). Reconcile Hob's order and the town's crisis (L-04; resolved 2026-10-27).
 4. Complete one playable character arc and clarify the sleeper's agency and the family mystery payoff (L-07, L-08, L-10).
-5. [x] Set the human cast target and define why encounters are rare while global numbers remain unknown (L-05; resolved 2026-10-27). Set faction institutions and tone boundaries before expanding the cast (L-06, L-09).
+5. [x] Set the human cast target and define why encounters are rare while global numbers remain unknown (L-05; resolved 2026-10-27). Define faction institutions and membership (L-06; resolved 2026-10-27). Set tone boundaries before expanding the cast (L-09).
 6. Establish a working-name and stable-ID policy before terms become content or save data (L-11).
 
 ## Review limits
