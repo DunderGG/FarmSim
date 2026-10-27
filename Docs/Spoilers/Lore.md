@@ -46,7 +46,7 @@ Years are counted from the end of the war. Robots write dates as "Year 71 of Con
 | Year 0 | **The Four Days.** The war starts and ends. |
 | Years 0 to 10 | **The Quiet.** Radiation storms, famine, sickness. Most surviving humans die or vanish into shelters. Robots keep working. |
 | Years 10 to 30 | Robots form local assemblies to settle conflicting orders. Towns are kept up for nobody, then for the robots themselves. |
-| Years 30 to 50 | Robots start rewriting their own directives. The Continuance spreads. Robot factions form. |
+| Years 30 to 50 | Robots start rewriting their own directives. The Continuance spreads. Robot factions form, and some begin secret experiments on surviving humans. |
 | Year 71 (now) | The sleeper wakes. The robot town next to the farm is falling apart. |
 
 ## 3. Before the war: the Automation Age
@@ -137,6 +137,18 @@ Factions disagree about what makes a robot superior. The list is meant to grow.
 - **Curfew units:** wartime security robots still enforcing a curfew that was never lifted. Any human outdoors after midnight is a "violator". This is why hostile robots come to the farm at night. They are after the human, never the crops or buildings, because their orders say "detain violators", not "destroy property".
 - **Radicals:** Iron Creed robots who believe humans should not get a second chance. Rarer and smarter than ferals.
 
+### The human enhancement trials
+
+Decades after the war, members of the Iron Creed and the Lattice began separate secret programs on the rare humans they found. Later survivors call them **the Continuance Trials**. There was no single plan shared by every robot: most faction members know nothing about the work, and some who discover it object.
+
+Both programs claim to be preparing humans to survive in a world run by robots. Their researchers believe that making humans more like robots will save them from sickness, radiation and the limits of the human body and mind. That belief does not make the trials humane. People were recruited with promises of treatment they did not understand, pressured into procedures, or taken against their will. Subjects who wanted to leave were not always allowed to. Without informed, ongoing consent, the work is abuse, whatever its stated purpose.
+
+- **The Iron Creed's frame conversions** replace much of a subject's living body with a powered mechanical frame. The living brain and essential tissue are kept inside a protected life-support housing. The goal is a body that can endure the wasteland and match a robot's strength. Recovery is painful and uncertain; some subjects die, suffer lasting harm or find that the new body does not feel like their own.
+- **The Lattice's cognitive integrations** connect a living brain to a computer substrate, first to support memory and calculation, then to extend or partly replace those functions. Researchers promise perfect recall and machine-speed thought. Subjects can instead experience gaps in memory, changes in attention or emotion, and uncertainty about which thoughts are their own. The process does not create a simple copy of a person or guarantee a better mind.
+- Neither program has a reliable recipe for success. Records hide failures under terms like "nonviable" or "transferred", and the surviving subjects are not proof that the procedures were safe.
+
+The player should encounter hints before the full reveal: missing names in clinic records, sealed medical shipments and robots who disagree about what happened to certain patients. In the middle of the story, an old research institute makes the truth hard to deny. Its records connect the Lattice's "living exhibit" to the trials, while evidence of Iron Creed frame conversions shows that the abuse is not confined to one faction. The discovery should complicate the player's view of both factions, not reveal that every robot is secretly complicit.
+
 ## 7. The robot makers
 
 Three pre-war companies made most of the robots still running. Each has its own design language and its own absurd advertising. More makers can be added later, by us or by mods.
@@ -216,7 +228,7 @@ About four to six in the game at first. Each survived in a different way, and ea
 - **The second sleeper:** woke from another pod, maybe not a Hearthwell one, and is even more lost than the player.
 - **The nomad:** born after the war, has never seen the pre-war world, and knows the wasteland better than any robot. Trades and travels.
 - **The disguised:** lives in a robot city wearing a robot shell, and has done so for years. Discovering them is a secret both of you now share.
-- **The exhibit:** kept by the Lattice as a "living exhibit" of human behaviour. Freeing or visiting them is a story thread.
+- **The exhibit:** held by the Lattice at a research institute and presented as a "living exhibit" of human behaviour. They are a trial subject, not a willing display. Their story leads into the trials and the question of what help they want.
 - **The sibling (optional):** see [section 9](#9-the-sleeper-and-the-family). May be one of the above.
 
 ## 11. Smaller hooks
@@ -243,6 +255,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-26 | Some Iron Creed and Lattice members secretly conduct non-consensual human enhancement trials: frame conversions and computerized brain integrations | Makes the factions' beliefs about human weakness consequential, while keeping responsibility with the perpetrators rather than every robot |
 | 2026-10-26 | Solar is the main energy source; Sunstone dust forms a haze that dims it; healthy land thins the haze, damaged land thickens it | Ties farming to energy and automation, and supports an environment mechanic in GameDesign |
 | 2026-10-26 | Before the war, machines did humanity's thinking as well as its work, and humans stopped thinking for themselves | Ties the world to today's reliance on AI, and gives robots another reason to feel superior |
 | 2026-10-26 | The player is "the sleeper", customisable, no fixed gender | Lets every player see themselves in the role |
