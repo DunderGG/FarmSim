@@ -15,7 +15,7 @@ Scores use a 1–10 scale: 1 means confusing or unusable; 5 means evocative but 
 |---|---:|---|
 | Core premise and thematic identity | 7/10 | Strong automation-and-inheritance theme; the player's personal role in it needs more definition. |
 | Timeline and causal coherence | 5/10 | The broad chronology works, but responsibility for the war and the post-war transition are ambiguous. |
-| World rules and plausibility | 4/10 | Sunstone, radiation, haze and energy are evocative but need consistent cause-and-effect rules. |
+| World rules and plausibility | 4/10 | Cinderium, radiation, haze and energy are evocative but need consistent cause-and-effect rules. |
 | Factions and social structure | 5/10 | Three useful ideological lenses, but limited institutions, internal diversity and political mechanics. |
 | Character depth and story arcs | 4/10 | Hob has a compelling hook; most other characters are archetypes, roles or unresolved concepts. |
 | Tone and emotional handling | 5/10 | The contrast of bleak history and absurd routine can work; boundaries for sensitive material are absent. |
@@ -40,11 +40,13 @@ Sections 3, 4 and 6 establish that machines made most decisions, the war was fou
 
 **Severity: High**
 
-Sections 4 and 11 say Sunstone weapons released dust that remains in the upper air, causes radiation storms and forms a haze. Healthy land and crops bind the dust and pull it out of the air; damaged land makes it rise again. The document does not explain how dust bound in soil or plants returns to the atmosphere, how a local farm changes regional haze, or how land restoration reduces storm frequency.
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) now defines Cinderium particles as fallout carried through air, soil and water; explains settling, washout and wind resuspension; distinguishes soil stabilization from contaminant removal; limits crop uptake to a mobile fraction that must be harvested and contained; and sets local versus regional recovery scales. [GameDesign.md](../GameDesign.md) now makes storm occurrence a weather event and land health a local influence on dust exposure, resuspension and solar output.
+
+Sections 4 and 11 say Cinderium weapons released dust that remains in the upper air, causes radiation storms and forms a haze. Healthy land and crops bind the dust and pull it out of the air; damaged land makes it rise again. The document does not explain how dust bound in soil or plants returns to the atmosphere, how a local farm changes regional haze, or how land restoration reduces storm frequency.
 
 **Why it matters:** This mechanism is the lore explanation for a major game system: farming changes solar output, visible skies and storm risk. Without stable rules, narrative descriptions, visual effects and gameplay tuning may contradict one another. Scientific realism is optional; internal consistency is not.
 
-**Recommended change:** Define a small fictional ruleset: what Sunstone dust is, how it moves between air/soil/plants/water, what “cleaning” removes, and the geographic/time scale of land recovery. State explicitly which aspects are speculative and which are fixed canon. Keep player-facing explanations simple, but give writers and designers one consistent model.
+**Recommended change:** Define a small fictional ruleset: what Cinderium dust is, how it moves between air/soil/plants/water, what “cleaning” removes, and the geographic/time scale of land recovery. State explicitly which aspects are speculative and which are fixed canon. Keep player-facing explanations simple, but give writers and designers one consistent model.
 
 ### L-03 — The post-war world's survival infrastructure needs a clearer maintenance model
 
@@ -148,7 +150,7 @@ The file correctly marks many names as working names, but also uses them through
 ## Recommended correction order
 
 1. [x] Separate established fact from faction belief and propaganda (L-01; resolved 2026-10-27).
-2. Define the fictional rules of Sunstone dust, radiation and land recovery (L-02).
+2. [x] Define the fictional rules of Cinderium dust, radiation and land recovery (L-02; resolved 2026-10-27).
 3. Explain infrastructure failure and Hob's limits, including why the town cannot repair itself (L-03, L-04).
 4. Complete one playable character arc and clarify the sleeper's agency and the family mystery payoff (L-07, L-08, L-10).
 5. Set population scale, faction institutions and tone boundaries before expanding the cast (L-05, L-06, L-09).

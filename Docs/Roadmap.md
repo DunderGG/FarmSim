@@ -256,7 +256,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 - [ ] Losing a fight: wake at home with a penalty
 - [ ] The first wasteland zone
 - [ ] Scavenging for materials
-- [ ] More zones, each with a reason in the history: a ruined city, a research facility, a Sunstone mine, a dam
+- [ ] More zones, each with a reason in the history: a ruined city, a research facility, a Cinderium mine, a dam
 
 ### Story
 

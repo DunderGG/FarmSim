@@ -148,7 +148,7 @@ The document says crops unsuited to a new season die, while multi-season and reg
 
 **Severity: Low**
 
-The document uses “radiation,” “radiation sickness,” “night radiation,” “radiation storms,” “land health,” “pollution,” “Sunstone dust,” “haze,” “dirty machines,” “power cells” and “charge” without consistently separating fictional concepts from gameplay variables. For example, tile radiation affects growth and mutations, player radiation affects survival needs, and storms affect both the world and the player, but their relationships are not stated.
+The document uses “radiation,” “radiation sickness,” “night radiation,” “radiation storms,” “land health,” “pollution,” “Cinderium dust,” “haze,” “dirty machines,” “power cells” and “charge” without consistently separating fictional concepts from gameplay variables. For example, tile radiation affects growth and mutations, player radiation affects survival needs, and storms affect both the world and the player, but their relationships are not stated.
 
 **Why it matters:** Different readers may interpret the same term as one shared meter or several systems. That ambiguity will spread into UI, tutorial messaging, content assets and balance.
 

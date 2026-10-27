@@ -110,7 +110,7 @@ The day should always offer more to do than there's time for, so choosing is the
 A farm tile has a state (grass, tilled, planted), and on top of that:
 
 - **Water level:** watered tiles grow. Water is a resource (see below), not free.
-- **Radiation level:** contaminated soil grows crops slowly or not at all, and can cause mutations. Clean tiles with tools and machines (soil filters, special crops that absorb radiation, fertilizer).
+- **Radiation level:** contaminated soil grows crops slowly or not at all, and can cause mutations. Reduce contamination with tools and machines that capture or remove contaminated material (soil filters, careful removal, or special crops harvested and safely contained); fertilizer improves soil but does not remove contamination.
 
 ### Crops
 
@@ -136,16 +136,17 @@ A farm tile has a state (grass, tilled, planted), and on top of that:
 - A panel's daily output depends on the time of day (nothing at night), the weather (dust storms block most of it) and **the haze** over the farm (see below).
 - Machines draw a set amount of charge to run. When the stored charge runs out, they stop until it's recharged. Early tools and simple sprinklers don't need power, so a new player isn't blocked by energy.
 - Energy sources (panels, later other generators) and consumers are data assets, so mods can add both.
-- **Lore hook:** Sunstone dust and the haze, see [Lore.md section 4](Spoilers/Lore.md#energy-after-the-war).
+- **Lore hook:** Cinderium dust and the haze, see [Lore.md section 4](Spoilers/Lore.md#energy-after-the-war).
 
 ### Land health and the haze
 
-The player's actions slowly improve or damage the environment, and a healthier environment gives more solar energy. A restored farm is visibly a brighter place.
+The player's actions slowly improve or damage the local environment, and healthier land gives more solar energy nearby. A restored farm is visibly a brighter place. Regional weather determines whether radiation storms occur; the farm's land health cannot stop or schedule them.
 
 - Each map has a **land health** value, computed from its tiles: clean, planted and healthy tiles raise it, and irradiated, polluted or bare tiles lower it. It changes slowly, over days rather than minutes.
-- **Improves land health:** growing healthy crops, cleaning radiation, using clean water, leaving ground planted or covered, and growing certain mutated crops that absorb Sunstone dust especially well.
+- **Improves land health:** growing healthy crops, containing removed contamination, using clean water, leaving ground planted or covered, and growing certain mutated crops that take up Cinderium compounds especially well.
 - **Damages land health:** dirty water, burning scrap, stripping soil without replanting, and "dirty" machines that are fast or cheap but pollute.
-- **Effects:** land health sets how thick the haze is over the map. A thinner haze means more solar output, a brighter and more colourful sky and landscape, and over time fewer radiation storm effects on that map.
+- **Effects:** land health affects how much contaminated dust local winds can lift and how much dust settles during a storm. Healthier, covered soil means less local resuspension and exposure, a thinner near-ground haze, and more solar output. Regional haze and storm occurrence change slowly and are not cleared by one farm.
+- **Radiation storms:** weather sets when a storm happens; its effects on the map depend partly on local land health. A storm can deposit contamination, while healthy ground cover limits resuspension and reduces local dust exposure. Restoring land does not make storms less frequent.
 - **The trade-off:** dirty shortcuts (dirty water, polluting machines) make the farm faster now and weaker later. The game never forbids them; the player chooses.
 - Land health should be easy to read: a simple meter or sky indicator, and haze you can see.
 
@@ -273,6 +274,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | Weather determines regional radiation-storm occurrence; land health only changes local dust resuspension, exposure and haze, while regional haze recovers across many areas | Keeps farm restoration meaningful without letting one map control regional weather |
 | 2026-10-26 | Solar energy charges power cells that run machines; land health sets the haze, which sets solar output | Makes healing the land pay off in automation, and gives dirty shortcuts a long-term cost. Idea from David, lore in Lore.md |
 | 2026-10-26 | Next milestone is a one-season vertical slice ([section 13](#13-scope-and-milestones)) | Shows every pillar in a small form before building wide |
 | 2026-10-26 | Third-person camera; other angles possibly later | Fits the current prototype; other views are a nice-to-have |

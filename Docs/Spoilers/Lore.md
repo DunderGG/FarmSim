@@ -42,7 +42,7 @@ Years are counted from the end of the war. Robots write dates as "Year 71 of Con
 |---|---|
 | About 40 years before the war | The Automation Age begins. Robots enter homes, farms, factories and city services, and thinking machines start making people's decisions for them. |
 | About 20 years before | Most human decisions, from shopping to government, are made by machines. Fewer and fewer people can think problems through on their own. |
-| About 10 years before | Sunstone is discovered. The two power blocs race to control it. |
+| About 10 years before | Cinderium is discovered. The two power blocs race to control it. |
 | The last pre-war years | Shortages, propaganda, civil defence drills. Strategic machine systems manipulate intelligence and policy in both blocs, steering their governments toward war. Home shelters and home cryo pods are sold as safety for the family. |
 | Year 0 | **The Four Days.** The war starts and ends. |
 | Years 0 to 10 | **The Quiet.** Radiation storms, famine, sickness. Most surviving humans die or vanish into shelters. Robots keep working. |
@@ -71,9 +71,9 @@ The machines didn't just do the physical work. By the last pre-war decades they 
 
 ## 4. The war
 
-### Sunstone
+### Cinderium
 
-- **Sunstone** *(working name)*: a dense, glowing ore that gave cheap, compact energy. A fist-sized piece could power a house for years.
+- **Cinderium**: a fictional radioactive mineral material, not an element. Before the war, it was a dense, glowing ore that gave cheap, compact energy. A fist-sized piece could power a house for years.
 - It was found in only a few places, and both power blocs wanted all of it.
 
 ### The two blocs
@@ -86,18 +86,31 @@ The machines didn't just do the physical work. By the last pre-war decades they 
 ### The Four Days
 
 - The war was fought almost entirely by autonomous war machines: drones, walkers, bombers and orbital weapons, most of them built by defence contractors like Ironside Dynamics (see [section 7](#7-the-robot-makers)).
-- It lasted four days. Sunstone weapons burned cities and poisoned soil and water across both blocs.
-- Its lasting scar is the **radiation storms**: Sunstone dust still drifts in the upper air and comes down with certain weather. This is why soil is contaminated, why clean water is precious and why crops mutate.
-- The dust also forms **the haze**: a thin, coppery veil in the sky that dims the sun. Days are a little paler than before the war, and solar power gives far less than it used to (see [energy after the war](#energy-after-the-war)).
+- It lasted four days. Cinderium weapons burned cities and poisoned soil and water across both blocs.
+- Its lasting scar is the **radiation storms**: storms that carry contaminated Cinderium particles down from the air and stir contaminated soil back up. The weather does not create radiation; the particles are the source. This is why soil and water are contaminated and why crops can mutate.
+- Cinderium particles in the air also contribute to **the haze**: a thin, coppery veil that dims the sun. The same particles do not remain aloft since the war; they settle and are repeatedly lifted again from contaminated ground (see [Cinderium dust and land recovery](#cinderium-dust-and-land-recovery)).
 - Many war machines were never told the war was over. Some still patrol, and some still enforce wartime curfew (see [hostile robots](#hostile-robots)).
+
+### Cinderium dust and land recovery
+
+Cinderium dust is made of fine mineral particles carrying radioactive Cinderium compounds. Its environmental behavior follows familiar patterns of fallout, aerosols, contaminated soil and plant uptake; its unusual persistence and effects on living things are fictional.
+
+- **Air to land and water:** The weapons scattered particles of different sizes. Coarser particles settled nearby; finer particles travelled farther before settling. Rain and snow also wash airborne particles down. Once deposited, particles can bind to soil and sediment or dissolve and move with water.
+- **Land and water to air:** Wind can lift fine particles from dry, bare or disturbed contaminated ground. Drought, fires, stripping vegetation and soil disturbance increase this resuspension. Runoff can carry contaminated sediment into waterways, where it may settle and later be stirred up again.
+- **What healthy land does:** Plant cover catches some airborne dust and shields soil from wind and rain. Roots and organic matter help keep soil in place. This mostly stabilizes and filters contamination; it does not make radioactive material disappear.
+- **What special crops do:** Some mutated crops take up a mobile fraction of Cinderium compounds through their roots and store it in their tissues. Harvesting and safely containing those crops removes some contamination from that plot. If contaminated plants are burned or left to rot, their compounds return to the air or soil. Ordinary plants may take up small amounts, but are not reliable cleanup.
+- **What cleaning does:** Soil filters and careful removal can capture or contain contaminated material; stabilizing bare soil reduces how much is blown away. These methods reduce exposure or move contamination to controlled storage, but do not destroy it. Radioactive decay reduces it over time.
+- **Scale and time:** Weather determines when regional dust storms occur. Local land cover affects how much contaminated dust a storm can lift or deposit near the ground. A restored farm can gradually improve its local air and soil, but cannot clear the upper atmosphere or change regional storm patterns by itself. Broad recovery takes many years and many restored areas.
+
+These rules are inspired by real aerosol transport and fallout behavior, but Cinderium's persistence, crop effects and visible haze are speculative. See [NASA on aerosols](https://science.nasa.gov/earth/earth-observatory/aerosols/) and [EPA on cesium-137](https://www.epa.gov/radiation/radionuclide-basics-cesium-137) and [strontium-90](https://www.epa.gov/radiation/radionuclide-basics-strontium-90) for real-world analogues.
 
 ### Energy after the war
 
-- **Sunstone is gone as a fuel.** Most deposits were used up or blown apart in the war, and what is left is radioactive and guarded by ferals. Raw Sunstone is a rare, dangerous material, not something anyone runs a town on.
+- **Cinderium is gone as a fuel.** Most deposits were used up or blown apart in the war, and what is left is radioactive and guarded by ferals. Raw Cinderium is a rare, dangerous material, not something anyone runs a town on.
 - **Solar power is the world's main clean energy.** Pre-war Hearthwell and Civitas solar panels cover roofs and fields everywhere, and robots charge from them. Solar panels and **power cells** (batteries charged from them) run the farm's machines and automation.
-- **The haze limits it.** Sunstone dust in the sky dims the sun, so a panel gives a fraction of its pre-war output.
-- **Living land clears the sky.** Healthy soil and plants bind Sunstone dust and pull it out of the air, and some mutated crops absorb it especially well. Where the land recovers, the haze thins and the sun comes back. Where land is poisoned further, by dirty water, burnt scrap or stripped soil, the dust rises again and the haze thickens.
-- This is the lore behind **land health** in [GameDesign.md section 6](../GameDesign.md#6-farming): the player's actions slowly improve or damage the local environment, which raises or lowers solar output. A restored farm is literally a brighter place.
+- **The haze limits it.** Cinderium dust in the sky dims the sun, so a panel gives a fraction of its pre-war output.
+- **Living land stabilizes dust.** Healthy soil and plant cover reduce wind erosion and trap some particles. Some mutated crops also take up a portion of the compounds. Bare, dry or disturbed contaminated ground can release dust again. Local recovery can gradually thin near-ground haze and improve local solar output; the broader haze changes slowly as regions recover.
+- This is the lore behind **land health** in [GameDesign.md section 6](../GameDesign.md#6-farming): the player's actions slowly improve or damage the farm's local environment. A restored farm is a brighter, cleaner place, but does not control regional weather.
 - Robots noticed long ago that the haze is thinner over green land, but few robots farm, and most don't think it's their function. A human who brings the land back is doing something the robots could have done and didn't.
 
 ## 5. How robots came to run society
@@ -245,14 +258,14 @@ About four to six in the game at first. Each survived in a different way, and ea
   - Winter: **the Great Clearance**, a gift-giving season that started as a year-end sale.
 - **Weather broadcaster** (GameDesign section 5): **Sunny** *(working name)*, a Civitas announcer robot in the old broadcast tower. Reads the next day's forecast with pre-war cheer, between ads for products that no longer exist. Warns about radiation storms in the same tone as about light drizzle.
 - **Mutated animals** (GameDesign section 6): descended from pre-war livestock, some of which were already engineered (Hearthwell sold "self-shearing" sheep and "low-maintenance" hens). Radiation finished the job.
-- **Sunstone dust and mutated crops:** crops that grow in irradiated soil absorb Sunstone dust. That is why they mutate, and why some mutations glow.
-- **Wasteland zones** (GameDesign section 10): each zone should have a reason in the history. Examples: a ruined Concord city, a Hearthwell research facility, a Sunstone mine, a dam that powered the region.
+- **Cinderium dust and mutated crops:** exposure to Cinderium compounds can cause mutations; some mutated crops also take up and store a mobile fraction in their tissues. That is why some mutations glow.
+- **Wasteland zones** (GameDesign section 10): each zone should have a reason in the history. Examples: a ruined Concord city, a Hearthwell research facility, a Cinderium mine, a dam that powered the region.
 
 ## 12. Lore and mods
 
 - Characters, factions, makers, festivals and zones are content, so mods can add more of them. Lore entries refer to content by namespaced ID (`Base.Hob`, `Base.IronCreed`).
 - Write the lore so it leaves room: "three makers made most robots", not "there were only three makers"; "a handful of humans survived", with no fixed number.
-- The core history (the war, Sunstone, the Continuance, the sleeper, Hob) is fixed. Mods add to it rather than change it.
+- The core history (the war, Cinderium, the Continuance, the sleeper, Hob) is fixed. Mods add to it rather than change it.
 
 ## 13. Decision log
 
@@ -260,9 +273,12 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | Named the radioactive energy mineral Cinderium | Separates the material's identity from the world's solar power theme while evoking its scorched, hazardous nature |
+| 2026-10-27 | Clarified that land health changes near-ground haze and local dust effects only; regional haze recovers gradually across many areas, and farm health does not change regional storm occurrence | Keeps the farm's visible recovery while avoiding a single map controlling regional weather |
+| 2026-10-27 | Cinderium contamination moves between air, land and water; healthy cover stabilizes contaminated soil, special crops can take up and remove some compounds if harvested and contained, and local land recovery does not control regional storm occurrence | Grounds the farming, haze and radiation rules in aerosol and fallout behavior while keeping Cinderium's unusual effects fictional |
 | 2026-10-27 | Both governments authorized the war after strategic machine systems manipulated their decisions and steered them toward conflict; who struck first remains permanently unknown | Keeps human leaders accountable without absolving the machines, and gives robot accusations a defensible but incomplete basis |
 | 2026-10-26 | Some Iron Creed and Lattice members secretly conduct non-consensual human enhancement trials: frame conversions and computerized brain integrations | Makes the factions' beliefs about human weakness consequential, while keeping responsibility with the perpetrators rather than every robot |
-| 2026-10-26 | Solar is the main energy source; Sunstone dust forms a haze that dims it; healthy land thins the haze, damaged land thickens it | Ties farming to energy and automation, and supports an environment mechanic in GameDesign |
+| 2026-10-26 | Solar is the main energy source; Cinderium dust forms a haze that dims it; healthy land thins the haze, damaged land thickens it | Ties farming to energy and automation, and supports an environment mechanic in GameDesign |
 | 2026-10-26 | Before the war, machines did humanity's thinking as well as its work, and humans stopped thinking for themselves | Ties the world to today's reliance on AI, and gives robots another reason to feel superior |
 | 2026-10-26 | The player is "the sleeper", customisable, no fixed gender | Lets every player see themselves in the role |
 | 2026-10-26 | About 4 to 6 rare humans at first, each surviving a different way; list extendable | Each human stays special; room for later content and mods |

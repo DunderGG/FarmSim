@@ -176,12 +176,12 @@
 			<path d="M0 0 C-10 -25 -28 -44 -20 -68 C-10 -52 2 -36 0 0" fill="#58793b" stroke="#354e20" stroke-width="1.8"/>
 			<path d="M0 0 C12 -28 32 -46 24 -72 C12 -54 -2 -38 0 0" fill="#759a4f" stroke="#416127" stroke-width="1.8"/>
 			<path d="M0 0 C-3 -34 0 -64 2 -85" fill="none" stroke="#a4cd6e" stroke-width="2.2" stroke-linecap="round"/>
-			<!-- Glowing inner Sunstone veins -->
+			<!-- Glowing inner Cinderium veins -->
 			<path d="M0 -12 C-7 -30 -14 -42 -12 -54" fill="none" stroke="#f6d56d" stroke-width="1.5" opacity="0.85"/>
 			<path d="M0 -22 C7 -36 15 -48 14 -60" fill="none" stroke="#f6d56d" stroke-width="1.5" opacity="0.85"/>
 		</g>
 
-		<!-- Glowing Sunstone Spore Particle -->
+		<!-- Glowing Cinderium Dust Mote -->
 		<g id="spore">
 			<circle cx="0" cy="0" r="5" fill="url(#bioGlowAmber)"/>
 			<circle cx="0" cy="0" r="1.6" fill="#ffffff"/>
@@ -194,7 +194,7 @@
 		<!-- 1. HAZY POST-WAR SKY -->
 		<rect width="1280" height="640" fill="url(#skyHaze)"/>
 
-		<!-- Coppery Sunstone dust streaks in upper atmosphere -->
+		<!-- Coppery Cinderium dust streaks in upper atmosphere -->
 		<path d="M -50 130 Q 300 70 650 110 T 1340 60" fill="none" stroke="#de8f50" stroke-width="48" opacity="0.14"/>
 		<path d="M -50 170 Q 340 110 760 150 T 1340 110" fill="none" stroke="#f0b870" stroke-width="24" opacity="0.18"/>
 		<path d="M 120 210 Q 540 160 940 190 T 1340 155" fill="none" stroke="#ffe2a0" stroke-width="9" opacity="0.25"/>
@@ -318,7 +318,7 @@
 		<path d="M 210 528 Q 580 478 950 447" fill="none" stroke="#dca35a" stroke-width="2.2" opacity="0.55"/>
 		<path d="M 320 583 Q 680 532 1010 490" fill="none" stroke="#f1be73" stroke-width="2.5" opacity="0.6"/>
 
-		<!-- Iridescent Sunstone mineral dust glistening in the freshly turned dirt -->
+		<!-- Iridescent Cinderium mineral dust glistening in the freshly turned dirt -->
 		<g fill="#ffe594" opacity="0.75">
 			<circle cx="340" cy="510" r="1.6"/>
 			<circle cx="480" cy="470" r="1.3"/>
@@ -329,7 +329,7 @@
 			<circle cx="1110" cy="530" r="1.8"/>
 		</g>
 
-		<!-- 7. THRIVING, MUTATED BIOLUMINESCENT CROPS (Absorbing Sunstone dust) -->
+		<!-- 7. THRIVING, MUTATED BIOLUMINESCENT CROPS (Absorbing Cinderium dust) -->
 		<!-- Placed cleanly in the midground and foreground without overlapping the left typography -->
 		
 		<!-- Wooden Seedling Stakes with Twine & Stamped Tags -->
@@ -352,7 +352,7 @@
 			<use xlink:href="#cropLeaf" transform="translate(330 -18) rotate(8)"/>
 		</g>
 
-		<!-- Foreground Mutated Sunstone Carrots / Parsnips (x: 530 to 850, y: 470) -->
+		<!-- Foreground Mutated Cinderium Carrots / Parsnips (x: 530 to 850, y: 470) -->
 		<g transform="translate(535 480) scale(0.85)">
 			<g transform="translate(0 0)">
 				<ellipse cx="0" cy="12" rx="14" ry="7" fill="#d46b25" stroke="#773008" stroke-width="2"/>
@@ -394,7 +394,7 @@
 			<!-- Curling tendrils -->
 			<path d="M 45 25 Q 70 -5 65 -25 Q 60 -40 75 -35" fill="none" stroke="#9ad372" stroke-width="2.5" stroke-linecap="round"/>
 
-			<!-- Great Glowing Sunstone Pumpkin -->
+			<!-- Great Glowing Cinderium Pumpkin -->
 			<g transform="translate(20 15)">
 				<ellipse cx="0" cy="46" rx="55" ry="14" fill="#0b120c" opacity="0.6"/>
 				<ellipse cx="-22" cy="10" rx="24" ry="34" fill="#be5f21" stroke="#622807" stroke-width="2.5"/>
@@ -417,7 +417,7 @@
 			<path d="M -55 22 L -75 -2 M -55 22 L -70 28" stroke="#8bc464" stroke-width="1.8"/>
 		</g>
 
-		<!-- Floating Sunstone pollen/dust motes shimmering upwards -->
+		<!-- Floating Cinderium dust motes shimmering upwards -->
 		<use xlink:href="#spore" transform="translate(530 410) scale(0.8)"/>
 		<use xlink:href="#spore" transform="translate(620 370) scale(1.1)"/>
 		<use xlink:href="#spore" transform="translate(710 440) scale(0.9)"/>
