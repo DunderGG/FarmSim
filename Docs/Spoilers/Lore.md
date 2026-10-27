@@ -149,7 +149,7 @@ Factions disagree about what makes a robot superior. The list is meant to grow.
 
 - Robots start with a low or negative opinion of the player because the player is human. Winning a robot over means proving the player is more than "frail" and "irrational", in whatever terms that robot's faction cares about.
 - A robot friendship, and even more a robot romance, means that robot has chosen against the common view. Romance scenes should acknowledge what it costs the robot socially.
-- Many town robots won't admit they need a human's help. Restoring the town is also the story of the town's opinion of humans changing.
+- Many town robots won't admit they need a human's help. Restoring the town is a community effort: the town's robots bring their specialist knowledge, while the sleeper contributes practical work and helps build cooperation. The sleeper is a catalyst, not a lone repair expert or saviour.
 
 ### Hostile robots
 
@@ -223,8 +223,10 @@ Each character is a data asset (see [section 12](#12-lore-and-mods)). This secti
 ### The caretaker: Hob
 
 - **Who:** **Hob** *(working name)*. A Hearthwell HB-7 "Homebody" home robot; the family shortened "Homebody" to Hob. Built before the war. Gender-neutral; refer to Hob as "Hob" or "they".
-- **Last order:** "Keep the farm until they wake up." Hob has followed it for seventy years.
+- **Last order:** "Keep the farm until they wake up." Hob has followed it for seventy years. The order was about preserving the farm and the sleeper, not repairing the town or waiting for the sleeper to fix it.
 - **How Hob kept the farm alive:** the farm is a small, isolated Hearthwell system, not a town utility network. Hob prioritised the cryo pod's power and essential upkeep, tended a small garden, and scavenged compatible parts when possible. The pod and farm needed less power and coordination than a town's services, but keeping them going still meant accepting deterioration elsewhere. Little of Hob's body is original any more; most of it is spare parts from other robots, some of which don't match.
+- **Why Hob did not restore the town:** Hob could not have repaired its interconnected services alone. The work needs multiple specialists, scarce legacy parts and coordination among robots with different assigned functions. Before the sleeper woke, Hob kept its limited resources focused on the order and the small farm system; Hob did not expect one human to solve the town's problems.
+- **After the sleeper wakes:** Hob has fulfilled the last order and is free to decide what to do next. Joining the town's recovery is Hob's choice, made alongside the sleeper and the town's robots; it is not an extension of the family's order.
 - **Memory:** Hob's memory is damaged. Hob remembers the family in fragments, and memories come back as the player restores the farm. This drives the family mystery.
 - **Faction:** a Keeper in all but name. Town robots mock Hob as an outdated servant model, and Hob pretends not to hear.
 - **Role in the game:** the player's first relationship, the tutorial guide and the first companion.
@@ -275,6 +277,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | Hob's last order is limited to preserving the farm and sleeper; town recovery is a cooperative effort led with Keeper specialists, with the sleeper as catalyst and Hob joining by choice after the sleeper wakes | Keeps Hob's loyalty meaningful without implying one robot or one human can repair a town alone |
 | 2026-10-27 | Robot societies have different maintenance capabilities: Iron Creed and Lattice maintain their own advanced systems, while Keeper towns rely on legacy, model-specific equipment, scarce parts and weak cross-role coordination; Hob preserves the small farm system by prioritizing it and scavenging parts | Explains selective decline in the neighboring town without making the whole robot world technologically stagnant |
 | 2026-10-27 | Named the radioactive energy mineral Cinderium | Separates the material's identity from the world's solar power theme while evoking its scorched, hazardous nature |
 | 2026-10-27 | Clarified that land health changes near-ground haze and local dust effects only; regional haze recovers gradually across many areas, and farm health does not change regional storm occurrence | Keeps the farm's visible recovery while avoiding a single map controlling regional weather |

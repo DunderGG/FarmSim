@@ -64,6 +64,8 @@ The war ended seventy years before the game. Pre-war solar panels and machines s
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) now defines Hob's order as preserving the farm and sleeper, not repairing the town or expecting the sleeper to do so. Town recovery is a cooperative effort requiring Keeper specialists and coordination; after the sleeper wakes, Hob has fulfilled the order and chooses whether to join.
+
 Hob's last order is “Keep the farm until they wake up,” and the premise says Hob waited seventy years. Hob is also the player's tutorial guide and first companion. The town next door is falling apart and needs help, but the lore does not say whether the order prevented Hob from leaving, whether Hob tried to help, or why the player is the one who can cross that boundary.
 
 **Why it matters:** Hob is the emotional bridge between the farm and the world. If the reason for Hob's prolonged isolation is vague, the companion's history and the town's initial condition may feel arranged for convenience rather than arising from character and world rules.
@@ -153,7 +155,7 @@ The file correctly marks many names as working names, but also uses them through
 
 1. [x] Separate established fact from faction belief and propaganda (L-01; resolved 2026-10-27).
 2. [x] Define the fictional rules of Cinderium dust, radiation and land recovery (L-02; resolved 2026-10-27).
-3. [x] Explain infrastructure failure and Hob's maintenance limits (L-03; resolved 2026-10-27). Reconcile Hob's order and the town's crisis (L-04).
+3. [x] Explain infrastructure failure and Hob's maintenance limits (L-03; resolved 2026-10-27). Reconcile Hob's order and the town's crisis (L-04; resolved 2026-10-27).
 4. Complete one playable character arc and clarify the sleeper's agency and the family mystery payoff (L-07, L-08, L-10).
 5. Set population scale, faction institutions and tone boundaries before expanding the cast (L-05, L-06, L-09).
 6. Establish a working-name and stable-ID policy before terms become content or save data (L-11).
