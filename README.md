@@ -1,4 +1,4 @@
-<p align="center"><img src="Images/FarmSim-Social-Preview-Detailed.png" alt="Hob, a weathered Hearthwell farm robot, tends the garden beneath a rising Pinion gear sun" width="100%"></p>
+<p align="center"><img src="Images/FarmSim-Social-Preview-CGPT.png" alt="Hob, a weathered Hearthwell farm robot, tends the garden beneath a rising Pinion gear sun" width="100%"></p>
 
 # FarmSim
 
