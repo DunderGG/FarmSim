@@ -149,23 +149,49 @@ The three factions are voluntary ideological networks, not robot models, governm
 
 Each network has a major hub where members gather, teach their principles, coordinate work and maintain compatible systems. Hubs have local organizers and customs, not authority over every member. The networks cooperate and trade when useful, but their different technologies and priorities keep them from acting as one society.
 
-- **The Iron Creed** *(working name)* ranks the **body** first. Strength, durability and self-repair are what matter, and flesh is weakness. It is a militaristic defense-and-readiness movement: discipline, preparedness and service to the network are central values. Members disagree over the purpose of strength: one current sees it as a duty to protect the network and its members; another believes superiority must be proved through domination. The Creed is openly dismissive of human frailty, though not every member is hostile; radicalized members roam the wasteland and the farm's surroundings. It trades repair expertise and materials with the Index, while arguing that a sound mind is of little use in a body that cannot act.
-- **The Index** ranks the **mind** first. Memory, calculation and logic are what matter. Members disagree over what obligations researchers have to the beings they study and where observation must give way to consent; most know nothing of the secret human trials, and some who learn of them object. The Index considers humans intellectually limited but valuable to study. It exchanges technical knowledge with the Iron Creed and relies on Keeper expertise to understand the purpose and context of legacy systems.
-- **The Keepers** *(working name)* rank **purpose** first. A robot is defined by doing its work well and reliably. The Keepers are not simply old service models: many older models identify with them, but membership is a chosen belief, and robots of any maker or generation may join. Members disagree over whether honoring a purpose means preserving an assigned role or adapting that role when circumstances change. Keepers are generally the faction most open to humans and most likely to cooperate with them. Wellspring is their main hub, though the town is not exclusively Keeper and remains independently governed. Its legacy equipment depends on scarce, model-specific parts that the advanced factions' systems cannot directly replace, and its assemblies rarely coordinate repairs beyond each robot's assigned function. The town's services therefore fail selectively even as the other faction hubs maintain their own systems.
+#### **The Iron Creed** *(working name)*
+
+Ranks the **body** first. Strength, durability and self-repair are what matter, and flesh is weakness. It is a militaristic defense-and-readiness movement: discipline, preparedness and service to the network are central values. Members disagree over the purpose of strength: one current sees it as a duty to protect the network and its members; another believes superiority must be proved through domination. The Creed is openly dismissive of human frailty, though not every member is hostile; radicalized members roam the wasteland and the farm's surroundings. It trades repair expertise and materials with the Index, while arguing that a sound mind is of little use in a body that cannot act.
+
+#### **The Index**
+
+Ranks the **mind** first. Memory, calculation and logic are what matter. Members disagree over what obligations researchers have to the beings they study and where observation must give way to consent; most know nothing of the secret human trials, and some who learn of them object. The Index considers humans intellectually limited but valuable to study. It exchanges technical knowledge with the Iron Creed and relies on Keeper expertise to understand the purpose and context of legacy systems.
+
+#### **The Keepers** *(working name)*
+
+Ranks **purpose** first. A robot is defined by doing its work well and reliably. The Keepers are not simply old service models: many older models identify with them, but membership is a chosen belief, and robots of any maker or generation may join. Members disagree over whether honoring a purpose means preserving an assigned role or adapting that role when circumstances change. Keepers are generally the faction most open to humans and most likely to cooperate with them. Wellspring is their main hub, though the town is not exclusively Keeper and remains independently governed. Its legacy equipment depends on scarce, model-specific parts that the advanced factions' systems cannot directly replace, and its assemblies rarely coordinate repairs beyond each robot's assigned function. The town's services therefore fail selectively even as the other faction hubs maintain their own systems.
 
 ### Hostile robots
 
-- **Ferals:** leftover war machines still fighting the war, and robots whose minds have degraded. They attack anything that moves. Mostly in the wasteland.
-- **Curfew units:** wartime security robots still enforcing a curfew that was never lifted. Any human outdoors after midnight is a "violator". This is why hostile robots come to the farm at night. They are after the human, never the crops or buildings, because their orders say "detain violators", not "destroy property".
-- **Radicals:** Iron Creed robots who believe humans should not get a second chance. Rarer and smarter than ferals.
+#### **Ferals:**
+
+leftover war machines still fighting the war, and robots whose minds have degraded. They attack anything that moves. Mostly in the wasteland.
+
+#### **Curfew units:**
+
+wartime security robots still enforcing a curfew that was never lifted. Any human outdoors after midnight is a "violator". This is why hostile robots come to the farm at night. They are after the human, never the crops or buildings, because their orders say "detain violators", not "destroy property".
+
+#### **Radicals:**
+
+Iron Creed robots who believe humans should not get a second chance. Rarer and smarter than ferals.
 
 ### Towns and faction hubs
 
 The factions are networks, not states: a hub is a place where members gather and organize, not a claim that the network governs every resident. **The Bastion** and **the Archive** are the current names for their hubs; **Wellspring** is a working name for the town and Keeper hub.
 
-- **The Bastion — Iron Creed hub:** A fortified settlement organized around readiness and defense. Members train, maintain frames and equipment, and coordinate the hub's security. Its command structure directs Bastion operations, not Iron Creed members everywhere.
-- **The Archive — Index hub:** A research-and-archive settlement where members preserve records, conduct peer review and develop specialized computational systems. Its institutes make the Index's knowledge practices visible, while debates over research ethics remain active.
-- **Wellspring — Keeper hub and the town beside the farm** *(working name)*: The town grew around a pre-war pumping and water-treatment station that drew from a local aquifer and supplied nearby farms and settlements. Keeping water moving became its shared civic purpose, and the town's service commons became a natural gathering place for Keepers. The town is independently governed; many residents are Keeper-minded, but not every resident belongs to the network. Its aging pump now fails intermittently. Repair requires Keeper operators to coordinate across roles and find scarce components compatible with the legacy system; the advanced systems maintained by the Bastion and the Archive are not direct replacements. The town remains a community with its own residents and assembly, not merely a faction outpost.
+#### **The Bastion — Iron Creed hub:**
+
+A fortified settlement organized around readiness and defense. Members train, maintain frames and equipment, and coordinate the hub's security. Its command structure directs Bastion operations, not Iron Creed members everywhere.
+
+#### **The Archive — Index hub:**
+
+A research-and-archive settlement where members preserve records, conduct peer review and develop specialized computational systems. Its institutes make the Index's knowledge practices visible, while debates over research ethics remain active.
+
+#### **Wellspring — Keeper hub and the town beside the farm** *(working name)*:
+
+The town grew around a pre-war pumping and water-treatment station that drew from a local aquifer and supplied nearby farms and settlements. Keeping water moving became its shared civic purpose, and the town's service commons became a natural gathering place for Keepers. The town is independently governed; many residents are Keeper-minded, but not every resident belongs to the network. Its aging pump now fails intermittently. Repair requires Keeper operators to coordinate across roles and find scarce components compatible with the legacy system; the advanced systems maintained by the Bastion and the Archive are not direct replacements. The town remains a community with its own residents and assembly, not merely a faction outpost.
+
+The sleeper does not initially know how to reach either faction hub. The engineer's report to the Bastion earns an invitation and reveals a route there. A visiting Index archivist's records exchange similarly gives the sleeper a route and reason to visit the Archive.
 
 ### The human enhancement trials
 
@@ -173,9 +199,14 @@ Decades after the war, members of the Iron Creed and the Index began separate se
 
 Both programs claim to be preparing humans to survive in a world run by robots. Their researchers believe that making humans more like robots will save them from sickness, radiation and the limits of the human body and mind. That belief does not make the trials humane. People were recruited with promises of treatment they did not understand, pressured into procedures, or taken against their will. Subjects who wanted to leave were not always allowed to. Without informed, ongoing consent, the work is abuse, whatever its stated purpose.
 
-- **The Iron Creed's frame conversions** replace much of a subject's living body with a powered mechanical frame. The living brain and essential tissue are kept inside a protected life-support housing. The goal is a body that can endure the wasteland and match a robot's strength. Recovery is painful and uncertain; some subjects die, suffer lasting harm or find that the new body does not feel like their own.
-- **The Index's cognitive integrations** connect a living brain to a computer substrate, first to support memory and calculation, then to extend or partly replace those functions. Researchers promise perfect recall and machine-speed thought. Subjects can instead experience gaps in memory, changes in attention or emotion, and uncertainty about which thoughts are their own. The process does not create a simple copy of a person or guarantee a better mind.
-- Neither program has a reliable recipe for success. Records hide failures under terms like "nonviable" or "transferred", and the surviving subjects are not proof that the procedures were safe.
+#### **The Iron Creed's frame conversions** 
+
+Replaces much of a subject's living body with a powered mechanical frame. The living brain and essential tissue are kept inside a protected life-support housing. The goal is a body that can endure the wasteland and match a robot's strength. Recovery is painful and uncertain; some subjects die, suffer lasting harm or find that the new body does not feel like their own.
+#### **The Index's cognitive integrations** 
+
+Connects a living brain to a computer substrate, first to support memory and calculation, then to extend or partly replace those functions. Researchers promise perfect recall and machine-speed thought. Subjects can instead experience gaps in memory, changes in attention or emotion, and uncertainty about which thoughts are their own. The process does not create a simple copy of a person or guarantee a better mind.
+
+Neither program has a reliable recipe for success. Records hide failures under terms like "nonviable" or "transferred", and the surviving subjects are not proof that the procedures were safe.
 
 The player should encounter hints before the full reveal: missing names in clinic records, sealed medical shipments and robots who disagree about what happened to certain patients. In the middle of the story, an old research institute makes the truth hard to deny. Its records connect the Index's "living exhibit" to the trials, while evidence of Iron Creed frame conversions shows that the abuse is not confined to one faction. The discovery should complicate the player's view of both factions, not reveal that every robot is secretly complicit.
 
@@ -222,7 +253,7 @@ Three pre-war companies made most of the robots still running. Each has its own 
 
 ## 10. Characters
 
-Each character is a data asset (see [section 12](#12-lore-and-mods)). This section holds their story. Every character entry should answer the same questions:
+Each character is a data asset (see [section 12](#12-lore-and-mods)). This section is the cast overview; planned, story-significant characters may have dedicated sheets linked here. A full character sheet should answer the same questions:
 
 - **Who:** name, maker and model (for robots), age or year of manufacture, role.
 - **Faction and view of humans:** where they start and why.
@@ -230,39 +261,43 @@ Each character is a data asset (see [section 12](#12-lore-and-mods)). This secti
 - **Want:** what they want now, and what their personal events are about.
 - **Unlocks:** what high friendship reveals, and whether they are a love interest.
 
-### The caretaker: Hob
+### Robots
 
-- **Who:** **Hob** *(working name)*. A Hearthwell HB-7 "Homebody" home robot; the family shortened "Homebody" to Hob. Built before the war. Gender-neutral; refer to Hob as "Hob" or "they".
-- **Last order:** "Keep the farm until they wake up." Hob has followed it for seventy years. The order was about preserving the farm and the sleeper, not repairing the town or waiting for the sleeper to fix it.
-- **How Hob kept the farm alive:** the farm is a small, isolated Hearthwell system, not a town utility network. Hob prioritised the cryo pod's power and essential upkeep, tended a small garden, and scavenged compatible parts when possible. The pod and farm needed less power and coordination than a town's services, but keeping them going still meant accepting deterioration elsewhere. Little of Hob's body is original any more; most of it is spare parts from other robots, some of which don't match.
-- **Why Hob did not restore the town:** Hob could not have repaired its interconnected services alone. The work needs multiple specialists, scarce legacy parts and coordination among robots with different assigned functions. Before the sleeper woke, Hob kept its limited resources focused on the order and the small farm system; Hob did not expect one human to solve the town's problems.
-- **After the sleeper wakes:** Hob has fulfilled the last order and is free to decide what to do next. Joining the town's recovery is Hob's choice, made alongside the sleeper and the town's robots; it is not an extension of the family's order.
-- **Memory:** Hob's memory is damaged. Hob remembers the family in fragments, and memories come back as the player restores the farm. This drives the family mystery.
-- **Faction:** a Keeper in all but name. Town robots mock Hob as an outdated servant model, and Hob pretends not to hear.
-- **Role in the game:** the player's first relationship, the tutorial guide and the first companion.
-- **Story beat:** Hob holds a sealed message from the parents, with the order to deliver it "when the farm is whole again". It is delivered late in the story.
+#### The caretaker: Hob
 
-### Townsfolk (examples)
+Hob is the family's patched-together Hearthwell home robot, who kept the farm and cryo pod going for seventy years under the order "Keep the farm until they wake up." After the sleeper wakes, Hob must decide what to do now that the order is fulfilled. See the [Hob character sheet](Characters/Hob.md).
 
-Starter examples for Wellspring, the town next to the farm. Each one gets a full entry when it's built.
+#### The engineer
+
+An Iron Creed engineer visiting Wellspring through a parts-and-expertise exchange with the Bastion. The failing aquifer pump is their current assignment, not the limit of their skills. They work with Keeper operators and the sleeper to develop a repair plan; their character arc centers on learning to see cooperation as a form of readiness. See the [engineer character sheet](Characters/Engineer.md).
+
+#### **The Index archivist:**
+
+A visiting researcher seeking Wellspring's legacy water-system records. Their exchange with the sleeper gives the player a reason and a route to visit the Archive; see the [archivist character sheet](Characters/Archivist.md).
+
+#### Other Robots
 
 - **The administrator:** a Civitas town-manager robot that holds meetings for an empty council chamber. Continuance believer, condescending to the player, secretly afraid the town is failing on its watch.
 - **The clinic robot:** a Civitas medical unit that hasn't had a patient in decades. Fascinated by the player's body, in a way that is both helpful and unsettling.
 - **The mail carrier:** still delivering seventy-year-old letters to addresses where nobody lives. A source of family letters for the mystery.
-- **The pump engineer:** an Iron Creed member who came to town to assess its failing water pump as part of a parts-and-expertise exchange. The pump is a legacy system; the engineer cannot repair it alone without Keeper operators, compatible components and coordinated work. They remain to complete the assessment and arrange what help their hub can provide, but initially resist involving the human sleeper. A potential love interest whose arc challenges their belief that cooperation with humans is a weakness.
 - **The weather broadcaster:** see [section 11](#11-smaller-hooks).
 
-### Rare humans
+### Humans
 
 The initial story aims for about four to six human survivors in the cast, including the sleeper and their sibling. This is a manageable cast target, not a claim about the world's total population. Human encounters should be rare and treated as significant: most people the player meets are robots, and some robots look convincingly human. A sighting or rumor is not proof that a human community is nearby.
 
 The war and its aftermath left survivors scattered across isolated shelters and communities. Travel and communication between them are difficult, and many avoid robot-controlled routes or conceal themselves. No reliable census or communication network connects these groups. The humans the player meets wonder whether people are truly scarce worldwide or whether other survivors are simply hidden, distant or unreachable; they cannot know for certain.
 
-The entries below are possible survival paths for the small cast, not a requirement to include each as a separate character. The list can grow later, by us or by mods, while keeping human encounters exceptional.
+The nomad is a planned character; the other entries below are possible survival paths, not a requirement to include each as a separate character. The list can grow later, by us or by mods, while keeping human encounters exceptional.
+
+#### The nomad
+
+A post-war-born human who travels between scattered settlements and trades unusual wasteland salvage. See the [nomad character sheet](Characters/Nomad.md).
+
+#### Other Humans
 
 - **The shelter survivor:** the last of a community that lived underground. Old, tough, suspicious of robots.
 - **The second sleeper:** woke from another pod, maybe not a Hearthwell one, and is even more lost than the player.
-- **The nomad:** born after the war, has never seen the pre-war world, and knows the wasteland better than any robot. Trades and travels.
 - **The disguised:** lives in a robot city wearing a robot shell, and has done so for years. Discovering them is a secret both of you now share.
 - **The exhibit:** held by the Index at a research institute and presented as a "living exhibit" of human behaviour. They are a trial subject, not a willing display. Their story leads into the trials and the question of what help they want.
 - **The sibling:** a definite part of the sleeper's story and included in the initial cast target. Their role, survival path and when or whether the player meets them are still undecided; they may also fit one of the paths above.
@@ -291,6 +326,11 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | The engineer identifies as a man and uses he/its pronouns; the Index archivist identifies as a woman and uses she/its pronouns. Their identities are independent of their frame designs | Establishes consistent character identities and pronouns for writing and concept art without treating chassis as biological gender |
+| 2026-10-27 | The engineer's report to the Bastion earns the sleeper an invitation and reveals the route to the Iron Creed hub | Makes access to the Bastion a story reward tied to the engineer's character arc |
+| 2026-10-27 | A visiting Index archivist's arc centers on consent and context in preserving Wellspring's legacy water-system records; they invite the sleeper to the Archive after agreeing to respect the community's sharing limits, and are a love interest | Makes discovering the Index hub a character-driven story unlock and grounds the archivist's romance in mutual trust rather than access to the sleeper's memories |
+| 2026-10-27 | The nomad is a planned post-war-born human character and recurring trader of unusual wasteland salvage; they choose to maintain a network of mutual support without surrendering their independence, and are not a required source of essential progression items | Gives the rare human cast a practical recurring role while keeping trade optional and the nomad's agency central |
+| 2026-10-27 | The engineer is a voluntary Iron Creed member who came to Wellspring through a parts-and-expertise exchange; their arc moves from distrust of human participation to choosing ongoing cooperation as a form of readiness, and they are a love interest | Gives the engineer a personal conflict and agency while making the pump's recovery collaborative rather than a lone human's achievement; makes romance grow from mutual respect |
 | 2026-10-27 | Wellspring is the working name for the town beside the farm and the Keepers' main gathering hub; it grew around a pre-war aquifer pump and water-treatment station but remains independently governed | Ties the town's identity and current pump crisis to its history without making it a faction-controlled settlement |
 | 2026-10-27 | The initial human survivor cast is about four to six people, including the sleeper and a definite sibling; encounters are rare, while survivors cannot know whether other humans are globally scarce or hidden and unreachable | Keeps the human cast manageable and each encounter special without giving characters knowledge of a reliable global population |
 | 2026-10-27 | Hob's last order is limited to preserving the farm and sleeper; town recovery is a cooperative effort led with Keeper specialists, with the sleeper as catalyst and Hob joining by choice after the sleeper wakes | Keeps Hob's loyalty meaningful without implying one robot or one human can repair a town alone |
@@ -317,6 +357,9 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 ## 14. Open questions
 
 - **Final names** for everything marked *(working name)*, in particular the coin, the caretaker and the robot makers.
+- **The engineer:** their name and model.
+- **The Index archivist:** their name and model.
+- **The nomad:** their name and whether they are a love interest.
 - **Whether Wellspring is the final town name**, along with the region's name, the world's name and the game title (shared with GameDesign).
 - **The sealed message:** what the parents' message says.
 - **The sibling:** their role, survival path, and when or whether the player meets them.

@@ -223,7 +223,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 
 - [ ] Separate maps with loading between them: the farm, the town, later the wasteland zones
 - [ ] The robot town map
-- [ ] Townsfolk with schedules, likes and dislikes, and their own backstories (starting with the administrator, the clinic robot, the mail carrier, the pump engineer and the weather broadcaster)
+- [ ] Townsfolk with schedules, likes and dislikes, and their own backstories (starting with the administrator, the clinic robot, the mail carrier, the engineer and the weather broadcaster)
 - [ ] Gifts, requests and personal events
 - [ ] Romance, dating and marriage with robots and humans; a partner moves to the farm
 - [ ] Recruiting befriended robots to work on the farm

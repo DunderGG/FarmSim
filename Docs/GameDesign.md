@@ -212,6 +212,7 @@ The player grows along several tracks at once:
 - **The farm:** the player's home and the biggest map.
 - **The robot town:** next to the farm. Shops, robots, events, facilities to restore.
 - **Wasteland zones:** further out and unlocked over time, for example a ruined city, an old research facility, a dam. Zones are where enemies, scavenging, rare materials and the rare humans are.
+- **Faction hubs:** separate maps unlocked through character stories. The engineer's report opens the route to the Bastion; an Index archivist's exchange opens the route to the Archive.
 - Zones are data driven, so mods can add new ones.
 
 ## 11. Combat

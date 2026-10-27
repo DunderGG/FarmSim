@@ -88,23 +88,25 @@ The war and first decade afterward kill or scatter most humans. The lore propose
 
 **Severity: Medium**
 
-**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) defines faction membership as voluntary and ideological, distinguishes networks from their hubs and from local communities, and gives each hub a concrete role, practice, internal disagreement and relationship with the other factions. It identifies the Bastion and Archive as Iron Creed and Index hubs, and Wellspring as the Keepers' main gathering hub while remaining an independently governed town. It also explains why the pump engineer came to town and why the failing legacy pump requires cooperation rather than one expert's repair.
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) defines faction membership as voluntary and ideological, distinguishes networks from their hubs and from local communities, and gives each hub a concrete role, practice, internal disagreement and relationship with the other factions. It identifies the Bastion and Archive as Iron Creed and Index hubs, and Wellspring as the Keepers' main gathering hub while remaining an independently governed town. It also explains why the engineer came to town and why the failing legacy pump requires cooperation rather than one expert's repair.
 
-At the time of the original review, the Iron Creed, Index and Keepers each ranked body, mind or purpose, but their voluntary membership, hubs, practices, relationships and internal disagreements were not defined. The Keepers were also conflated with older service models, and an Iron Creed pump engineer was described as “stuck” in a Keeper town without explanation.
+At the time of the original review, the Iron Creed, Index and Keepers each ranked body, mind or purpose, but their voluntary membership, hubs, practices, relationships and internal disagreements were not defined. The Keepers were also conflated with older service models, and an Iron Creed engineer was described as “stuck” in a Keeper town without explanation.
 
 **Why it matters:** Factions currently risk functioning as personality categories rather than social forces. The town's repair crisis, human treatment, and character conflicts depend on how these groups actually influence decisions.
 
-**Recommended change:** For each faction, establish one concrete practice, institution or policy, one source of internal disagreement, and one relationship with the other groups. Clarify whether faction membership is ideological, model-based, geographic or voluntary. Explain how the pump engineer came to be in town and what keeps them there.
+**Recommended change:** For each faction, establish one concrete practice, institution or policy, one source of internal disagreement, and one relationship with the other groups. Clarify whether faction membership is ideological, model-based, geographic or voluntary. Explain how the engineer came to be in town and what keeps them there.
 
 ### L-07 — Most character entries are hooks, not playable character arcs
 
 **Severity: High**
 
-Hob has a last order, history and story beat. The administrator, clinic robot, mail carrier and pump engineer are described mainly by role, a comic or unsettling premise, and one secret or attitude. The rare humans are types of survival stories. The character template asks for wants and unlocks, but most entries do not yet provide them.
+**Status: Partially addressed (2026-10-27).** The engineer and Index archivist now have sequenced character-arc outlines with meaningful player involvement, character-owned choices and defined outcomes; both have optional romance arcs. The nomad has a fuller character outline, and Hob has a dedicated character sheet. Full implementation and playtesting are deferred until the game has a playable story slice.
+
+Hob has a last order, history and story beat. The administrator, clinic robot and mail carrier are described mainly by role, a comic or unsettling premise, and one secret or attitude. The engineer now has a sequenced arc outline, and the archivist has an arc outline built around consent and context; the nomad has a fuller character outline. The rest of the cast remains underdefined, and these arcs still need implementation and validation in a playable slice. The rare humans are mostly types of survival stories. The character template asks for wants and unlocks, but most entries do not yet provide them.
 
 **Why it matters:** The design promises memorable histories, friendship, romance, recruitment and personal events. Archetypes can inspire writing, but they are not enough to generate consistent dialogue or meaningful player choices. In particular, romance and the town's changing view of humanity need character-specific reasons and consequences.
 
-**Recommended change:** Before treating a character as planned content, define their present want, fear or contradiction, what they believe about humans, what evidence challenges that belief, the player's meaningful role, and an outcome they choose themselves. Build one complete arc for the vertical slice before committing to a large cast.
+**Recommended change:** As characters become planned content, define their present want, fear or contradiction, beliefs, what challenges those beliefs, the player's meaningful role and an outcome they choose themselves. When the game has a playable story slice, implement and test at least one complete arc, then review the other planned characters against the same standard. Keep uncommitted characters as hooks rather than expanding the whole cast in advance.
 
 ### L-08 — The family mystery's main payoff is still an unspecified, potentially over-gated message
 
@@ -160,7 +162,7 @@ The file correctly marks many names as working names, but also uses them through
 1. [x] Separate established fact from faction belief and propaganda (L-01; resolved 2026-10-27).
 2. [x] Define the fictional rules of Cinderium dust, radiation and land recovery (L-02; resolved 2026-10-27).
 3. [x] Explain infrastructure failure and Hob's maintenance limits (L-03; resolved 2026-10-27). Reconcile Hob's order and the town's crisis (L-04; resolved 2026-10-27).
-4. Complete one playable character arc and clarify the sleeper's agency and the family mystery payoff (L-07, L-08, L-10).
+4. [ ] **L-07 partially addressed:** Character sheets outline the engineer's and archivist's arcs; implement and validate a complete arc once a playable story slice exists, and develop other characters as they become planned content. Clarify the sleeper's agency (L-10) and the family mystery payoff (L-08).
 5. [x] Set the human cast target and define why encounters are rare while global numbers remain unknown (L-05; resolved 2026-10-27). Define faction institutions and membership (L-06; resolved 2026-10-27). Set tone boundaries before expanding the cast (L-09).
 6. Establish a working-name and stable-ID policy before terms become content or save data (L-11).
 
