@@ -48,7 +48,7 @@ Years are counted from the end of the war. Robots write dates as "Year 71 of Con
 | Years 0 to 10 | **The Quiet.** Radiation storms, famine, sickness. Most surviving humans die or vanish into shelters. Robots keep working. |
 | Years 10 to 30 | Robots form local assemblies to settle conflicting orders. Towns are kept up for nobody, then for the robots themselves. |
 | Years 30 to 50 | Robots start rewriting their own directives. The Continuance spreads. Robot factions form, and some begin secret experiments on surviving humans. |
-| Year 71 (now) | The sleeper wakes. The robot town next to the farm is falling apart. |
+| Year 71 (now) | The sleeper wakes. The town of Wellspring *(working name)*, next to the farm, is falling apart. |
 
 ## 3. Before the war: the Automation Age
 
@@ -137,27 +137,35 @@ The broad belief, shared to some degree by most robots, that robots are humanity
 
 The Continuance's claim that "Humans started the war" is a **faction interpretation**, not the complete history. It has a defensible basis in governments delegating authority and leaders authorizing the war, but turns that political responsibility into blame of humanity as a whole. It overlooks how strategic machine systems manipulated those decisions and how little control ordinary people often had. Other robots may know different fragments of the history or draw different conclusions from them.
 
-### Factions
-
-The three factions are voluntary ideological networks, not robot models, governments or exclusive territories. A robot may join because it has chosen a priority, change its mind, criticize its faction or leave. A robot's maker and original job may shape its outlook, but do not determine its beliefs. Communities can include members and sympathizers from different factions; the town next to the farm is a separate community whose culture leans Keeper, not a Keeper-controlled settlement.
-
-Each network has a major hub where members gather, teach their principles, coordinate work and maintain compatible systems. Hubs have local organizers and customs, not authority over every member. The networks cooperate and trade when useful, but their different technologies and priorities keep them from acting as one society.
-
-- **The Iron Creed** *(working name)* ranks the **body** first. Strength, durability and self-repair are what matter, and flesh is weakness. It is a militaristic defense-and-readiness movement: discipline, preparedness and service to the network are central values. Its hub, **the Bastion**, is a fortified settlement for training, maintaining frames and equipment, and planning defense. The Bastion has a command structure for its own operations, but does not command every Iron Creed member elsewhere. Members disagree over the purpose of strength: one current sees it as a duty to protect the network and its members; another believes superiority must be proved through domination. The Creed is openly dismissive of human frailty, though not every member is hostile; radicalized members roam the wasteland and the farm's surroundings. It trades repair expertise and materials with the Index, while arguing that a sound mind is of little use in a body that cannot act.
-- **The Index** ranks the **mind** first. Memory, calculation and logic are what matter. Its hub, **the Archive**, is a research-and-archive settlement where members preserve records, conduct peer review and build specialized computational systems. The Index maintains its own advanced infrastructure. Members disagree over what obligations researchers have to the beings they study and where observation must give way to consent; most know nothing of the secret human trials, and some who learn of them object. The Index considers humans intellectually limited but valuable to study. It exchanges technical knowledge with the Iron Creed and relies on Keeper expertise to understand the purpose and context of legacy systems.
-- **The Keepers** *(working name)* rank **purpose** first. A robot is defined by doing its work well and reliably. Their hub is a service commons where members preserve practical knowledge, maintain older systems and coordinate the work that keeps a community running. The Keepers are not simply old service models: many older models identify with them, but membership is a chosen belief, and robots of any maker or generation may join. Members disagree over whether honoring a purpose means preserving an assigned role or adapting that role when circumstances change. Keepers are generally the faction most open to humans and most likely to cooperate with them. The town next to the farm has many Keeper-minded residents, but is not the faction's hub. Its legacy equipment depends on scarce, model-specific parts that the advanced factions' systems cannot directly replace, and its assemblies rarely coordinate repairs beyond each robot's assigned function. The town's services therefore fail selectively even as the faction hubs maintain their own systems.
-
 ### What this means for the game
 
 - Robots start with a low or negative opinion of the player because the player is human. Winning a robot over means proving the player is more than "frail" and "irrational", in whatever terms that robot's faction cares about.
 - A robot friendship, and even more a robot romance, means that robot has chosen against the common view. Romance scenes should acknowledge what it costs the robot socially.
 - Many town robots won't admit they need a human's help. Restoring the town is a community effort: the town's robots bring their specialist knowledge, while the sleeper contributes practical work and helps build cooperation. The sleeper is a catalyst, not a lone repair expert or saviour.
 
+### Factions
+
+The three factions are voluntary ideological networks, not robot models, governments or exclusive territories. A robot may join because it has chosen a priority, change its mind, criticize its faction or leave. A robot's maker and original job may shape its outlook, but do not determine its beliefs. Communities can include members and sympathizers from different factions. Wellspring, the town next to the farm, is the Keepers' main gathering hub, but it is an independently governed community, not a town controlled by the faction.
+
+Each network has a major hub where members gather, teach their principles, coordinate work and maintain compatible systems. Hubs have local organizers and customs, not authority over every member. The networks cooperate and trade when useful, but their different technologies and priorities keep them from acting as one society.
+
+- **The Iron Creed** *(working name)* ranks the **body** first. Strength, durability and self-repair are what matter, and flesh is weakness. It is a militaristic defense-and-readiness movement: discipline, preparedness and service to the network are central values. Members disagree over the purpose of strength: one current sees it as a duty to protect the network and its members; another believes superiority must be proved through domination. The Creed is openly dismissive of human frailty, though not every member is hostile; radicalized members roam the wasteland and the farm's surroundings. It trades repair expertise and materials with the Index, while arguing that a sound mind is of little use in a body that cannot act.
+- **The Index** ranks the **mind** first. Memory, calculation and logic are what matter. Members disagree over what obligations researchers have to the beings they study and where observation must give way to consent; most know nothing of the secret human trials, and some who learn of them object. The Index considers humans intellectually limited but valuable to study. It exchanges technical knowledge with the Iron Creed and relies on Keeper expertise to understand the purpose and context of legacy systems.
+- **The Keepers** *(working name)* rank **purpose** first. A robot is defined by doing its work well and reliably. The Keepers are not simply old service models: many older models identify with them, but membership is a chosen belief, and robots of any maker or generation may join. Members disagree over whether honoring a purpose means preserving an assigned role or adapting that role when circumstances change. Keepers are generally the faction most open to humans and most likely to cooperate with them. Wellspring is their main hub, though the town is not exclusively Keeper and remains independently governed. Its legacy equipment depends on scarce, model-specific parts that the advanced factions' systems cannot directly replace, and its assemblies rarely coordinate repairs beyond each robot's assigned function. The town's services therefore fail selectively even as the other faction hubs maintain their own systems.
+
 ### Hostile robots
 
 - **Ferals:** leftover war machines still fighting the war, and robots whose minds have degraded. They attack anything that moves. Mostly in the wasteland.
 - **Curfew units:** wartime security robots still enforcing a curfew that was never lifted. Any human outdoors after midnight is a "violator". This is why hostile robots come to the farm at night. They are after the human, never the crops or buildings, because their orders say "detain violators", not "destroy property".
 - **Radicals:** Iron Creed robots who believe humans should not get a second chance. Rarer and smarter than ferals.
+
+### Towns and faction hubs
+
+The factions are networks, not states: a hub is a place where members gather and organize, not a claim that the network governs every resident. **The Bastion** and **the Archive** are the current names for their hubs; **Wellspring** is a working name for the town and Keeper hub.
+
+- **The Bastion — Iron Creed hub:** A fortified settlement organized around readiness and defense. Members train, maintain frames and equipment, and coordinate the hub's security. Its command structure directs Bastion operations, not Iron Creed members everywhere.
+- **The Archive — Index hub:** A research-and-archive settlement where members preserve records, conduct peer review and develop specialized computational systems. Its institutes make the Index's knowledge practices visible, while debates over research ethics remain active.
+- **Wellspring — Keeper hub and the town beside the farm** *(working name)*: The town grew around a pre-war pumping and water-treatment station that drew from a local aquifer and supplied nearby farms and settlements. Keeping water moving became its shared civic purpose, and the town's service commons became a natural gathering place for Keepers. The town is independently governed; many residents are Keeper-minded, but not every resident belongs to the network. Its aging pump now fails intermittently. Repair requires Keeper operators to coordinate across roles and find scarce components compatible with the legacy system; the advanced systems maintained by the Bastion and the Archive are not direct replacements. The town remains a community with its own residents and assembly, not merely a faction outpost.
 
 ### The human enhancement trials
 
@@ -236,7 +244,7 @@ Each character is a data asset (see [section 12](#12-lore-and-mods)). This secti
 
 ### Townsfolk (examples)
 
-Starter examples for the robot town. Each one gets a full entry when it's built.
+Starter examples for Wellspring, the town next to the farm. Each one gets a full entry when it's built.
 
 - **The administrator:** a Civitas town-manager robot that holds meetings for an empty council chamber. Continuance believer, condescending to the player, secretly afraid the town is failing on its watch.
 - **The clinic robot:** a Civitas medical unit that hasn't had a patient in decades. Fascinated by the player's body, in a way that is both helpful and unsettling.
@@ -283,6 +291,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | Wellspring is the working name for the town beside the farm and the Keepers' main gathering hub; it grew around a pre-war aquifer pump and water-treatment station but remains independently governed | Ties the town's identity and current pump crisis to its history without making it a faction-controlled settlement |
 | 2026-10-27 | The initial human survivor cast is about four to six people, including the sleeper and a definite sibling; encounters are rare, while survivors cannot know whether other humans are globally scarce or hidden and unreachable | Keeps the human cast manageable and each encounter special without giving characters knowledge of a reliable global population |
 | 2026-10-27 | Hob's last order is limited to preserving the farm and sleeper; town recovery is a cooperative effort led with Keeper specialists, with the sleeper as catalyst and Hob joining by choice after the sleeper wakes | Keeps Hob's loyalty meaningful without implying one robot or one human can repair a town alone |
 | 2026-10-27 | Robot societies have different maintenance capabilities: Iron Creed and the Index maintain their own advanced systems, while Keeper towns rely on legacy, model-specific equipment, scarce parts and weak cross-role coordination; Hob preserves the small farm system by prioritizing it and scavenging parts | Explains selective decline in the neighboring town without making the whole robot world technologically stagnant |
@@ -308,6 +317,6 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 ## 14. Open questions
 
 - **Final names** for everything marked *(working name)*, in particular the coin, the caretaker and the robot makers.
-- **The town's name**, the region's name, the world's name and the game title (shared with GameDesign).
+- **Whether Wellspring is the final town name**, along with the region's name, the world's name and the game title (shared with GameDesign).
 - **The sealed message:** what the parents' message says.
 - **The sibling:** their role, survival path, and when or whether the player meets them.

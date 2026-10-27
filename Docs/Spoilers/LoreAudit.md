@@ -88,7 +88,7 @@ The war and first decade afterward kill or scatter most humans. The lore propose
 
 **Severity: Medium**
 
-**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) defines faction membership as voluntary and ideological, distinguishes networks from their hubs and from local communities, and gives each hub a concrete role, practice, internal disagreement and relationship with the other factions. It also explains why the pump engineer came to town and why the failing legacy pump requires cooperation rather than one expert's repair.
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) defines faction membership as voluntary and ideological, distinguishes networks from their hubs and from local communities, and gives each hub a concrete role, practice, internal disagreement and relationship with the other factions. It identifies the Bastion and Archive as Iron Creed and Index hubs, and Wellspring as the Keepers' main gathering hub while remaining an independently governed town. It also explains why the pump engineer came to town and why the failing legacy pump requires cooperation rather than one expert's repair.
 
 At the time of the original review, the Iron Creed, Index and Keepers each ranked body, mind or purpose, but their voluntary membership, hubs, practices, relationships and internal disagreements were not defined. The Keepers were also conflated with older service models, and an Iron Creed pump engineer was described as “stuck” in a Keeper town without explanation.
 
