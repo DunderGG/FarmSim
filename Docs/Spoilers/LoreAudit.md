@@ -76,6 +76,8 @@ Hob's last order is “Keep the farm until they wake up,” and the premise says
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-27).** [Lore.md](Lore.md) sets an initial target of four to six human survivors in the cast, including the sleeper and a definite sibling; describes human encounters as rare and significant, with human-looking robots contributing to mistaken sightings; and establishes that survivors cannot know whether other humans are globally scarce or hidden and unreachable. The sibling's role and survival path remain a separate open story question.
+
 The war and first decade afterward kill or scatter most humans. The lore proposes about four to six survivors in the game and lists five human archetypes plus a possible sibling, who may overlap with one of them. Meanwhile, shelters, cryo pods and surviving communities appear across the world. It is not clear whether the archetypes are alternatives, the intended cast, or examples from a much larger population.
 
 **Why it matters:** The world offers multiple independent ways for people to survive, but the story does not define why humans remain rare in the places the player visits or why these particular encounters are exceptional. The sibling overlap also makes the target cast size unclear.
@@ -157,7 +159,7 @@ The file correctly marks many names as working names, but also uses them through
 2. [x] Define the fictional rules of Cinderium dust, radiation and land recovery (L-02; resolved 2026-10-27).
 3. [x] Explain infrastructure failure and Hob's maintenance limits (L-03; resolved 2026-10-27). Reconcile Hob's order and the town's crisis (L-04; resolved 2026-10-27).
 4. Complete one playable character arc and clarify the sleeper's agency and the family mystery payoff (L-07, L-08, L-10).
-5. Set population scale, faction institutions and tone boundaries before expanding the cast (L-05, L-06, L-09).
+5. [x] Set the human cast target and define why encounters are rare while global numbers remain unknown (L-05; resolved 2026-10-27). Set faction institutions and tone boundaries before expanding the cast (L-06, L-09).
 6. Establish a working-name and stable-ID policy before terms become content or save data (L-11).
 
 ## Review limits

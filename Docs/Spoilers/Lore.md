@@ -244,14 +244,18 @@ Starter examples for the robot town. Each one gets a full entry when it's built.
 
 ### Rare humans
 
-About four to six in the game at first. Each survived in a different way, and each one found is a story moment. The list is designed to grow: more humans can be added later, by us or by mods, as long as they have their own way of surviving.
+The initial story aims for about four to six human survivors in the cast, including the sleeper and their sibling. This is a manageable cast target, not a claim about the world's total population. Human encounters should be rare and treated as significant: most people the player meets are robots, and some robots look convincingly human. A sighting or rumor is not proof that a human community is nearby.
+
+The war and its aftermath left survivors scattered across isolated shelters and communities. Travel and communication between them are difficult, and many avoid robot-controlled routes or conceal themselves. No reliable census or communication network connects these groups. The humans the player meets wonder whether people are truly scarce worldwide or whether other survivors are simply hidden, distant or unreachable; they cannot know for certain.
+
+The entries below are possible survival paths for the small cast, not a requirement to include each as a separate character. The list can grow later, by us or by mods, while keeping human encounters exceptional.
 
 - **The shelter survivor:** the last of a community that lived underground. Old, tough, suspicious of robots.
 - **The second sleeper:** woke from another pod, maybe not a Hearthwell one, and is even more lost than the player.
 - **The nomad:** born after the war, has never seen the pre-war world, and knows the wasteland better than any robot. Trades and travels.
 - **The disguised:** lives in a robot city wearing a robot shell, and has done so for years. Discovering them is a secret both of you now share.
 - **The exhibit:** held by the Lattice at a research institute and presented as a "living exhibit" of human behaviour. They are a trial subject, not a willing display. Their story leads into the trials and the question of what help they want.
-- **The sibling (optional):** see [section 9](#9-the-sleeper-and-the-family). May be one of the above.
+- **The sibling:** a definite part of the sleeper's story and included in the initial cast target. Their role, survival path and when or whether the player meets them are still undecided; they may also fit one of the paths above.
 
 ## 11. Smaller hooks
 
@@ -269,7 +273,7 @@ About four to six in the game at first. Each survived in a different way, and ea
 
 - Characters, factions, makers, festivals and zones are content, so mods can add more of them. Lore entries refer to content by namespaced ID (`Base.Hob`, `Base.IronCreed`).
 - Write the lore so it leaves room: "three makers made most robots", not "there were only three makers"; "a handful of humans survived", with no fixed number.
-- The core history (the war, Cinderium, the Continuance, the sleeper, Hob) is fixed. Mods add to it rather than change it.
+- The core history (the war, Cinderium, the Continuance, the sleeper, the sibling and Hob) is fixed. Mods add to it rather than change it.
 
 ## 13. Decision log
 
@@ -277,6 +281,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-27 | The initial human survivor cast is about four to six people, including the sleeper and a definite sibling; encounters are rare, while survivors cannot know whether other humans are globally scarce or hidden and unreachable | Keeps the human cast manageable and each encounter special without giving characters knowledge of a reliable global population |
 | 2026-10-27 | Hob's last order is limited to preserving the farm and sleeper; town recovery is a cooperative effort led with Keeper specialists, with the sleeper as catalyst and Hob joining by choice after the sleeper wakes | Keeps Hob's loyalty meaningful without implying one robot or one human can repair a town alone |
 | 2026-10-27 | Robot societies have different maintenance capabilities: Iron Creed and Lattice maintain their own advanced systems, while Keeper towns rely on legacy, model-specific equipment, scarce parts and weak cross-role coordination; Hob preserves the small farm system by prioritizing it and scavenging parts | Explains selective decline in the neighboring town without making the whole robot world technologically stagnant |
 | 2026-10-27 | Named the radioactive energy mineral Cinderium | Separates the material's identity from the world's solar power theme while evoking its scorched, hazardous nature |
@@ -302,4 +307,4 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 - **Final names** for everything marked *(working name)*, in particular the coin, the caretaker and the robot makers.
 - **The town's name**, the region's name, the world's name and the game title (shared with GameDesign).
 - **The sealed message:** what the parents' message says.
-- **The sibling:** whether they exist, and if so which rare human they are.
+- **The sibling:** their role, survival path, and when or whether the player meets them.
