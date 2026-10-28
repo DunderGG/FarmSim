@@ -18,6 +18,15 @@ Hob is the sleeper's caretaker and first companion: a family home robot who kept
 - **Role in the game:** The player's first relationship, tutorial guide and first companion.
 - **Story beat:** Hob holds a sealed message from the parents, with the instruction to deliver it "when the farm is whole again." It arrives late in the story. The message's contents and the exact threshold for the farm being whole are undecided.
 
+## Vertical slice arc
+
+The one relationship arc the vertical slice builds and tests (see [GameDesign.md section 8](../../GameDesign.md#relationships)).
+
+- **Start:** Hob is formal and dutiful. They treat the sleeper as the object of the order ("as instructed"), not as a person whose views they want.
+- **What changes trust:** working alongside Hob and asking for Hob's opinion instead of giving orders, for example restoring Hob's garden together.
+- **Visible response:** Hob starts saying "I'd like to" and helps on their own initiative.
+- **Payoff:** the first returning memory of the family, not an item.
+
 ## Open decisions
 
 - Whether Hob remains the final name.

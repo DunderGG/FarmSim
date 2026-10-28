@@ -186,7 +186,7 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] Hob *(working name)* in the game: placeholder body first, then a Blender model
 - [ ] Simple data-driven dialogue
 - [ ] Characters as data assets, so more robots and humans can be added the same way
-- [ ] One relationship track: robots start with a low opinion of the player, which grows through talking and gifts
+- [ ] One relationship track with Hob, who starts as a dutiful servant rather than a sceptic; trust grows through talking, gifts and working together, and the slice arc is in [Hob's character sheet](Spoilers/Characters/Hob.md#vertical-slice-arc)
 - [ ] Hob guides the player through the first days as a tutorial
 
 ### 4.5 Automation and selling

@@ -148,7 +148,9 @@ At the time of the original review, section 2 said systems should not make multi
 
 **Severity: Medium**
 
-Section 8 proposes low or negative robot attitudes toward the player, gifts, requests, events, personal lore, recipes, upgrades, recruitment, romance and marriage. It does not say what distinguishes individual characters, how affection is communicated, whether negative opinions can be repaired, or how romance eligibility and consent are signaled.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 8 now requires visible reasons for every change in trust, makes romance an explicit opt-in that the character can decline, and sets one complete caretaker arc for the vertical slice. The caretaker starts loyal rather than sceptical, matching the lore. The arc (start, what changes trust, visible response, payoff) is in [Hob's character sheet](Spoilers/Characters/Hob.md#vertical-slice-arc), and [Roadmap.md](Roadmap.md) section 4.4 points to it.
+
+At the time of the original review, section 8 proposed low or negative robot attitudes toward the player, gifts, requests, events, personal lore, recipes, upgrades, recruitment, romance and marriage. It does not say what distinguishes individual characters, how affection is communicated, whether negative opinions can be repaired, or how romance eligibility and consent are signaled.
 
 **Why it matters:** The relationship system risks reducing characters to a checklist of gifts and unlocks, while the premise says each robot has a history and that earning trust should feel special. Starting at negative opinion can feel arbitrary unless the character's perspective and player's ability to respond are legible.
 
@@ -194,7 +196,7 @@ At the time of the original review, the document used “radiation,” “radiat
 3. [x] Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12; resolved 2026-10-28).
 4. [x] Define the first-season progression and economy with a simple playable budget (G-06, G-07; resolved 2026-10-28).
 5. [x] Establish a minimum complete game and defer unbounded scope (G-08). Bound the modding and multiplayer commitments (G-09, G-10). All resolved 2026-10-28.
-6. Prototype one character arc (G-11). [x] Clarify the core mechanic vocabulary (G-13; resolved 2026-10-28).
+6. [x] Prototype one character arc (G-11). Clarify the core mechanic vocabulary (G-13). All resolved 2026-10-28.
 
 ## Review limits
 

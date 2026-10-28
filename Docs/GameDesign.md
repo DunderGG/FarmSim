@@ -204,9 +204,13 @@ Robots fill every role a human would. They don't see themselves as servants: mos
 ### Relationships
 
 - Robots start at a low or even negative opinion of the player, because the player is human. Humans start neutral or friendly.
+- The caretaker robot is the exception: it is loyal to the family, so it starts as a dutiful servant rather than a sceptic. Its arc is about choosing a purpose of its own (**Lore hook:** see its character sheet).
+- Every change in trust has a reason the player can see: the character says or does something different.
 - Friendship grows by talking, giving gifts, helping with requests and taking part in events.
 - Higher friendship unlocks: the robot's backstory and personal events, gifts and recipes, upgrades for that robot, recruiting it to the farm, and romance with eligible characters.
 - Romance leads to dating and marriage. A partner moves to the farm.
+- Romance is always opt-in through an explicit dialogue choice, and the character can decline. Gifts alone never lead to romance.
+- **Vertical slice:** one complete arc with the caretaker robot. Trust grows when the player works alongside it and asks for its opinion instead of giving orders. It responds visibly by helping on its own initiative, and the payoff is a story moment, not an item.
 - Characters are data assets so mods can add new robots and humans.
 
 ## 9. Progression
@@ -335,6 +339,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | The caretaker robot starts loyal rather than sceptical; trust changes must be visible; romance is an explicit opt-in the character can decline; the vertical slice has one complete caretaker arc ([section 8](#relationships)) | Makes relationships more than a gift checklist and fixes the clash between the caretaker's loyalty and the general robot attitude (audit G-11) |
 | 2026-10-28 | Set a first-release target with limits on maps, seasons, crops, characters, romance and systems, and named cut candidates (multiplayer, mod loading, animals, other cameras, extra faction hubs, extra scavenging) ([section 13](#first-release)) | A solo project needs a cut line, or "later" reads as a commitment (audit G-08) |
 | 2026-10-28 | The first season guarantees a start: starting seeds and purse, a basic crop always for sale that sells for at least twice its seed price, and town donations of fixed items separate from selling ([section 9](#economy)) | A poor harvest must never block the systems needed for a better one (audit G-07) |
 | 2026-10-28 | Each progression track has one job: town restoration is the story, the tech tree owns machines and tool tiers, relationships unlock character content only, skills give small bonuses and never gate ([section 9](#9-progression)) | Stops tracks from gating the same rewards or forcing grind on an unintended track (audit G-06) |
