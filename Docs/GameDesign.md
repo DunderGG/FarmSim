@@ -233,6 +233,12 @@ In the vertical slice, farming is the primary loop and the sprinkler is the one 
 - There is one currency from the start (**Lore hook:** what it is).
 - Selling crops and goods gives currency, which buys seeds, tools, tech tree unlocks and buildings.
 - The economy is a supporting system, not a focus early on. Balancing and depth (shops, prices, trading) come later.
+- **First-season guarantees:**
+  - The player starts with seeds for a first planting and a small purse.
+  - One cheap basic crop is always for sale and always grows in clean, watered soil, so a bad harvest is a setback, never a dead end.
+  - A basic crop sells for at least twice its seed price.
+  - Town restoration asks for specific items in fixed amounts, separate from selling, so donating versus selling is a real choice.
+  - Before setting prices, plan a simple budget for one ordinary and one poor season.
 
 ## 10. World and exploration
 
@@ -314,6 +320,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | The first season guarantees a start: starting seeds and purse, a basic crop always for sale that sells for at least twice its seed price, and town donations of fixed items separate from selling ([section 9](#economy)) | A poor harvest must never block the systems needed for a better one (audit G-07) |
 | 2026-10-28 | Each progression track has one job: town restoration is the story, the tech tree owns machines and tool tiers, relationships unlock character content only, skills give small bonuses and never gate ([section 9](#9-progression)) | Stops tracks from gating the same rewards or forcing grind on an unintended track (audit G-06) |
 | 2026-10-28 | Out-of-season crops wither at 06:00 on the new season's first day, with days to harvest on seeds, days left on the HUD, a warning when planting too late, and a reminder from the caretaker robot ([section 4](#seasonal-loop-28-days)) | Keeps seasonal planning meaningful without an opaque crop wipe (audit G-12) |
 | 2026-10-28 | Switching survival needs off removes only the player's own meters, their HUD and penalties; farming systems are the same in both modes, and the setting can change at any time ([section 7](#7-survival-needs)) | Gives the option an exact contract that is easy to balance and safe for saves (audit G-05) |

@@ -195,7 +195,9 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] A sprinkler that waters nearby tiles each morning from the farm's water store
 - [ ] A shipping bin: crops put in it are sold overnight
 - [ ] The currency (brass gear coins, name still open) on the HUD
-- [ ] A simple way to buy seeds
+- [ ] A simple way to buy seeds, with one cheap basic seed always for sale
+- [ ] Starting seeds and a small purse for a new game
+- [ ] A simple budget for an ordinary and a poor season before prices are set
 
 ### 4.6 Interface and input
 

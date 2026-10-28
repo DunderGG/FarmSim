@@ -100,7 +100,9 @@ At the time of the original review, section 9 listed skills, tool tiers, a tech 
 
 **Severity: Medium**
 
-The economy is described as “supporting,” but crops are also supposed to fund seeds, tools, tech unlocks and buildings, while the town restoration consumes player-produced crops, materials and machines. Dirty water, energy and materials add further resource demands. No starting supply, guaranteed income, price relationship or recovery from a failed harvest is described.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 9 now sets first-season guarantees: starting seeds and a small purse, a cheap basic crop always for sale that grows in clean watered soil, a basic crop selling for at least twice its seed price, and town donations of fixed items kept separate from selling. A budget for an ordinary and a poor season comes before prices, as a [Roadmap.md](Roadmap.md) item.
+
+At the time of the original review, the economy was described as “supporting,” but crops were also supposed to fund seeds, tools, tech unlocks and buildings, while the town restoration consumes player-produced crops, materials and machines. Dirty water, energy and materials add further resource demands. No starting supply, guaranteed income, price relationship or recovery from a failed harvest is described.
 
 **Why it matters:** A poor first-season harvest could prevent buying seeds or restoring facilities, which in turn blocks the systems needed for a better harvest. Conversely, if crops can be sold without trade-offs, town donations and farming upgrades may compete only through arbitrary costs.
 
@@ -188,7 +190,7 @@ At the time of the original review, the document used “radiation,” “radiat
 1. [x] Narrow and define the vertical-slice promise (G-01; resolved 2026-10-28).
 2. [x] Bound the land-health, radiation, storm and energy feedbacks before implementing them (G-02; resolved 2026-10-28).
 3. [x] Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12; resolved 2026-10-28).
-4. Define the first-season progression and economy with a simple playable budget (G-06, G-07).
+4. [x] Define the first-season progression and economy with a simple playable budget (G-06, G-07; resolved 2026-10-28).
 5. Establish a minimum complete game and defer unbounded scope (G-08). [x] Bound the modding and multiplayer commitments (G-09, G-10; resolved 2026-10-28).
 6. Prototype one character arc (G-11). [x] Clarify the core mechanic vocabulary (G-13; resolved 2026-10-28).
 
