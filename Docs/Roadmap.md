@@ -117,13 +117,14 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] The current turnip becomes the first crop asset, `Base.Turnip`, and its settings move off the tile Blueprint
 - [ ] Tool data assets (`UFarmToolData`), replacing the hard-coded tool list (`EFarmTool`)
 - [ ] Item data assets (`UFarmItemData`) for seeds, harvested crops and other things the player can carry
-- [ ] All content uses namespaced IDs (`Base.<Name>`)
+- [ ] All content uses namespaced IDs (`Base.<Name>`) in a `ContentId` property that also builds the asset's primary asset ID, with data validation of the format, a startup check for duplicate IDs, and an ID redirect list ([Architecture.md section 5](Architecture.md#5-data-and-content))
 
 **Tiles and the farm grid**
 
 - [ ] Tile rules in a plain state struct, separate from the tile actor that shows them
 - [ ] A shared way to find the grid (`AFarmGrid::Find`), replacing the repeated searches
 - [ ] The grid announces when its tiles are ready, so loading no longer waits a frame
+- [ ] `AFarmDayCycle::Get` follows the find-or-spawn rules: spawns only in a running game world and logs a warning when it spawns or finds more than one ([Architecture.md section 2](Architecture.md#2-unreals-gameplay-framework-where-things-go))
 
 **Saving**
 
@@ -131,6 +132,8 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] Tiles are saved with their grid coordinates, not by position in a list
 - [ ] Saves store content IDs, and skip content that no longer exists with a warning
 - [ ] A save version number
+- [ ] A save that can't be loaded (corrupt, newer version, failed migration) is left untouched: saving stays off until the player starts a new game ([Architecture.md section 6](Architecture.md#6-saving))
+- [ ] A failed save write keeps the previous save
 
 **Communication and extension points**
 
@@ -149,7 +152,9 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] Set up CQTest in the project
 - [ ] Tile rule tests: tilling, planting, watered crops grow, dry crops don't, harvesting only when ripe
 - [ ] Day clock tests: the time and day roll over correctly
-- [ ] Save tests: save data survives a save and load round trip
+- [ ] Save tests: tile, farming and clock state survive a save and load round trip through each owner's own save and restore functions
+- [ ] Save failure tests: a corrupt or newer-version save is not overwritten, and unknown content IDs are skipped
+- [ ] Content ID tests: a redirected ID, a duplicate ID and an unknown ID
 
 ### 4.2 Farming depth
 

@@ -56,24 +56,40 @@ Unreal already has a home for most kinds of logic. Use it before inventing one.
 
 | Class | Lifetime | Put here | Don't put here |
 |---|---|---|---|
-| `UGameInstance` and its subsystems | The whole run of the game, across level loads | Settings, the player profile, which save slot is active, music that plays across levels | Anything tied to one level |
-| `AGameModeBase` | One level | The rules of the level: default classes (pawn, HUD, controller), spawning, win/lose conditions | State the UI needs to read (in multiplayer it doesn't exist on clients) |
-| `AGameStateBase` | One level | Shared state of the world everyone may read: season, weather, calendar | Per-player state |
-| `APlayerController` | One level, per player | The player's will: input routing, UI ownership, camera | The body's abilities or game rules |
-| `APlayerState` | One level, per player, survives the pawn being destroyed | Per-player data that outlives the body: money, inventory, relationships | Things that need the body in the world |
+| `UGameInstance` and its subsystems | The whole run of the game, across map changes | Settings, the player profile, which save slot is active, music that plays across maps | Anything tied to one world |
+| `AGameModeBase` | One world | The authoritative rules of the game in this world: default classes (pawn, HUD, controller), spawning, win/lose conditions | State the UI needs to read (in multiplayer it exists only on the server) |
+| `AGameStateBase` | One world | Shared state of the world everyone may read: season, weather, calendar | Per-player state |
+| `APlayerController` | One world, per player | The player's will: input routing, UI ownership, camera | The body's abilities or game rules |
+| `APlayerState` | One world, per player, survives the pawn being destroyed | Per-player data that outlives the body: money, inventory, relationships | Things that need the body in the world |
 | `APawn` / `ACharacter` | Until destroyed | The body: movement, animation, what it holds, abilities that need a position | Data that should survive the pawn |
 | `UActorComponent` | Same as its actor | Reusable behavior: farming, inventory, interaction, health | Behavior only one actor will ever have (put it on that actor) |
-| `AHUD` | One level, per player | Hosting the UI | Game state |
-| `UWorldSubsystem` | One world (level) | Level-wide services with no transform: saving, lookups, registries | Settings that need tweaking per level |
-| `UGameInstanceSubsystem` | Whole run | Services that survive level loads | Level-specific state |
+| `AHUD` | One world, per player | Hosting the UI | Game state |
+| `UWorldSubsystem` | One world | World-wide services with no transform: saving the world's state, lookups, registries | Settings that need tweaking per level; state that must survive a map change |
+| `UGameInstanceSubsystem` | Whole run | Services that survive map changes | World-specific state |
 | `ULocalPlayerSubsystem` | Per local player | Per-player UI, input and camera services | Shared state |
 | `UDeveloperSettings` | Config | Project-wide tunables shown in Project Settings | Per-instance values |
 | `UPrimaryDataAsset` | Asset | Definitions of content: a crop, a tool, an item | Runtime state |
 | `USaveGame` | Save file | The saved data layout | Logic |
 
+**World, map and level.** A *world* (`UWorld`) is the running game: one persistent map plus any sublevels streamed into it. The lifetimes above are world lifetimes, not sublevel lifetimes:
+
+- **Streaming a sublevel** in or out only adds or removes that sublevel's actors. The world, its subsystems and the framework actors stay.
+- **Opening a map** (`OpenLevel`, or non-seamless travel) tears the whole world down and creates a new one, with new world subsystems and framework actors. Only the game instance and its subsystems survive.
+- **Seamless travel** also creates a new world, but carries a chosen set of actors (by default the game mode, game state, player controllers and player states) across through a transition map.
+
+FarmSim today has one map, no level streaming, and no travel except `OpenLevel` on the same map to start a new game. Revisit this section and [section 13](#13-systems-and-ownership) before adding any of them.
+
 A useful test for player data: **does it need to exist when the player's body doesn't?** Money and inventory do, so they belong on the player state (or a component on it). Tool use needs a position and facing, so it belongs on the pawn.
 
-Placed actors versus subsystems: use an actor when something needs a place in the level or per-level settings a designer tweaks in the Details panel. Use a subsystem when it's a service that should always exist and needs no settings. A placed actor that the game can't run without should find-or-spawn itself (`AFarmDayCycle::Get`), so a level that's missing it still works.
+Placed actors versus subsystems: use an actor when something needs a place in the level or per-level settings a designer tweaks in the Details panel. Use a subsystem when it's a service that should always exist and needs no settings.
+
+A placed actor that the game can't run without may **find-or-spawn** itself through a static `Get(UWorld*)` (`AFarmDayCycle::Get`), so a level that's missing it still runs. This is a convenience with side effects, so it follows these rules:
+
+- **World-scoped and game-thread only.** `Get` takes the world it works in and never caches an instance across worlds.
+- **Only in a running game world.** It spawns only in game and Play in Editor worlds that have begun play and aren't being torn down. Anywhere else (editor and preview worlds, teardown) it returns what `Find` returns, possibly null, and callers handle null.
+- **One creation authority.** `Get` is the only code that spawns the actor. Everything else calls `Get` or `Find`.
+- **Bad level setup is visible, not hidden.** Spawning a missing instance logs a warning, and finding more than one logs an error and uses the first. A level that needs designer settings on the actor should place it rather than rely on the fallback.
+- **Actors only.** A service with no transform or per-level settings belongs in a subsystem, which Unreal creates exactly once per world; don't copy this pattern for it.
 
 ## 3. Lifetimes and initialization order
 
@@ -83,13 +99,13 @@ Most hard-to-find Unreal bugs are about things running in a different order than
 - **`OnConstruction`** runs in the editor whenever a placed actor changes. Use it for editor previews (`AFarmGrid` sizes its bounds box), never for gameplay.
 - **`PostInitializeComponents`** runs before `BeginPlay`, once the actor's own components exist. Use it to wire an actor's own components together.
 - **`BeginPlay`** is where gameplay setup starts. **The order between different actors' `BeginPlay` calls is not guaranteed.** Never assume another actor has already run its `BeginPlay`.
-- **`EndPlay`** runs when the actor is destroyed or the level unloads. Unbind delegates and remove UI here.
+- **`EndPlay`** runs when the actor is destroyed, when the sublevel it lives in is streamed out, or when the world is torn down. Unbind delegates and remove UI here.
 - **World subsystems**: `Initialize` runs when the world is created, `OnWorldBeginPlay` before the actors' `BeginPlay`, and `Deinitialize` when it is torn down.
-- **Level loads** destroy the world and everything in it: actors, components and world subsystems. Only the game instance and its subsystems survive.
+- **Opening a map** destroys the world and everything in it: actors, components and world subsystems. Only the game instance and its subsystems survive. Streaming a sublevel doesn't; see [section 2](#2-unreals-gameplay-framework-where-things-go) for the difference.
 
 To deal with unknown order, in order of preference:
 
-1. **Find-or-spawn on demand.** A static `Get(World)` that returns the existing instance or creates it (`AFarmDayCycle::Get`).
+1. **Find-or-spawn on demand.** A static `Get(World)` that returns the existing instance or creates it (`AFarmDayCycle::Get`), under the rules in [section 2](#2-unreals-gameplay-framework-where-things-go). Only for required placed actors.
 2. **Register with a known owner.** Things announce themselves to a subsystem in their `BeginPlay`, and the subsystem broadcasts once everything it needs has arrived.
 3. **Wait for a signal.** Bind to a "ready" event rather than guessing.
 4. **Wait a tick** (`SetTimerForNextTick`). This works but hides the dependency. Use it only when the above don't fit, and comment why.
@@ -126,7 +142,14 @@ Rules:
 | Open-ended categories designers extend | `FGameplayTag` | Item categories, seasons |
 | Small closed sets that code switches on | `enum class` | `EFarmTool`, `EFarmTileState` |
 
-- **Identify content by stable IDs**, not by pointers or array positions: a data asset's `FPrimaryAssetId`, an `FName` or a gameplay tag. This matters most for saves: an ID still means the same thing after content is added or reordered.
+- **Identify content by stable IDs**, not by pointers, array positions, asset paths or display names. This matters most for saves: an ID still means the same thing after content is added, reordered, renamed or moved.
+- **One canonical content ID.** Every content data asset has a `ContentId` property, an `FName` of the form `<Namespace>.<Name>` (`Base.Turnip`). It is typed in by whoever makes the asset; it is not derived from the asset's file name or path, so renaming or moving the asset doesn't change it. The asset's `FPrimaryAssetId` is built from it (the data asset overrides `GetPrimaryAssetId` to return its type and `ContentId`), so the Asset Manager and saves use the same ID. This ID is what saves store.
+  - **Format:** exactly one dot; namespace and name are PascalCase ASCII letters and digits. Base content uses the namespace `Base`; a mod uses its own name. Data validation (`IsDataValid`) rejects an asset with a missing or badly formed ID.
+  - **IDs never change once a build has shipped.** Fix a display name instead; that's a separate localized `FText`. If an ID really must change, add an old-to-new entry to an ID redirect list that loading applies before looking content up.
+  - **Duplicates are errors.** At startup the game checks every content type for repeated IDs and logs an error naming both assets. Base content wins over mods; between two mods, the first one loaded wins until mod load order exists ([section 12](#12-designing-for-mods)).
+  - **Unknown IDs** in a save are skipped with a logged warning, and the player is told some content couldn't be found ([section 12](#12-designing-for-mods), rule 6).
+  - **Tests** cover a redirected ID, a duplicate ID and an unknown ID before saves rely on content IDs.
+- **Gameplay tags** identify open-ended categories (item categories, seasons), not individual pieces of content.
 - **Reference assets softly** (`TSoftObjectPtr`) when they don't have to be in memory with the referencing class. Hard references load everything they point to.
 - **Code never hard-codes paths to our own assets.** Expose a property and set it in a Blueprint subclass, a data asset or config. Engine default assets (`/Engine/BasicShapes/...`) are fine as placeholders.
 
@@ -134,9 +157,22 @@ Rules:
 
 - **Each owner saves its own state.** An owner provides a function that returns a plain save struct (`FFarmTileSaveData`) and one that restores from it. The save subsystem collects and stores these structs. It doesn't read or write other classes' internals.
 - **Save data is plain structs** of IDs and values. No object pointers.
-- **Version the save.** The save game has a version number. Loading an older version migrates it or falls back to a clean start with a message, never a crash.
-- **Save at clear points.** We save when a new day starts. That keeps saves consistent: nothing is half-done mid-action.
+- **Version the save.** The save game has a version number, raised whenever the layout changes, with a migration step from each older version.
+- **Never lose the player's save by accident.** Only an explicit choice by the player (starting a new game) deletes or replaces a save that couldn't be loaded. What loading does:
+
+| What's in the slot | Outcome |
+|---|---|
+| Nothing | Start a new game. No message needed. |
+| A save of the current version | Load it. |
+| An older version that migrates | Load the migrated data. Before the first save in the new format overwrites it, keep a copy of the original file next to it. |
+| A corrupt file, a newer version than this build understands, or an older version whose migration fails | Don't load it and don't crash. Tell the player and log why. Leave the file untouched: saving stays off for the rest of the session, so a fresh day can't overwrite it. The player can start a new game, which is the explicit decision to replace it. |
+| Content IDs this build doesn't know | Load the rest, skip those entries with a warning ([section 12](#12-designing-for-mods), rule 6). |
+
+- **A failed write keeps the last good save.** Write the new save beside the old one and replace the old one only when the write succeeded; tell the player if it failed. The game carries on and tries again at the next save point.
+- **Save at clear points.** We save when a new day starts. That keeps saves consistent: nothing is half-done mid-action. The accepted cost: quitting mid-day loses everything since that morning. Saving is synchronous (`SaveGameToSlot`), which is fine while saves are small; move to `AsyncSaveGameToSlot` if writing a save causes a visible hitch.
+- **One world, one slot.** Today the save subsystem lives in the world ([section 2](#2-unreals-gameplay-framework-where-things-go)) and uses one fixed slot. Before adding save slots, a main menu or map travel, split it: choosing and remembering the active slot moves to a `UGameInstanceSubsystem` (it must survive the world being replaced), and collecting and applying the world's snapshot stays in the world subsystem. Never open another map while a save is being written; with synchronous saves this can't happen yet.
 - **Restore without side effects.** Restoring sets state directly; it doesn't replay game actions or broadcast "new day" again (`AFarmDayCycle::RestoreClock`).
+- **Test the save rules.** Save tests cover a save and load round trip through each owner's own save and restore functions, migration from every older version, a corrupt and a newer-version file being left untouched, and unknown content being skipped.
 
 ## 7. Presentation: UI, audio and effects
 
@@ -169,7 +205,7 @@ Don't optimize early, but don't choose designs that can't scale either.
 
 - **Ticking is opt-in.** Most things react to events or timers. Only things that genuinely change every frame tick (`AFarmDayCycle` moves the sun).
 - **Event-driven daily updates.** Farm logic mostly happens once a day, on `OnNewDay`. Nothing needs to check crops every frame.
-- **Many things, few actors.** One actor per tile is fine for an 8x8 field. For fields of thousands of tiles, the grid should keep tile state in an array of structs and draw tiles with instanced static mesh components. That's another reason to keep tile rules out of tile visuals ([principle 4](#1-core-principles)).
+- **Change structure when a profile says so, not at a tile count.** One actor per tile is the current design and stays until profiling shows tiles are a real cost. If they are, look at what is expensive (CPU, memory, collision, draw calls) and pick the fix that targets it. Options to weigh include keeping tile state in an array of structs owned by the grid, drawing tiles with instanced static mesh components (which changes how tiles are drawn, not their rules or collision), and merging collision. Keeping tile rules out of tile visuals ([principle 4](#1-core-principles)) keeps all of these open.
 - **Measure before optimizing.** Use `stat unit`, `stat game` and Unreal Insights to find real costs.
 
 ## 11. Patterns borrowed from Lyra
@@ -185,38 +221,51 @@ Lyra is Epic's reference for a well-structured UE5 game. It is built for a large
 | Gameplay tags for identifiers | **Later**, for open-ended categories. Closed sets stay enums. |
 | Input actions mapped to tags through data assets | **Later.** Input actions are created in code today. Move to `IA_` / `IMC_` assets when input grows. |
 | Gameplay Message Router | **Not yet.** Plain delegates are enough. |
-| Game Feature plugins and modular gameplay actors (actors that accept components from plugins) | **Later**, as the mod mechanism ([section 12](#12-designing-for-mods)). |
+| Game Feature plugins and modular gameplay actors (actors that accept components from plugins) | **Later**, as a likely building block for mod loading ([section 12](#12-designing-for-mods)). |
 | Gameplay Ability System, Experiences, Common UI, replication | **Not adopted.** Each adds a lot of setup that a single-player prototype doesn't need. Revisit when a feature calls for one. |
 
 ## 12. Designing for mods
 
-**Goal: other people can add content and behavior to the game without our source code.** We don't build mod support yet, but we design so it can be added later without a rewrite.
+**Goal: other people can add content and behavior to the game without our source code.**
+
+**Status: mod-oriented design, not mod support.** The game can't load mods today, and nothing in it is a promised mod API yet. We follow the rules below so mod loading can be added later without a rewrite.
 
 ### How Unreal games are modded
 
-- A mod is a **plugin**: content (meshes, data assets, Blueprints) plus, rarely, C++. The game finds and loads plugins at startup.
-- **Content and Blueprint mods** are what we support. C++ mods have to be compiled against exactly the same engine version and build as the game, which is fragile; we don't plan for them.
-- Lyra's **Game Feature plugins** are Epic's mechanism for this. A Game Feature can add data assets, add components to existing actors and register gameplay tags without the base game knowing it exists.
+- A mod is usually a **plugin**: content (meshes, data assets, Blueprints) plus, rarely, C++. Unreal doesn't discover, mount or activate plugins added to a packaged game on its own; the game has to do that, and the plugin's content has to be cooked for the same engine version.
+- **Content and Blueprint mods** are the kind we design for. C++ mods have to be compiled against exactly the same engine version and build as the game, which is fragile; we don't plan for them.
+- Lyra's **Game Feature plugins** are a likely building block. A Game Feature can add data assets, add components to existing actors and register gameplay tags without the base game knowing it exists. They aren't a mod loader, though: the game has to register and activate each one through the Game Features subsystem, and deactivation, dependencies and their lifecycle are ours to design.
 - The best way to keep the game moddable is to **build the base game the way a mod would be built**: base content goes through the same discovery, IDs and extension points a mod would use.
 
 ### Rules from now on
 
 1. **Content is discovered, not listed.** Crops, tools, items, recipes and shop stock are data assets of a registered primary asset type (for example `FarmCrop`). The game asks the Asset Manager for every asset of that type. There are no hard-coded lists or `switch` statements over content, so a mod adds a crop by adding a data asset.
 2. **Enums only for fixed mechanics.** An `enum class` is fine for states that mods shouldn't extend, like `EFarmTileState` (grass, tilled, planted). Anything a modder might want more of (tools, crops, item categories) is a data asset or a gameplay tag.
-3. **Namespaced IDs.** Every piece of content has a stable ID of the form `<Package>.<Name>`. Base game content uses `Base` (`Base.Parsnip`, `Base.WateringCan`). Mods use their own name. Gameplay tags we define live under `Farm.`; mods add their own.
+3. **Namespaced IDs.** Every piece of content has a stable `ContentId` of the form `<Namespace>.<Name>`, with the format, rename and duplicate rules in [section 5](#5-data-and-content). Base game content uses `Base` (`Base.Parsnip`, `Base.WateringCan`). Mods use their own name. Gameplay tags we define live under `Farm.`; mods add their own.
 4. **Deliberate extension points.** Key classes are `Blueprintable`. Meaningful moments get Blueprint-assignable events or `BlueprintNativeEvent` hooks (a crop is harvested, a new day starts, a tool is used). Main actions are `BlueprintCallable`. Mark these with `/** Extension point: ... */` in the header. Everything else stays private, because every exposed function is a promise to modders.
 5. **Behavior in components, and actors that tolerate extra ones.** A mod adds behavior by adding a component to an existing actor. Actors must not assume they have a fixed set of components, and systems should look for components and interfaces rather than concrete classes.
 6. **Saves survive missing content.** Saves store content IDs, never positions in a list. When a save mentions content that no longer exists (a mod was removed), loading skips it with a warning instead of failing.
 7. **No hard asset paths in code**, as in [section 5](#5-data-and-content). Mods can only replace or extend what goes through properties, data assets and the Asset Manager.
 
+### Before we say the game supports mods
+
+All of these have to exist and be tested in a packaged build first:
+
+- **Discovery and mounting:** finding mod plugins in a mods folder of a packaged build and mounting their cooked content.
+- **Asset Manager scanning:** the primary asset types are configured to scan plugin content, so a mod's data assets are found like base content.
+- **Activation:** turning a mod on and off, and what happens to its content in a running game.
+- **Load order and conflicts:** which mod wins, and how duplicate content IDs are reported ([section 5](#5-data-and-content)).
+- **Versions:** which game versions a mod works with, and what happens when it doesn't.
+- **Saves without the mod:** a save made with a mod loads without it ([section 6](#6-saving)).
+- **Trust and consent:** mods run with the player's trust (a Blueprint mod can do anything the game can), so the player turns each mod on knowingly, and the game never runs mods from untrusted sources automatically.
+- **A documented mod API:** which classes, events and functions are extension points (rule 4).
+
 ### What we leave for later
 
+- Everything in the list above.
 - Moving base content into its own Game Feature plugin.
-- Loading mod plugins from a mods folder in a packaged build, mod load order and conflict handling.
 - A mod kit: the editor setup modders would build with.
 - Letting mods override base content rather than only add to it.
-
-Mods run with the player's trust: a Blueprint mod can do anything the game can. That's normal for games, but it's a reason never to run mods from untrusted sources automatically.
 
 ---
 
@@ -228,11 +277,11 @@ Mods run with the player's trust: a Blueprint mod can do anything the game can. 
 |---|---|---|---|
 | `AFarmTile` | Actor | One tile's state (grass, tilled, planted, watered, growth) and its visuals | Time, input, saving |
 | `AFarmGrid` | Actor, placed in the level | Spawning tiles, finding a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
-| `AFarmDayCycle` | Actor, placed or auto-spawned | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished` | Tiles, saving, HUD |
+| `AFarmDayCycle` | Actor, placed or found-or-spawned by `Get` ([section 2](#2-unreals-gameplay-framework-where-things-go)) | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished` | Tiles, saving, HUD |
 | `UFarmingComponent` | Component on the farmer | Current tool, seeds, harvest count, tile targeting, using a tool, sleeping and passing out | UI, input bindings, meshes |
 | `AFarmerCharacter` | Character (parent of `BP_ThirdPersonCharacter`) | Input bindings and the held tool mesh | Farming rules |
 | `AFarmHUD` + `SFarmHudWidget` | HUD + Slate widget | Display only. Reads from the day cycle and farming component; keeps fading messages | Any game state |
-| `UFarmSaveSubsystem` | World subsystem | Saving on `OnNewDayFinished`, loading at play start, starting a new game | Game rules |
+| `UFarmSaveSubsystem` | World subsystem | The current world's snapshot: saving it on `OnNewDayFinished` and loading it at play start, in the single save slot. Starting a new game (deletes that slot, then reopens the map) | Game rules; save slot or profile choice that must survive a map change ([section 6](#6-saving)) |
 | `UFarmSaveGame` | Save game | The saved data layout | Logic |
 
 When a new responsibility appears, decide its owner using [section 2](#2-unreals-gameplay-framework-where-things-go), add a row here, and say so in the commit message.
@@ -286,7 +335,11 @@ sequenceDiagram
     Save->>HUD: "Game saved."
 ```
 
-`OnNewDayFinished` exists so saving always runs after every system has reacted to the new day, whatever order they subscribed in.
+`OnNewDayFinished` exists so saving always runs after every system has reacted to the new day, whatever order they subscribed in. The day cycle broadcasts it as soon as the `OnNewDay` broadcast returns, so it only marks the end of work done **synchronously**. That's a contract for every `OnNewDay` listener:
+
+- **Finish all changes to saved state inside the handler.** No timers, latent actions, async tasks or deferred spawns that change state the save captures.
+- **Presentation may run later.** A crop-growth animation or a sound can play over the next seconds, because nothing about it is saved.
+- **If a system ever needs asynchronous day work,** `OnNewDayFinished` stops being enough. Replace it with an explicit barrier first: each system reports pending work to the day cycle, and the day cycle signals that the day has finished only when every report is done. Save tests check the snapshot against whichever contract is in force.
 
 At play start, `UFarmSaveSubsystem` waits one tick so the grid has spawned its tiles, then binds to the day cycle and loads the save if there is one.
 
@@ -300,12 +353,18 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | One canonical content ID: a typed-in `ContentId` (`<Namespace>.<Name>`) on each content data asset, used for the `FPrimaryAssetId` and in saves; IDs never change after shipping (redirects if they must), duplicates are startup errors, base content wins | An ID derived from an asset's name or path changes when the asset is renamed or moved, which would break saves and mods. Settled before the first crop asset exists |
+| 2026-10-28 | A save that can't be loaded is never overwritten without the player starting a new game; a failed write keeps the last good save; quitting mid-day loses that day's progress | Treating an unreadable or newer save as a clean start would turn a fixable problem into lost progress. Saving only at day start keeps saves consistent, and the loss window is an accepted trade-off for now |
+| 2026-10-28 | Save subsystem scope is one world and one slot; slot and profile choice move to a game-instance subsystem before save slots, menus or map travel arrive | A world subsystem is recreated with every new world, so anything that must survive a map change can't live there |
+| 2026-10-28 | `OnNewDay` listeners finish changes to saved state synchronously; an explicit completion barrier replaces `OnNewDayFinished` if that ever changes | `OnNewDayFinished` only follows synchronous work. Without the contract a save could capture a half-advanced day |
+| 2026-10-28 | Find-or-spawn (`Get`) only spawns in a running game world, is the only creator, and warns when it spawns or finds duplicates; subsystems are used instead for services | The fallback should keep a level running without hiding a broken level setup or spawning into editor or dying worlds |
+| 2026-10-28 | Mod support described as a design goal with a readiness checklist, not as a supported feature | Data-driven rules alone don't make plugin content loadable in a packaged build; contributors shouldn't build against a mod API that doesn't exist |
 | 2026-10-26 | Removed the template's unused code and content: the Combat, Platforming and SideScrolling variants, `LevelPrototyping`, `Lvl_ThirdPerson` and mannequin assets nothing references. Kept only what `L_Farm` and the third person Blueprints use | Keeps the public repository small and clear, and limits how much Epic template material we redistribute. Drops the AI and StateTree dependencies |
 | 2026-10-26 | Code under GPL-3.0-or-later with an Unreal Engine linking permission; assets under CC BY-NC-SA 4.0; contributors grant the maintainer commercial use (see `LICENSING.md`) | Open for contributors and modders, no closed-source forks, and only the maintainer sells complete builds. The linking permission is needed because the engine isn't free software |
 | 2026-10-26 | Design for content and Blueprint mods; don't build mod loading yet | David wants the game to be easy to mod later. Following the rules in [section 12](#12-designing-for-mods) costs little now; retrofitting them later would mean rewriting content and saves |
 | 2026-10-26 | Architecture documented here; code style in `CodingGuidelines.md` | Keep "how it fits together" apart from "how code looks" |
-| 2026-10-25 | Tests use CQTest | Epic's newest C++ test framework; simpler than Automation Spec |
-| 2026-10-25 | Save in a `UWorldSubsystem`, written when a new day starts | Saving is a level-wide service with no transform. A new world means a fresh subsystem, so a new game is "delete save, reload level". Saving at day start keeps saves consistent |
+| 2026-10-25 | Adopt CQTest for game-rule tests; setup is pending (see the Tests checklist in [Roadmap.md](Roadmap.md)) | Epic's newest C++ test framework; simpler than Automation Spec |
+| 2026-10-25 | Save in a `UWorldSubsystem`, written when a new day starts | Saving is a world-wide service with no transform. A new world means a fresh subsystem, so a new game is "delete save, reopen the map". Saving at day start keeps saves consistent |
 | 2026-10-25 | HUD is an `AHUD` hosting a C++ Slate widget | No widget assets to maintain for a tiny HUD. Revisit with UMG when menus arrive |
 | 2026-10-25 | Clock, lighting and night exposure moved from `AFarmGrid` to a new `AFarmDayCycle` | The grid's job is tiles. Time has its own owner, which the grid listens to |
 | 2026-10-25 | `AFarmDayCycle` is found or spawned on demand | The game works even in a level where nobody placed one |
@@ -324,6 +383,8 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 - **No extension points.** Nothing is exposed to Blueprints yet, and the C++ delegates can't be bound from Blueprints.
 - **Tiles are saved by grid position.** If the grid size changes, saved tiles land in the wrong place. Save each tile's grid coordinates (or an ID) with its data.
 - **No save version number** in `UFarmSaveGame`.
+- **An unreadable save gets overwritten.** When loading fails, `UFarmSaveSubsystem` shows a message but still saves on the next new day, replacing the file it couldn't read. Turn saving off for the session instead ([section 6](#6-saving)). A failed write may also leave no good save, since `SaveGameToSlot` writes over the old file.
+- **`AFarmDayCycle::Get` doesn't follow the find-or-spawn rules yet** ([section 2](#2-unreals-gameplay-framework-where-things-go)). It spawns in any world without checking the world type or teardown, and logs nothing when it spawns or when the level has more than one.
 - **Load waits a tick** for the grid to spawn tiles ([section 3](#3-lifetimes-and-initialization-order)). Better: the grid broadcasts when its tiles are ready, or registers with the save subsystem.
 - **The grid is found with `TActorIterator` in several places.** Add `AFarmGrid::Find(const UWorld*)` like `AFarmDayCycle::Find`.
 - **Tile rules and visuals live in the same class.** Fine for now. Separate them (a plain tile-state struct the actor owns) before writing tile tests or growing the field a lot.
@@ -333,7 +394,8 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 Likely next steps as the game grows, with the design we intend. These aren't commitments; record the real decision in the log when we get there.
 
 - **Inventory and money** move off the pawn into an inventory component on the player state, because they must outlive the body ([section 2](#2-unreals-gameplay-framework-where-things-go)).
-- **Crops, tools and items** become data assets (`UFarmCropData`, `UFarmToolData`, `UFarmItemData`) found through the Asset Manager. Tiles, the farming component and saves refer to them by namespaced ID. `EFarmTool` goes away.
+- **Crops, tools and items** become data assets (`UFarmCropData`, `UFarmToolData`, `UFarmItemData`) found through the Asset Manager. Tiles, the farming component and saves refer to them by their `ContentId` ([section 5](#5-data-and-content)). `EFarmTool` goes away.
+- **Save slots, a main menu or map travel** split the save subsystem: the active slot moves to a `UGameInstanceSubsystem`, and the world subsystem keeps collecting and applying the world's snapshot ([section 6](#6-saving)).
 - **Interaction** (doors, chests, NPCs, shipping bin) goes through an `IFarmInteractable` interface, so the farmer's interact key doesn't need to know every type.
 - **Seasons and weather** belong to the game state, or to the day cycle if they stay small. They broadcast changes like `OnNewDay`.
 - **Menus and inventory UI** move to UMG Widget Blueprints with C++ base classes.

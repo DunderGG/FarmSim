@@ -28,6 +28,8 @@ Scores use a 1–10 scale: 1 means misleading or absent; 5 means usable but has 
 
 **Severity: High**
 
+**Status: Resolved (2026-10-28).** Sections 2 and 3 now use world lifetimes throughout, explain the difference between streaming a sublevel, opening a map and seamless travel, describe the game mode as authoritative and server-only in multiplayer, and state the current assumption: one map, no streaming, `OpenLevel` only for a new game.
+
 Sections 2 and 3 repeatedly describe framework objects and `UWorldSubsystem` as lasting “one level,” then say level loads destroy the world. Unreal's lifecycle boundary is generally the `UWorld`, not an individual streamed level. Streaming a level does not, by itself, imply that the world and its subsystems are recreated; map travel and seamless travel have different lifecycle behavior. `AGameModeBase` is also authoritative game-mode state, not a client-visible world service.
 
 **Why it matters:** A reader could attach state to the wrong lifetime, incorrectly assume a subsystem will be recreated, or lose state during travel. This becomes especially risky once the game uses streamed levels, transitions, or separate menus.
@@ -37,6 +39,8 @@ Sections 2 and 3 repeatedly describe framework objects and `UWorldSubsystem` as 
 ### A-02 — World-scoped save coordination has no stated travel boundary
 
 **Severity: Medium**
+
+**Status: Resolved (2026-10-28).** Section 6 and the ownership table state the current scope (one world, one save slot, a new game deletes the slot and reopens the map) and the split to make before save slots, menus or travel: slot choice in a game-instance subsystem, the world snapshot in the world subsystem. Logged as a decision and an expected change.
 
 **Section 13** assigns saving and loading to `UFarmSaveSubsystem`, a `UWorldSubsystem`. Section 16 explicitly includes deleting the save as part of “delete save, reload level”; the concern is not that the document claims reloading alone deletes persistent data. Rather, the document does not say whether this world-scoped service is only responsible for the current world's snapshot or also owns active-slot/profile selection, nor what happens if a save/load is in progress during world travel.
 
@@ -48,6 +52,8 @@ Sections 2 and 3 repeatedly describe framework objects and `UWorldSubsystem` as 
 
 **Severity: High**
 
+**Status: Resolved (2026-10-28).** Section 6 defines the outcome for an empty slot, a current, migratable, corrupt or newer save, and unknown content; an unreadable save is never overwritten without the player starting a new game; a failed write keeps the last good save; the mid-day loss window and synchronous saving are stated as accepted. Save tests are listed. The current code's overwrite of an unreadable save is recorded as a known gap and a roadmap item.
+
 Section 6 says an old save should migrate “or fall back to a clean start with a message.” It does not distinguish a missing save, a corrupt save, an unsupported newer save, or a failed migration. It also does not say whether a fallback may later overwrite the original file. “Save at clear points” describes when the game saves, not what happens when the write fails or the game exits before the next day boundary.
 
 **Why it matters:** Treating an unreadable or newer save as a clean start can turn a recoverable compatibility problem into permanent data loss. Saving only at day boundaries also means all progress since the previous boundary can be lost; that may be an intentional prototype trade-off, but it should be explicit.
@@ -57,6 +63,8 @@ Section 6 says an old save should migrate “or fall back to a clean start with 
 ### A-04 — “Stable ID” has no rename or collision policy
 
 **Severity: Medium**
+
+**Status: Resolved (2026-10-28).** Sections 5 and 12 define one canonical persisted ID (a typed-in `ContentId`, `<Namespace>.<Name>`, that also builds the `FPrimaryAssetId`), its format and validation, a no-rename rule with redirects, duplicate and unknown ID handling, and the tests needed. Logged as a decision.
 
 Sections 5 and 12 call `FPrimaryAssetId`, `FName` and gameplay tags stable identifiers and prescribe namespaced content IDs. These types are useful identifiers, but the document does not define which representation is canonical or how IDs survive asset renames, package changes, duplicate mod IDs, removed mods or conflicting content. An asset-derived ID is not automatically an immutable save identifier.
 
@@ -68,6 +76,8 @@ Sections 5 and 12 call `FPrimaryAssetId`, `FName` and gameplay tags stable ident
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-28).** Section 12 now states "mod-oriented design, not mod support", explains that Unreal doesn't load plugins into packaged games on its own and that Game Features need deliberate activation, and adds a readiness checklist (discovery, scanning, activation, load order and ID conflicts, versions, saves without the mod, trust and consent, a documented API).
+
 Section 12 calls content and Blueprint mods what the project supports, while also deferring loading mod plugins from a packaged build, load order, conflict handling and a mod kit. Asset Manager discovery and primary asset types are useful building blocks, but do not on their own make third-party plugin content discoverable, cooked, loadable or safe to activate. Game Feature plugins also require deliberate runtime activation and lifecycle design; they are not a general-purpose mod loader that works automatically.
 
 **Why it matters:** Contributors may build against an implied mod API or promise compatibility before packaging, discovery, activation, dependency and save-compatibility behavior exists. Blueprint mods also execute trusted game logic, as the document correctly notes, so extension surfaces need an explicit trust boundary.
@@ -77,6 +87,8 @@ Section 12 calls content and Blueprint mods what the project supports, while als
 ### A-06 — The day-finished event is not a general completion barrier
 
 **Severity: Medium**
+
+**Status: Resolved (2026-10-28).** Section 15 states the synchronous-completion contract for `OnNewDay` listeners and the explicit completion barrier that replaces `OnNewDayFinished` if asynchronous day work is ever needed. Logged as a decision.
 
 Section 15 says `OnNewDayFinished` ensures saving runs after every system has reacted, regardless of subscription order. That is true only for work completed synchronously by listeners during the preceding `OnNewDay` broadcast. A listener that starts a timer, latent action, async task or deferred spawn has not necessarily finished when that broadcast returns. The document does not define whether day listeners are required to complete synchronously.
 
@@ -88,6 +100,8 @@ Section 15 says `OnNewDayFinished` ensures saving runs after every system has re
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-28).** Section 2 limits find-or-spawn to required placed actors and sets rules: world-scoped and game-thread only, spawning only in running game worlds, `Get` as the only creator, warnings when it spawns or finds duplicates, and subsystems for services. The current `AFarmDayCycle::Get` is recorded as a known gap and a roadmap item.
+
 Sections 2 and 3 recommend that a required placed actor find-or-spawn itself through a static `Get(World)` call. This can be a practical choice for `AFarmDayCycle`, which controls world actors and lighting, but the guidance does not specify when spawning is allowed, how duplicate instances are prevented, or how editor/preview worlds and teardown are handled.
 
 **Why it matters:** A convenience lookup can silently turn a missing level dependency into an implicit runtime side effect. With streaming, editor previews or future multiple-world contexts, “find-or-spawn” can produce surprising ownership or duplicate actors if its world scope is not explicit.
@@ -98,6 +112,8 @@ Sections 2 and 3 recommend that a required placed actor find-or-spawn itself thr
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-28).** The decision log entry now reads "Adopt CQTest for game-rule tests; setup is pending" and points to the roadmap. The roadmap's save tests now include the tile save and restore ownership boundary.
+
 Section 16 says “Tests use CQTest,” but the [Roadmap.md](Roadmap.md) Tests checklist still has “Set up CQTest in the project” unchecked. The [CodingGuidelines.md](CodingGuidelines.md) describes setup as work to do with the first test. This is a documentation-state mismatch, not a criticism of choosing CQTest.
 
 **Why it matters:** The architecture decision log reads like a current implementation fact, while the roadmap says the framework is not yet installed/configured. Contributors may assume tests can be added and run now.
@@ -107,6 +123,8 @@ Section 16 says “Tests use CQTest,” but the [Roadmap.md](Roadmap.md) Tests c
 ### A-09 — The scale example prescribes a structural rewrite by actor count
 
 **Severity: Low**
+
+**Status: Resolved (2026-10-28).** Section 10 now keeps one actor per tile until profiling shows a cost, and presents grid-owned state arrays, instanced meshes and merged collision as options to weigh against the measured bottleneck, not a step triggered by tile count.
 
 Section 10 contrasts an 8×8 field of tile actors with “fields of thousands” represented by an array of structs and instanced static meshes. The section also correctly says to measure before optimizing, but the specific threshold suggests actor count alone decides when to switch. Rendering, collision, ticking, component count, interaction frequency and target hardware all affect the trade-off; instanced meshes replace rendering representation, not automatically tile behavior or collision.
 
@@ -124,12 +142,12 @@ Section 10 contrasts an 8×8 field of tile actors with “fields of thousands”
 
 ## Recommended correction order
 
-1. Correct world-versus-level lifetime wording and the save subsystem/new-game description (A-01, A-02).
-2. Define save load/write failure behavior and the accepted save-loss window (A-03).
-3. Choose a canonical persisted content ID and rename/collision policy before adding more content or mods (A-04).
-4. Recast mod support as a future capability with explicit readiness requirements (A-05).
-5. Specify the synchronous day-event contract and constrain find-or-spawn behavior (A-06, A-07).
-6. Align the CQTest decision log with the roadmap, then revisit the actor-scale example (A-08, A-09).
+1. [x] Correct world-versus-level lifetime wording and the save subsystem/new-game description (A-01, A-02).
+2. [x] Define save load/write failure behavior and the accepted save-loss window (A-03).
+3. [x] Choose a canonical persisted content ID and rename/collision policy before adding more content or mods (A-04).
+4. [x] Recast mod support as a future capability with explicit readiness requirements (A-05).
+5. [x] Specify the synchronous day-event contract and constrain find-or-spawn behavior (A-06, A-07).
+6. [x] Align the CQTest decision log with the roadmap, then revisit the actor-scale example (A-08, A-09).
 
 ## Review limits
 
