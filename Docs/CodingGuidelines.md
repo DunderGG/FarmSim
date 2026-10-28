@@ -328,7 +328,14 @@ UE_LOG(LogFarmSim, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 - Write comments as full sentences in plain English.
 - Don't leave commented-out code. Git remembers it.
 - `TODO:` comments are allowed for known follow-ups but must say what is missing: `// TODO: Move tool meshes into UFarmToolData once there are more tools.`
-- New files don't carry the Epic copyright line; the template's files keep theirs.
+- New source files start with our copyright and license header (see [LICENSING.md](../LICENSING.md#license-notices-in-files)), then a blank line:
+
+  ```cpp
+  // Copyright (C) 2026 David Bennehag and the FarmSim contributors.
+  // SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-FarmSim-Unreal-Exception
+  ```
+
+  They don't carry the Epic copyright line; the template's files keep theirs.
 
 ## 12. Performance and ticking
 
@@ -428,6 +435,7 @@ Before committing, check:
 - [ ] Design changes are reflected in [Architecture.md](Architecture.md) (ownership table, decision log).
 - [ ] Names follow the prefixes, the `Farm` prefix and PascalCase, and nothing shadows a base class member.
 - [ ] Changed files are formatted with clang-format.
+- [ ] New source files start with the copyright and SPDX license header.
 - [ ] Headers forward declare; `.cpp` files include what they use, own header first.
 - [ ] Strong `UObject` references are `UPROPERTY() TObjectPtr<>`; non-owning ones are weak, deferred assets are soft. Pointers that can be null are checked.
 - [ ] Runtime state is private. Nothing new is exposed to Blueprints without a reason.

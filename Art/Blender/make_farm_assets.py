@@ -1,3 +1,6 @@
+# Copyright (C) 2026 David Bennehag and the FarmSim contributors.
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 """
 Builds the step 3 farm assets procedurally and exports them for Unreal.
 
