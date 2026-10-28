@@ -83,7 +83,7 @@ The day should always offer more to do than there's time for, so choosing is the
 ### Seasonal loop (28 days)
 
 - Each season has its own crops, weather and town events.
-- Crops that don't fit the new season die when it changes, so planning matters.
+- Crops that don't fit the new season wither at 06:00 on its first day, so planning matters. The deadline is always visible: seeds show their days to harvest, the HUD shows the days left in the season, planting a crop that can't ripen in time gives a warning, and the caretaker robot mentions crops at risk a few days before the change.
 - A season ends with a festival or event in town (**Lore hook:** pre-war holidays the robots still celebrate, without remembering why).
 
 ### Long loop (years)
@@ -305,6 +305,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | Out-of-season crops wither at 06:00 on the new season's first day, with days to harvest on seeds, days left on the HUD, a warning when planting too late, and a reminder from the caretaker robot ([section 4](#seasonal-loop-28-days)) | Keeps seasonal planning meaningful without an opaque crop wipe (audit G-12) |
 | 2026-10-28 | Switching survival needs off removes only the player's own meters, their HUD and penalties; farming systems are the same in both modes, and the setting can change at any time ([section 7](#7-survival-needs)) | Gives the option an exact contract that is easy to balance and safe for saves (audit G-05) |
 | 2026-10-28 | At zero stamina every action still works at half speed, stamina never goes below zero, and sleep refills it (to 75% when exhausted) ([section 5](#5-time-days-and-seasons)) | Stamina stays a real resource without ever trapping the player (audit G-04) |
 | 2026-10-28 | Late nights are gently pressured: HUD warnings at 22:00 and 00:00, one level of exhaustion that never stacks, and no item or currency loss from night knock-outs for now ([section 5](#5-time-days-and-seasons)) | Keeps the *Your pace* pillar honest: staying up costs the next morning, not progress (audit G-03) |

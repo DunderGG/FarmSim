@@ -152,7 +152,9 @@ Section 8 proposes low or negative robot attitudes toward the player, gifts, req
 
 **Severity: Medium**
 
-The document says crops unsuited to a new season die, while multi-season and regrowing crops are deferred. It does not specify whether planted crops die at the exact transition, whether harvested crops remain available, how the player is warned, or whether each season belongs to a continuous calendar year.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 4 now sets the timing (06:00 on the new season's first day) and makes the deadline visible: days to harvest on seeds, days left on the HUD, a warning when planting a crop that can't ripen in time, and a reminder from the caretaker robot. [Roadmap.md](Roadmap.md) section 4.2 lists these for the vertical slice.
+
+At the time of the original review, the document said crops unsuited to a new season die, while multi-season and regrowing crops are deferred. It does not specify whether planted crops die at the exact transition, whether harvested crops remain available, how the player is warned, or whether each season belongs to a continuous calendar year.
 
 **Why it matters:** The rule can turn a calendar transition into an opaque crop wipe, particularly when a crop's growth time is longer than the remaining season. This compounds the “your pace” issue and makes crop planning difficult without complete crop data.
 
@@ -183,7 +185,7 @@ At the time of the original review, the document used “radiation,” “radiat
 
 1. [x] Narrow and define the vertical-slice promise (G-01; resolved 2026-10-28).
 2. [x] Bound the land-health, radiation, storm and energy feedbacks before implementing them (G-02; resolved 2026-10-28).
-3. Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12).
+3. [x] Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12; resolved 2026-10-28).
 4. Define the first-season progression and economy with a simple playable budget (G-06, G-07).
 5. Establish a minimum complete game and defer unbounded scope (G-08). [x] Bound the modding and multiplayer commitments (G-09, G-10; resolved 2026-10-28).
 6. Prototype one character arc (G-11). [x] Clarify the core mechanic vocabulary (G-13; resolved 2026-10-28).

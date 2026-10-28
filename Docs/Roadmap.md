@@ -166,7 +166,9 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] Water level on each tile, so watering is a state the tile tracks
 - [ ] Clean water as a resource: a water source on the farm that the watering can fills from
 - [ ] Dirty water: easy to get, but raises tile radiation
-- [ ] A 28-day season with the date shown on the HUD
+- [ ] A 28-day season with the date and the days left shown on the HUD
+- [ ] Seeds show their days to harvest, and planting a crop that can't ripen before the season ends gives a warning
+- [ ] Out-of-season crops wither at 06:00 on the first day of the next season
 
 ### 4.3 Stamina and late nights
 
