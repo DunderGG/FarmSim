@@ -4,6 +4,8 @@
 
 The Index is a voluntary ideological network that ranks the mind first. Its members prize memory, calculation, logic and careful research. Their central disagreement is where the pursuit of knowledge must yield to the rights and consent of the beings they study.
 
+<p align="center"><img src="../../../Images/ConceptArt/Index-CGPT.png" alt="The Index, a voluntary ideological network that ranks the mind first" width="50%"></p>
+
 ## Identity
 
 - **Core belief:** Reliable knowledge lets society understand and solve problems that strength or habit alone cannot.

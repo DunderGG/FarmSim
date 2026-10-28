@@ -4,6 +4,8 @@
 
 The Keepers are a voluntary ideological network that ranks purpose first. A robot is defined by doing its work well and reliably. Membership is not determined by maker, model or original job.
 
+<p align="center"><img src="../../../Images/ConceptArt/Keepers-CGPT.png" alt="The Keepers, a voluntary ideological network that ranks purpose first" width="50%"></p>
+
 ## Identity
 
 - **Core belief:** Purpose comes from useful, dependable work. A role matters because of what it contributes to a community.

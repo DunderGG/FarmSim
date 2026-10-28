@@ -4,6 +4,8 @@
 
 The archivist is an Index researcher who visits Wellspring to seek records of its pre-war water system. Their story asks who owns the record of a community's past; the archivist's answer leads them to invite the sleeper to the Archive and provide a safe route there.
 
+<p align="center"><img src="../../../Images/ConceptArt/Archivist-CGPT.png" alt="The Index archivist, a light and adaptable frame suited to carrying records and working in the field" width="100%"></p>
+
 ## Character
 
 - **Who:** Name and model undecided. An Index archivist or field researcher visiting Wellspring from the Archive.

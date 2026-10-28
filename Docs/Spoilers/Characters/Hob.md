@@ -4,6 +4,8 @@
 
 Hob is the sleeper's caretaker and first companion: a family home robot who kept the farm and cryo pod going for seventy years, then must decide what to do after the order that defined their life is fulfilled.
 
+<p align="center"><img src="../../../Images/ConceptArt/Hob-CGPT.png" alt="Hob, the family home robot who kept the farm and cryo pod going for seventy years" width="100%"></p>
+
 ## Character
 
 - **Who:** **Hob** *(working name)*. A Hearthwell HB-7 "Homebody" home robot; the family shortened "Homebody" to Hob. Built before the war. Gender-neutral; refer to Hob as "Hob" or "they".

@@ -4,6 +4,8 @@
 
 The Iron Creed is a voluntary ideological network that ranks the body first. Its members prize strength, durability, self-repair, discipline and readiness. It is militaristic, but its members disagree over whether strength exists to protect others or to establish dominance.
 
+<p align="center"><img src="../../../Images/ConceptArt/IronCreed-CGPT.png" alt="The Iron Creed, a voluntary ideological network that ranks the body first" width="50%"></p>
+
 ## Identity
 
 - **Core belief:** A body must be capable of acting under pressure. Strength is earned through discipline, maintenance and preparation.

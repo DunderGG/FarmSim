@@ -4,6 +4,8 @@
 
 The engineer is an Iron Creed member visiting Wellspring through a parts-and-expertise exchange with the Bastion. Their work on the failing aquifer pump brings them, the Keeper operators and the sleeper into a practical collaboration; engineering is their broader skill, not just their assignment here.
 
+<p align="center"><img src="../../../Images/ConceptArt/Engineer-CGPT.png" alt="The engineer, a compact and heavy-duty frame built for practical work" width="100%"></p>
+
 ## Character
 
 - **Who:** Name and model undecided. An engineer and voluntary Iron Creed member who came to Wellspring through a parts-and-expertise exchange with the Bastion.

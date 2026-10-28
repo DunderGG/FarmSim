@@ -4,6 +4,8 @@
 
 The nomad is a rare, recurring human visitor who trades unusual wasteland salvage and news. They know the routes between scattered settlements better than most robots, but want to keep their independence and freedom to travel.
 
+<p align="center"><img src="../../../Images/ConceptArt/NomadF-CGPT.png" alt="The nomad, a rare human visitor who trades unusual wasteland salvage and news" width="100%"></p>
+
 ## Character
 
 - **Who:** Name undecided. A human born after the war who has never known the pre-war world. They travel between scattered settlements and know the wasteland's routes better than most robots.

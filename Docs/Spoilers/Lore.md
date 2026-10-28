@@ -73,7 +73,9 @@ The machines didn't just do the physical work. By the last pre-war decades they 
 
 ### Cinderium
 
-- **Cinderium**: a fictional radioactive mineral material, not an element. Before the war, it was a dense, glowing ore that gave cheap, compact energy. A fist-sized piece could power a house for years.
+<p align="center"><img src="../../Images/ConceptArt/Cinderium-CGPT.png" alt="Cinderium dust and its impact on the environment" width="100%"></p>
+
+- A fictional radioactive mineral material, not an element. Before the war, it was a dense, glowing ore that gave cheap, compact energy. A fist-sized piece could power a house for years.
 - It was found in only a few places, and both power blocs wanted all of it.
 
 ### The two blocs
@@ -114,6 +116,8 @@ These rules are inspired by real aerosol transport and fallout behavior, but Cin
 - Robots noticed long ago that the haze is thinner over green land, but few robots farm, and most don't think it's their function. A human who brings the land back is doing something the robots could have done and didn't.
 
 ## 5. How robots came to run society
+
+<p align="center"><img src="../../Images/ConceptArt/SocietyOfRobots-CGPT.png" alt="Robot society after the war, with robots running most aspects of civilization" width="100%"></p>
 
 - When the bombs stopped, robots did what they always did: their jobs. Water robots kept the pumps running, mail robots kept delivering, clinic robots kept treating patients.
 - The humans kept dying. Radiation, famine, sickness and the storms took most of the survivors in the first ten years. Many robots watched it happen while following orders, unable to help. That memory still shapes how robots think about humans.
@@ -181,13 +185,19 @@ The factions are networks, not states: a hub is a place where members gather and
 
 #### **The Bastion — Iron Creed hub:**
 
+<p align="center"><img src="../../Images/ConceptArt/Bastion-CGPT.png" alt="The Bastion, the Iron Creed hub and a fortified settlement organized around readiness and defense" width="100%"></p>
+
 A fortified settlement organized around readiness and defense. Members train, maintain frames and equipment, and coordinate the hub's security. Its command structure directs Bastion operations, not Iron Creed members everywhere.
 
 #### **The Archive — Index hub:**
 
+<p align="center"><img src="../../Images/ConceptArt/Archive-CGPT.png" alt="The Archive, the Index hub and a research-and-archive settlement" width="100%"></p>
+
 A research-and-archive settlement where members preserve records, conduct peer review and develop specialized computational systems. Its institutes make the Index's knowledge practices visible, while debates over research ethics remain active.
 
 #### **Wellspring — Keeper hub and the town beside the farm** *(working name)*:
+
+<p align="center"><img src="../../Images/ConceptArt/Wellspring-CGPT.png" alt="Wellspring, the town beside the farm and the Keeper hub" width="100%"></p>
 
 The town grew around a pre-war pumping and water-treatment station that drew from a local aquifer and supplied nearby farms and settlements. Keeping water moving became its shared civic purpose, and the town's service commons became a natural gathering place for Keepers. The town is independently governed; many residents are Keeper-minded, but not every resident belongs to the network. Its aging pump now fails intermittently. Repair requires Keeper operators to coordinate across roles and find scarce components compatible with the legacy system; the advanced systems maintained by the Bastion and the Archive are not direct replacements. The town remains a community with its own residents and assembly, not merely a faction outpost.
 
@@ -235,6 +245,8 @@ Three pre-war companies made most of the robots still running. Each has its own 
 ## 9. The sleeper and the family
 
 ### The sleeper
+
+<p align="center"><img src="../../Images/ConceptArt/Cryo-CGPT.png" alt="The sleeper, the player character who wakes from a seventy-year cryo sleep" width="100%"></p>
 
 - The player character is **the sleeper**: a young adult when they went into the pod. The player chooses their name and look, and the lore never fixes a gender. Write "the sleeper" or "they".
 - The sleeper doesn't know how long they've been asleep, and learns the year (71) early from the caretaker.
