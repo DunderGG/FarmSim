@@ -112,7 +112,9 @@ At the time of the original review, the economy was described as “supporting,�
 
 **Severity: High**
 
-The long-term vision includes farming simulation, four seasons, multiple resource networks, land health, building placement, automation, a town, schedules, dialogue, relationships, romance, companions, hostile AI, combat, survival needs, separate exploration maps, rare human characters, mod loading and multiplayer. The scope section defers many systems, but does not define a total target, a cut line, or which features are essential to a releasable game.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 13 now defines a first release with explicit limits (maps, seasons, crops, characters, romance and systems), to revisit after the vertical slice, and names cut candidates kept out of the critical path: multiplayer, mod loading and a mod kit, animals, other camera angles, extra faction hubs and extra scavenging.
+
+At the time of the original review, the long-term vision included farming simulation, four seasons, multiple resource networks, land health, building placement, automation, a town, schedules, dialogue, relationships, romance, companions, hostile AI, combat, survival needs, separate exploration maps, rare human characters, mod loading and multiplayer. The scope section defers many systems, but does not define a total target, a cut line, or which features are essential to a releasable game.
 
 **Why it matters:** For a solo developer, this is enough breadth to risk years of partial systems and placeholder content. “Later” can read as a commitment even when the document says it is only a rough ordering. The realistic-art target and reliance on external assets add a separate content pipeline and integration risk.
 
@@ -191,7 +193,7 @@ At the time of the original review, the document used “radiation,” “radiat
 2. [x] Bound the land-health, radiation, storm and energy feedbacks before implementing them (G-02; resolved 2026-10-28).
 3. [x] Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12; resolved 2026-10-28).
 4. [x] Define the first-season progression and economy with a simple playable budget (G-06, G-07; resolved 2026-10-28).
-5. Establish a minimum complete game and defer unbounded scope (G-08). [x] Bound the modding and multiplayer commitments (G-09, G-10; resolved 2026-10-28).
+5. [x] Establish a minimum complete game and defer unbounded scope (G-08). Bound the modding and multiplayer commitments (G-09, G-10). All resolved 2026-10-28.
 6. Prototype one character arc (G-11). [x] Clarify the core mechanic vocabulary (G-13; resolved 2026-10-28).
 
 ## Review limits

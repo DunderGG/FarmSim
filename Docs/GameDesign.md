@@ -291,9 +291,24 @@ The slice is done when the content works and playtests show that a first-time pl
 - Stays up late at least once and understands what it cost them the next day.
 - Finishes the season wanting to start the next one.
 
+### First release
+
+The minimum complete game. Everything beyond these limits is a stretch goal. The numbers are starting limits, to revisit after the vertical slice.
+
+| Area | Limit |
+|---|---|
+| Maps | The farm, the robot town, 2 wasteland zones |
+| Seasons | 4 of 28 days |
+| Crops | About 16 (4 per season), 3 of them mutated |
+| Characters | About 10 robots and 2 rare humans |
+| Romance | 3 love interests with full arcs |
+| Systems | Farming, water, radiation, energy and land health, the tech tree, town restoration, simple combat, the survival needs setting |
+
+**Cut candidates**, kept out of the critical path until the core game is proven: multiplayer, mod loading and a mod kit, animals, other camera angles, faction hubs beyond one, and scavenging beyond the 2 zones.
+
 ### Later
 
-Roughly in order, to be planned when we get there:
+Roughly in order, to be planned when we get there. Cut candidates in this list are stretch goals beyond the first release:
 
 - Weather events, more crops and all four seasons.
 - Solar energy and power cells, then land health and the haze.
@@ -320,6 +335,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | Set a first-release target with limits on maps, seasons, crops, characters, romance and systems, and named cut candidates (multiplayer, mod loading, animals, other cameras, extra faction hubs, extra scavenging) ([section 13](#first-release)) | A solo project needs a cut line, or "later" reads as a commitment (audit G-08) |
 | 2026-10-28 | The first season guarantees a start: starting seeds and purse, a basic crop always for sale that sells for at least twice its seed price, and town donations of fixed items separate from selling ([section 9](#economy)) | A poor harvest must never block the systems needed for a better one (audit G-07) |
 | 2026-10-28 | Each progression track has one job: town restoration is the story, the tech tree owns machines and tool tiers, relationships unlock character content only, skills give small bonuses and never gate ([section 9](#9-progression)) | Stops tracks from gating the same rewards or forcing grind on an unintended track (audit G-06) |
 | 2026-10-28 | Out-of-season crops wither at 06:00 on the new season's first day, with days to harvest on seeds, days left on the HUD, a warning when planting too late, and a reminder from the caretaker robot ([section 4](#seasonal-loop-28-days)) | Keeps seasonal planning meaningful without an opaque crop wipe (audit G-12) |
