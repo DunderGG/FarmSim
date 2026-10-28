@@ -5,6 +5,7 @@
 
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
+#include "FarmCropData.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -78,13 +79,14 @@ bool AFarmTile::Till()
 	return true;
 }
 
-bool AFarmTile::Plant()
+bool AFarmTile::Plant(const UFarmCropData* InCrop)
 {
-	if (State != EFarmTileState::Tilled)
+	if (State != EFarmTileState::Tilled || !InCrop)
 	{
 		return false;
 	}
 	State = EFarmTileState::Planted;
+	Crop = InCrop;
 	GrowthDays = 0;
 	RefreshVisuals();
 	return true;
@@ -108,9 +110,15 @@ bool AFarmTile::Harvest()
 		return false;
 	}
 	State = EFarmTileState::Tilled;
+	Crop = nullptr;
 	GrowthDays = 0;
 	RefreshVisuals();
 	return true;
+}
+
+bool AFarmTile::IsRipe() const
+{
+	return State == EFarmTileState::Planted && Crop && GrowthDays >= Crop->GetDaysToMature();
 }
 
 void AFarmTile::AdvanceDay()
@@ -123,11 +131,14 @@ void AFarmTile::AdvanceDay()
 	RefreshVisuals();
 }
 
-void AFarmTile::RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays)
+void AFarmTile::RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays, const UFarmCropData* SavedCrop)
 {
-	State = SavedState;
+	// A planted tile can't exist without its crop, so a missing crop leaves empty tilled soil.
+	const bool bPlanted = SavedState == EFarmTileState::Planted && SavedCrop;
+	State = SavedState == EFarmTileState::Planted && !bPlanted ? EFarmTileState::Tilled : SavedState;
+	Crop = bPlanted ? SavedCrop : nullptr;
 	bWatered = bSavedWatered && State != EFarmTileState::Grass;
-	GrowthDays = State == EFarmTileState::Planted ? FMath::Clamp(SavedGrowthDays, 0, DaysToMature) : 0;
+	GrowthDays = Crop ? FMath::Clamp(SavedGrowthDays, 0, Crop->GetDaysToMature()) : 0;
 	RefreshVisuals();
 }
 
@@ -180,8 +191,7 @@ void AFarmTile::RefreshCrop()
 	}
 
 	const float SurfaceZ = TilledSoilMesh ? SoilSurfaceHeight : FarmTilePlaceholder::SoilTop;
-	UStaticMesh* StageMesh = CropStageMeshes.IsEmpty() ? nullptr
-		: CropStageMeshes[FMath::Min(GrowthDays, CropStageMeshes.Num() - 1)].Get();
+	UStaticMesh* StageMesh = Crop ? Crop->GetGrowthStageMesh(GrowthDays) : nullptr;
 	if (StageMesh)
 	{
 		CropMesh->SetStaticMesh(StageMesh);

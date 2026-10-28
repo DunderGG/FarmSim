@@ -105,6 +105,10 @@ void UFarmSaveSubsystem::LoadFarm()
 	Farming->HarvestedCrops = Save->HarvestedCrops;
 	Farming->SelectTool(Save->CurrentTool);
 
+	// Saves don't record which crop a tile grows yet. Every crop so far is the seed crop, so planted tiles get that.
+	// TODO: Save each planted tile's crop ContentId once saves store content IDs.
+	const UFarmCropData* SavedCrop = Farming->GetSeedCrop();
+
 	// If the grid's size changed since saving, tiles beyond the saved ones stay as grass.
 	const TArray<TObjectPtr<AFarmTile>>& Tiles = Grid->GetTiles();
 	for (int32 Index = 0; Index < FMath::Min(Tiles.Num(), Save->Tiles.Num()); ++Index)
@@ -112,7 +116,7 @@ void UFarmSaveSubsystem::LoadFarm()
 		if (AFarmTile* Tile = Tiles[Index])
 		{
 			const FFarmTileSaveData& TileData = Save->Tiles[Index];
-			Tile->RestoreState(TileData.State, TileData.bWatered, TileData.GrowthDays);
+			Tile->RestoreState(TileData.State, TileData.bWatered, TileData.GrowthDays, SavedCrop);
 		}
 	}
 

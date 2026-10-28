@@ -10,6 +10,7 @@
 class AFarmDayCycle;
 class AFarmGrid;
 class AFarmTile;
+class UFarmCropData;
 
 UENUM(BlueprintType)
 enum class EFarmTool : uint8
@@ -39,6 +40,9 @@ public:
 	void UseTool();
 	void Sleep();
 
+	/** The crop the Seeds tool plants, or nullptr if SeedCropId doesn't name a crop asset. Loaded at BeginPlay. */
+	const UFarmCropData* GetSeedCrop() const { return SeedCrop; }
+
 	/** Broadcast whenever the current tool changes, including when a save is loaded. */
 	FOnFarmToolChanged OnToolChanged;
 
@@ -58,6 +62,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	void LoadSeedCrop();
 	AFarmTile* GetTargetTile() const;
 	void StartNextDay(const TCHAR* Reason);
 	void ShowMessage(const FString& Message) const;
@@ -67,6 +72,13 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<AFarmDayCycle> DayCycle;
+
+	/** Crop asset the Seeds tool plants, picked by its ID (FarmCrop:Base.Turnip). */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", AllowedTypes = "FarmCrop"))
+	FPrimaryAssetId SeedCropId;
+
+	UPROPERTY()
+	TObjectPtr<const UFarmCropData> SeedCrop;
 
 	EFarmTool CurrentTool = EFarmTool::Hoe;
 };

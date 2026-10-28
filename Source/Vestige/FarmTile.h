@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "FarmTile.generated.h"
 
+class UFarmCropData;
 class UStaticMesh;
 class UStaticMeshComponent;
 class UMaterialInstanceDynamic;
@@ -31,7 +32,8 @@ public:
 
 	// Each action returns true if it changed the tile.
 	bool Till();
-	bool Plant();
+	/** Also returns false without a crop to plant. */
+	bool Plant(const UFarmCropData* InCrop);
 	bool Water();
 	bool Harvest();
 
@@ -40,15 +42,14 @@ public:
 
 	EFarmTileState GetState() const { return State; }
 	bool IsWatered() const { return bWatered; }
-	bool IsRipe() const { return State == EFarmTileState::Planted && GrowthDays >= DaysToMature; }
+	bool IsRipe() const;
 	int32 GetGrowthDays() const { return GrowthDays; }
 
-	/** Puts the tile straight into a saved state. */
-	void RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays);
+	/** The crop growing here, or nullptr if nothing is planted. */
+	const UFarmCropData* GetCrop() const { return Crop; }
 
-	/** Days of watering a crop needs before it can be harvested. */
-	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 1))
-	int32 DaysToMature = 3;
+	/** Puts the tile straight into a saved state. A planted state without a crop restores as empty tilled soil. */
+	void RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays, const UFarmCropData* SavedCrop);
 
 	// Optional art. Anything left empty falls back to the colored placeholder shapes.
 
@@ -59,10 +60,6 @@ public:
 	/** Material swapped onto TilledSoilMesh while the soil is watered. */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals")
 	TObjectPtr<UMaterialInterface> WateredSoilMaterial;
-
-	/** One mesh per growth stage, from the day planted to ripe (DaysToMature + 1 entries). Origin on the soil surface. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals")
-	TArray<TObjectPtr<UStaticMesh>> CropStageMeshes;
 
 	/** Height of the soil surface that custom crop meshes stand on, in cm. */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals")
@@ -102,4 +99,8 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
 	int32 GrowthDays = 0;
+
+	/** Set exactly while the tile is planted. Whoever loads the crop also loads its meshes. */
+	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
+	TObjectPtr<const UFarmCropData> Crop;
 };

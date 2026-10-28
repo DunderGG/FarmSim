@@ -4,14 +4,17 @@
 #include "FarmingComponent.h"
 
 #include "DrawDebugHelpers.h"
+#include "Engine/AssetManager.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "FarmCropData.h"
 #include "FarmDayCycle.h"
 #include "FarmGrid.h"
 #include "FarmHUD.h"
 #include "FarmTile.h"
 #include "GameFramework/Pawn.h"
 #include "TimerManager.h"
+#include "Vestige.h"
 
 UFarmingComponent::UFarmingComponent()
 {
@@ -22,6 +25,7 @@ void UFarmingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	LoadSeedCrop();
 	DayCycle = AFarmDayCycle::Get(GetWorld());
 
 	// The prototype has a single field, so just use the first grid in the level.
@@ -37,6 +41,28 @@ void UFarmingComponent::BeginPlay()
 				Farming->ShowMessage(TEXT("No FarmGrid in the level. Drag one in from the Place Actors panel."));
 			}
 		});
+	}
+}
+
+void UFarmingComponent::LoadSeedCrop()
+{
+	UAssetManager* AssetManager = UAssetManager::GetIfInitialized();
+	if (!AssetManager || !SeedCropId.IsValid())
+	{
+		UE_LOG(LogVestige, Warning, TEXT("%s has no Seed Crop Id set, so nothing can be planted."), *GetPathName());
+		return;
+	}
+
+	// Waiting is fine at play start, and with the meshes loaded now, planting never stalls on a load.
+	if (const TSharedPtr<FStreamableHandle> Handle = AssetManager->LoadPrimaryAsset(SeedCropId, {UFarmCropData::VisualsBundle}))
+	{
+		Handle->WaitUntilComplete();
+	}
+	SeedCrop = AssetManager->GetPrimaryAssetObject<UFarmCropData>(SeedCropId);
+	if (!SeedCrop)
+	{
+		UE_LOG(LogVestige, Warning, TEXT("Seed crop %s wasn't found, so nothing can be planted. Check the crop asset's Content Id."),
+			*SeedCropId.ToString());
 	}
 }
 
@@ -62,11 +88,11 @@ void UFarmingComponent::UseTool()
 		break;
 
 	case EFarmTool::Seeds:
-		if (Seeds <= 0)
+		if (Seeds <= 0 || !SeedCrop)
 		{
 			ShowMessage(TEXT("Out of seeds."));
 		}
-		else if (Tile->Plant())
+		else if (Tile->Plant(SeedCrop))
 		{
 			--Seeds;
 			ShowMessage(TEXT("Planted a seed."));
@@ -82,9 +108,9 @@ void UFarmingComponent::UseTool()
 		break;
 
 	case EFarmTool::Hand:
-		if (Tile->Harvest())
+		if (const UFarmCropData* RipeCrop = Tile->GetCrop(); RipeCrop && Tile->Harvest())
 		{
-			++HarvestedCrops;
+			HarvestedCrops += RipeCrop->GetYield();
 			ShowMessage(TEXT("Harvested a crop!"));
 		}
 		else
