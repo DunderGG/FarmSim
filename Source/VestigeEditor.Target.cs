@@ -3,13 +3,13 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class FarmSimEditorTarget : TargetRules
+public class VestigeEditorTarget : TargetRules
 {
-	public FarmSimEditorTarget(TargetInfo Target) : base(Target)
+	public VestigeEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V6;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;
-		ExtraModuleNames.Add("FarmSim");
+		ExtraModuleNames.Add("Vestige");
 	}
 }

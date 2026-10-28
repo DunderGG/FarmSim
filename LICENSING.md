@@ -1,10 +1,10 @@
 # Licensing
 
-FarmSim's code and its assets are under different licenses, and they allow different things:
+Project Vestige's code and its assets are under different licenses, and they allow different things:
 
 - **The code is free software** under the GNU GPL, version 3 or later, with an extra permission for linking with Unreal Engine. Anyone can use, change, share and even sell it, as long as they pass on the same GPL rights and the source code.
 - **The assets are public but not free for commercial use.** Art, audio, levels, Blueprints, game data and documentation are under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0). Anyone can use and change them for non-commercial purposes. Commercial use of the assets is reserved to the maintainer, David Bennehag, on purpose.
-- **The maintainer sells official builds** of the game on online stores, for players who don't want to build it themselves. Their FarmSim code stays under the GPL, and its source is published for every build.
+- **The maintainer sells official builds** of the game on online stores, for players who don't want to build it themselves. Their Project Vestige code stays under the GPL, and its source is published for every build.
 
 So the repository as a whole is not "open source" in the strict sense: the code is, the assets are open for non-commercial use only.
 
@@ -19,19 +19,19 @@ So the repository as a whole is not "open source" in the strict sense: the code 
 **The code**
 
 - You can read, change, share and build it, for any purpose.
-- If you distribute a program built from it, including a paid one, you must give its users the same GPL rights and the source code of your version. Nobody can ship a closed-source game made from FarmSim's code.
+- If you distribute a program built from it, including a paid one, you must give its users the same GPL rights and the source code of your version. Nobody can ship a closed-source game made from Project Vestige's code.
 - The GPL does not stop anyone from selling copies of the code. It only makes sure the code stays free. What stops a fork from selling the *game* is the asset license below.
 - The GPL doesn't stop anyone from writing their own, similar game without copying our code or assets.
 
 **The assets**
 
-- You can use them for mods, fan projects, videos and anything else non-commercial, as long as you credit FarmSim and share your changes to the assets under the same license.
-- You can't sell the assets, or a game or other product that contains them, and you can't use them in any other commercial way. That also applies to forks of FarmSim: a fork can sell its GPL code, but not with our assets in it.
+- You can use them for mods, fan projects, videos and anything else non-commercial, as long as you credit Project Vestige and share your changes to the assets under the same license.
+- You can't sell the assets, or a game or other product that contains them, and you can't use them in any other commercial way. That also applies to forks of Project Vestige: a fork can sell its GPL code, but not with our assets in it.
 - Only the maintainer may use the assets commercially. He can do this because he made them, or because contributors gave him permission (see [Contributions](#contributions)).
 
 **Official builds**
 
-- The builds the maintainer sells are FarmSim's code (under the GPL, with the additional permission) and FarmSim's assets (which he may sell under the contributors' grant).
+- The builds the maintainer sells are Project Vestige's code (under the GPL, with the additional permission) and Project Vestige's assets (which he may sell under the contributors' grant).
 - Every official build is made from a tagged commit in this repository, and the store page and in-game credits say where to find it. That tagged source is the Corresponding Source the GPL requires for the build's code. Engine and platform SDK code is not included, as the additional permission allows.
 - Buying a build gives you the GPL rights to its code. It doesn't give you commercial rights to the assets.
 - Buying a build is not the only legal way to play: anyone can build the game from this repository for their own use.
@@ -42,7 +42,7 @@ So the repository as a whole is not "open source" in the strict sense: the code 
 
 ## Additional permission for Unreal Engine (GPLv3 section 7)
 
-FarmSim is built on Unreal Engine, which is not free software. Without an additional permission, the GPL would not allow anyone, including the maintainer, to distribute a build of the game, because a build links GPL code with the engine.
+Project Vestige is built on Unreal Engine, which is not free software. Without an additional permission, the GPL would not allow anyone, including the maintainer, to distribute a build of the game, because a build links GPL code with the engine.
 
 **This permission is part of the license terms for the code.** It is in [LICENSE-EXCEPTION.txt](LICENSE-EXCEPTION.txt), next to the GPL text in [LICENSE](LICENSE), so it travels with every copy of the source. Keep both files when you share the code. The permission reads:
 
@@ -52,7 +52,7 @@ FarmSim is built on Unreal Engine, which is not free software. Without an additi
 >
 > This permission applies whichever version of the GNU GPL (version 3 or any later version) you choose to apply to this Program.
 
-This permission covers only the engine and the platform components. FarmSim's own code stays under the GPL, and its source must be shared. It doesn't settle what each store or console's own terms require; those are checked separately for each platform before release there.
+This permission covers only the engine and the platform components. Project Vestige's own code stays under the GPL, and its source must be shared. It doesn't settle what each store or console's own terms require; those are checked separately for each platform before release there.
 
 The copyright holders who grant it are the maintainer and every contributor of code, through the [contributor terms](CONTRIBUTING.md#11-licensing-and-credit).
 
@@ -61,11 +61,11 @@ The copyright holders who grant it are the maintainer and every contributor of c
 Each source file we wrote starts with a copyright line and an [SPDX](https://spdx.dev/) license identifier:
 
 ```cpp
-// Copyright (C) 2026 David Bennehag and the FarmSim contributors.
-// SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-FarmSim-Unreal-Exception
+// Copyright (C) 2026 David Bennehag and the Project Vestige contributors.
+// SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-Vestige-Unreal-Exception
 ```
 
-`AdditionRef-FarmSim-Unreal-Exception` names the additional permission in [LICENSE-EXCEPTION.txt](LICENSE-EXCEPTION.txt). Scripts that never link with Unreal Engine (for example `Art/Blender/*.py`) use plain `GPL-3.0-or-later`. Epic template files keep Epic's copyright line instead. Binary assets can't carry a notice, so the table below says which license applies to them.
+`AdditionRef-Vestige-Unreal-Exception` names the additional permission in [LICENSE-EXCEPTION.txt](LICENSE-EXCEPTION.txt). Scripts that never link with Unreal Engine (for example `Art/Blender/*.py`) use plain `GPL-3.0-or-later`. Epic template files keep Epic's copyright line instead. Binary assets can't carry a notice, so the table below says which license applies to them.
 
 ## Which license applies where
 
@@ -73,18 +73,18 @@ This table is the licensing record for every part of the repository. Update it i
 
 | Path | Copyright holder | License | Origin | In sold builds |
 |---|---|---|---|---|
-| `Source/FarmSim/Farm*.h/.cpp` (our classes, with the SPDX line) | David Bennehag and contributors | GPL-3.0-or-later with the additional permission | Written for FarmSim | Yes, compiled |
-| `Source/FarmSim.Target.cs`, `Source/FarmSimEditor.Target.cs`, `Source/FarmSim/FarmSim.Build.cs`, `FarmSim.h/.cpp`, `FarmSimCharacter.h/.cpp`, `FarmSimGameMode.h/.cpp`, `FarmSimPlayerController.h/.cpp` | Epic Games, plus our changes | Unreal Engine EULA; our changes GPL-3.0-or-later with the additional permission | Third Person template, edited by us (mixed) | Yes, compiled |
-| `FarmSim.uproject`, `Config/*.ini` | Epic Games and David Bennehag | Our settings GPL-3.0-or-later with the additional permission; template defaults Unreal Engine EULA | Generated by the template, edited by us (mixed) | Yes |
-| `Art/Blender/*.py`, `.clang-format`, `.gitattributes`, `.gitignore` | David Bennehag and contributors | GPL-3.0-or-later | Written for FarmSim | No |
-| `Content/Farm/` | David Bennehag and contributors | CC BY-NC-SA 4.0 | Made for FarmSim | Yes |
-| `Content/Maps/`, `Content/L_Farm.umap` | David Bennehag and contributors | CC BY-NC-SA 4.0 | Made for FarmSim; places template content listed below | Yes |
+| `Source/Vestige/Farm*.h/.cpp` (our classes, with the SPDX line) | David Bennehag and contributors | GPL-3.0-or-later with the additional permission | Written for Project Vestige | Yes, compiled |
+| `Source/Vestige.Target.cs`, `Source/VestigeEditor.Target.cs`, `Source/Vestige/Vestige.Build.cs`, `Vestige.h/.cpp`, `VestigeCharacter.h/.cpp`, `VestigeGameMode.h/.cpp`, `VestigePlayerController.h/.cpp` | Epic Games, plus our changes | Unreal Engine EULA; our changes GPL-3.0-or-later with the additional permission | Third Person template, edited by us (mixed) | Yes, compiled |
+| `Vestige.uproject`, `Config/*.ini` | Epic Games and David Bennehag | Our settings GPL-3.0-or-later with the additional permission; template defaults Unreal Engine EULA | Generated by the template, edited by us (mixed) | Yes |
+| `Art/Blender/*.py`, `.clang-format`, `.gitattributes`, `.gitignore` | David Bennehag and contributors | GPL-3.0-or-later | Written for Project Vestige | No |
+| `Content/Farm/` | David Bennehag and contributors | CC BY-NC-SA 4.0 | Made for Project Vestige | Yes |
+| `Content/Maps/`, `Content/L_Farm.umap` | David Bennehag and contributors | CC BY-NC-SA 4.0 | Made for Project Vestige; places template content listed below | Yes |
 | `Content/Characters/`, `Content/ThirdPerson/`, `Content/Input/` | Epic Games | Unreal Engine EULA | Third Person template | Yes |
-| `Art/Blender/*.blend`, `Art/Export/*.fbx` | David Bennehag and contributors | CC BY-NC-SA 4.0 | Made for FarmSim (generated by `make_farm_assets.py`) | No, sources only |
-| `Images/` | David Bennehag | CC BY-NC-SA 4.0 | Made for FarmSim; how the `*-CGPT.png` images were made is still to be recorded | No |
-| `Docs/`, the Markdown files in the root, `.github/` | David Bennehag and contributors | CC BY-NC-SA 4.0 | Written for FarmSim | No |
+| `Art/Blender/*.blend`, `Art/Export/*.fbx` | David Bennehag and contributors | CC BY-NC-SA 4.0 | Made for Project Vestige (generated by `make_farm_assets.py`) | No, sources only |
+| `Images/` | David Bennehag | CC BY-NC-SA 4.0 | Made for Project Vestige; how the `*-CGPT.png` images were made is still to be recorded | No |
+| `Docs/`, the Markdown files in the root, `.github/` | David Bennehag and contributors | CC BY-NC-SA 4.0 | Written for Project Vestige | No |
 | `LICENSE`, `LICENSE-ASSETS.txt` | Free Software Foundation; Creative Commons | Verbatim license texts, under their own terms | Copied unchanged | Yes, with the build |
-| `LICENSE-EXCEPTION.txt` | David Bennehag | Part of the code's license terms | Written for FarmSim | Yes, with the build |
+| `LICENSE-EXCEPTION.txt` | David Bennehag | Part of the code's license terms | Written for Project Vestige | Yes, with the build |
 
 Build output (`Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/`) isn't committed. It carries the licenses of the files it was made from.
 
@@ -99,7 +99,7 @@ Changes we make to these files are ours, under the GPL with the additional permi
 Every contribution comes with two separate grants. The full, binding wording is in the [contributor terms](CONTRIBUTING.md#11-licensing-and-credit):
 
 1. **To everyone:** the contribution is licensed under the license for its part of the repository, GPL-3.0-or-later with the additional permission for code and CC BY-NC-SA 4.0 for everything else.
-2. **To the maintainer only:** permission to use the contribution in official FarmSim builds, including selling them on stores and consoles. The FarmSim code in those builds stays under the GPL, and its source is published. The maintainer can't use this grant to make a closed-source version.
+2. **To the maintainer only:** permission to use the contribution in official Project Vestige builds, including selling them on stores and consoles. The Project Vestige code in those builds stays under the GPL, and its source is published. The maintainer can't use this grant to make a closed-source version.
 
 Contributions are accepted only as pull requests in which the contributor ticks the contributor terms box, so every contribution has a recorded agreement. Ideas and suggestions in issues are welcome, but they aren't contributions of code or assets; if one turns into code or art, it comes in as a pull request.
 
@@ -107,7 +107,7 @@ Third-party material (code or assets someone else made) is accepted only under t
 
 ## Still to check
 
-This setup has not yet been reviewed by a lawyer. Before FarmSim is sold, released on a console or opened to outside contributions, a lawyer experienced with the GPL and Unreal Engine should check:
+This setup has not yet been reviewed by a lawyer. Before Project Vestige is sold, released on a console or opened to outside contributions, a lawyer experienced with the GPL and Unreal Engine should check:
 
 - the wording and scope of the additional permission, and how it works with later GPL versions;
 - whether it fits the Unreal Engine EULA and each target store and console's SDK terms;

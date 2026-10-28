@@ -1,15 +1,15 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 
-#include "FarmSimPlayerController.h"
+#include "VestigePlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "InputMappingContext.h"
 #include "Blueprint/UserWidget.h"
-#include "FarmSim.h"
+#include "Vestige.h"
 #include "Widgets/Input/SVirtualJoystick.h"
 
-void AFarmSimPlayerController::BeginPlay()
+void AVestigePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -26,14 +26,14 @@ void AFarmSimPlayerController::BeginPlay()
 
 		} else {
 
-			UE_LOG(LogFarmSim, Error, TEXT("Could not spawn mobile controls widget."));
+			UE_LOG(LogVestige, Error, TEXT("Could not spawn mobile controls widget."));
 
 		}
 
 	}
 }
 
-void AFarmSimPlayerController::SetupInputComponent()
+void AVestigePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
@@ -60,7 +60,7 @@ void AFarmSimPlayerController::SetupInputComponent()
 	}
 }
 
-bool AFarmSimPlayerController::ShouldUseTouchControls() const
+bool AVestigePlayerController::ShouldUseTouchControls() const
 {
 	// are we on a mobile platform? Should we force touch?
 	return SVirtualJoystick::ShouldDisplayTouchInterface() || bForceTouchControls;

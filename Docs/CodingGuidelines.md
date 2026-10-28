@@ -331,8 +331,8 @@ UE_LOG(LogFarmSim, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 - New source files start with our copyright and license header (see [LICENSING.md](../LICENSING.md#license-notices-in-files)), then a blank line:
 
   ```cpp
-  // Copyright (C) 2026 David Bennehag and the FarmSim contributors.
-  // SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-FarmSim-Unreal-Exception
+  // Copyright (C) 2026 David Bennehag and the Project Vestige contributors.
+  // SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-Vestige-Unreal-Exception
   ```
 
   They don't carry the Epic copyright line; the template's files keep theirs.

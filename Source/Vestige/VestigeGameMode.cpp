@@ -1,10 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "FarmSimGameMode.h"
+#include "VestigeGameMode.h"
 
 #include "FarmHUD.h"
 
-AFarmSimGameMode::AFarmSimGameMode()
+AVestigeGameMode::AVestigeGameMode()
 {
 	HUDClass = AFarmHUD::StaticClass();
 }

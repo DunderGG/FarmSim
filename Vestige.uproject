@@ -5,7 +5,7 @@
   "Description": "",
   "Modules": [
     {
-      "Name": "FarmSim",
+      "Name": "Vestige",
       "Type": "Runtime",
       "LoadingPhase": "Default"
     }

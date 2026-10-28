@@ -4,20 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "FarmSimGameMode.generated.h"
+#include "VestigeGameMode.generated.h"
 
 /**
  *  Simple GameMode for a third person game
  */
 UCLASS(abstract)
-class AFarmSimGameMode : public AGameModeBase
+class AVestigeGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
 	
 	/** Constructor */
-	AFarmSimGameMode();
+	AVestigeGameMode();
 };
 
 

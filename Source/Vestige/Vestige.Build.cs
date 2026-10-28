@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class FarmSim : ModuleRules
+public class Vestige : ModuleRules
 {
-	public FarmSim(ReadOnlyTargetRules Target) : base(Target)
+	public Vestige(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -22,7 +22,7 @@ public class FarmSim : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
 		PublicIncludePaths.AddRange(new string[] {
-			"FarmSim"
+			"Vestige"
 		});
 
 		// Uncomment if you are using Slate UI

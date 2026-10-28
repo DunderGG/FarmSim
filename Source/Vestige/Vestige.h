@@ -5,4 +5,4 @@
 #include "CoreMinimal.h"
 
 /** Main log category used across the project */
-DECLARE_LOG_CATEGORY_EXTERN(LogFarmSim, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogVestige, Log, All);

@@ -1,10 +1,10 @@
-// Copyright (C) 2026 David Bennehag and the FarmSim contributors.
-// SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-FarmSim-Unreal-Exception
+// Copyright (C) 2026 David Bennehag and the Project Vestige contributors.
+// SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-Vestige-Unreal-Exception
 
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FarmSimCharacter.h"
+#include "VestigeCharacter.h"
 #include "FarmingComponent.h"
 #include "FarmerCharacter.generated.h"
 
@@ -18,7 +18,7 @@ class UInputMappingContext;
  * Reparent BP_ThirdPersonCharacter to this class so it keeps its mesh, animation and movement input.
  */
 UCLASS()
-class AFarmerCharacter : public AFarmSimCharacter
+class AFarmerCharacter : public AVestigeCharacter
 {
 	GENERATED_BODY()
 
