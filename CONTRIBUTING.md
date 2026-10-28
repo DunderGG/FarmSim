@@ -1,6 +1,6 @@
-# Contributing to FarmSim
+# Contributing to Project Vestige
 
-Thanks for wanting to help. FarmSim is a cozy 3D farming and life-sim game, built with Unreal Engine 5 and Blender. It is an early prototype made by one developer, so there is plenty to do and plenty of room to shape it.
+Thanks for wanting to help. Project Vestige is a cozy 3D farming and life-sim game, built with Unreal Engine 5 and Blender. It is an early prototype made by one developer, so there is plenty to do and plenty of room to shape it.
 
 This guide covers how to get the project running, how it is organized, and how to contribute code, art, audio and ideas.
 
@@ -56,9 +56,9 @@ Not sure where you fit? Open an issue and say what you'd like to do.
 
 1. Install Git LFS once: `git lfs install`.
 2. Clone the repository. LFS files download with it; if you see small text files where assets should be, run `git lfs pull`.
-3. Double-click **`FarmSim.uproject`**. The first time, Unreal offers to build the C++ modules; say yes. This takes a few minutes.
-   - If you will write C++, right-click `FarmSim.uproject` and pick *Generate Visual Studio project files* first, then open `FarmSim.sln` and build the **FarmSimEditor** target in **Development Editor / Win64**.
-   - Always open the project through `FarmSim.uproject` or the launcher's *My Projects* list. Opening the editor on its own and letting it auto-load the project can show a misleading "modules were built with a different engine version" error.
+3. Double-click **`Vestige.uproject`**. The first time, Unreal offers to build the C++ modules; say yes. This takes a few minutes.
+   - If you will write C++, right-click `Vestige.uproject` and pick *Generate Visual Studio project files* first, then open `Vestige.sln` and build the **VestigeEditor** target in **Development Editor / Win64**.
+   - Always open the project through `Vestige.uproject` or the launcher's *My Projects* list. Opening the editor on its own and letting it auto-load the project can show a misleading "modules were built with a different engine version" error.
 4. Open the level **`Content/Maps/L_Farm`** and press **Play**.
 
 ### Controls
@@ -77,9 +77,9 @@ Till the grass, plant seeds, water them each day, sleep, and harvest when the cr
 ## 3. Finding your way around
 
 ```
-FarmSim/
-    FarmSim.uproject        The Unreal project
-    Source/FarmSim/         Game C++ code (one module)
+ProjectVestige/
+    Vestige.uproject        The Unreal project
+    Source/Vestige/         Game C++ code (one module)
     Content/                Unreal assets
         Farm/               Our game assets (meshes, materials, Blueprints)
         Maps/               Levels (L_Farm is the main one)
@@ -103,7 +103,7 @@ Read these before making larger changes:
 2. **Follow the architecture.** The most important rule: every actor, component and subsystem has one job, and new logic goes on the class whose job it is. If nothing fits, propose a new class. See [Architecture.md](Docs/Architecture.md).
 3. **Follow the coding guidelines.** Epic's naming (`AFarm...`, `UFarm...`, `bIsSomething`), tabs and braces on their own lines, small functions, no magic numbers. The repo's `.clang-format` handles formatting: enable *ClangFormat support* in Visual Studio and format the files you change.
 4. **Build for mods.** Content (crops, tools, items) is data, not hard-coded lists or enums. See [Designing for mods](Docs/Architecture.md#12-designing-for-mods).
-5. **Test it.** Game rule changes come with automated tests (CQTest, in `Source/FarmSim/Tests/`). Run the `FarmSim` tests from the editor's Test Automation window, and play the change in the editor.
+5. **Test it.** Game rule changes come with automated tests (CQTest, in `Source/Vestige/Tests/`). Run the `Vestige` tests from the editor's Test Automation window, and play the change in the editor.
 6. **No new warnings.** The build treats some warnings as errors, for example a local variable that hides a member (`Mesh` inside a character class).
 7. **Update the docs.** If your change adds a system, moves a responsibility or makes a design choice, update `Docs/Architecture.md` (the ownership table and the decision log) in the same pull request.
 
@@ -150,7 +150,7 @@ The data asset types for this (`UFarmCropData` and friends) are planned but not 
 
 ## 8. Ideas, bugs and feedback
 
-- **Bugs:** open an issue with what you did, what you expected, what happened, and the engine version. Attach the log from `Saved/Logs/FarmSim.log` and a screenshot if it helps.
+- **Bugs:** open an issue with what you did, what you expected, what happened, and the engine version. Attach the log from `Saved/Logs/Vestige.log` and a screenshot if it helps.
 - **Ideas:** open an issue describing the idea and why it would make the game better. Small, concrete ideas are easiest to act on.
 - **Questions:** open an issue too. If something in the docs confused you, that's a bug in the docs.
 - **Security problems:** report them privately, not as an issue. See [SECURITY.md](SECURITY.md).
@@ -168,7 +168,7 @@ The data asset types for this (`UFarmCropData` and friends) are planned but not 
 
 Before opening a pull request, check:
 
-- [ ] It builds, and the `FarmSim` tests pass.
+- [ ] It builds, and the `Vestige` tests pass.
 - [ ] You played it in the editor and it works.
 - [ ] Code follows the [coding guidelines](Docs/CodingGuidelines.md#17-review-checklist) and the [architecture](Docs/Architecture.md).
 - [ ] Assets are named correctly, and their Blender sources are included.
@@ -182,7 +182,7 @@ You're welcome to use AI coding assistants. [AGENTS.md](AGENTS.md) (and `CLAUDE.
 
 ## 11. Licensing and credit
 
-FarmSim's code is licensed under the **GPL-3.0-or-later** with an [additional permission](LICENSE-EXCEPTION.txt) that allows linking with Unreal Engine and platform SDKs. Its assets and documentation are under **CC BY-NC-SA 4.0**, which doesn't allow commercial use. The maintainer sells official builds of the game, and their code stays under the GPL. The full picture, and which license applies to which folder, is in [LICENSING.md](LICENSING.md).
+Project Vestige's code is licensed under the **GPL-3.0-or-later** with an [additional permission](LICENSE-EXCEPTION.txt) that allows linking with Unreal Engine and platform SDKs. Its assets and documentation are under **CC BY-NC-SA 4.0**, which doesn't allow commercial use. The maintainer sells official builds of the game, and their code stays under the GPL. The full picture, and which license applies to which folder, is in [LICENSING.md](LICENSING.md).
 
 ### Contributor terms
 
@@ -192,8 +192,8 @@ When you open a pull request, you agree that:
 
 1. **You have the right to submit it.** The contribution is your own work, or you have the right to submit it under these terms (for example, your employer allows it). You have listed every third-party part with its source and license, as described under [Third-party material](#third-party-material).
 2. **It is licensed to everyone** under the license for the part of the repository it goes into: GPL-3.0-or-later with the additional permission in [LICENSE-EXCEPTION.txt](LICENSE-EXCEPTION.txt) for code, and CC BY-NC-SA 4.0 for assets, documentation and everything else. [LICENSING.md](LICENSING.md#which-license-applies-where) says which is which.
-3. **The maintainer may use it in official builds.** You also grant David Bennehag, the maintainer, a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license to use, copy, modify and distribute your contribution as part of official FarmSim builds, including commercial builds sold on game stores and consoles. This includes accepting the terms a store or platform sets for publishing there, and letting people who work on official builds for him (for example a porting studio or a publisher) do the same, under the same limits.
-4. **Official builds stay GPL.** The grant in point 3 doesn't let anyone distribute your code under closed-source terms. The FarmSim code in every official build stays under the GPL with the additional permission, and its source is published in this repository. The grant only adds what CC BY-NC-SA doesn't allow: commercial use of your assets in official builds.
+3. **The maintainer may use it in official builds.** You also grant David Bennehag, the maintainer, a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license to use, copy, modify and distribute your contribution as part of official Project Vestige builds, including commercial builds sold on game stores and consoles. This includes accepting the terms a store or platform sets for publishing there, and letting people who work on official builds for him (for example a porting studio or a publisher) do the same, under the same limits.
+4. **Official builds stay GPL.** The grant in point 3 doesn't let anyone distribute your code under closed-source terms. The Project Vestige code in every official build stays under the GPL with the additional permission, and its source is published in this repository. The grant only adds what CC BY-NC-SA doesn't allow: commercial use of your assets in official builds.
 5. **You keep the copyright** to your work and may use it elsewhere however you like.
 
 Tick the contributor terms box in the pull request template. Pull requests are merged only when the box is ticked, and the pull request is the record of your agreement and of the terms version you agreed to. If you submitted something you didn't have the right to submit, say so in the pull request or an issue, and it will be removed.

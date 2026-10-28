@@ -1,6 +1,6 @@
 <p align="center"><img src="Images/FarmSim-Social-Preview-CGPT.png" alt="Hob, a weathered Hearthwell farm robot, tends the garden beneath a rising Pinion gear sun" width="100%"></p>
 
-# FarmSim
+# Project Vestige
 
 A cozy 3D farming and life-sim game set in a retro-futuristic, post-apocalyptic world. You wake from decades of cryosleep under an overgrown homestead. Humans have almost vanished, and robots carry on with the jobs people gave them. You bring the farm back to life, help the robot town next door, and slowly push out into the wasteland.
 
@@ -14,10 +14,10 @@ You need Windows 10 or 11, Unreal Engine 5.7, Git with **Git LFS**, and Visual S
 
 ```
 git lfs install
-git clone https://github.com/DunderGG/FarmSim.git
+git clone https://github.com/DunderGG/ProjectVestige.git
 ```
 
-Then double-click `FarmSim.uproject`, let Unreal build the C++ modules, open `Content/Maps/L_Farm` and press **Play**. [CONTRIBUTING.md](CONTRIBUTING.md) has the full setup, the controls and troubleshooting.
+Then double-click `Vestige.uproject`, let Unreal build the C++ modules, open `Content/Maps/L_Farm` and press **Play**. [CONTRIBUTING.md](CONTRIBUTING.md) has the full setup, the controls and troubleshooting.
 
 ## Documentation
 

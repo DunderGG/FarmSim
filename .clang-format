@@ -1,4 +1,4 @@
-# Formatting for FarmSim's C++ code, following Epic's C++ Coding Standard.
+# Formatting for Project Vestige's C++ code, following Epic's C++ Coding Standard.
 # Visual Studio picks this file up automatically (Tools > Options > Text Editor > C/C++ > Code Style > Formatting).
 # Format a file with Ctrl+K, Ctrl+D.
 BasedOnStyle: Microsoft

@@ -30,4 +30,4 @@ body:
     id: logs
     attributes:
       label: Log and screenshots
-      description: Attach `Saved/Logs/FarmSim.log` and a screenshot or short clip if it helps.
+      description: Attach `Saved/Logs/Vestige.log` and a screenshot or short clip if it helps.

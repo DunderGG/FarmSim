@@ -1,4 +1,4 @@
-# FarmSim game design
+# Project Vestige game design
 
 **Current working codename: Project Vestige.** This is an internal project name, not the final public game title.
 

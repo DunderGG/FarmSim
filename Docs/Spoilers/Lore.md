@@ -1,4 +1,4 @@
-# FarmSim lore
+# Project Vestige lore
 
 > **Spoilers.** This document reveals the story, its secrets and the characters' backstories.
 

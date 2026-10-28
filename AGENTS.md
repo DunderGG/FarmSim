@@ -1,4 +1,4 @@
-# FarmSim agent instructions
+# Project Vestige agent instructions
 
 Instructions for AI coding agents working in this repository. Humans can read it too; it is a short summary of how the project works and the rules to follow.
 
@@ -6,9 +6,9 @@ Instructions for AI coding agents working in this repository. Humans can read it
 
 - A cozy 3D farming and life-sim game, currently a small playable prototype.
 - Unreal Engine 5.7, C++ first, Blueprints for content. Art made in Blender.
-- Single game module `FarmSim` in `Source/FarmSim/`, built from the Third Person C++ template.
+- Single game module `Vestige` in `Source/Vestige/`, built from the Third Person C++ template.
 - Main level: `/Game/Maps/L_Farm`. Our assets live under `Content/Farm/`. Blender sources in `Art/Blender/`, exports in `Art/Export/`.
-- Developed by one person (David) on Windows, in `C:\Unreal Projects\FarmSim`. Open the editor via `FarmSim.uproject`.
+- Developed by one person (David) on Windows, in `C:\Unreal Projects\Vestige`. Open the editor via `Vestige.uproject`.
 
 ## Read first
 
@@ -42,13 +42,13 @@ Follow the two Docs files for every change. The rules below are the ones most of
 10. **Record design decisions.** A change that adds a system, moves a responsibility or makes a design choice updates `Docs/Architecture.md` (Part B and the decision log) in the same commit.
 11. **Design for mods.** Content (crops, tools, items) is data assets found through the Asset Manager, never hard-coded lists or enums. Content has namespaced IDs (`Base.Parsnip`). Saves store IDs and skip unknown content. See `Docs/Architecture.md`, section 12.
 12. **Ticking off by default.** Use events and timers instead of per-frame polling.
-13. **Tests for rules.** Game rule changes get CQTest tests in `Source/FarmSim/Tests/`, named `FarmSim.<Area>.<Behavior>`. A bug fix gets a test that would have caught it. CQTest isn't set up yet: the first test sets it up (guidelines section 13).
+13. **Tests for rules.** Game rule changes get CQTest tests in `Source/Vestige/Tests/`, named `Vestige.<Area>.<Behavior>`. A bug fix gets a test that would have caught it. CQTest isn't set up yet: the first test sets it up (guidelines section 13).
 
 ## Building and testing
 
 - C++ can only be compiled on David's Windows machine with Unreal Engine installed. Cloud containers have no engine.
-- If you can build (for example in a session on David's PC), build the `FarmSimEditor` target (Development Editor, Win64) before committing and fix every error and warning you introduced.
-- Run the `FarmSim` automation tests when you can build.
+- If you can build (for example in a session on David's PC), build the `VestigeEditor` target (Development Editor, Win64) before committing and fix every error and warning you introduced.
+- Run the `Vestige` automation tests when you can build.
 - If you can't build, say clearly that the change is uncompiled, and list what David should test in Play in Editor.
 - Live Coding can't add new `UPROPERTY`s, `UFUNCTION`s or classes. Tell David when a change needs the editor closed and the project rebuilt.
 

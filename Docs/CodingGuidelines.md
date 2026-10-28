@@ -1,4 +1,4 @@
-# FarmSim coding guidelines
+# Project Vestige coding guidelines
 
 How code in this project should look. How the systems fit together, who owns what and why, is in [Architecture.md](Architecture.md).
 
@@ -71,7 +71,7 @@ Follow Epic's naming rules. The `.editorconfig` in the repo enforces the prefixe
 
 Like Lyra prefixes its classes with `Lyra` (`ALyraCharacter`, `ULyraHealthComponent`), every class, struct, enum, delegate and log category we add starts with **`Farm`** after the type prefix: `AFarmGrid`, `EFarmTileState`, `FOnFarmNewDay`. This keeps our types apart from engine types in autocomplete and in the editor's class pickers.
 
-The template classes (`AFarmSimCharacter`, `AFarmSimGameMode`, `AFarmSimPlayerController`) keep their generated names.
+The template classes (`AVestigeCharacter`, `AVestigeGameMode`, `AVestigePlayerController`) keep the template's naming: the module name plus the class role.
 
 ### 2.3 Case and wording
 
@@ -138,7 +138,7 @@ bool AFarmTile::Till()
 
 ## 4. Architecture
 
-Architecture lives in its own document, [Architecture.md](Architecture.md): design principles, where things go in Unreal's gameplay framework, lifetimes and initialization order, communication between systems, data, saving, presentation, the C++/Blueprint split, the Lyra patterns we use, FarmSim's current design and the decision log.
+Architecture lives in its own document, [Architecture.md](Architecture.md): design principles, where things go in Unreal's gameplay framework, lifetimes and initialization order, communication between systems, data, saving, presentation, the C++/Blueprint split, the Lyra patterns we use, Project Vestige's current design and the decision log.
 
 Code that changes the design must follow it, and update its Part B and decision log in the same commit.
 
@@ -200,7 +200,7 @@ private:
 ```
 
 - Never include `Engine.h` or `EngineMinimal.h`.
-- New engine module dependencies go in `FarmSim.Build.cs`. Put them in `PrivateDependencyModuleNames` unless our public headers expose that module's types.
+- New engine module dependencies go in `Vestige.Build.cs`. Put them in `PrivateDependencyModuleNames` unless our public headers expose that module's types.
 
 ### 5.4 Const correctness
 
@@ -305,10 +305,10 @@ void UFarmSaveSubsystem::LoadFarm()
 
 ## 10. Errors, logging and assertions
 
-- Log with the project category `LogFarmSim` (declared in `FarmSim.h`):
+- Log with the project category `LogVestige` (declared in `Vestige.h`):
 
 ```cpp
-UE_LOG(LogFarmSim, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *GetWorld()->GetMapName());
+UE_LOG(LogVestige, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *GetWorld()->GetMapName());
 ```
 
 - Verbosity: `Error` for broken state, `Warning` for recoverable setup problems, `Log` for notable events, `Verbose` for detailed tracing.
@@ -351,10 +351,10 @@ UE_LOG(LogFarmSim, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 Game rules get automated tests. They run in seconds without playing the game, and they catch a broken rule the moment it breaks instead of three play sessions later.
 
 - **Framework: CQTest**, Epic's newest C++ test framework (https://dev.epicgames.com/documentation/unreal-engine/cqtest-test-framework-for-unreal-engine). It wraps the engine's automation system with `TEST_CLASS` / `TEST` macros and automatic setup and teardown. It is the chosen framework for all new tests. Don't mix in the older Automation Spec or `IMPLEMENT_SIMPLE_AUTOMATION_TEST` styles.
-- **Status: setup pending.** The project has no tests yet; `FarmSim.Build.cs` doesn't depend on CQTest and `FarmSim.uproject` doesn't enable it ([Roadmap.md](Roadmap.md), Tests). Whoever adds the first test also sets CQTest up, confirms the test runs, and then replaces this bullet with the exact module and plugin entries and the command that was used, and ticks the roadmap item, in the same commit. Until then, the expected starting point is `"CQTest"` in `PrivateDependencyModuleNames` and, if the build can't find the module, the CQTest plugin enabled in `FarmSim.uproject`.
+- **Status: setup pending.** The project has no tests yet; `Vestige.Build.cs` doesn't depend on CQTest and `Vestige.uproject` doesn't enable it ([Roadmap.md](Roadmap.md), Tests). Whoever adds the first test also sets CQTest up, confirms the test runs, and then replaces this bullet with the exact module and plugin entries and the command that was used, and ticks the roadmap item, in the same commit. Until then, the expected starting point is `"CQTest"` in `PrivateDependencyModuleNames` and, if the build can't find the module, the CQTest plugin enabled in `Vestige.uproject`.
 - **What to test**: rules and data, not visuals. Tile transitions (grass, tilled, planted, ripe), growth only when watered, harvesting, tool use with no seeds left, the day clock rolling over, and save data round-tripping.
-- **Where**: `Source/FarmSim/Tests/<ClassName>Tests.cpp`, wrapped in `#if WITH_DEV_AUTOMATION_TESTS` so tests never ship. Name tests `FarmSim.<Area>.<Behavior>`, for example `FarmSim.Tile.WateredCropGrowsOneStage`.
-- **Running**: from the editor's Test Automation window (Tools menu), filtered on `FarmSim`, or from the command line with `-ExecCmds="Automation RunTests FarmSim"`.
+- **Where**: `Source/Vestige/Tests/<ClassName>Tests.cpp`, wrapped in `#if WITH_DEV_AUTOMATION_TESTS` so tests never ship. Name tests `Vestige.<Area>.<Behavior>`, for example `Vestige.Tile.WateredCropGrowsOneStage`.
+- **Running**: from the editor's Test Automation window (Tools menu), filtered on `Vestige`, or from the command line with `-ExecCmds="Automation RunTests Vestige"`.
 - **Design for testability**: keep rules in code that doesn't need a running level. When rule code is tangled with visuals or actor setup, that's a sign to separate them (see [Architecture.md, Known gaps](Architecture.md#17-known-gaps)).
 - Run the tests before committing a change to game rules. A bug fix gets a test that would have caught it.
 
@@ -363,16 +363,16 @@ Game rules get automated tests. They run in seconds without playing the game, an
 ### 14.1 Source
 
 ```
-Source/FarmSim/
-    FarmSim.Build.cs, FarmSim.h/.cpp   Module, log category
-    FarmSim*.h/.cpp                     Template classes (character, game mode, player controller)
+Source/Vestige/
+    Vestige.Build.cs, Vestige.h/.cpp   Module, log category
+    Vestige*.h/.cpp                     Template classes (character, game mode, player controller)
     Farm*.h/.cpp                        Our gameplay code
 ```
 
 The folder is flat while it is easy to find things in. **When finding or changing related code gets awkward** (related files are hard to spot, or a feature's files are scattered between others), move to feature folders the way Lyra does (`Character/`, `UI/`, `System/`...). File count is only a hint; somewhere around 20 of our own files is a good time to ask the question:
 
 ```
-Source/FarmSim/
+Source/Vestige/
     Farming/    Tiles, grid, crops, tools, farming component
     Time/       Day cycle
     Player/     Farmer character, player controller
@@ -381,7 +381,7 @@ Source/FarmSim/
     Core/       Game mode, module, shared types
 ```
 
-Do that move in its own commit with no other changes. Include by path from the module's source root (`#include "Farming/FarmTile.h"`). The template's `PublicIncludePaths` entry `"FarmSim"` already puts that root on the include path, so nothing needs to change in `FarmSim.Build.cs`. Don't add each feature folder to `PublicIncludePaths`: bare includes like `"FarmTile.h"` hide where a file lives, and every added path is exposed to any other module that depends on ours. FarmSim is a single module today; if a second module ever needs our headers, give the module a `Public/` and `Private/` split and move only the headers meant for other modules into `Public/`.
+Do that move in its own commit with no other changes. Include by path from the module's source root (`#include "Farming/FarmTile.h"`). The template's `PublicIncludePaths` entry `"Vestige"` already puts that root on the include path, so nothing needs to change in `Vestige.Build.cs`. Don't add each feature folder to `PublicIncludePaths`: bare includes like `"FarmTile.h"` hide where a file lives, and every added path is exposed to any other module that depends on ours. The game is a single module today; if a second module ever needs our headers, give the module a `Public/` and `Private/` split and move only the headers meant for other modules into `Public/`.
 
 ### 14.2 Content and asset naming
 
@@ -442,7 +442,7 @@ Before committing, check:
 - [ ] No magic numbers, no duplicated logic, no commented-out code, no stray debug messages.
 - [ ] Ticking is off unless needed. No per-frame searches of the level.
 - [ ] Classes and non-obvious public members have `/** */` comments.
-- [ ] Changed game rules have tests, and the `FarmSim` tests pass.
+- [ ] Changed game rules have tests, and the `Vestige` tests pass.
 - [ ] It compiles and works in Play in Editor.
 - [ ] The commit message is clear and has no tool attribution lines.
 

@@ -1,6 +1,6 @@
 # Security policy
 
-FarmSim is a single-player game in early development. There are no servers or accounts, but security still matters for things like save files and, later, mods: a crafted file should never be able to crash the game in a way that runs code or touches files outside the game's folders.
+Project Vestige is a single-player game in early development. There are no servers or accounts, but security still matters for things like save files and, later, mods: a crafted file should never be able to crash the game in a way that runs code or touches files outside the game's folders.
 
 ## Supported versions
 

@@ -1,6 +1,6 @@
 # Credits
 
-FarmSim is made by these people. Thank you!
+Project Vestige is made by these people. Thank you!
 
 ## Project lead
 

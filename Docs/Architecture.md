@@ -1,11 +1,11 @@
-# FarmSim architecture
+# Project Vestige architecture
 
 How the game is put together and why. [CodingGuidelines.md](CodingGuidelines.md) covers how the code looks. This document covers how classes, systems and data fit together.
 
 It has three parts:
 
 - **Part A: principles.** General architecture practice for C++ and Unreal Engine games. These hold for any project.
-- **Part B: FarmSim's design.** How this project applies them today: the systems, who owns what, and how data flows.
+- **Part B: Project Vestige's design.** How this project applies them today: the systems, who owns what, and how data flows.
 - **Part C: decisions.** A log of the design choices we made and why, plus known gaps and the changes we expect to make.
 
 Keep Part B and Part C up to date. When a change adds a system, moves a responsibility or makes a design choice, update this document in the same commit.
@@ -25,7 +25,7 @@ Contents
   10. [Performance by design](#10-performance-by-design)
   11. [Patterns borrowed from Lyra](#11-patterns-borrowed-from-lyra)
   12. [Designing for mods](#12-designing-for-mods)
-- Part B: FarmSim's design
+- Part B: Project Vestige's design
   13. [Systems and ownership](#13-systems-and-ownership)
   14. [Dependencies](#14-dependencies)
   15. [The day flow](#15-the-day-flow)
@@ -77,7 +77,7 @@ Unreal already has a home for most kinds of logic. Use it before inventing one.
 - **Opening a map** (`OpenLevel`, or non-seamless travel) tears the whole world down and creates a new one, with new world subsystems and framework actors. Only the game instance and its subsystems survive.
 - **Seamless travel** also creates a new world, but carries a chosen set of actors (by default the game mode, game state, player controllers and player states) across through a transition map.
 
-FarmSim today has one map, no level streaming, and no travel except `OpenLevel` on the same map to start a new game. Revisit this section and [section 13](#13-systems-and-ownership) before adding any of them.
+Project Vestige today has one map, no level streaming, and no travel except `OpenLevel` on the same map to start a new game. Revisit this section and [section 13](#13-systems-and-ownership) before adding any of them.
 
 A useful test for player data: **does it need to exist when the player's body doesn't?** Money and inventory do, so they belong on the player state (or a component on it). Tool use needs a position and facing, so it belongs on the pawn.
 
@@ -192,10 +192,10 @@ The usual Unreal split, and Epic's own recommendation, is **C++ for systems, Blu
 
 ## 9. Modules and plugins
 
-- The game is a **single runtime module** (`FarmSim`). That's right for a project this size.
+- The game is a **single runtime module** (`Vestige`). That's right for a project this size.
 - Add a separate module only for a concrete reason:
-  - **`FarmSimEditor`** (editor-only module): when we write editor tools, validators or custom detail panels, which must not ship in the game.
-  - **`FarmSimTests`**: if the tests outgrow `Source/FarmSim/Tests/`.
+  - **`VestigeEditor`** (editor-only module): when we write editor tools, validators or custom detail panels, which must not ship in the game.
+  - **`VestigeTests`**: if the tests outgrow `Source/Vestige/Tests/`.
   - **A plugin**: for a system that's finished, self-contained and reusable in another project.
 - Module dependencies are one-way and listed in `.Build.cs`. Prefer private dependencies.
 
@@ -212,7 +212,7 @@ Don't optimize early, but don't choose designs that can't scale either.
 
 Lyra is Epic's reference for a well-structured UE5 game. It is built for a large team and multiplayer, so **we adopt a Lyra pattern when we have a concrete need for it, not before.**
 
-| Lyra pattern | Status in FarmSim |
+| Lyra pattern | Status in Project Vestige |
 |---|---|
 | Thin actors, behavior in components (`ULyraHealthComponent`, `ULyraHeroComponent`) | **Adopted.** `AFarmerCharacter` is a template character plus `UFarmingComponent`. New abilities (fishing, stamina) become new components. |
 | Subsystems instead of singletons and managers | **Adopted.** `UFarmSaveSubsystem`. |
@@ -269,7 +269,7 @@ All of these have to exist and be tested in a packaged build first:
 
 ---
 
-# Part B: FarmSim's design
+# Part B: Project Vestige's design
 
 ## 13. Systems and ownership
 
