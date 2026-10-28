@@ -14,6 +14,7 @@ public class Vestige : ModuleRules
 			"Engine",
 			"InputCore",
 			"EnhancedInput",
+			"GameplayTags",
 			"UMG",
 			"Slate",
 			"SlateCore"

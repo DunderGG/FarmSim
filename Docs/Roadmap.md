@@ -113,7 +113,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 **Content as data**
 
-- [ ] Crop data assets (`UFarmCropData`) found through the Asset Manager: ID, name, seasons, growth stage meshes, days per stage, water need, radiation tolerance, yield, seed price and sell price
+- [x] Crop data assets (`UFarmCropData`) found through the Asset Manager: ID, name, seasons, growth stage meshes, days per stage, water need, radiation tolerance, yield, seed price and sell price
 - [ ] The current turnip becomes the first crop asset, `Base.Turnip`, and its settings move off the tile Blueprint
 - [ ] Tool data assets (`UFarmToolData`), replacing the hard-coded tool list (`EFarmTool`)
 - [ ] Item data assets (`UFarmItemData`) for seeds, harvested crops and other things the player can carry

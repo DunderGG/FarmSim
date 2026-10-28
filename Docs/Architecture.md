@@ -217,7 +217,7 @@ Lyra is Epic's reference for a well-structured UE5 game. It is built for a large
 | Thin actors, behavior in components (`ULyraHealthComponent`, `ULyraHeroComponent`) | **Adopted.** `AFarmerCharacter` is a template character plus `UFarmingComponent`. New abilities (fishing, stamina) become new components. |
 | Subsystems instead of singletons and managers | **Adopted.** `UFarmSaveSubsystem`. |
 | A project prefix on every class (`Lyra...`) | **Adopted.** `Farm...` |
-| Data assets describing content (`ULyraPawnData`) | **Planned** for crops, tools and items once there is more than one of each. |
+| Data assets describing content (`ULyraPawnData`) | **Adopted** for crops (`UFarmCropData`). **Planned** for tools and items. |
 | Gameplay tags for identifiers | **Later**, for open-ended categories. Closed sets stay enums. |
 | Input actions mapped to tags through data assets | **Later.** Input actions are created in code today. Move to `IA_` / `IMC_` assets when input grows. |
 | Gameplay Message Router | **Not yet.** Plain delegates are enough. |
@@ -283,6 +283,7 @@ All of these have to exist and be tested in a packaged build first:
 | `AFarmHUD` + `SFarmHudWidget` | HUD + Slate widget | Display only. Reads from the day cycle and farming component; keeps fading messages | Any game state |
 | `UFarmSaveSubsystem` | World subsystem | The current world's snapshot: saving it on `OnNewDayFinished` and loading it at play start, in the single save slot. Starting a new game (deletes that slot, then reopens the map) | Game rules; save slot or profile choice that must survive a map change ([section 6](#6-saving)) |
 | `UFarmSaveGame` | Save game | The saved data layout | Logic |
+| `UFarmCropData` | Primary data asset (type `FarmCrop`), one per crop in `Content/Farm/Crops` | One crop's definition: `ContentId`, display name, seasons, days to mature, water need, contamination tolerance, growth stage meshes (in the `Visuals` bundle), yield, seed and sell price | Runtime state such as growth or which tiles grow it |
 
 When a new responsibility appears, decide its owner using [section 2](#2-unreals-gameplay-framework-where-things-go), add a row here, and say so in the commit message.
 
@@ -307,7 +308,7 @@ flowchart TD
 
 Layers, from bottom to top:
 
-1. **Data**: `UFarmSaveGame`, enums and structs.
+1. **Data**: `UFarmSaveGame`, `UFarmCropData`, enums and structs.
 2. **World state**: `AFarmTile`, `AFarmGrid`, `AFarmDayCycle`.
 3. **Player actions**: `UFarmingComponent`.
 4. **Services**: `UFarmSaveSubsystem`.
@@ -353,6 +354,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | Crops are `UFarmCropData` primary data assets of type `FarmCrop`, scanned in `/Game/Farm/Crops` and always cooked. The primary asset ID is `FarmCrop:<ContentId>`. Growth stage meshes are soft references in a `Visuals` asset bundle. Seasons are gameplay tags (`Farm.Season.*`). Growth stays one stage per watered day up to `DaysToMature`, with no separate day count per stage. Fields no system reads yet (seasons, water need, contamination tolerance, prices) have neutral defaults | Content is found by the Asset Manager, not listed in code. Crops nothing refers to are still cooked, so mods and shops can find them. Soft meshes load only for crops in use. Seasons are open-ended categories ([section 5](#5-data-and-content)). One stage per day matches the prototype; add per-stage days when a crop needs uneven stages. Defining every field now means later systems only fill in data |
 | 2026-10-28 | Game module, targets and project file renamed from `FarmSim` to `Vestige` (`Vestige.uproject`, `VestigeEditor`, `VESTIGE_API`, `LogVestige`, `AVestigeCharacter`/`GameMode`/`PlayerController`); the `Farm`-prefixed gameplay types, `Content/Farm/`, `L_Farm` and the save slot keep their names; `[CoreRedirects]` in `DefaultEngine.ini` map `/Script/FarmSim` to `/Script/Vestige` | The project's codename is now Project Vestige. Renaming the gameplay types too would touch every class, asset reference and doc for no gain; the `Farm` prefix still describes what they are. The redirects keep Blueprints, `L_Farm` and existing save files that name the old module loading |
 | 2026-10-28 | Licensing tightened after the licensing audit: contributors' grant to the maintainer narrowed so official builds stay GPL (no closed-source versions, by anyone); the Unreal/platform permission moved into `LICENSE-EXCEPTION.txt` and applies to later GPL versions too; SPDX headers in our source files; a path-level license table in `LICENSING.md`; contributions only as pull requests with a ticked terms box; a list of accepted third-party licenses | Matches the stated goal that nobody ships a closed-source FarmSim, keeps the permission attached to every copy of the code, and gives a recorded rights chain for selling builds. Commercial asset use stays reserved to the maintainer on purpose. Still needs a lawyer's check |
 | 2026-10-28 | One canonical content ID: a typed-in `ContentId` (`<Namespace>.<Name>`) on each content data asset, used for the `FPrimaryAssetId` and in saves; IDs never change after shipping (redirects if they must), duplicates are startup errors, base content wins | An ID derived from an asset's name or path changes when the asset is renamed or moved, which would break saves and mods. Settled before the first crop asset exists |
@@ -381,6 +383,7 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 
 - **Game logic calls the HUD.** `UFarmingComponent` and `UFarmSaveSubsystem` call `AFarmHUD::ShowMessage` directly, so gameplay depends on presentation. Replace with a feedback event (for example an `OnFarmMessage` delegate on a small subsystem) that the HUD listens to.
 - **The save subsystem reads and writes other classes' state.** It sets `UFarmingComponent::Seeds` directly and pulls tile fields one by one. Give each owner its own save and restore functions that use its save struct ([section 6](#6-saving)).
+- **Content IDs aren't checked yet.** `UFarmCropData::ContentId` has no format validation, duplicate check or redirect list ([section 5](#5-data-and-content)). A crop with an empty ID has no valid primary asset ID, so the Asset Manager doesn't register it.
 - **Tools are a hard-coded enum** (`EFarmTool`), so new tools need code changes. Replace with tool data assets ([section 12](#12-designing-for-mods)).
 - **No extension points.** Nothing is exposed to Blueprints yet, and the C++ delegates can't be bound from Blueprints.
 - **Tiles are saved by grid position.** If the grid size changes, saved tiles land in the wrong place. Save each tile's grid coordinates (or an ID) with its data.
@@ -396,7 +399,7 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 Likely next steps as the game grows, with the design we intend. These aren't commitments; record the real decision in the log when we get there.
 
 - **Inventory and money** move off the pawn into an inventory component on the player state, because they must outlive the body ([section 2](#2-unreals-gameplay-framework-where-things-go)).
-- **Crops, tools and items** become data assets (`UFarmCropData`, `UFarmToolData`, `UFarmItemData`) found through the Asset Manager. Tiles, the farming component and saves refer to them by their `ContentId` ([section 5](#5-data-and-content)). `EFarmTool` goes away.
+- **Tools and items** become data assets (`UFarmToolData`, `UFarmItemData`) found through the Asset Manager, like crops (`UFarmCropData`) already are. Tiles, the farming component and saves refer to content by its `ContentId` ([section 5](#5-data-and-content)). `EFarmTool` goes away.
 - **Save slots, a main menu or map travel** split the save subsystem: the active slot moves to a `UGameInstanceSubsystem`, and the world subsystem keeps collecting and applying the world's snapshot ([section 6](#6-saving)).
 - **Interaction** (doors, chests, NPCs, shipping bin) goes through an `IFarmInteractable` interface, so the farmer's interact key doesn't need to know every type.
 - **Seasons and weather** belong to the game state, or to the day cycle if they stay small. They broadcast changes like `OnNewDay`.
