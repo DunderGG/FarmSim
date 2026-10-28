@@ -43,9 +43,9 @@ Every feature should serve at least one pillar. Features that serve none are cut
 4. **Serious world, light touch.** The setting is grim and the stakes are real, but the game is warm and funny in its details: robots stuck in pre-war routines, absurd old advertising, dry humour.
 5. **Your pace.** No forced sleep, no failing out of the game. Days have limits and late nights have costs, but the player decides how to spend their time. Survival needs can be switched off.
 
-**Design goal: moddable.** Crops, items, tools, robots, recipes and tech tree entries are data that mods can add. See [Architecture.md section 12](Architecture.md#12-designing-for-mods). Every system in this document should be designed so a mod can add more of its content.
+**Design goal: moddable.** Content (crops, items, tools, robots, recipes, tech tree entries) is data found by the game, never a hard-coded list, so a mod can add more of it the same way the base game does. See [Architecture.md section 12](Architecture.md#12-designing-for-mods). Beyond that, a system gets mod-specific extension points only when there is a concrete use for them; we don't build speculative abstractions ahead of the gameplay. Mod loading isn't built yet, so the game doesn't claim mod support until we have decided what mods may change and what compatibility we promise between versions.
 
-**Design goal: multiplayer later.** The game is solo first. Co-op is wanted some day, so systems should not make it impossible (see [open questions](#15-open-questions)).
+**Design target: single-player.** The game is designed and built for one player, as [Architecture.md](Architecture.md#16-decision-log) says. Co-op is wanted some day, but no system needs to be ready for networking now. Keeping ordinary separation of concerns (state owned by one class, no needless global assumptions) is enough. When co-op becomes real work, it gets its own design milestone that decides authority, the shared clock and sleep, farm ownership and saves (see [open questions](#15-open-questions)).
 
 ## 3. Premise and setting
 
@@ -288,6 +288,8 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | Single-player is the design target; co-op gets its own design milestone later, and no system has to be networking-ready now | "Don't make co-op impossible" had no boundary and invited costly guesswork (audit G-10) |
+| 2026-10-28 | Moddability means data-driven content plus extension points added for a concrete use; no claim of mod support until its scope and compatibility policy are decided | "Design every system for mods" was unbounded and could delay gameplay (audit G-09) |
 | 2026-10-28 | The vertical slice proves the farming core and a first relationship, not every pillar; it is judged by playtest criteria as well as features ([section 13](#13-scope-and-milestones)) | The slice's content doesn't cover the town, humans, exploration, combat or survival needs, so claiming it shows every pillar would give false confidence (audit G-01) |
 | 2026-10-27 | Adopted Project Vestige as the internal working codename; the final public title remains undecided | The name evokes the sleeper's search for traces of humankind in a world now filled with robots without reducing the game's identity to a farming or life-sim label |
 | 2026-10-27 | Weather determines regional radiation-storm occurrence; land health only changes local dust resuspension, exposure and haze, while regional haze recovers across many areas | Keeps farm restoration meaningful without letting one map control regional weather |

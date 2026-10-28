@@ -110,7 +110,9 @@ The long-term vision includes farming simulation, four seasons, multiple resourc
 
 **Severity: Medium**
 
-Section 2 says every system should be designed so mods can add its content. Section 13 later defers mod loading and a mod kit, while the architecture document describes mod support as a future capability rather than implemented functionality. Many systems—world zones, characters, recipes, tech trees, machine behavior—will require different extension surfaces and validation rules.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 2 now limits the goal to data-driven content discovered like base content, adds mod-specific extension points only for a concrete use, and says the game won't claim mod support until a supported scope and compatibility policy are decided.
+
+At the time of the original review, section 2 said every system should be designed so mods can add its content. Section 13 later defers mod loading and a mod kit, while the architecture document describes mod support as a future capability rather than implemented functionality. Many systems—world zones, characters, recipes, tech trees, machine behavior—will require different extension surfaces and validation rules.
 
 **Why it matters:** Treating mod extensibility as a universal acceptance criterion can create speculative abstractions and delay core gameplay, despite no working mod distribution or load pipeline. It also risks promising users compatibility that is not supported.
 
@@ -120,7 +122,9 @@ Section 2 says every system should be designed so mods can add its content. Sect
 
 **Severity: Medium**
 
-Section 2 says systems should not make multiplayer impossible, while the decision log and [Architecture.md](Architecture.md) explicitly select single-player without replication. The open question correctly defers co-op decisions, but “not impossible” has no actionable boundary.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 2 now makes single-player the design target, requires only ordinary separation of concerns, and defers authority, shared clock, sleep, farm ownership and saves to a separate co-op design milestone.
+
+At the time of the original review, section 2 said systems should not make multiplayer impossible, while the decision log and [Architecture.md](Architecture.md) explicitly select single-player without replication. The open question correctly defers co-op decisions, but “not impossible” has no actionable boundary.
 
 **Why it matters:** Contributors may introduce networking abstractions or restrictions preemptively, adding complexity to a single-player game without ensuring that the eventual time, sleep, farm ownership, save and NPC systems can actually support co-op.
 
@@ -171,7 +175,7 @@ The document uses “radiation,” “radiation sickness,” “night radiation,
 2. Bound the land-health, radiation, storm and energy feedbacks before implementing them (G-02).
 3. Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12).
 4. Define the first-season progression and economy with a simple playable budget (G-06, G-07).
-5. Establish a minimum complete game and defer unbounded scope, modding and multiplayer commitments (G-08 through G-10).
+5. Establish a minimum complete game and defer unbounded scope (G-08). [x] Bound the modding and multiplayer commitments (G-09, G-10; resolved 2026-10-28).
 6. Prototype one character arc and clarify the core mechanic vocabulary (G-11, G-13).
 
 ## Review limits
