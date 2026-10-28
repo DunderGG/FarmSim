@@ -217,6 +217,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 
 ### Energy and the land
 
+- [ ] Simulate a best-case and a worst-case season for land health and energy before building them ([GameDesign.md section 6](GameDesign.md#land-health-and-the-haze))
 - [ ] Solar panels that charge power cells, with output depending on time of day, weather and haze
 - [ ] Machines that draw charge and stop when it runs out
 - [ ] Land health for each map, raised by healthy farming and lowered by pollution

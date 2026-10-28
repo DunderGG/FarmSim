@@ -40,7 +40,9 @@ At the time of the original review, section 13 said the one-season vertical slic
 
 **Severity: High**
 
-Sections 5–6 connect radiation, crop growth and mutation, land health, haze, solar output and the frequency of radiation storms. Healthy land improves solar power and reduces future storms; dirty shortcuts damage land and can reduce future power. The document does not specify caps, recovery rates, minimum energy availability, or whether storm frequency can create further land damage.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 6 now bounds land health: 0 to 100 per map, a low-tech recovery path that needs no power, a 40% floor on solar output from haze, a cap on contamination per storm, and about one season from poor to fair with clean play. Storm frequency already no longer depends on land health (2026-10-27). [Roadmap.md](Roadmap.md) adds a best-case and worst-case simulation before energy is built.
+
+At the time of the original review, sections 5–6 connected radiation, crop growth and mutation, land health, haze, solar output and the frequency of radiation storms. Healthy land improves solar power and reduces future storms; dirty shortcuts damage land and can reduce future power. The document does not specify caps, recovery rates, minimum energy availability, or whether storm frequency can create further land damage.
 
 **Why it matters:** A positive feedback loop can become a runaway reward loop that makes recovery trivial, while a negative loop can become a softlock: low land health causes less power, insufficient power prevents purification, and more storms worsen the land. The design explicitly wants dirty choices to remain possible without forbidding them, which makes recovery paths particularly important.
 
@@ -174,7 +176,7 @@ At the time of the original review, the document used “radiation,” “radiat
 ## Recommended correction order
 
 1. [x] Narrow and define the vertical-slice promise (G-01; resolved 2026-10-28).
-2. Bound the land-health, radiation, storm and energy feedbacks before implementing them (G-02).
+2. [x] Bound the land-health, radiation, storm and energy feedbacks before implementing them (G-02; resolved 2026-10-28).
 3. Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12).
 4. Define the first-season progression and economy with a simple playable budget (G-06, G-07).
 5. Establish a minimum complete game and defer unbounded scope (G-08). [x] Bound the modding and multiplayer commitments (G-09, G-10; resolved 2026-10-28).

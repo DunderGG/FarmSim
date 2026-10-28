@@ -153,6 +153,15 @@ The player's actions slowly improve or damage the local environment, and healthi
 - **The trade-off:** dirty shortcuts (dirty water, polluting machines) make the farm faster now and weaker later. The game never forbids them; the player chooses.
 - Land health should be easy to read: a simple meter or sky indicator, and haze you can see.
 
+**Bounds.** Land health is strategic feedback, but gentle: it shapes how well the farm runs, never whether it can. These limits keep the loop from running away in either direction (starting values, to tune):
+
+- Land health runs from 0 to 100 for each map.
+- A low-tech way back always exists: the well and hand tools need no power, so even a badly damaged farm can be cleaned up by hand.
+- The haze never cuts solar output below 40% of a clear day, so powered machines never stop entirely because of it.
+- One storm adds at most a set amount of contamination to each tile.
+- With clean play, going from poor (20) to fair (50) takes about one season.
+- Before the energy system is built, simulate a best-case and a worst-case season (on paper or in a test) to check these limits.
+
 ### Implementation order
 
 1. Radiation on tiles and mutated crops.
@@ -289,6 +298,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | Land health is bounded: 0 to 100 per map, a low-tech recovery path that needs no power, a 40% floor on solar output, capped contamination per storm, and about one season from poor to fair ([section 6](#land-health-and-the-haze)) | Stops the environment loop from becoming a softlock or a runaway reward (audit G-02) |
 | 2026-10-28 | Added a mechanics glossary ([section 16](#16-mechanics-glossary)) that separates tile contamination, land health, pollution, haze, weather, charge and player exposure | One word ("radiation") was used for several values, which would confuse UI, tutorials and balance (audit G-13) |
 | 2026-10-28 | Single-player is the design target; co-op gets its own design milestone later, and no system has to be networking-ready now | "Don't make co-op impossible" had no boundary and invited costly guesswork (audit G-10) |
 | 2026-10-28 | Moddability means data-driven content plus extension points added for a concrete use; no claim of mod support until its scope and compatibility policy are decided | "Design every system for mods" was unbounded and could delay gameplay (audit G-09) |
@@ -321,7 +331,7 @@ To be decided later. Move each one into the relevant section and the decision lo
 - **Lore:** the details still open in [Lore.md](Spoilers/Lore.md), such as names marked as working names.
 - **Multiplayer:** co-op is wanted, but [Architecture.md](Architecture.md#16-decision-log) currently says single-player only. When we start, decide what shared state looks like (shared farm or separate farms, shared clock and sleep) and update the architecture.
 - **Pollution and exposure:** whether pollution is its own tile value or lowers land health directly, and whether standing on contaminated tiles adds player exposure ([section 16](#16-mechanics-glossary)).
-- **Land health:** whether it is one value per map or varies across a map, how fast it changes, and whether damage spreads to neighbouring tiles.
+- **Land health:** exactly how fast it changes, and whether damage spreads to neighbouring tiles.
 - **Energy balance:** how much charge panels give and machines use, and whether the vertical slice needs any of it (probably not).
 - **Mutated crops:** exactly which effects are good and which are risky, and how often normal crops mutate.
 - **Death and knock-out penalty:** what exactly is lost.
@@ -336,7 +346,7 @@ The gameplay values behind the setting's words. Use these names in code, UI text
 | **Tile contamination** | Each farm tile | Radiation, Cinderium compounds in the soil | Raised by dirty water and by radiation storms depositing dust. Lowered by soil filters, careful removal, harvesting and containing absorbing mutated crops, and slow decay | Crop growth speed, whether a crop grows at all, the chance a crop mutates. Feeds **land health** |
 | **Tile water** | Each farm tile | | Raised by the watering can, sprinklers and rain. Falls each day | Whether the crop grows that day |
 | **Water store** | Farm water sources (well, rain collector, purifier) | Clean water | Filled by rain and purifiers, drawn by the watering can and sprinklers | How much clean watering the player can do |
-| **Land health** | Each map (*open:* or varying across a map) | | Computed from the map's tiles, and changes over days: planted, clean, covered tiles raise it; contaminated, polluted or bare tiles lower it | **Local haze**, dust exposure during storms |
+| **Land health** | Each map, 0 to 100 | | Computed from the map's tiles, and changes over days: planted, clean, covered tiles raise it; contaminated, polluted or bare tiles lower it | **Local haze**, dust exposure during storms |
 | **Pollution** | *Open:* its own tile value, or a direct cut to land health | | Dirty machines, burning scrap | Land health |
 | **Local haze** | Each map | The haze | Follows land health slowly, on top of a regional haze that barely changes | Solar output, how bright the sky looks |
 | **Weather** | The region, set each day and announced a day ahead | | Regional forecast only; the farm can't change it | Rain waters tiles. Dust storms cut solar output. Radiation storms add tile contamination and **player exposure** outdoors |
