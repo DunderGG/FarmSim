@@ -238,7 +238,9 @@ Third-person farmer, a grid of tiles, tilling, planting, watering, harvesting, a
 
 ### Next: vertical slice
 
-One full season that shows every pillar in a small form:
+One full 28-day season that proves the farming core. It covers three pillars in a small form (*Bring the land back*, *Old hands, new machines* and *Your pace*) and starts a fourth with one relationship: the caretaker robot. It does not test the robot town, rare humans, exploration, combat or survival needs. Those get their own proof in later milestones, and the slice should not be read as validating them.
+
+Content:
 
 - 3 to 4 crops, including one mutated crop.
 - Radiation and clean water on tiles.
@@ -247,6 +249,15 @@ One full season that shows every pillar in a small form:
 - One automation unlock: a sprinkler.
 - Selling crops for currency.
 - Crops, tools and items as data assets (needed for moddability before content grows).
+
+The slice is done when the content works and playtests show that a first-time player, without outside help:
+
+- Notices why a crop grows slowly or not at all (dry soil or radiation) and fixes it.
+- Makes at least one real choice, such as clean versus dirty water or which crop goes in which soil.
+- Sees the caretaker robot's opinion change because of something they did.
+- Spends less time watering once the sprinkler is in place, and notices it.
+- Stays up late at least once and understands what it cost them the next day.
+- Finishes the season wanting to start the next one.
 
 ### Later
 
@@ -277,6 +288,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | The vertical slice proves the farming core and a first relationship, not every pillar; it is judged by playtest criteria as well as features ([section 13](#13-scope-and-milestones)) | The slice's content doesn't cover the town, humans, exploration, combat or survival needs, so claiming it shows every pillar would give false confidence (audit G-01) |
 | 2026-10-27 | Adopted Project Vestige as the internal working codename; the final public title remains undecided | The name evokes the sleeper's search for traces of humankind in a world now filled with robots without reducing the game's identity to a farming or life-sim label |
 | 2026-10-27 | Weather determines regional radiation-storm occurrence; land health only changes local dust resuspension, exposure and haze, while regional haze recovers across many areas | Keeps farm restoration meaningful without letting one map control regional weather |
 | 2026-10-26 | Solar energy charges power cells that run machines; land health sets the haze, which sets solar output | Makes healing the land pay off in automation, and gives dirty shortcuts a long-term cost. Idea from David, lore in Lore.md |

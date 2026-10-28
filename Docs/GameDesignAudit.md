@@ -28,7 +28,9 @@ Scores use a 1–10 scale: 1 means unclear or risky; 5 means directionally usefu
 
 **Severity: High**
 
-Section 13 says the one-season vertical slice should “show every pillar in a small form.” Its listed content includes a few crops, radiation/water, stamina, the caretaker robot, a sprinkler and selling. It does not include a rebuilt town facility, town events, a human discovery, a meaningful friendship/romance arc, exploration, or an implementation of the survival-needs toggle. Combat is explicitly deferred.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 13 and [Roadmap.md](Roadmap.md) now say the slice proves the farming core (three pillars in a small form) plus a first relationship with the caretaker robot, and name the pillars it does not test. Section 13 adds playtest criteria about the player's experience alongside the feature list.
+
+At the time of the original review, section 13 said the one-season vertical slice should “show every pillar in a small form.” Its listed content includes a few crops, radiation/water, stamina, the caretaker robot, a sprinkler and selling. It does not include a rebuilt town facility, town events, a human discovery, a meaningful friendship/romance arc, exploration, or an implementation of the survival-needs toggle. Combat is explicitly deferred.
 
 **Why it matters:** A milestone can be completed while the project still has not tested major pillars—especially town restoration and social relationships, which are described as core identity rather than optional extras. Calling the slice comprehensive risks giving a false sense of validation and delaying discovery of the hardest narrative and production problems.
 
@@ -165,7 +167,7 @@ The document uses “radiation,” “radiation sickness,” “night radiation,
 
 ## Recommended correction order
 
-1. Narrow and define the vertical-slice promise (G-01).
+1. [x] Narrow and define the vertical-slice promise (G-01; resolved 2026-10-28).
 2. Bound the land-health, radiation, storm and energy feedbacks before implementing them (G-02).
 3. Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12).
 4. Define the first-season progression and economy with a simple playable budget (G-06, G-07).
