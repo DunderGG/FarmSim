@@ -34,7 +34,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
 2. **Epic naming.** `A`/`U`/`S`/`F`/`E`/`I`/`T` type prefixes, `b` for booleans, PascalCase everywhere, and the `Farm` project prefix on every new type (`AFarmShop`, `EFarmSeason`, `FOnFarmNewDay`).
 3. **No shadowing.** The build treats MSVC C4458 as an error. Never give a local or parameter the name of a member of the class or any engine base class (`Mesh` in a character, `Owner`, `Controller`, `Tags`...).
 4. **Formatting.** Tabs, braces on their own lines, braces on every block. Format changed files with the repo's `.clang-format`; don't reformat untouched files.
-5. **UObject pointers.** Members are `UPROPERTY() TObjectPtr<T>`. Check pointers that can be null. No `new`/`delete` on UObjects.
+5. **UObject pointers.** Strong references are `UPROPERTY() TObjectPtr<T>`; non-owning references are `TWeakObjectPtr<T>`, assets loaded on demand are `TSoftObjectPtr<T>` (guidelines section 7). Check pointers that can be null. No `new`/`delete` on UObjects.
 6. **Encapsulation.** Runtime state is private with getters. Don't add public mutable data members. Expose to Blueprints only when a Blueprint needs it or as a deliberate, commented modding extension point.
 7. **Communicate through delegates and small functions**, not by reaching into another class's state.
 8. **Keep it simple.** Small functions, early returns, named constants instead of magic numbers, no duplicated logic, no commented-out code, no new debug-only on-screen messages. Don't add Lyra machinery (GAS, Experiences, Game Features, Common UI) or replication unless asked.
@@ -42,7 +42,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
 10. **Record design decisions.** A change that adds a system, moves a responsibility or makes a design choice updates `Docs/Architecture.md` (Part B and the decision log) in the same commit.
 11. **Design for mods.** Content (crops, tools, items) is data assets found through the Asset Manager, never hard-coded lists or enums. Content has namespaced IDs (`Base.Parsnip`). Saves store IDs and skip unknown content. See `Docs/Architecture.md`, section 12.
 12. **Ticking off by default.** Use events and timers instead of per-frame polling.
-13. **Tests for rules.** Game rule changes get CQTest tests in `Source/FarmSim/Tests/`, named `FarmSim.<Area>.<Behavior>`. A bug fix gets a test that would have caught it.
+13. **Tests for rules.** Game rule changes get CQTest tests in `Source/FarmSim/Tests/`, named `FarmSim.<Area>.<Behavior>`. A bug fix gets a test that would have caught it. CQTest isn't set up yet: the first test sets it up (guidelines section 13).
 
 ## Building and testing
 

@@ -28,6 +28,8 @@ Scores use a 1–10 scale: 1 means misleading or absent; 5 means usable but has 
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-28).** [CodingGuidelines.md](CodingGuidelines.md) section 2.3 now separates state queries, which are named as questions, from actions that can fail, which keep their verb name and return `bool` for success, documenting what `false` means. `Till()` is the example, consistent with the code.
+
 Section 2.3 says functions returning `bool` ask a question, with examples such as `IsRipe()` and `HasMessage()`. But the formatting example uses `AFarmTile::Till()` returning `bool` to indicate whether an action succeeded, and section 2.4 also uses the action-oriented `Till()` name.
 
 **Why it matters:** The rule gives conflicting direction for common gameplay APIs that both perform an action and report success. A contributor could produce awkward names such as `DidTillSucceed()` or incorrectly change a useful result type.
@@ -37,6 +39,8 @@ Section 2.3 says functions returning `bool` ask a question, with examples such a
 ### C-02 — “Every UObject member is TObjectPtr” blurs strong, weak and soft references
 
 **Severity: High**
+
+**Status: Resolved (2026-10-28).** Sections 6 and 7 now describe pointer types by meaning: strong `UPROPERTY() TObjectPtr` references keep a target alive, non-owning references stay `TWeakObjectPtr`, and deferred assets stay `TSoftObjectPtr`/`TSoftClassPtr`, with a table of when to use each. The review checklist and [AGENTS.md](../AGENTS.md) rule 5 match.
 
 Section 6 says every `UObject*` member must be a `UPROPERTY()` holding `TObjectPtr<>`. Section 7 separately recommends `TWeakObjectPtr` for non-owning references and `TSoftObjectPtr`/`TSoftClassPtr` for deferred assets. These are different reference semantics, not interchangeable spelling choices.
 
@@ -48,6 +52,8 @@ Section 6 says every `UObject*` member must be a `UPROPERTY()` holding `TObjectP
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-28).** Section 13 now calls CQTest the chosen framework with setup pending, states what is missing from `FarmSim.Build.cs` and `FarmSim.uproject`, and requires the first test's commit to record the verified setup and command and tick the roadmap item. [AGENTS.md](../AGENTS.md) rule 13 says the same.
+
 Section 13 says to use CQTest for all new tests and gives setup instructions. The [Roadmap.md](Roadmap.md) checklist still marks “Set up CQTest in the project” as incomplete; the current [FarmSim.Build.cs](../Source/FarmSim/FarmSim.Build.cs) has no CQTest dependency, and [FarmSim.uproject](../FarmSim.uproject) does not enable the CQTest plugin.
 
 **Why it matters:** The guide promises a test workflow that may not be available in a clean checkout. “Enable the plugin if the editor reports the module as missing” also leaves the required configuration dependent on an error rather than stating a verified setup.
@@ -57,6 +63,8 @@ Section 13 says to use CQTest for all new tests and gives setup instructions. Th
 ### C-04 — Error feedback guidance can be read as coupling gameplay to the HUD
 
 **Severity: Medium**
+
+**Status: Resolved (2026-10-28).** Section 10 now requires player-facing failures to reach the player through a presentation-neutral feedback event that the HUD listens to; game code logs and returns or broadcasts the failure and never calls the HUD. The direct `AFarmHUD::ShowMessage` calls are named as a known gap, not a pattern. The pointer to `ShowMessage` as the feedback route was removed.
 
 Section 10 says failures the player should know about, such as a failed save, “are reported on the HUD.” [Architecture.md](Architecture.md) says game rules must not depend on presentation and already lists direct `ShowMessage` calls as a known gap.
 
@@ -68,6 +76,8 @@ Section 10 says failures the player should know about, such as a failed save, �
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-28).** Section 14.1 now triggers the folder split on navigation pain rather than a file count, uses includes relative to the module root (`Farming/FarmTile.h`, which the existing `"FarmSim"` include path already supports) and says not to add feature folders to `PublicIncludePaths`; a `Public/`/`Private/` split is reserved for headers another module actually needs.
+
 Section 14.1 says to add feature folders to `PublicIncludePaths` after the source is split into folders. Feature-folder paths are not automatically public API. Within a module, includes can use module-relative paths, and only headers intended for consumers of other modules should be exposed as public includes.
 
 **Why it matters:** Publishing every feature directory can make private headers easy to include across module boundaries, weaken encapsulation and increase accidental compile-time coupling. The arbitrary “about 20 files” trigger also makes a structural change depend on file count rather than navigation pain or ownership boundaries.
@@ -77,6 +87,8 @@ Section 14.1 says to add feature folders to `PublicIncludePaths` after the sourc
 ### C-06 — “Use UE types, not the standard library” is broader than the stated reasons justify
 
 **Severity: Medium**
+
+**Status: Resolved (2026-10-28).** Section 9 now makes UE types the default and requires them at reflection, save and engine API boundaries, while allowing standard-library facilities in private `.cpp` implementation code. `FMath` is the normal choice for math rather than a ban on `<cmath>`.
 
 Section 9 rules out `std::` containers categorically and says to use `FMath` instead of `<cmath>`. Unreal types are the right default for reflected properties, engine APIs, serialization and allocator-aware engine containers, but standard C++ library facilities remain useful and valid in non-reflected implementation details. The guide does not distinguish those cases.
 
@@ -88,6 +100,8 @@ Section 9 rules out `std::` containers categorically and says to use `FMath` ins
 
 **Severity: Low**
 
+**Status: Resolved (2026-10-28).** Section 12 now names the concern (game-thread hitches), asks for async loading of large or slow assets during interactive play, and allows synchronous loads during startup or behind a loading screen.
+
 Section 12 says not to load synchronously during gameplay. Avoiding blocking loads during active play is a good performance rule, but “during gameplay” can include a deliberate loading screen or initialization phase where synchronous loading may be an acceptable, bounded trade-off.
 
 **Why it matters:** Read literally, the rule can force unnecessary async-loading machinery even when the player is not interacting and the load is intentionally blocking. It also does not state the actual concern: game-thread stalls and hitching.
@@ -97,6 +111,8 @@ Section 12 says not to load synchronously during gameplay. Avoiding blocking loa
 ### C-08 — Several numeric rules are presented as universal thresholds
 
 **Severity: Low**
+
+**Status: Resolved (2026-10-28).** Sections 8 and 14.1 now treat function length and file count as review prompts: split a function when it does more than one thing or is hard to follow, and reorganize folders when related code becomes hard to find.
 
 Sections 8 and 14 prescribe a split at about 40 function lines and a folder restructure at about 20 project-owned files. These can be useful prompts, but neither number is a reliable quality threshold. A 41-line cohesive function may be clearer than a fragmented one, and 20 files may still be easy to navigate.
 
@@ -115,11 +131,11 @@ Sections 8 and 14 prescribe a split at about 40 function lines and a folder rest
 
 ## Recommended correction order
 
-1. Clarify strong, weak and soft UObject reference rules (C-02).
-2. Resolve the bool naming contradiction and HUD feedback dependency (C-01, C-04).
-3. Reconcile CQTest documentation with the actual project configuration (C-03).
-4. Tighten module include-path guidance before source folders are reorganized (C-05).
-5. Qualify the standard-library and synchronous-load rules; soften numeric thresholds (C-06 through C-08).
+1. [x] Clarify strong, weak and soft UObject reference rules (C-02; resolved 2026-10-28).
+2. [x] Resolve the bool naming contradiction and HUD feedback dependency (C-01, C-04; resolved 2026-10-28).
+3. [x] Reconcile CQTest documentation with the actual project configuration (C-03; resolved 2026-10-28). The roadmap item stays open until the first test runs.
+4. [x] Tighten module include-path guidance before source folders are reorganized (C-05; resolved 2026-10-28).
+5. [x] Qualify the standard-library and synchronous-load rules; soften numeric thresholds (C-06 through C-08; resolved 2026-10-28).
 
 ## Review limits
 

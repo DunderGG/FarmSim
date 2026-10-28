@@ -78,7 +78,8 @@ The template classes (`AFarmSimCharacter`, `AFarmSimGameMode`, `AFarmSimPlayerCo
 - **PascalCase for everything**: types, functions, members, locals, parameters, constants. No `snake_case`, no `m_` or `_` prefixes, no Hungarian notation beyond the prefixes above.
 - Names are **descriptive and unabbreviated**: `ReachDistance`, not `RchDst`; `HarvestedCrops`, not `NumHarv`. Common, well-known short forms are fine (`HUD`, `UI`, `Max`, `Min`, `Num`).
 - Functions that do something are **verbs**: `Till()`, `StartNextDay()`, `RefreshVisuals()`.
-- Functions that return a `bool` ask a **question**: `IsRipe()`, `IsPastBedtime()`, `HasMessage()`.
+- Functions that only **query state** and return a `bool` ask a **question**: `IsRipe()`, `IsPastBedtime()`, `HasMessage()`.
+- Functions that **do something that can fail** keep their verb name and return `bool` for success: `AFarmTile::Till()` returns `false` when the tile isn't grass. Say in the `/** */` comment what `false` means. Don't rename them as questions (`DidTillSucceed()`) or add a `Try` prefix.
 - Getters use `Get`: `GetCurrentDay()`. `Find` returns `nullptr` when nothing exists; `Get` may create it (see `AFarmDayCycle::Find` vs `AFarmDayCycle::Get`).
 - Delegates: the type is `FOnFarm<Event>`, the member is `On<Event>`: `FOnFarmNewDay OnNewDay`.
 - Event handlers are named for what they do, not when they run: `AdvanceTiles(int32 NewDay)`, `SaveFarm(int32 NewDay)`, not `HandleOnNewDay`.
@@ -217,12 +218,14 @@ private:
 
 ## 6. UPROPERTY, UFUNCTION and Blueprint exposure
 
-- Every `UObject*` member is a `UPROPERTY()` holding a `TObjectPtr<>`, so the garbage collector sees it. This applies even to private, non-edited members:
+- A **strong** reference from a `UObject` to another `UObject` is a `UPROPERTY()` holding a `TObjectPtr<>`, so the garbage collector sees it and keeps the target alive. This applies even to private, non-edited members:
 
 ```cpp
 UPROPERTY()
 TObjectPtr<AFarmGrid> Grid;
 ```
+
+- Not every reference should be strong. Weak and soft references have different meanings and stay weak or soft; see [section 7](#7-memory-pointers-and-object-lifetime) for which to pick. Don't turn one into a `TObjectPtr` just to satisfy the rule above.
 
 - Pick the narrowest specifier:
 
@@ -243,9 +246,17 @@ TObjectPtr<AFarmGrid> Grid;
 ## 7. Memory, pointers and object lifetime
 
 - Never use `new` / `delete` for `UObject`s. Create them with `NewObject`, `CreateDefaultSubobject` or `SpawnActor`.
-- Members pointing at `UObject`s: `UPROPERTY() TObjectPtr<T>`.
-- Non-owning references that may outlive the target and must not keep it alive: `TWeakObjectPtr<T>` (as `SFarmHudWidget` does with its HUD).
-- References to assets that shouldn't load with the class: `TSoftObjectPtr<T>` / `TSoftClassPtr<T>`.
+
+Choose a member's pointer type by what the reference **means**, not by habit:
+
+| The reference... | Use | Effect |
+|---|---|---|
+| should keep the target alive (components we create, assets we always need, actors this object depends on) | `UPROPERTY() TObjectPtr<T>` | Strong: the garbage collector keeps the target while we point at it |
+| points at something we don't own and must not keep alive (another actor that may be destroyed, the HUD from a Slate widget) | `TWeakObjectPtr<T>` | Weak: becomes null when the target is destroyed. Check with `IsValid()` or `Get()` before use. Add `UPROPERTY()` when the editor or serialization needs to see it |
+| names an asset that shouldn't load with the class (crop meshes, data assets for content not in use) | `UPROPERTY() TSoftObjectPtr<T>` / `TSoftClassPtr<T>` | Soft: stores the asset's path; load it when needed |
+
+`SFarmHudWidget` holding its HUD in a `TWeakObjectPtr` is an example of the second row.
+
 - Non-`UObject` heap data: `TUniquePtr`, `TSharedPtr`, `TSharedRef` (Slate widgets use `TSharedPtr`).
 - Raw pointers are fine for locals and parameters that don't outlive the call.
 - **Check pointers before using them** whenever they can legitimately be null: actors found in the level, `GetOwner()`, `GetWorld()`, `GetController()`, cast results. Use `IsValid()` for actors that may have been destroyed.
@@ -254,7 +265,7 @@ TObjectPtr<AFarmGrid> Grid;
 ## 8. Functions and control flow
 
 - **Small functions that do one thing.** If you need a comment to separate the parts of a function, those parts probably want to be functions (`RefreshVisuals` calls `RefreshSoil` and `RefreshCrop`).
-- Aim for functions that fit on one screen. Past about 40 lines, look for a split.
+- Aim for functions that fit on one screen. Length is a prompt, not a limit: split a function when it does more than one thing or is hard to follow, not because it crossed a line count. A long but single-purpose function is fine.
 - **Return early** to keep the happy path unindented:
 
 ```cpp
@@ -279,7 +290,8 @@ void UFarmSaveSubsystem::LoadFarm()
 
 ## 9. Modern C++ usage
 
-- Use UE types, not the standard library: `int32`, `uint8`, `float`, `double`, `FString`, `FName`, `FText`, `TArray`, `TMap`, `TSet`, `TOptional`, `TFunction`. Don't use `std::` containers or `int`/`long` where size matters.
+- **Default to UE types**: `int32`, `uint8`, `float`, `double`, `FString`, `FName`, `FText`, `TArray`, `TMap`, `TSet`, `TOptional`, `TFunction`. They are required for anything reflected (`UPROPERTY`, `UFUNCTION`), saved, passed to engine APIs or shown in the editor, and they're what readers of Unreal code expect. Don't use `int`/`long` where size matters.
+- The standard library is allowed in private implementation code when it does something the UE types don't do as well (for example `<algorithm>` helpers or `std::array` inside a `.cpp`). Keep `std::` types out of headers, reflected members and save data.
 - `FString` for runtime strings, `FName` for identifiers, `FText` for anything the player reads (so it can be localized later).
 - Wrap string literals in `TEXT("...")`.
 - `nullptr`, never `NULL` or `0`.
@@ -288,7 +300,7 @@ void UFarmSaveSubsystem::LoadFarm()
 - `auto`: only where the type is obvious from the right-hand side (`auto* Hud = Cast<AFarmHUD>(...)`), for iterators and for lambdas. Spell out the type otherwise. Write `auto*` and `const auto&` so pointers and references stay visible.
 - Lambdas: capture explicitly (`[this]`, `[Tile]`). Never capture `this` in a lambda that can outlive the object; bind delegates with `AddUObject` / `AddWeakLambda` instead.
 - `constexpr` for compile-time constants. `static constexpr` for class constants (`UFarmSaveGame::SlotName`).
-- `FMath` instead of `<cmath>`.
+- `FMath` is the normal choice for math, especially on engine types (`FVector`, `FRotator`) and for helpers like `FMath::Clamp` and `FMath::Lerp`. Use `<cmath>` only for something `FMath` lacks.
 - No exceptions and no RTTI; the engine builds without them.
 
 ## 10. Errors, logging and assertions
@@ -300,13 +312,13 @@ UE_LOG(LogFarmSim, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 ```
 
 - Verbosity: `Error` for broken state, `Warning` for recoverable setup problems, `Log` for notable events, `Verbose` for detailed tracing.
-- Never leave `GEngine->AddOnScreenDebugMessage` as a permanent feature. Player-facing feedback goes through `AFarmHUD::ShowMessage`.
+- Never leave `GEngine->AddOnScreenDebugMessage` as a permanent feature.
 - Assertions:
   - `check(Condition)`: a programmer error that makes continuing pointless. Compiled out in shipping builds, so never put side effects inside.
   - `ensure(Condition)` / `ensureMsgf`: something is wrong but the game can carry on. Logs a callstack once.
   - Plain `if` with a graceful fallback for things that can legitimately happen at runtime or through level setup (a missing grid, a missing save).
 - Content mistakes a designer can make (a missing mesh, no grid in the level) must not crash. Fall back to a placeholder and warn, as `AFarmTile` does with its placeholder shapes.
-- Failures the player should know about (a save that couldn't be written) are reported on the HUD.
+- Failures the player should know about (a save that couldn't be written) must reach the player, but game code never calls the HUD to do it. The code that failed logs the failure, returns or broadcasts it, and raises a presentation-neutral feedback event; the HUD listens and displays it (see [Architecture.md, section 7](Architecture.md#7-presentation-ui-audio-and-effects)). Today `UFarmingComponent` and `UFarmSaveSubsystem` still call `AFarmHUD::ShowMessage` directly; that is a [known gap](Architecture.md#17-known-gaps), not the pattern to copy.
 
 ## 11. Comments and documentation
 
@@ -323,15 +335,16 @@ UE_LOG(LogFarmSim, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 - Turn ticking **off by default** (`PrimaryActorTick.bCanEverTick = false`) and turn it on only for classes that really need per-frame work (`AFarmDayCycle` moves the sun).
 - Prefer events, timers (`FTimerManager`) and delegates over checking something every frame.
 - Don't search the level (`TActorIterator`, `GetAllActorsOfClass`) every frame. Find things once in `BeginPlay` and keep the reference.
-- Don't load assets with `ConstructorHelpers` outside constructors, and don't load synchronously during gameplay.
+- Don't load assets with `ConstructorHelpers` outside constructors.
+- Don't block the game thread with a synchronous load while the player is playing; it causes a visible hitch. Load assets that may be large or slow asynchronously (`FStreamableManager` / the Asset Manager). Synchronous loads are fine during startup or behind a loading screen, where nobody is waiting on the next frame and the cost is known.
 - Optimize when something is measurably slow. Clear code first.
 
 ## 13. Testing
 
 Game rules get automated tests. They run in seconds without playing the game, and they catch a broken rule the moment it breaks instead of three play sessions later.
 
-- **Framework: CQTest**, Epic's newest C++ test framework (https://dev.epicgames.com/documentation/unreal-engine/cqtest-test-framework-for-unreal-engine). It wraps the engine's automation system with `TEST_CLASS` / `TEST` macros and automatic setup and teardown. Use it for all new tests. Don't mix in the older Automation Spec or `IMPLEMENT_SIMPLE_AUTOMATION_TEST` styles.
-- **Setup** (once, with the first test): add `"CQTest"` to `PrivateDependencyModuleNames` in `FarmSim.Build.cs`, and enable the CQTest plugin in `FarmSim.uproject` if the editor reports the module as missing.
+- **Framework: CQTest**, Epic's newest C++ test framework (https://dev.epicgames.com/documentation/unreal-engine/cqtest-test-framework-for-unreal-engine). It wraps the engine's automation system with `TEST_CLASS` / `TEST` macros and automatic setup and teardown. It is the chosen framework for all new tests. Don't mix in the older Automation Spec or `IMPLEMENT_SIMPLE_AUTOMATION_TEST` styles.
+- **Status: setup pending.** The project has no tests yet; `FarmSim.Build.cs` doesn't depend on CQTest and `FarmSim.uproject` doesn't enable it ([Roadmap.md](Roadmap.md), Tests). Whoever adds the first test also sets CQTest up, confirms the test runs, and then replaces this bullet with the exact module and plugin entries and the command that was used, and ticks the roadmap item, in the same commit. Until then, the expected starting point is `"CQTest"` in `PrivateDependencyModuleNames` and, if the build can't find the module, the CQTest plugin enabled in `FarmSim.uproject`.
 - **What to test**: rules and data, not visuals. Tile transitions (grass, tilled, planted, ripe), growth only when watered, harvesting, tool use with no seeds left, the day clock rolling over, and save data round-tripping.
 - **Where**: `Source/FarmSim/Tests/<ClassName>Tests.cpp`, wrapped in `#if WITH_DEV_AUTOMATION_TESTS` so tests never ship. Name tests `FarmSim.<Area>.<Behavior>`, for example `FarmSim.Tile.WateredCropGrowsOneStage`.
 - **Running**: from the editor's Test Automation window (Tools menu), filtered on `FarmSim`, or from the command line with `-ExecCmds="Automation RunTests FarmSim"`.
@@ -349,7 +362,7 @@ Source/FarmSim/
     Farm*.h/.cpp                        Our gameplay code
 ```
 
-The folder is flat while there are only a handful of files. **When it passes about 20 of our own files**, move to feature folders the way Lyra does (`Character/`, `UI/`, `System/`...):
+The folder is flat while it is easy to find things in. **When finding or changing related code gets awkward** (related files are hard to spot, or a feature's files are scattered between others), move to feature folders the way Lyra does (`Character/`, `UI/`, `System/`...). File count is only a hint; somewhere around 20 of our own files is a good time to ask the question:
 
 ```
 Source/FarmSim/
@@ -361,7 +374,7 @@ Source/FarmSim/
     Core/       Game mode, module, shared types
 ```
 
-Do that move in its own commit with no other changes, and add the folders to `PublicIncludePaths` in `FarmSim.Build.cs`.
+Do that move in its own commit with no other changes. Include by path from the module's source root (`#include "Farming/FarmTile.h"`). The template's `PublicIncludePaths` entry `"FarmSim"` already puts that root on the include path, so nothing needs to change in `FarmSim.Build.cs`. Don't add each feature folder to `PublicIncludePaths`: bare includes like `"FarmTile.h"` hide where a file lives, and every added path is exposed to any other module that depends on ours. FarmSim is a single module today; if a second module ever needs our headers, give the module a `Public/` and `Private/` split and move only the headers meant for other modules into `Public/`.
 
 ### 14.2 Content and asset naming
 
@@ -416,7 +429,7 @@ Before committing, check:
 - [ ] Names follow the prefixes, the `Farm` prefix and PascalCase, and nothing shadows a base class member.
 - [ ] Changed files are formatted with clang-format.
 - [ ] Headers forward declare; `.cpp` files include what they use, own header first.
-- [ ] `UObject` members are `UPROPERTY() TObjectPtr<>`. Pointers that can be null are checked.
+- [ ] Strong `UObject` references are `UPROPERTY() TObjectPtr<>`; non-owning ones are weak, deferred assets are soft. Pointers that can be null are checked.
 - [ ] Runtime state is private. Nothing new is exposed to Blueprints without a reason.
 - [ ] No magic numbers, no duplicated logic, no commented-out code, no stray debug messages.
 - [ ] Ticking is off unless needed. No per-frame searches of the level.
