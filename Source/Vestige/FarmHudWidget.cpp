@@ -7,6 +7,7 @@
 #include "FarmHUD.h"
 
 #include "FarmingComponent.h"
+#include "FarmToolData.h"
 #include "Styling/CoreStyle.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/SBoxPanel.h"
@@ -107,7 +108,7 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 			.Font(FCoreStyle::GetDefaultFontStyle("Regular", 13))
 			.ColorAndOpacity(FarmHudStyle::Hint)
 			.ShadowOffset(FarmHudStyle::ShadowOffset)
-			.Text(FText::FromString(TEXT("1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep   |   F9 New game")))
+			.Text(this, &SFarmHudWidget::GetControlsText)
 		]
 	];
 }
@@ -121,9 +122,33 @@ FText SFarmHudWidget::GetStatusText() const
 	{
 		return FText::GetEmpty();
 	}
+	const UFarmToolData* Tool = Farming->GetCurrentTool();
 	return FText::FromString(FString::Printf(TEXT("Day %d   %s   |   %s"),
 		DayCycle->GetCurrentDay(), *FormatClock(DayCycle->GetTimeOfDay()),
-		*UEnum::GetDisplayValueAsText(Farming->GetCurrentTool()).ToString()));
+		Tool ? *Tool->GetDisplayName().ToString() : TEXT("No tool")));
+}
+
+FText SFarmHudWidget::GetControlsText() const
+{
+	FString Controls;
+	const AFarmHUD* FarmHud = Hud.Get();
+	if (const UFarmingComponent* Farming = FarmHud ? FarmHud->GetFarming() : nullptr)
+	{
+		const TArray<TObjectPtr<const UFarmToolData>>& Tools = Farming->GetToolbar().GetTools();
+		for (int32 Slot = 0; Slot < Tools.Num(); ++Slot)
+		{
+			if (const UFarmToolData* Tool = Tools[Slot])
+			{
+				Controls += FString::Printf(TEXT("%d %s   "), Slot + 1, *Tool->GetDisplayName().ToString());
+			}
+		}
+		if (!Controls.IsEmpty())
+		{
+			Controls += TEXT("|   ");
+		}
+	}
+	Controls += TEXT("E Use tool   |   N Sleep   |   F9 New game");
+	return FText::FromString(Controls);
 }
 
 FText SFarmHudWidget::GetInventoryText() const

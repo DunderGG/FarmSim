@@ -11,10 +11,32 @@
 #include "FarmingComponent.h"
 #include "FarmSaveGame.h"
 #include "FarmTile.h"
+#include "FarmToolData.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+
+FName UFarmSaveSubsystem::GetSavedToolId(const UFarmSaveGame& Save)
+{
+	if (!Save.CurrentToolId.IsNone())
+	{
+		return Save.CurrentToolId;
+	}
+
+	switch (Save.CurrentTool)
+	{
+	case EFarmTool::Hoe:
+		return TEXT("Base.Hoe");
+	case EFarmTool::Seeds:
+		return TEXT("Base.Seeds");
+	case EFarmTool::WateringCan:
+		return TEXT("Base.WateringCan");
+	case EFarmTool::Hand:
+		return TEXT("Base.Hand");
+	}
+	return NAME_None;
+}
 
 bool UFarmSaveSubsystem::DoesSupportWorldType(const EWorldType::Type WorldType) const
 {
@@ -63,7 +85,8 @@ void UFarmSaveSubsystem::SaveFarm(int32 NewDay)
 	Save->TimeOfDay = DayCycle->GetTimeOfDay();
 	Save->Seeds = Farming->Seeds;
 	Save->HarvestedCrops = Farming->HarvestedCrops;
-	Save->CurrentTool = Farming->GetCurrentTool();
+	const UFarmToolData* Tool = Farming->GetCurrentTool();
+	Save->CurrentToolId = Tool ? Tool->GetContentId() : NAME_None;
 	for (const AFarmTile* Tile : Grid->GetTiles())
 	{
 		FFarmTileSaveData& TileData = Save->Tiles.AddDefaulted_GetRef();
@@ -103,7 +126,7 @@ void UFarmSaveSubsystem::LoadFarm()
 	DayCycle->RestoreClock(Save->Day, Save->TimeOfDay);
 	Farming->Seeds = Save->Seeds;
 	Farming->HarvestedCrops = Save->HarvestedCrops;
-	Farming->SelectTool(Save->CurrentTool);
+	Farming->RestoreCurrentTool(GetSavedToolId(*Save));
 
 	// Saves don't record which crop a tile grows yet. Every crop so far is the seed crop, so planted tiles get that.
 	// TODO: Save each planted tile's crop ContentId once saves store content IDs.

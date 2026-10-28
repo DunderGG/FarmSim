@@ -5,23 +5,16 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "FarmToolbar.h"
 #include "FarmingComponent.generated.h"
 
 class AFarmDayCycle;
 class AFarmGrid;
 class AFarmTile;
 class UFarmCropData;
+class UFarmToolData;
 
-UENUM(BlueprintType)
-enum class EFarmTool : uint8
-{
-	Hoe,
-	Seeds,
-	WateringCan UMETA(DisplayName = "Watering Can"),
-	Hand
-};
-
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnFarmToolChanged, EFarmTool);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnFarmToolChanged, const UFarmToolData* /* Tool */);
 
 /**
  * Gives its owner farming tools, a tiny inventory and the ability to sleep.
@@ -35,8 +28,16 @@ class UFarmingComponent : public UActorComponent
 public:
 	UFarmingComponent();
 
-	void SelectTool(EFarmTool Tool);
-	EFarmTool GetCurrentTool() const { return CurrentTool; }
+	/** Puts the tool in a toolbar slot (0 is the first) in hand. Does nothing if the slot doesn't exist. */
+	void SelectToolbarSlot(int32 Slot);
+
+	/** Puts the saved tool in hand, by its ContentId. Falls back to the first slot, with a warning, if no slot holds it. */
+	void RestoreCurrentTool(FName ToolContentId);
+
+	/** The tool in hand, or nullptr if its slot is empty. */
+	const UFarmToolData* GetCurrentTool() const { return Toolbar.GetCurrentTool(); }
+	const FFarmToolbar& GetToolbar() const { return Toolbar; }
+
 	void UseTool();
 	void Sleep();
 
@@ -63,6 +64,7 @@ protected:
 
 private:
 	void LoadSeedCrop();
+	void LoadToolbar();
 	AFarmTile* GetTargetTile() const;
 	void StartNextDay(const TCHAR* Reason);
 	void ShowMessage(const FString& Message) const;
@@ -80,5 +82,11 @@ private:
 	UPROPERTY()
 	TObjectPtr<const UFarmCropData> SeedCrop;
 
-	EFarmTool CurrentTool = EFarmTool::Hoe;
+	/** Tool assets in the toolbar slots, in order (FarmTool:Base.Hoe). Keys 1 to 9 select the first nine; the first is in hand at the start. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", AllowedTypes = "FarmTool"))
+	TArray<FPrimaryAssetId> ToolbarIds;
+
+	/** The tools loaded from ToolbarIds at BeginPlay, and the one in hand. */
+	UPROPERTY()
+	FFarmToolbar Toolbar;
 };

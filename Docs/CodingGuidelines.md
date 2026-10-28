@@ -62,7 +62,7 @@ Follow Epic's naming rules. The `.editorconfig` in the repo enforces the prefixe
 | `U` | Classes deriving from `UObject` (components, subsystems, data assets) | `UFarmingComponent` |
 | `S` | Slate widgets | `SFarmHudWidget` |
 | `F` | Structs and most other classes | `FFarmTileSaveData` |
-| `E` | Enums | `EFarmTool` |
+| `E` | Enums | `EFarmToolAction` |
 | `I` | Interfaces | `IFarmInteractable` |
 | `T` | Templates | `TFarmPool` |
 | `b` | Booleans (variables, members, parameters) | `bWatered`, `bHasCrop` |
@@ -93,10 +93,10 @@ The build treats MSVC warning **C4458 (declaration hides class member)** as an e
 
 ```cpp
 // Wrong: ACharacter already has a member called Mesh.
-UStaticMesh* Mesh = ToolMeshes.FindRef(Tool);
+UStaticMesh* Mesh = Tool->GetHeldMesh();
 
 // Right
-UStaticMesh* ToolMesh = ToolMeshes.FindRef(Tool);
+UStaticMesh* ToolMesh = Tool->GetHeldMesh();
 ```
 
 Other common traps in actors and pawns: `Controller`, `Owner`, `Tags`, `Instigator`, `RootComponent`, `Children`. In Slate widgets: `ChildSlot`.
@@ -327,7 +327,7 @@ UE_LOG(LogVestige, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 - Inside functions, comment **why**, not what. Good: `// Static or stationary lights can't be turned at runtime.` Bad: `// Set the mobility to movable.`
 - Write comments as full sentences in plain English.
 - Don't leave commented-out code. Git remembers it.
-- `TODO:` comments are allowed for known follow-ups but must say what is missing: `// TODO: Move tool meshes into UFarmToolData once there are more tools.`
+- `TODO:` comments are allowed for known follow-ups but must say what is missing: `// TODO: Save each planted tile's crop ContentId once saves store content IDs.`
 - New source files start with our copyright and license header (see [LICENSING.md](../LICENSING.md#license-notices-in-files)), then a blank line:
 
   ```cpp

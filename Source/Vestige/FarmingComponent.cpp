@@ -12,6 +12,7 @@
 #include "FarmGrid.h"
 #include "FarmHUD.h"
 #include "FarmTile.h"
+#include "FarmToolData.h"
 #include "GameFramework/Pawn.h"
 #include "TimerManager.h"
 #include "Vestige.h"
@@ -26,6 +27,7 @@ void UFarmingComponent::BeginPlay()
 	Super::BeginPlay();
 
 	LoadSeedCrop();
+	LoadToolbar();
 	DayCycle = AFarmDayCycle::Get(GetWorld());
 
 	// The prototype has a single field, so just use the first grid in the level.
@@ -55,10 +57,45 @@ void UFarmingComponent::LoadSeedCrop()
 	}
 }
 
-void UFarmingComponent::SelectTool(EFarmTool Tool)
+void UFarmingComponent::LoadToolbar()
 {
-	CurrentTool = Tool;
-	OnToolChanged.Broadcast(Tool);
+	if (ToolbarIds.IsEmpty())
+	{
+		UE_LOG(LogVestige, Warning, TEXT("%s has no Toolbar Ids, so the farmer has no tools."), *GetPathName());
+	}
+
+	// A missing tool leaves its slot empty, so the other tools keep their keys.
+	TArray<TObjectPtr<const UFarmToolData>> Tools;
+	for (const FPrimaryAssetId& ToolId : ToolbarIds)
+	{
+		const UFarmToolData* Tool = Cast<UFarmToolData>(UFarmContentData::LoadWithVisuals(ToolId));
+		if (!Tool)
+		{
+			UE_LOG(LogVestige, Warning, TEXT("Toolbar slot %d of %s (%s) names no tool asset, so the slot is empty."), Tools.Num() + 1,
+				*GetPathName(), *ToolId.ToString());
+		}
+		Tools.Add(Tool);
+	}
+	Toolbar.SetTools(MoveTemp(Tools));
+}
+
+void UFarmingComponent::SelectToolbarSlot(int32 Slot)
+{
+	if (Toolbar.SelectSlot(Slot))
+	{
+		OnToolChanged.Broadcast(GetCurrentTool());
+	}
+}
+
+void UFarmingComponent::RestoreCurrentTool(FName ToolContentId)
+{
+	if (!Toolbar.SelectTool(ToolContentId))
+	{
+		UE_LOG(LogVestige, Warning, TEXT("The saved tool %s isn't on the toolbar, so the first slot is in hand."),
+			*ToolContentId.ToString());
+		Toolbar.SelectSlot(0);
+	}
+	OnToolChanged.Broadcast(GetCurrentTool());
 }
 
 void UFarmingComponent::UseTool()
@@ -70,13 +107,20 @@ void UFarmingComponent::UseTool()
 		return;
 	}
 
-	switch (CurrentTool)
+	const UFarmToolData* Tool = GetCurrentTool();
+	if (!Tool)
 	{
-	case EFarmTool::Hoe:
+		ShowMessage(TEXT("No tool in this slot."));
+		return;
+	}
+
+	switch (Tool->GetAction())
+	{
+	case EFarmToolAction::Till:
 		ShowMessage(Tile->Till() ? TEXT("Tilled the soil.") : TEXT("Only grass can be tilled."));
 		break;
 
-	case EFarmTool::Seeds:
+	case EFarmToolAction::Plant:
 		if (Seeds <= 0 || !SeedCrop)
 		{
 			ShowMessage(TEXT("Out of seeds."));
@@ -92,11 +136,11 @@ void UFarmingComponent::UseTool()
 		}
 		break;
 
-	case EFarmTool::WateringCan:
+	case EFarmToolAction::Water:
 		ShowMessage(Tile->Water() ? TEXT("Watered.") : TEXT("Nothing to water here."));
 		break;
 
-	case EFarmTool::Hand:
+	case EFarmToolAction::Harvest:
 		if (const UFarmCropData* RipeCrop = Tile->GetCrop(); RipeCrop && Tile->Harvest())
 		{
 			HarvestedCrops += RipeCrop->GetYield();

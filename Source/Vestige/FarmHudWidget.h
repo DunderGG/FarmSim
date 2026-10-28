@@ -24,6 +24,7 @@ public:
 private:
 	FText GetStatusText() const;
 	FText GetInventoryText() const;
+	FText GetControlsText() const;
 	FText GetMessageText() const;
 	EVisibility GetMessageVisibility() const;
 

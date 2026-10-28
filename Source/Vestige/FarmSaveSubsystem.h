@@ -11,6 +11,7 @@ class AFarmDayCycle;
 class AFarmGrid;
 class AFarmHUD;
 class UFarmingComponent;
+class UFarmSaveGame;
 
 /**
  * Saves the farm every time a new day starts and loads it when play begins.
@@ -23,6 +24,9 @@ class UFarmSaveSubsystem : public UWorldSubsystem
 	GENERATED_BODY()
 
 public:
+	/** The ContentId of the tool in hand in a save. Saves made before tools were data assets name a base tool through the old enum. */
+	static FName GetSavedToolId(const UFarmSaveGame& Save);
+
 	/** Deletes the save and reloads the level, starting the farm from day 1. */
 	void StartNewGame();
 

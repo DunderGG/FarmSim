@@ -140,7 +140,7 @@ Rules:
 | Per-class tunables | `EditDefaultsOnly` properties, set in a Blueprint subclass | How `AFarmTile`'s meshes are set today |
 | Per-placed-instance tunables | `EditAnywhere` properties | `AFarmGrid` size |
 | Open-ended categories designers extend | `FGameplayTag` | Item categories, seasons |
-| Small closed sets that code switches on | `enum class` | `EFarmTool`, `EFarmTileState` |
+| Small closed sets that code switches on | `enum class` | `EFarmToolAction`, `EFarmTileState` |
 
 - **Identify content by stable IDs**, not by pointers, array positions, asset paths or display names. This matters most for saves: an ID still means the same thing after content is added, reordered, renamed or moved.
 - **One canonical content ID.** Every content data asset has a `ContentId` property, an `FName` of the form `<Namespace>.<Name>` (`Base.Turnip`). It is typed in by whoever makes the asset; it is not derived from the asset's file name or path, so renaming or moving the asset doesn't change it. The asset's `FPrimaryAssetId` is built from it (the data asset overrides `GetPrimaryAssetId` to return its type and `ContentId`), so the Asset Manager and saves use the same ID. This ID is what saves store.
@@ -217,7 +217,7 @@ Lyra is Epic's reference for a well-structured UE5 game. It is built for a large
 | Thin actors, behavior in components (`ULyraHealthComponent`, `ULyraHeroComponent`) | **Adopted.** `AFarmerCharacter` is a template character plus `UFarmingComponent`. New abilities (fishing, stamina) become new components. |
 | Subsystems instead of singletons and managers | **Adopted.** `UFarmSaveSubsystem`. |
 | A project prefix on every class (`Lyra...`) | **Adopted.** `Farm...` |
-| Data assets describing content (`ULyraPawnData`) | **Adopted** for crops (`UFarmCropData`). **Planned** for tools and items. |
+| Data assets describing content (`ULyraPawnData`) | **Adopted** for crops (`UFarmCropData`) and tools (`UFarmToolData`). **Planned** for items. |
 | Gameplay tags for identifiers | **Later**, for open-ended categories. Closed sets stay enums. |
 | Input actions mapped to tags through data assets | **Later.** Input actions are created in code today. Move to `IA_` / `IMC_` assets when input grows. |
 | Gameplay Message Router | **Not yet.** Plain delegates are enough. |
@@ -278,8 +278,9 @@ All of these have to exist and be tested in a packaged build first:
 | `AFarmTile` | Actor | One tile's state (grass, tilled, planted, watered, growth, the crop planted in it) and its visuals | Crop definitions, time, input, saving |
 | `AFarmGrid` | Actor, placed in the level | Spawning tiles, finding a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
 | `AFarmDayCycle` | Actor, placed or found-or-spawned by `Get` ([section 2](#2-unreals-gameplay-framework-where-things-go)) | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished` | Tiles, saving, HUD |
-| `UFarmingComponent` | Component on the farmer | Current tool, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting, using a tool, sleeping and passing out | UI, input bindings, meshes |
-| `AFarmerCharacter` | Character (parent of `BP_ThirdPersonCharacter`) | Input bindings and the held tool mesh | Farming rules |
+| `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting, using a tool, sleeping and passing out | UI, input bindings, meshes |
+| `FFarmToolbar` | Struct inside `UFarmingComponent` | The toolbar's slots and which slot is in hand, with the rules for selecting one | Loading or using tools |
+| `AFarmerCharacter` | Character (parent of `BP_ThirdPersonCharacter`) | Input bindings (keys 1 to 9 pick toolbar slots) and showing the current tool's held mesh | Farming rules, which tools exist |
 | `AFarmHUD` + `SFarmHudWidget` | HUD + Slate widget | Display only. Reads from the day cycle and farming component; keeps fading messages | Any game state |
 | `UFarmSaveSubsystem` | World subsystem | The current world's snapshot: saving it on `OnNewDayFinished` and loading it at play start, in the single save slot. Starting a new game (deletes that slot, then reopens the map) | Game rules; save slot or profile choice that must survive a map change ([section 6](#6-saving)) |
 | `UFarmSaveGame` | Save game | The saved data layout | Logic |
@@ -356,6 +357,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | `EFarmTool` replaced by tool data. The farming component owns the toolbar: `ToolbarIds`, a list of `FarmTool` IDs set on the farmer Blueprint, loaded with their visuals at `BeginPlay` into an `FFarmToolbar`. A missing tool leaves its slot empty, with a warning. The character binds keys 1 to 9 to slots and shows the held mesh of whatever tool is in hand. The HUD shows the tool's display name and builds its key hints from the toolbar. Saves store the tool in hand as its `ContentId` (`CurrentToolId`). Saves made before this only have the old `EFarmTool` value, which stays in `FarmSaveGame.h` and is mapped to the base tool IDs when loading. There is still no save version number | The toolbar is per player, so it belongs with the other tool state, while input stays on the character. Keeping the slot rules in a plain struct lets them be tested without a level. Mapping the old enum keeps existing saves loading the right tool. An empty `CurrentToolId` already marks a save as older, so a version number can wait for its own roadmap item |
 | 2026-10-28 | Tools are `UFarmToolData` primary data assets of type `FarmTool`, scanned in `/Game/Farm/Tools` and always cooked. What a tool does is an `EFarmToolAction` enum (till, plant, water, harvest), not a gameplay tag. The held mesh is a soft reference in the `Visuals` bundle. There is no per-tool grip offset: the farmer Blueprint's `HeldTool` component keeps the one hand transform it has today. `StaminaCost` is defined but unused until stamina exists | The actions are fixed mechanics that code switches on, which is what enums are for ([section 12](#12-designing-for-mods), rule 2). The compiler then flags a missing case, and modders combine actions rather than invent new ones. A per-tool offset can move into the asset when a second held mesh needs a different grip |
 | 2026-10-28 | `ContentId`, the display name, the primary asset ID and loading with the `Visuals` bundle moved from `UFarmCropData` into an abstract `UFarmContentData` base. Each content type only names its primary asset type | Tools are the second kind of content, and both need the same ID and loading code. One copy keeps the ID rules from [section 5](#5-data-and-content) in one place |
 | 2026-10-28 | CQTest set up: a private `CQTest` dependency in builds with developer tools, and the first tests in `Source/Vestige/Tests/FarmTileTests.cpp` | Rule changes to the tile needed tests. Tying the dependency to developer tools keeps the developer module out of shipping builds |
@@ -390,8 +392,8 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 - **Game logic calls the HUD.** `UFarmingComponent` and `UFarmSaveSubsystem` call `AFarmHUD::ShowMessage` directly, so gameplay depends on presentation. Replace with a feedback event (for example an `OnFarmMessage` delegate on a small subsystem) that the HUD listens to.
 - **The save subsystem reads and writes other classes' state.** It sets `UFarmingComponent::Seeds` directly and pulls tile fields one by one. Give each owner its own save and restore functions that use its save struct ([section 6](#6-saving)).
 - **Content IDs aren't checked yet.** `UFarmContentData::ContentId` has no format validation, duplicate check or redirect list ([section 5](#5-data-and-content)). A content asset with an empty ID has no valid primary asset ID, so the Asset Manager doesn't register it.
-- **Tools are a hard-coded enum** (`EFarmTool`), so new tools need code changes. Replace with tool data assets ([section 12](#12-designing-for-mods)).
-- **No extension points.** Nothing is exposed to Blueprints yet, and the C++ delegates can't be bound from Blueprints.
+- **No extension points.** Nothing is exposed to Blueprints yet, and the C++ delegates can't be bound from Blueprints. A tool can only do one of the fixed `EFarmToolAction` actions; custom tool behavior needs a Blueprint hook for using a tool.
+- **The toolbar is fixed per farmer Blueprint.** `ToolbarIds` lives on the farming component's defaults, and only which slot is in hand is saved. It moves to the inventory once there is one.
 - **Saves don't record a tile's crop.** `UFarmSaveSubsystem` restores every planted tile with the farming component's seed crop. That is correct only while there is one crop. Save the crop's `ContentId` per tile ([section 6](#6-saving)).
 - **Tiles are saved by grid position.** If the grid size changes, saved tiles land in the wrong place. Save each tile's grid coordinates (or an ID) with its data.
 - **No save version number** in `UFarmSaveGame`.
@@ -406,7 +408,7 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 Likely next steps as the game grows, with the design we intend. These aren't commitments; record the real decision in the log when we get there.
 
 - **Inventory and money** move off the pawn into an inventory component on the player state, because they must outlive the body ([section 2](#2-unreals-gameplay-framework-where-things-go)).
-- **Tools and items** become data assets (`UFarmToolData`, `UFarmItemData`) found through the Asset Manager, like crops (`UFarmCropData`) already are. Tiles, the farming component and saves refer to content by its `ContentId` ([section 5](#5-data-and-content)). `EFarmTool` goes away.
+- **Items** become data assets (`UFarmItemData`) found through the Asset Manager, like crops and tools already are. Tiles, the farming component and saves refer to content by its `ContentId` ([section 5](#5-data-and-content)).
 - **Save slots, a main menu or map travel** split the save subsystem: the active slot moves to a `UGameInstanceSubsystem`, and the world subsystem keeps collecting and applying the world's snapshot ([section 6](#6-saving)).
 - **Interaction** (doors, chests, NPCs, shipping bin) goes through an `IFarmInteractable` interface, so the farmer's interact key doesn't need to know every type.
 - **Seasons and weather** belong to the game state, or to the day cycle if they stay small. They broadcast changes like `OnNewDay`.

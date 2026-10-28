@@ -11,6 +11,7 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
 #include "FarmSaveSubsystem.h"
+#include "FarmToolData.h"
 #include "GameFramework/PlayerController.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
@@ -58,11 +59,16 @@ void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	EnhancedInput->BindAction(MakeAction(EKeys::E), ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::UseTool);
 	EnhancedInput->BindAction(MakeAction(EKeys::N), ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::Sleep);
-	EnhancedInput->BindAction(MakeAction(EKeys::One), ETriggerEvent::Started, this, &AFarmerCharacter::SelectHoe);
-	EnhancedInput->BindAction(MakeAction(EKeys::Two), ETriggerEvent::Started, this, &AFarmerCharacter::SelectSeeds);
-	EnhancedInput->BindAction(MakeAction(EKeys::Three), ETriggerEvent::Started, this, &AFarmerCharacter::SelectWateringCan);
-	EnhancedInput->BindAction(MakeAction(EKeys::Four), ETriggerEvent::Started, this, &AFarmerCharacter::SelectHand);
 	EnhancedInput->BindAction(MakeAction(EKeys::F9), ETriggerEvent::Started, this, &AFarmerCharacter::StartNewGame);
+
+	// The number keys pick toolbar slots; which tool sits in each slot is the farming component's data.
+	const FKey ToolbarKeys[] = {
+		EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five, EKeys::Six, EKeys::Seven, EKeys::Eight, EKeys::Nine};
+	for (int32 Slot = 0; Slot < UE_ARRAY_COUNT(ToolbarKeys); ++Slot)
+	{
+		EnhancedInput->BindAction(
+			MakeAction(ToolbarKeys[Slot]), ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::SelectToolbarSlot, Slot);
+	}
 
 	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -73,16 +79,6 @@ void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
-void AFarmerCharacter::SelectHoe() { SelectTool(EFarmTool::Hoe); }
-void AFarmerCharacter::SelectSeeds() { SelectTool(EFarmTool::Seeds); }
-void AFarmerCharacter::SelectWateringCan() { SelectTool(EFarmTool::WateringCan); }
-void AFarmerCharacter::SelectHand() { SelectTool(EFarmTool::Hand); }
-
-void AFarmerCharacter::SelectTool(EFarmTool Tool)
-{
-	Farming->SelectTool(Tool);
-}
-
 void AFarmerCharacter::StartNewGame()
 {
 	if (UFarmSaveSubsystem* Saves = GetWorld()->GetSubsystem<UFarmSaveSubsystem>())
@@ -91,8 +87,7 @@ void AFarmerCharacter::StartNewGame()
 	}
 }
 
-void AFarmerCharacter::ShowHeldTool(EFarmTool Tool)
+void AFarmerCharacter::ShowHeldTool(const UFarmToolData* Tool)
 {
-	const TObjectPtr<UStaticMesh>* ToolMesh = ToolMeshes.Find(Tool);
-	HeldTool->SetStaticMesh(ToolMesh ? ToolMesh->Get() : nullptr);
+	HeldTool->SetStaticMesh(Tool ? Tool->GetHeldMesh() : nullptr);
 }

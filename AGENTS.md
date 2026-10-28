@@ -27,8 +27,8 @@ Follow the two Docs files for every change. The rules below are the ones most of
    - `AFarmTile`: one tile's state (including the crop planted in it) and visuals.
    - `AFarmGrid`: spawns tiles, finds a tile by location, advances tiles on a new day. No clock, no lighting.
    - `AFarmDayCycle`: day number, clock, sun, sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished`.
-   - `UFarmingComponent`: tools, seeds and the crop they plant, harvest count, tile targeting, using tools, sleeping.
-   - `AFarmerCharacter`: input bindings and the held tool mesh only.
+   - `UFarmingComponent`: the toolbar and the tool in hand, seeds and the crop they plant, harvest count, tile targeting, using tools, sleeping.
+   - `AFarmerCharacter`: input bindings and showing the current tool's held mesh only.
    - `AFarmHUD` / `SFarmHudWidget`: display only.
    - `UFarmSaveSubsystem` / `UFarmSaveGame`: saving and loading.
    - `UFarmContentData`: base of every content data asset. Owns the `ContentId`, display name and loading through the Asset Manager.

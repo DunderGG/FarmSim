@@ -8,7 +8,7 @@
 #include "FarmingComponent.h"
 #include "FarmerCharacter.generated.h"
 
-class UStaticMesh;
+class UFarmToolData;
 class UStaticMeshComponent;
 class UInputAction;
 class UInputMappingContext;
@@ -29,18 +29,11 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-	/** Mesh shown in the hand for each tool. Tools without an entry show nothing. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming")
-	TMap<EFarmTool, TObjectPtr<UStaticMesh>> ToolMeshes;
-
 private:
-	void SelectHoe();
-	void SelectSeeds();
-	void SelectWateringCan();
-	void SelectHand();
-	void SelectTool(EFarmTool Tool);
 	void StartNewGame();
-	void ShowHeldTool(EFarmTool Tool);
+
+	/** Shows the tool's held mesh in the hand, or nothing for an empty slot or a tool without one. */
+	void ShowHeldTool(const UFarmToolData* Tool);
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UFarmingComponent> Farming;
