@@ -26,6 +26,7 @@ Contents
 13. [Scope and milestones](#13-scope-and-milestones)
 14. [Decision log](#14-decision-log)
 15. [Open questions](#15-open-questions)
+16. [Mechanics glossary](#16-mechanics-glossary)
 
 ---
 
@@ -288,6 +289,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | Added a mechanics glossary ([section 16](#16-mechanics-glossary)) that separates tile contamination, land health, pollution, haze, weather, charge and player exposure | One word ("radiation") was used for several values, which would confuse UI, tutorials and balance (audit G-13) |
 | 2026-10-28 | Single-player is the design target; co-op gets its own design milestone later, and no system has to be networking-ready now | "Don't make co-op impossible" had no boundary and invited costly guesswork (audit G-10) |
 | 2026-10-28 | Moddability means data-driven content plus extension points added for a concrete use; no claim of mod support until its scope and compatibility policy are decided | "Design every system for mods" was unbounded and could delay gameplay (audit G-09) |
 | 2026-10-28 | The vertical slice proves the farming core and a first relationship, not every pillar; it is judged by playtest criteria as well as features ([section 13](#13-scope-and-milestones)) | The slice's content doesn't cover the town, humans, exploration, combat or survival needs, so claiming it shows every pillar would give false confidence (audit G-01) |
@@ -318,8 +320,29 @@ To be decided later. Move each one into the relevant section and the decision lo
 
 - **Lore:** the details still open in [Lore.md](Spoilers/Lore.md), such as names marked as working names.
 - **Multiplayer:** co-op is wanted, but [Architecture.md](Architecture.md#16-decision-log) currently says single-player only. When we start, decide what shared state looks like (shared farm or separate farms, shared clock and sleep) and update the architecture.
+- **Pollution and exposure:** whether pollution is its own tile value or lowers land health directly, and whether standing on contaminated tiles adds player exposure ([section 16](#16-mechanics-glossary)).
 - **Land health:** whether it is one value per map or varies across a map, how fast it changes, and whether damage spreads to neighbouring tiles.
 - **Energy balance:** how much charge panels give and machines use, and whether the vertical slice needs any of it (probably not).
 - **Mutated crops:** exactly which effects are good and which are risky, and how often normal crops mutate.
 - **Death and knock-out penalty:** what exactly is lost.
 - **Final public game title** and the world's name. The current internal codename is Project Vestige.
+
+## 16. Mechanics glossary
+
+The gameplay values behind the setting's words. Use these names in code, UI text and content assets; the lore names are flavour for the same thing. Each value is separate unless the table says one feeds another. Anything marked *open* is still to be decided (see [open questions](#15-open-questions)).
+
+| Gameplay value | Where it lives | Lore name | What changes it | What it affects |
+|---|---|---|---|---|
+| **Tile contamination** | Each farm tile | Radiation, Cinderium compounds in the soil | Raised by dirty water and by radiation storms depositing dust. Lowered by soil filters, careful removal, harvesting and containing absorbing mutated crops, and slow decay | Crop growth speed, whether a crop grows at all, the chance a crop mutates. Feeds **land health** |
+| **Tile water** | Each farm tile | | Raised by the watering can, sprinklers and rain. Falls each day | Whether the crop grows that day |
+| **Water store** | Farm water sources (well, rain collector, purifier) | Clean water | Filled by rain and purifiers, drawn by the watering can and sprinklers | How much clean watering the player can do |
+| **Land health** | Each map (*open:* or varying across a map) | | Computed from the map's tiles, and changes over days: planted, clean, covered tiles raise it; contaminated, polluted or bare tiles lower it | **Local haze**, dust exposure during storms |
+| **Pollution** | *Open:* its own tile value, or a direct cut to land health | | Dirty machines, burning scrap | Land health |
+| **Local haze** | Each map | The haze | Follows land health slowly, on top of a regional haze that barely changes | Solar output, how bright the sky looks |
+| **Weather** | The region, set each day and announced a day ahead | | Regional forecast only; the farm can't change it | Rain waters tiles. Dust storms cut solar output. Radiation storms add tile contamination and **player exposure** outdoors |
+| **Charge** | Power cells | | Solar panels add it; machines draw a set amount to run | Whether a powered machine runs |
+| **Stamina** | The player | | Tool actions spend it; it refills on sleep. Drains faster after midnight | How much work the player can do, and how fast at zero |
+| **Exhaustion** | The player, for one day | | Going to bed late | Lower starting stamina the next morning |
+| **Player exposure** | The player, only with survival needs on | Radiation sickness | Radiation storms outdoors, night radiation, eating harmful crops (*open:* standing on contaminated tiles) | Stamina and work speed ([section 7](#7-survival-needs)) |
+
+Tile contamination and player exposure are different values: dirty soil hurts crops, and only weather, night and food hurt the player directly.

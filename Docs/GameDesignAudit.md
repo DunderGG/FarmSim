@@ -154,7 +154,9 @@ The document says crops unsuited to a new season die, while multi-season and reg
 
 **Severity: Low**
 
-The document uses “radiation,” “radiation sickness,” “night radiation,” “radiation storms,” “land health,” “pollution,” “Cinderium dust,” “haze,” “dirty machines,” “power cells” and “charge” without consistently separating fictional concepts from gameplay variables. For example, tile radiation affects growth and mutations, player radiation affects survival needs, and storms affect both the world and the player, but their relationships are not stated.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 16 adds a mechanics glossary that names each gameplay value, where it lives, its lore alias, what changes it and what it affects, and states that tile contamination and player exposure are separate. Two relationships (how pollution is stored, and whether contaminated tiles expose the player) are marked open.
+
+At the time of the original review, the document used “radiation,” “radiation sickness,” “night radiation,” “radiation storms,” “land health,” “pollution,” “Cinderium dust,” “haze,” “dirty machines,” “power cells” and “charge” without consistently separating fictional concepts from gameplay variables. For example, tile radiation affects growth and mutations, player radiation affects survival needs, and storms affect both the world and the player, but their relationships are not stated.
 
 **Why it matters:** Different readers may interpret the same term as one shared meter or several systems. That ambiguity will spread into UI, tutorial messaging, content assets and balance.
 
@@ -176,7 +178,7 @@ The document uses “radiation,” “radiation sickness,” “night radiation,
 3. Decide how “your pace,” zero stamina, survival settings and season boundaries protect against softlocks and avoidable loss (G-03 through G-05, G-12).
 4. Define the first-season progression and economy with a simple playable budget (G-06, G-07).
 5. Establish a minimum complete game and defer unbounded scope (G-08). [x] Bound the modding and multiplayer commitments (G-09, G-10; resolved 2026-10-28).
-6. Prototype one character arc and clarify the core mechanic vocabulary (G-11, G-13).
+6. Prototype one character arc (G-11). [x] Clarify the core mechanic vocabulary (G-13; resolved 2026-10-28).
 
 ## Review limits
 
