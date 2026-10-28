@@ -98,7 +98,7 @@ The day should always offer more to do than there's time for, so choosing is the
 - **Clock:** 24-hour display (06:40, 21:30). A day runs from 06:00 onwards.
 - **Seasons:** four seasons (spring, summer, autumn, winter) of 28 days each. The wasteland twist comes from weather events, not from strange seasons.
 - **Weather:** clear, rain (waters crops), dust storms, and radiation storms (raise tile radiation, dangerous outdoors). Weather is announced a day ahead (**Lore hook:** a robot weather broadcaster).
-- **Stamina:** tool actions cost stamina. At zero, the player can still move but works slowly.
+- **Stamina:** tool actions cost stamina. At zero, every action still works but takes twice as long, and costs nothing more. Stamina never goes below zero, so the faster drain after midnight only matters while some is left. Sleep refills it fully, or to 75% when exhausted.
 - **No forced sleep.** The player can stay up as long as they like, but late nights cost:
   - After midnight, **hostile robots** roam the farm and its surroundings. They attack the player, never crops or buildings.
   - Stamina drains faster.
@@ -302,6 +302,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | At zero stamina every action still works at half speed, stamina never goes below zero, and sleep refills it (to 75% when exhausted) ([section 5](#5-time-days-and-seasons)) | Stamina stays a real resource without ever trapping the player (audit G-04) |
 | 2026-10-28 | Late nights are gently pressured: HUD warnings at 22:00 and 00:00, one level of exhaustion that never stacks, and no item or currency loss from night knock-outs for now ([section 5](#5-time-days-and-seasons)) | Keeps the *Your pace* pillar honest: staying up costs the next morning, not progress (audit G-03) |
 | 2026-10-28 | Land health is bounded: 0 to 100 per map, a low-tech recovery path that needs no power, a 40% floor on solar output, capped contamination per storm, and about one season from poor to fair ([section 6](#land-health-and-the-haze)) | Stops the environment loop from becoming a softlock or a runaway reward (audit G-02) |
 | 2026-10-28 | Added a mechanics glossary ([section 16](#16-mechanics-glossary)) that separates tile contamination, land health, pollution, haze, weather, charge and player exposure | One word ("radiation") was used for several values, which would confuse UI, tutorials and balance (audit G-13) |
@@ -357,7 +358,7 @@ The gameplay values behind the setting's words. Use these names in code, UI text
 | **Weather** | The region, set each day and announced a day ahead | | Regional forecast only; the farm can't change it | Rain waters tiles. Dust storms cut solar output. Radiation storms add tile contamination and **player exposure** outdoors |
 | **Charge** | Power cells | | Solar panels add it; machines draw a set amount to run | Whether a powered machine runs |
 | **Stamina** | The player | | Tool actions spend it; it refills on sleep. Drains faster after midnight | How much work the player can do, and how fast at zero |
-| **Exhaustion** | The player, for one day | | Going to bed late | Lower starting stamina the next morning |
+| **Exhaustion** | The player, for one day | | Going to bed late | Starts the next morning at 75% stamina |
 | **Player exposure** | The player, only with survival needs on | Radiation sickness | Radiation storms outdoors, night radiation, eating harmful crops (*open:* standing on contaminated tiles) | Stamina and work speed ([section 7](#7-survival-needs)) |
 
 Tile contamination and player exposure are different values: dirty soil hurts crops, and only weather, night and food hurt the player directly.

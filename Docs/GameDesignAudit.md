@@ -64,7 +64,9 @@ At the time of the original review, the fifth pillar promised no forced sleep an
 
 **Severity: Medium**
 
-Section 5 says the player can continue working at zero stamina, but more slowly. Section 13 also calls for a player to “run out of stamina” and “pay for staying up late.” No fatigue cap, action cost behavior, recovery rule, or relationship between stamina, exhaustion and work speed is described.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 5 now says every action still works at zero stamina but takes twice as long and costs nothing more, stamina never goes below zero (so the faster late-night drain can't push it further), and sleep refills it fully, or to 75% when exhausted.
+
+At the time of the original review, section 5 said the player can continue working at zero stamina, but more slowly. Section 13 also calls for a player to “run out of stamina” and “pay for staying up late.” No fatigue cap, action cost behavior, recovery rule, or relationship between stamina, exhaustion and work speed is described.
 
 **Why it matters:** If actions remain repeatable indefinitely at zero stamina, stamina may be a time tax rather than a meaningful resource. If the slowdown is severe, it may instead become a soft lock or tedious wait. The document currently does not establish which experience is intended.
 

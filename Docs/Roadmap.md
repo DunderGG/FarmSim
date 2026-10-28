@@ -171,7 +171,7 @@ The code changes that the slice's content depends on. Doing them first means add
 ### 4.3 Stamina and late nights
 
 - [ ] Stamina: tool actions cost stamina, shown on the HUD
-- [ ] At zero stamina the player can still move but works slowly
+- [ ] At zero stamina every action still works but takes twice as long; stamina never goes below zero
 - [ ] No forced sleep: remove the pass-out at 02:00
 - [ ] After midnight, stamina drains faster
 - [ ] Going to bed late makes the next day start "exhausted" with less stamina; one level only, cleared by one night in bed before midnight
