@@ -88,7 +88,9 @@ At the time of the original review, section 7 said that with survival needs disa
 
 **Severity: Medium**
 
-Section 9 lists skills, tool tiers, a tech tree, town restoration and relationships as parallel progression tracks. The tech tree also unlocks tools, machines and robot upgrades; town facilities unlock shops, robots, areas and mechanics; relationships unlock recipes, upgrades and recruitment. Currency and materials are used across several of these.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 9 now gives each track one job in a table: town restoration is the main story, the tech tree owns machines, automation, tool tiers and robot upgrades, relationships gate only that character's content, and skills give small bonuses but never gate. It also names the vertical slice's primary loop, its optional track and what the player has earned by the end of the season.
+
+At the time of the original review, section 9 listed skills, tool tiers, a tech tree, town restoration and relationships as parallel progression tracks. The tech tree also unlocks tools, machines and robot upgrades; town facilities unlock shops, robots, areas and mechanics; relationships unlock recipes, upgrades and recruitment. Currency and materials are used across several of these.
 
 **Why it matters:** The same reward may be gated by multiple tracks, or players may be required to grind an unintended track to access the main loop. Without a hierarchy, the tracks can become redundant menus rather than distinct kinds of progress.
 

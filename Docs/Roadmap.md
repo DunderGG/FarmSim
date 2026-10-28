@@ -242,7 +242,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 ### Progression
 
 - [ ] Skills that level up by doing: farming, engineering, scavenging, combat
-- [ ] Tool tiers: rusty, pre-war and high-tech
+- [ ] Tool tiers: rusty, pre-war and high-tech, unlocked through the tech tree
 - [ ] The tech tree, as data assets, with branches for automation, tools, water and soil machines, energy and robot upgrades
 - [ ] Automation from sprinklers to robot farmhands to a fully automated farm
 
