@@ -1,0 +1,40 @@
+FarmSim additional permission under GNU GPL version 3 section 7
+
+This file is part of the license terms for FarmSim's code. The code is
+licensed under the GNU General Public License, version 3 or (at your option)
+any later version (the full text is in LICENSE), together with the following
+additional permission, granted by the copyright holders of FarmSim's code.
+
+    Additional permission under GNU GPL version 3 section 7
+
+    If you modify this Program, or any covered work, by linking or combining
+    it with Unreal Engine (or a modified version of it), or with the
+    libraries and SDKs of a game distribution platform or console that are
+    needed to publish the game there (together, the "Non-GPL Components"),
+    containing parts covered by the terms of their own licenses, the
+    licensors of this Program grant you additional permission to convey the
+    resulting work. Corresponding Source for a non-source form of such a
+    combination shall not include the source code for the parts of the
+    Non-GPL Components used, but shall include the source code for the parts
+    of this Program that are used.
+
+    This permission applies whichever version of the GNU GPL (version 3 or
+    any later version) you choose to apply to this Program.
+
+Scope
+
+- "This Program" means the files that carry the SPDX line
+  "GPL-3.0-or-later WITH AdditionRef-FarmSim-Unreal-Exception", and the other
+  code paths listed as GPL in LICENSING.md.
+- The permission only leaves the Non-GPL Components out of Corresponding
+  Source. FarmSim's own code stays under the GPL, and its source must be
+  shared whenever a build is conveyed.
+- It does not cover the Epic Games template files listed in LICENSING.md,
+  which are under the Unreal Engine EULA, or the assets, which are under
+  CC BY-NC-SA 4.0 (LICENSE-ASSETS.txt).
+- As GPLv3 section 7 allows, you may remove this permission from your own
+  copies and modified versions. Without it, a build that includes Unreal
+  Engine can't be conveyed under the GPL.
+
+This wording has not yet been reviewed by a lawyer. It will be checked
+before FarmSim is sold or released on a console; see LICENSING.md.

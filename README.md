@@ -36,8 +36,8 @@ Contributions are welcome: gameplay code, 3D art, audio, testing, documentation 
 
 ## License
 
-- **Code** (`Source/`, `Config/`, scripts): [GPL-3.0-or-later](LICENSE), with an additional permission to link with Unreal Engine.
-- **Assets and documentation**: [CC BY-NC-SA 4.0](LICENSE-ASSETS.txt).
+- **Code** (`Source/`, `Config/`, scripts): [GPL-3.0-or-later](LICENSE), with an [additional permission](LICENSE-EXCEPTION.txt) to link with Unreal Engine and platform SDKs. Anyone may share and sell it, as long as they pass on the source under the same license.
+- **Assets and documentation**: [CC BY-NC-SA 4.0](LICENSE-ASSETS.txt). Free for non-commercial use; commercial use is reserved to the maintainer, who sells official builds.
 - **Epic Games template material** stays under the [Unreal Engine EULA](https://www.unrealengine.com/eula).
 
 [LICENSING.md](LICENSING.md) explains what this means in practice. Contributors are listed in [CREDITS.md](CREDITS.md).

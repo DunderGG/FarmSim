@@ -84,7 +84,7 @@ A third-person farmer on a small field who can till, plant, water and harvest, w
 - [x] Contributing guide, and Git LFS for more file types
 - [x] Game design document
 - [x] Lore document
-- [x] Licenses: GPL-3.0 with an Unreal Engine permission for code, CC BY-NC-SA 4.0 for assets, and a credits file
+- [x] Licenses: GPL-3.0-or-later with an Unreal Engine permission for code, CC BY-NC-SA 4.0 for assets, and a credits file
 - [x] The Unreal Engine permission stated as part of the code's license terms
 - [x] Names of other games removed from the documents and from the Git history
 - [x] This roadmap
@@ -284,7 +284,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 - [ ] Main menu, settings and save slots
 - [ ] Music and sound effects
 - [ ] Final names for the game, the world, the town, the coin, the caretaker and the robot makers
-- [ ] License headers (an SPDX line) in our own source files *(decide)*
+- [x] License headers (an SPDX line) in our own source files
 - [ ] A lawyer's check of the licensing setup
 - [ ] Make the GitHub repository public, so contributors can work on it as the licensing intends
 - [ ] Packaged builds and store pages

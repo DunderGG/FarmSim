@@ -151,3 +151,20 @@ LICENSING.md and the README identify code as GPL-3.0-or-later, but CONTRIBUTING.
 ## Review limits
 
 This audit compares the checked-in license and contribution documents with the stated goals. It does not establish whether a particular contributor accepted terms, whether FarmSim has sufficient rights to any individual asset, or whether the proposed exception is legally effective. It is not a substitute for legal advice. Before opening the repository publicly, accepting external contributions, or distributing paid builds, obtain specialist review of the complete rights chain and platform-specific obligations.
+
+## Status (2026-10-28)
+
+Changes made in response to this audit. None of them replaces the lawyer's check, which is still open (see `Docs/Roadmap.md`, section 6).
+
+| Finding | Status | What changed |
+|---|---|---|
+| LIC-01 | Addressed | Kept CC BY-NC-SA 4.0 for assets on purpose. `LICENSING.md` now says plainly that commercial asset use is reserved to the maintainer, that forks may sell GPL code but not the assets, and no longer calls the whole repository "open". |
+| LIC-02 | Addressed | David chose the narrow grant. Contributor terms (version 2) let the maintainer use contributions in official builds and accept store terms, but official builds keep their code under the GPL, so nobody (the maintainer included) can make a closed-source version. |
+| LIC-03 | Addressed, needs legal review | The additional permission is now in `LICENSE-EXCEPTION.txt` next to `LICENSE`, with a scope section. Our source files carry a copyright line and SPDX identifier pointing to it. |
+| LIC-04 | Addressed | Contributions are accepted only as pull requests; issues and ideas are not contributions. The PR template has a terms checkbox naming the terms version; PRs merge only when it is ticked, and the PR is the record. |
+| LIC-05 | Addressed | `LICENSING.md` and the contributor terms state the public grant and the maintainer's grant separately, including what it covers (stores, consoles, porting studios and publishers working for him) and what license applies to code and assets in an official build. |
+| LIC-06 | Addressed | New summary distinguishes free code, non-commercial assets and official builds; explains that the GPL allows selling copies and that building from source is legal. |
+| LIC-07 | Addressed | `LICENSING.md` has a path-level table (copyright holder, license, origin, whether it ships) that must be updated with new folders or third-party files; mixed-origin template files are marked. How the `Images/*-CGPT.png` images were made is still to be recorded. |
+| LIC-08 | Addressed | `CONTRIBUTING.md` lists accepted and rejected licenses for code, assets and docs (no third-party GPL/LGPL code, nothing NC/ND/BY-SA), requires source and license per file in the PR and `CREDITS.md`, and treats AI-generated material as third-party. |
+| LIC-09 | Open | Needs a lawyer experienced with the GPL and Unreal Engine, and a check of each store and console's terms before release there. Listed under "Still to check" in `LICENSING.md`. |
+| LIC-10 | Addressed, needs legal review | "GPL-3.0-or-later" used everywhere; the permission states it applies with later GPL versions too; SPDX identifiers added. |

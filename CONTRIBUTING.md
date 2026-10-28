@@ -4,7 +4,7 @@ Thanks for wanting to help. FarmSim is a cozy 3D farming and life-sim game, buil
 
 This guide covers how to get the project running, how it is organized, and how to contribute code, art, audio and ideas.
 
-> **Licensing in short:** code is GPL-3.0, assets are CC BY-NC-SA 4.0, and the maintainer (David, [@DunderGG](https://github.com/DunderGG)) sells official builds of the game. Contributors are credited. Read [Licensing and credit](#11-licensing-and-credit) before your first contribution.
+> **Licensing in short:** code is GPL-3.0-or-later with a permission for Unreal Engine, assets are CC BY-NC-SA 4.0 (no commercial use except by the maintainer), and the maintainer (David, [@DunderGG](https://github.com/DunderGG)) sells official builds of the game whose code stays under the GPL. Contributors are credited. Read [Licensing and credit](#11-licensing-and-credit) before your first contribution.
 
 Contents
 
@@ -173,6 +173,8 @@ Before opening a pull request, check:
 - [ ] Code follows the [coding guidelines](Docs/CodingGuidelines.md#17-review-checklist) and the [architecture](Docs/Architecture.md).
 - [ ] Assets are named correctly, and their Blender sources are included.
 - [ ] Docs are updated if the design changed.
+- [ ] Third-party material is listed with its source and license (see [Third-party material](#third-party-material)), and new source files start with the license header from [LICENSING.md](LICENSING.md#license-notices-in-files).
+- [ ] You agree to the [contributor terms](#contributor-terms).
 
 ## 10. Working with AI tools
 
@@ -180,20 +182,45 @@ You're welcome to use AI coding assistants. [AGENTS.md](AGENTS.md) (and `CLAUDE.
 
 ## 11. Licensing and credit
 
-FarmSim's code is licensed under the **GPL-3.0** (with a permission that allows linking with Unreal Engine) and its assets under **CC BY-NC-SA 4.0**. The maintainer sells official builds of the game. The full picture is in [LICENSING.md](LICENSING.md).
+FarmSim's code is licensed under the **GPL-3.0-or-later** with an [additional permission](LICENSE-EXCEPTION.txt) that allows linking with Unreal Engine and platform SDKs. Its assets and documentation are under **CC BY-NC-SA 4.0**, which doesn't allow commercial use. The maintainer sells official builds of the game, and their code stays under the GPL. The full picture, and which license applies to which folder, is in [LICENSING.md](LICENSING.md).
 
-**Contributor terms.** By submitting a pull request, a file or any other contribution to this repository, you agree that:
+### Contributor terms
 
-1. The contribution is your own work, or you have the right to submit it, and you have said where any third-party parts come from and what license they are under.
-2. Your contribution is licensed under the license for the part of the repository it goes into: GPL-3.0 (with the Unreal Engine permission) for code, CC BY-NC-SA 4.0 for assets and everything else.
-3. You also grant David Bennehag, the maintainer, a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license to use, modify, distribute and sublicense your contribution as part of FarmSim, including in commercial builds sold on game stores and consoles, and under other license terms if the project needs them (for example for a console release).
-4. You keep the copyright to your work and may use it elsewhere however you like.
+These terms are version 2, dated 2026-10-28. They apply to every pull request to this repository. Contributions are accepted only as pull requests; please don't send code or assets by email, chat or issue attachment. Ideas and suggestions in issues and discussions are welcome, and aren't contributions under these terms. If one turns into code or art, it comes in as a pull request.
 
-Add a line `I agree to the contributor terms in CONTRIBUTING.md` to your first pull request.
+When you open a pull request, you agree that:
 
-**Credit.** Add yourself to [CREDITS.md](CREDITS.md) in your first pull request. Contributors are also listed in the game's credits.
+1. **You have the right to submit it.** The contribution is your own work, or you have the right to submit it under these terms (for example, your employer allows it). You have listed every third-party part with its source and license, as described under [Third-party material](#third-party-material).
+2. **It is licensed to everyone** under the license for the part of the repository it goes into: GPL-3.0-or-later with the additional permission in [LICENSE-EXCEPTION.txt](LICENSE-EXCEPTION.txt) for code, and CC BY-NC-SA 4.0 for assets, documentation and everything else. [LICENSING.md](LICENSING.md#which-license-applies-where) says which is which.
+3. **The maintainer may use it in official builds.** You also grant David Bennehag, the maintainer, a perpetual, worldwide, non-exclusive, royalty-free, irrevocable license to use, copy, modify and distribute your contribution as part of official FarmSim builds, including commercial builds sold on game stores and consoles. This includes accepting the terms a store or platform sets for publishing there, and letting people who work on official builds for him (for example a porting studio or a publisher) do the same, under the same limits.
+4. **Official builds stay GPL.** The grant in point 3 doesn't let anyone distribute your code under closed-source terms. The FarmSim code in every official build stays under the GPL with the additional permission, and its source is published in this repository. The grant only adds what CC BY-NC-SA doesn't allow: commercial use of your assets in official builds.
+5. **You keep the copyright** to your work and may use it elsewhere however you like.
 
-**Third-party material.** Only submit assets and code you made yourself or that are under a license compatible with ours (for example CC0 or CC BY for assets, MIT or BSD for code). Say where they came from in the pull request. Never submit assets ripped from other games, or anything generated from someone else's protected work.
+Tick the contributor terms box in the pull request template. Pull requests are merged only when the box is ticked, and the pull request is the record of your agreement and of the terms version you agreed to. If you submitted something you didn't have the right to submit, say so in the pull request or an issue, and it will be removed.
+
+### Credit
+
+Add yourself to [CREDITS.md](CREDITS.md) in your first pull request. Contributors are also listed in the game's credits.
+
+### Third-party material
+
+Only submit code and assets you made yourself, or third-party material under one of these licenses:
+
+| Kind | Accepted | Not accepted |
+|---|---|---|
+| Code | MIT, BSD-2-Clause, BSD-3-Clause, Apache-2.0, zlib, BSL-1.0, public domain or CC0 | Any GPL, LGPL or AGPL code (its authors haven't given the Unreal Engine permission, so we couldn't ship builds), and any license with a non-commercial or "no modification" clause |
+| Assets (models, textures, fonts, audio, music) | CC0, public domain, CC BY 4.0, and font licenses such as the SIL Open Font License | Anything non-commercial (NC), no-derivatives (ND), ShareAlike under a different license (for example CC BY-SA), "free for personal use", editorial-only, or with an unclear source |
+| Documentation | Your own writing; short quotes with a source | Copied text from other sites or books |
+
+For each third-party file:
+
+- Say in the pull request where it came from (a link), who made it and its license.
+- Add it to the third-party list in [CREDITS.md](CREDITS.md#third-party) with the same details, and keep any license or attribution file the license requires next to it.
+- If you're not sure the license allows a commercial game, don't submit it; ask in an issue first.
+
+**AI-generated material** is treated like third-party material: say which tool made it and what you gave it, and make sure the tool's terms allow use in a commercial game. Never submit anything generated from, or imitating, someone else's protected work. The maintainer may decline AI-generated material whose origin is unclear.
+
+Never submit code or assets ripped from other games.
 
 ## 12. Be kind
 
