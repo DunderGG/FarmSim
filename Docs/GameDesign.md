@@ -177,7 +177,10 @@ The player's actions slowly improve or damage the local environment, and healthi
 ## 7. Survival needs
 
 - **Needs:** hunger, thirst and radiation sickness. Eating crops and drinking clean water keep them in check, which feeds back into farming.
-- **Optional:** a setting turns survival needs off for casual players. With them off, the game is a pure farming and life sim; nothing else should depend on needs being on.
+- **Optional:** a setting turns survival needs off for casual players. With them off, the game is a pure farming and life sim:
+  - Off removes the player's own meters (hunger, thirst, radiation exposure, cold) together with their HUD and penalties.
+  - Everything that belongs to farming stays the same in both modes: tile contamination, clean water for crops, and storms.
+  - The setting can be changed at any time. The save keeps the meters, and they start full when needs are switched back on.
 - Needs never kill the player outright. Neglecting them lowers stamina and work speed, and at worst the player wakes at home with a penalty (the same as being knocked out in combat).
 
 ## 8. Robots and people
@@ -302,6 +305,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | Switching survival needs off removes only the player's own meters, their HUD and penalties; farming systems are the same in both modes, and the setting can change at any time ([section 7](#7-survival-needs)) | Gives the option an exact contract that is easy to balance and safe for saves (audit G-05) |
 | 2026-10-28 | At zero stamina every action still works at half speed, stamina never goes below zero, and sleep refills it (to 75% when exhausted) ([section 5](#5-time-days-and-seasons)) | Stamina stays a real resource without ever trapping the player (audit G-04) |
 | 2026-10-28 | Late nights are gently pressured: HUD warnings at 22:00 and 00:00, one level of exhaustion that never stacks, and no item or currency loss from night knock-outs for now ([section 5](#5-time-days-and-seasons)) | Keeps the *Your pace* pillar honest: staying up costs the next morning, not progress (audit G-03) |
 | 2026-10-28 | Land health is bounded: 0 to 100 per map, a low-tech recovery path that needs no power, a 40% floor on solar output, capped contamination per storm, and about one season from poor to fair ([section 6](#land-health-and-the-haze)) | Stops the environment loop from becoming a softlock or a runaway reward (audit G-02) |

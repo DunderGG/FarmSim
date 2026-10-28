@@ -76,7 +76,9 @@ At the time of the original review, section 5 said the player can continue worki
 
 **Severity: Medium**
 
-Section 7 says that with survival needs disabled, “nothing else should depend on needs being on.” Elsewhere, hunger, thirst and radiation sickness interact with food, clean water, stamina and radiation; section 5 adds cold and night radiation when needs are on. The document does not say whether disabling needs removes the systems, freezes them, or merely prevents penalties.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 7 now defines the setting's contract: off removes the player's meters (hunger, thirst, radiation exposure, cold) with their HUD and penalties, farming systems (tile contamination, clean water for crops, storms) are the same in both modes, and the setting can change at any time, with meters starting full when switched back on.
+
+At the time of the original review, section 7 said that with survival needs disabled, “nothing else should depend on needs being on.” Elsewhere, hunger, thirst and radiation sickness interact with food, clean water, stamina and radiation; section 5 adds cold and night radiation when needs are on. The document does not say whether disabling needs removes the systems, freezes them, or merely prevents penalties.
 
 **Why it matters:** A setting that changes foundational resource rules can make crops, water, food and progression behave differently in ways that are difficult to balance or save consistently. An option intended to make play more casual may still leave players facing mandatory resource chores.
 
