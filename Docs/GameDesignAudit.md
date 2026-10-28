@@ -52,7 +52,9 @@ At the time of the original review, sections 5–6 connected radiation, crop gro
 
 **Severity: High**
 
-The fifth pillar promises no forced sleep and says the player decides how to spend their time. But the design also adds hostile robots after midnight, faster stamina drain, reduced stamina after late sleep, and crops dying at season change. The stated rule that enemies never damage property reduces one risk but does not resolve interrupted play, repeated player knockouts, or the loss of a nearly complete crop cycle.
+**Status: Resolved (2026-10-28).** [GameDesign.md](GameDesign.md) section 5 now states a gentle pressure level and adds guardrails: HUD warnings at 22:00 and 00:00, a single level of exhaustion that never stacks and clears after one early night, and no item or currency loss from night knock-outs until combat penalties are designed. Season-change loss is handled under G-12.
+
+At the time of the original review, the fifth pillar promised no forced sleep and says the player decides how to spend their time. But the design also adds hostile robots after midnight, faster stamina drain, reduced stamina after late sleep, and crops dying at season change. The stated rule that enemies never damage property reduces one risk but does not resolve interrupted play, repeated player knockouts, or the loss of a nearly complete crop cycle.
 
 **Why it matters:** These are overlapping time pressures. Players who explore, socialize or simply learn slowly may be punished both for staying up and for crossing a season boundary. That can make the game feel less like “your pace” and more like a hidden deadline system.
 

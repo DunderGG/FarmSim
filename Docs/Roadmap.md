@@ -174,7 +174,8 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] At zero stamina the player can still move but works slowly
 - [ ] No forced sleep: remove the pass-out at 02:00
 - [ ] After midnight, stamina drains faster
-- [ ] Going to bed late makes the next day start "exhausted" with less stamina
+- [ ] Going to bed late makes the next day start "exhausted" with less stamina; one level only, cleared by one night in bed before midnight
+- [ ] HUD warnings at 22:00 and 00:00
 - [ ] A bed in the farmhouse to sleep in, instead of a key that works anywhere
 - [ ] Hostile robots at night wait until combat exists ([milestone 3](#combat-and-the-wasteland))
 

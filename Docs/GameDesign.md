@@ -104,6 +104,10 @@ The day should always offer more to do than there's time for, so choosing is the
   - Stamina drains faster.
   - Sleeping late makes the player **exhausted**: the next day starts with less stamina.
   - With survival needs on, cold and night radiation also build up (see [section 7](#7-survival-needs)).
+- **Late-night guardrails.** The pressure is gentle: a late night costs the next morning, never the player's progress.
+  - The HUD warns at 22:00 ("getting late") and at 00:00 ("it's dangerous out now").
+  - Exhaustion has one level and never stacks. One night in bed before midnight clears it.
+  - Being knocked out by night robots sends the player home exhausted, with no item or currency loss until combat and its penalties exist.
 - This replaces the prototype's "pass out at 02:00" rule.
 
 ## 6. Farming
@@ -298,6 +302,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-28 | Late nights are gently pressured: HUD warnings at 22:00 and 00:00, one level of exhaustion that never stacks, and no item or currency loss from night knock-outs for now ([section 5](#5-time-days-and-seasons)) | Keeps the *Your pace* pillar honest: staying up costs the next morning, not progress (audit G-03) |
 | 2026-10-28 | Land health is bounded: 0 to 100 per map, a low-tech recovery path that needs no power, a 40% floor on solar output, capped contamination per storm, and about one season from poor to fair ([section 6](#land-health-and-the-haze)) | Stops the environment loop from becoming a softlock or a runaway reward (audit G-02) |
 | 2026-10-28 | Added a mechanics glossary ([section 16](#16-mechanics-glossary)) that separates tile contamination, land health, pollution, haze, weather, charge and player exposure | One word ("radiation") was used for several values, which would confuse UI, tutorials and balance (audit G-13) |
 | 2026-10-28 | Single-player is the design target; co-op gets its own design milestone later, and no system has to be networking-ready now | "Don't make co-op impossible" had no boundary and invited costly guesswork (audit G-10) |
