@@ -43,7 +43,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
 10. **Record design decisions.** A change that adds a system, moves a responsibility or makes a design choice updates `Docs/Architecture.md` (Part B and the decision log) in the same commit.
 11. **Design for mods.** Content (crops, tools, items) is data assets found through the Asset Manager, never hard-coded lists or enums. Content has namespaced IDs (`Base.Parsnip`). Saves store IDs and skip unknown content. See `Docs/Architecture.md`, section 12.
 12. **Ticking off by default.** Use events and timers instead of per-frame polling.
-13. **Tests for rules.** Game rule changes get CQTest tests in `Source/Vestige/Tests/`, named `Vestige.<Area>.<Behavior>`. A bug fix gets a test that would have caught it. CQTest isn't set up yet: the first test sets it up (guidelines section 13).
+13. **Tests for rules.** Game rule changes get CQTest tests in `Source/Vestige/Tests/`, named `Vestige.<Area>.<Behavior>`. A bug fix gets a test that would have caught it. How to write and run them is in guidelines section 13.
 
 ## Building and testing
 

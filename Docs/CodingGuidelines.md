@@ -351,10 +351,16 @@ UE_LOG(LogVestige, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 Game rules get automated tests. They run in seconds without playing the game, and they catch a broken rule the moment it breaks instead of three play sessions later.
 
 - **Framework: CQTest**, Epic's newest C++ test framework (https://dev.epicgames.com/documentation/unreal-engine/cqtest-test-framework-for-unreal-engine). It wraps the engine's automation system with `TEST_CLASS` / `TEST` macros and automatic setup and teardown. It is the chosen framework for all new tests. Don't mix in the older Automation Spec or `IMPLEMENT_SIMPLE_AUTOMATION_TEST` styles.
-- **Status: setup pending.** The project has no tests yet; `Vestige.Build.cs` doesn't depend on CQTest and `Vestige.uproject` doesn't enable it ([Roadmap.md](Roadmap.md), Tests). Whoever adds the first test also sets CQTest up, confirms the test runs, and then replaces this bullet with the exact module and plugin entries and the command that was used, and ticks the roadmap item, in the same commit. Until then, the expected starting point is `"CQTest"` in `PrivateDependencyModuleNames` and, if the build can't find the module, the CQTest plugin enabled in `Vestige.uproject`.
+- **Setup:** `Vestige.Build.cs` adds `"CQTest"` to `PrivateDependencyModuleNames` only when `Target.bBuildDeveloperTools` is set. CQTest is an engine developer module, so it never ships. No plugin needs enabling in `Vestige.uproject`: the CQTest plugin only contains Epic's tests of the framework itself.
 - **What to test**: rules and data, not visuals. Tile transitions (grass, tilled, planted, ripe), growth only when watered, harvesting, tool use with no seeds left, the day clock rolling over, and save data round-tripping.
-- **Where**: `Source/Vestige/Tests/<ClassName>Tests.cpp`, wrapped in `#if WITH_DEV_AUTOMATION_TESTS` so tests never ship. Name tests `Vestige.<Area>.<Behavior>`, for example `Vestige.Tile.WateredCropGrowsOneStage`.
-- **Running**: from the editor's Test Automation window (Tools menu), filtered on `Vestige`, or from the command line with `-ExecCmds="Automation RunTests Vestige"`.
+- **Where**: `Source/Vestige/Tests/<ClassName>Tests.cpp`, wrapped in `#if WITH_DEV_AUTOMATION_TESTS` so tests never ship. Name tests `Vestige.<Area>.<Behavior>`, for example `Vestige.Tile.WateredCropGrowsOneStage`. CQTest names a test `<directory>.<class>.<method>`, so write `TEST_CLASS(Tile, "Vestige")` with one `TEST_METHOD` per behavior. Put the class in a namespace named after the file (`FarmTileTests`) so the short fixture name can't clash with other declarations in unity builds.
+- **Running**: from the editor's Test Automation window (Tools menu), filtered on `Vestige`, or from the command line with the editor closed:
+
+  ```
+  "C:\Program Files\Epic Games\UE_5.7\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "C:\Unreal Projects\Vestige\Vestige.uproject" -ExecCmds="Automation RunTests Vestige; Quit" -unattended -nopause -nullrhi -nosplash -testexit="Automation Test Queue Empty"
+  ```
+
+  Each test logs a `Test Completed. Result={Success}` line.
 - **Design for testability**: keep rules in code that doesn't need a running level. When rule code is tangled with visuals or actor setup, that's a sign to separate them (see [Architecture.md, Known gaps](Architecture.md#17-known-gaps)).
 - Run the tests before committing a change to game rules. A bug fix gets a test that would have caught it.
 

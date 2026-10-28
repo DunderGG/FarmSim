@@ -22,6 +22,12 @@ public class Vestige : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
+		// CQTest is a developer module, so it is only available to builds with developer tools (never shipping).
+		if (Target.bBuildDeveloperTools)
+		{
+			PrivateDependencyModuleNames.Add("CQTest");
+		}
+
 		PublicIncludePaths.AddRange(new string[] {
 			"Vestige"
 		});

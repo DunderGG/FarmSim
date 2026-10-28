@@ -149,7 +149,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 **Tests**
 
-- [ ] Set up CQTest in the project
+- [x] Set up CQTest in the project
 - [ ] Tile rule tests: tilling, planting, watered crops grow, dry crops don't, harvesting only when ripe
 - [ ] Day clock tests: the time and day roll over correctly
 - [ ] Save tests: tile, farming and clock state survive a save and load round trip through each owner's own save and restore functions
