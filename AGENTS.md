@@ -31,7 +31,8 @@ Follow the two Docs files for every change. The rules below are the ones most of
    - `AFarmerCharacter`: input bindings and the held tool mesh only.
    - `AFarmHUD` / `SFarmHudWidget`: display only.
    - `UFarmSaveSubsystem` / `UFarmSaveGame`: saving and loading.
-   - `UFarmCropData`: one crop's definition (ID, name, growth, meshes, yield, prices), found through the Asset Manager. No runtime state.
+   - `UFarmContentData`: base of every content data asset. Owns the `ContentId`, display name and loading through the Asset Manager.
+   - `UFarmCropData`: one crop's definition (growth, meshes, yield, prices). No runtime state.
 2. **Epic naming.** `A`/`U`/`S`/`F`/`E`/`I`/`T` type prefixes, `b` for booleans, PascalCase everywhere, and the `Farm` project prefix on every new type (`AFarmShop`, `EFarmSeason`, `FOnFarmNewDay`).
 3. **No shadowing.** The build treats MSVC C4458 as an error. Never give a local or parameter the name of a member of the class or any engine base class (`Mesh` in a character, `Owner`, `Controller`, `Tags`...).
 4. **Formatting.** Tabs, braces on their own lines, braces on every block. Format changed files with the repo's `.clang-format`; don't reformat untouched files.

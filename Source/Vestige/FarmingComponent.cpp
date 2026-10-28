@@ -4,9 +4,9 @@
 #include "FarmingComponent.h"
 
 #include "DrawDebugHelpers.h"
-#include "Engine/AssetManager.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "FarmContentData.h"
 #include "FarmCropData.h"
 #include "FarmDayCycle.h"
 #include "FarmGrid.h"
@@ -46,22 +46,11 @@ void UFarmingComponent::BeginPlay()
 
 void UFarmingComponent::LoadSeedCrop()
 {
-	UAssetManager* AssetManager = UAssetManager::GetIfInitialized();
-	if (!AssetManager || !SeedCropId.IsValid())
-	{
-		UE_LOG(LogVestige, Warning, TEXT("%s has no Seed Crop Id set, so nothing can be planted."), *GetPathName());
-		return;
-	}
-
 	// Waiting is fine at play start, and with the meshes loaded now, planting never stalls on a load.
-	if (const TSharedPtr<FStreamableHandle> Handle = AssetManager->LoadPrimaryAsset(SeedCropId, {UFarmCropData::VisualsBundle}))
-	{
-		Handle->WaitUntilComplete();
-	}
-	SeedCrop = AssetManager->GetPrimaryAssetObject<UFarmCropData>(SeedCropId);
+	SeedCrop = Cast<UFarmCropData>(UFarmContentData::LoadWithVisuals(SeedCropId));
 	if (!SeedCrop)
 	{
-		UE_LOG(LogVestige, Warning, TEXT("Seed crop %s wasn't found, so nothing can be planted. Check the crop asset's Content Id."),
+		UE_LOG(LogVestige, Warning, TEXT("%s's Seed Crop Id (%s) names no crop asset, so nothing can be planted."), *GetPathName(),
 			*SeedCropId.ToString());
 	}
 }

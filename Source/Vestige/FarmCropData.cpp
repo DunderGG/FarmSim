@@ -6,16 +6,6 @@
 #include "Engine/StaticMesh.h"
 
 const FPrimaryAssetType UFarmCropData::AssetType(TEXT("FarmCrop"));
-const FName UFarmCropData::VisualsBundle(TEXT("Visuals"));
-
-FPrimaryAssetId UFarmCropData::GetPrimaryAssetId() const
-{
-	if (ContentId.IsNone())
-	{
-		return FPrimaryAssetId();
-	}
-	return FPrimaryAssetId(AssetType, ContentId);
-}
 
 UStaticMesh* UFarmCropData::GetGrowthStageMesh(int32 GrowthDays) const
 {

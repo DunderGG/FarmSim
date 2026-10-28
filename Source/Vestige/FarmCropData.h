@@ -4,18 +4,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataAsset.h"
+#include "FarmContentData.h"
 #include "GameplayTagContainer.h"
 #include "FarmCropData.generated.h"
 
 class UStaticMesh;
 
 /**
- * The definition of one crop: its ID and name, how it grows, how it looks and what it is worth.
+ * The definition of one crop: how it grows, how it looks and what it is worth, plus the ID and name every content asset has.
  * One asset per crop, found through the Asset Manager by its ContentId. Holds no runtime state; tiles do.
  */
 UCLASS()
-class UFarmCropData : public UPrimaryDataAsset
+class UFarmCropData : public UFarmContentData
 {
 	GENERATED_BODY()
 
@@ -23,29 +23,16 @@ public:
 	/** The primary asset type crops are registered under in Config/DefaultGame.ini. */
 	static const FPrimaryAssetType AssetType;
 
-	/** Asset bundle holding the growth stage meshes. Load a crop with it so the meshes load too. */
-	static const FName VisualsBundle;
-
-	/** Built from ContentId, so renaming or moving the asset keeps the ID. Invalid while ContentId is empty. */
-	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
-
-	FName GetContentId() const { return ContentId; }
-	const FText& GetDisplayName() const { return DisplayName; }
 	int32 GetDaysToMature() const { return DaysToMature; }
 	int32 GetYield() const { return Yield; }
 
 	/** The mesh for a crop that has grown for GrowthDays days, or nullptr if that stage has no mesh or it isn't loaded. */
 	UStaticMesh* GetGrowthStageMesh(int32 GrowthDays) const;
 
+protected:
+	virtual FPrimaryAssetType GetContentType() const override { return AssetType; }
+
 private:
-	/** Stable ID of the form Namespace.Name (Base.Turnip). Saves and lookups use it; never change it once shipped. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true"))
-	FName ContentId;
-
-	/** Name shown to the player. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true"))
-	FText DisplayName;
-
 	/** Seasons the crop grows in. Not used yet: crops grow in any season until seasons exist. */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", Categories = "Farm.Season"))
 	FGameplayTagContainer Seasons;
