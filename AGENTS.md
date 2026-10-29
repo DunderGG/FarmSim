@@ -70,6 +70,7 @@ These rules are for agents working for David, the maintainer. If you are helping
 ## Working with David
 
 - David is an experienced C++ programmer who is new to Unreal Engine and Blender. Don't explain C++; do explain Unreal specifics (editor menus, settings, why an engine pattern is used) concretely.
+- **Be critical of David's decisions.** Because he is new to Unreal, he relies on you to say when a choice is wrong or risky. Give an honest assessment with reasons and the better alternative before agreeing, even when he sounds sure; then follow his final call and record it.
 - Before doing work that touches several systems, say which class will own the new responsibility.
 - Game presentation preferences: 24-hour clock (06:40, 21:30), and properly dark nights.
 - Don't name other games in docs, code comments or commit messages.
