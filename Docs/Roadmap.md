@@ -151,8 +151,8 @@ The code changes that the slice's content depends on. Doing them first means add
 **Tests**
 
 - [x] Set up CQTest in the project
-- [ ] Tile rule tests: tilling, planting, watered crops grow, dry crops don't, harvesting only when ripe
-- [ ] Day clock tests: the time and day roll over correctly
+- [x] Tile rule tests: tilling, planting, watered crops grow, dry crops don't, harvesting only when ripe
+- [x] Day clock tests: the time and day roll over correctly
 - [x] Save tests: tile, farming and clock state survive a save and load round trip through each owner's own save and restore functions
 - [x] Save failure tests: a corrupt or newer-version save is not overwritten, and unknown content IDs are skipped
 - [x] Content ID tests: the format, a duplicate ID and an unknown ID in a save
