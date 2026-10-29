@@ -46,11 +46,11 @@ namespace FarmRestTests
 		{
 			const FRestSetup Setup = MakeRestingActor();
 
-			Setup.Cycle->RestoreClock(1, Setup.Cycle->DayEndHour);
+			Setup.Cycle->RestoreClock(1, Setup.Cycle->GetDayEndHour());
 			Setup.Cycle->TickActor(0.1f, LEVELTICK_All, Setup.Cycle->PrimaryActorTick);
 
 			ASSERT_THAT(IsTrue(Setup.Cycle->GetCurrentDay() == 2));
-			ASSERT_THAT(IsTrue(Setup.Cycle->GetTimeOfDay() == Setup.Cycle->DayStartHour));
+			ASSERT_THAT(IsTrue(Setup.Cycle->GetTimeOfDay() == Setup.Cycle->GetDayStartHour()));
 		}
 	};
 }

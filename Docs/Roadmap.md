@@ -145,7 +145,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 - [ ] Inventory and money move into an inventory component on the player state, so they outlive the character
 - [x] Seed and harvest counts become private, with a restore function for loading
-- [ ] Tunable settings on the tile, grid and day cycle become protected or private
+- [x] Tunable settings on the tile, grid and day cycle become protected or private
 
 **Tests**
 

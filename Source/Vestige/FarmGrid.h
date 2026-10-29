@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "FarmGrid.generated.h"
 
+class AFarmDayCycle;
 class AFarmTile;
 class UBoxComponent;
 
@@ -42,25 +43,10 @@ public:
 	/** Broadcast once, at the end of BeginPlay, when every tile has been spawned. */
 	FOnFarmTilesReady OnTilesReady;
 
-	/** Number of tiles along the actor's X axis. */
-	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 1))
-	int32 Width = 8;
-
-	/** Number of tiles along the actor's Y axis. */
-	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 1))
-	int32 Height = 8;
-
-	/** Size of one tile in Unreal units (cm). */
-	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 10))
-	float TileSize = 100.f;
-
-	/** Tile actor to spawn. Swap in a Blueprint subclass later to change how tiles look. */
-	UPROPERTY(EditAnywhere, Category = "Farming")
-	TSubclassOf<AFarmTile> TileClass;
-
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
 	/** Spawns Width x Height tiles of TileClass, row by row. */
@@ -69,12 +55,31 @@ private:
 	/** Grows watered crops and dries the soil on every tile. */
 	void AdvanceTiles(int32 NewDay);
 
+	/** Number of tiles along the actor's X axis. */
+	UPROPERTY(EditAnywhere, Category = "Farming", meta = (AllowPrivateAccess = "true", ClampMin = 1))
+	int32 Width = 8;
+
+	/** Number of tiles along the actor's Y axis. */
+	UPROPERTY(EditAnywhere, Category = "Farming", meta = (AllowPrivateAccess = "true", ClampMin = 1))
+	int32 Height = 8;
+
+	/** Size of one tile in Unreal units (cm). */
+	UPROPERTY(EditAnywhere, Category = "Farming", meta = (AllowPrivateAccess = "true", ClampMin = 10))
+	float TileSize = 100.f;
+
+	/** Tile actor to spawn. A Blueprint subclass of AFarmTile (BP_FarmTile) sets how tiles look. */
+	UPROPERTY(EditAnywhere, Category = "Farming", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AFarmTile> TileClass;
+
 	/** Outlines the grid in the editor so it's easy to place. Hidden in game. */
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UBoxComponent> Bounds;
 
 	UPROPERTY()
 	TArray<TObjectPtr<AFarmTile>> Tiles;
+
+	/** The day cycle this grid listens to, so EndPlay can stop listening. */
+	TWeakObjectPtr<AFarmDayCycle> DayCycle;
 
 	bool bTilesReady = false;
 };

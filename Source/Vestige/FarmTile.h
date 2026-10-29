@@ -60,20 +60,6 @@ public:
 	/** Puts the tile straight into a saved state. A planted state without a crop restores as empty tilled soil. */
 	void RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays, const UFarmCropData* SavedCrop);
 
-	// Optional art. Anything left empty falls back to the colored placeholder shapes.
-
-	/** Mesh for tilled, planted and watered soil. Origin at the bottom center, UnscaledSize wide. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals")
-	TObjectPtr<UStaticMesh> TilledSoilMesh;
-
-	/** Material swapped onto TilledSoilMesh while the soil is watered. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals")
-	TObjectPtr<UMaterialInterface> WateredSoilMaterial;
-
-	/** Height of the soil surface that custom crop meshes stand on, in cm. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals")
-	float SoilSurfaceHeight = 6.f;
-
 protected:
 	virtual void BeginPlay() override;
 
@@ -84,6 +70,20 @@ private:
 
 	/** The placeholder soil's color for the current state: grass, dry soil or watered soil. */
 	FLinearColor GetPlaceholderSoilColor() const;
+
+	// Optional art. Anything left empty falls back to the colored placeholder shapes.
+
+	/** Mesh for tilled, planted and watered soil. Origin at the bottom center, UnscaledSize wide. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UStaticMesh> TilledSoilMesh;
+
+	/** Material swapped onto TilledSoilMesh while the soil is watered. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UMaterialInterface> WateredSoilMaterial;
+
+	/** Height of the soil surface that custom crop meshes stand on, in cm. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals", meta = (AllowPrivateAccess = "true", ClampMin = 0))
+	float SoilSurfaceHeight = 6.f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UStaticMeshComponent> SoilMesh;

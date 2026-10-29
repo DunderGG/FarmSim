@@ -31,7 +31,7 @@ namespace FarmDayCycleTests
 		/** Runs the clock forward by GameHours, the way a frame's tick does. */
 		static void PassHours(AFarmDayCycle& Cycle, float GameHours)
 		{
-			Cycle.TickActor(GameHours * Cycle.RealSecondsPerGameHour, LEVELTICK_All, Cycle.PrimaryActorTick);
+			Cycle.TickActor(GameHours * Cycle.GetRealSecondsPerGameHour(), LEVELTICK_All, Cycle.PrimaryActorTick);
 		}
 
 		TEST_METHOD(StartingTheNextDayAdvancesTheDayAndResetsTheClock)
@@ -47,16 +47,16 @@ namespace FarmDayCycleTests
 			ASSERT_THAT(IsTrue(Cycle.GetCurrentDay() == 2));
 			ASSERT_THAT(IsTrue(Broadcasts == 1));
 			ASSERT_THAT(IsTrue(NewDay == 2));
-			ASSERT_THAT(IsTrue(Cycle.GetTimeOfDay() == Cycle.DayStartHour));
+			ASSERT_THAT(IsTrue(Cycle.GetTimeOfDay() == Cycle.GetDayStartHour()));
 		}
 
 		TEST_METHOD(ClockStopsAtTheDayEnd)
 		{
 			AFarmDayCycle& Cycle = Spawner.SpawnActor<AFarmDayCycle>();
 
-			PassHours(Cycle, Cycle.DayEndHour);
+			PassHours(Cycle, Cycle.GetDayEndHour());
 
-			ASSERT_THAT(IsTrue(Cycle.GetTimeOfDay() == Cycle.DayEndHour));
+			ASSERT_THAT(IsTrue(Cycle.GetTimeOfDay() == Cycle.GetDayEndHour()));
 		}
 
 		TEST_METHOD(DayEndIsBroadcastOnceWhenTheClockReachesIt)
@@ -65,7 +65,7 @@ namespace FarmDayCycleTests
 			int32 Broadcasts = 0;
 			CountBroadcasts(Cycle.OnDayEndReached, Broadcasts);
 
-			PassHours(Cycle, Cycle.DayEndHour - Cycle.DayStartHour - 1.f);
+			PassHours(Cycle, Cycle.GetDayEndHour() - Cycle.GetDayStartHour() - 1.f);
 			ASSERT_THAT(IsTrue(Broadcasts == 0));
 
 			PassHours(Cycle, 2.f);
@@ -78,10 +78,10 @@ namespace FarmDayCycleTests
 			AFarmDayCycle& Cycle = Spawner.SpawnActor<AFarmDayCycle>();
 			int32 Broadcasts = 0;
 			CountBroadcasts(Cycle.OnDayEndReached, Broadcasts);
-			PassHours(Cycle, Cycle.DayEndHour);
+			PassHours(Cycle, Cycle.GetDayEndHour());
 
 			Cycle.StartNextDay();
-			PassHours(Cycle, Cycle.DayEndHour);
+			PassHours(Cycle, Cycle.GetDayEndHour());
 
 			ASSERT_THAT(IsTrue(Broadcasts == 2));
 		}
@@ -94,10 +94,10 @@ namespace FarmDayCycleTests
 			CountBroadcasts(Cycle.OnNewDayFinished, Broadcasts);
 			CountBroadcasts(Cycle.OnDayEndReached, Broadcasts);
 
-			Cycle.RestoreClock(0, Cycle.DayEndHour + 5.f);
+			Cycle.RestoreClock(0, Cycle.GetDayEndHour() + 5.f);
 
 			ASSERT_THAT(IsTrue(Cycle.GetCurrentDay() == 1));
-			ASSERT_THAT(IsTrue(Cycle.GetTimeOfDay() == Cycle.DayEndHour));
+			ASSERT_THAT(IsTrue(Cycle.GetTimeOfDay() == Cycle.GetDayEndHour()));
 			ASSERT_THAT(IsTrue(Broadcasts == 0));
 		}
 
@@ -107,7 +107,7 @@ namespace FarmDayCycleTests
 			int32 Broadcasts = 0;
 			CountBroadcasts(Cycle.OnDayEndReached, Broadcasts);
 
-			Cycle.RestoreClock(3, Cycle.DayEndHour);
+			Cycle.RestoreClock(3, Cycle.GetDayEndHour());
 			PassHours(Cycle, 0.1f);
 
 			ASSERT_THAT(IsTrue(Broadcasts == 1));

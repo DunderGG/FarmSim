@@ -43,14 +43,39 @@ void AFarmGrid::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (AFarmDayCycle* DayCycle = AFarmDayCycle::Get(GetWorld()))
+	DayCycle = AFarmDayCycle::Get(GetWorld());
+	if (AFarmDayCycle* Cycle = DayCycle.Get())
 	{
-		DayCycle->OnNewDay.AddUObject(this, &AFarmGrid::AdvanceTiles);
+		Cycle->OnNewDay.AddUObject(this, &AFarmGrid::AdvanceTiles);
 	}
 
 	SpawnTiles();
 	bTilesReady = true;
 	OnTilesReady.Broadcast();
+}
+
+void AFarmGrid::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (AFarmDayCycle* Cycle = DayCycle.Get())
+	{
+		Cycle->OnNewDay.RemoveAll(this);
+	}
+
+	// When the grid alone goes (destroyed, or its sublevel streamed out), its tiles go with it. When the whole world
+	// ends, the world destroys them itself.
+	if (EndPlayReason == EEndPlayReason::Destroyed || EndPlayReason == EEndPlayReason::RemovedFromWorld)
+	{
+		for (AFarmTile* Tile : Tiles)
+		{
+			if (IsValid(Tile))
+			{
+				Tile->Destroy();
+			}
+		}
+	}
+	Tiles.Reset();
+	bTilesReady = false;
+	Super::EndPlay(EndPlayReason);
 }
 
 AFarmGrid* AFarmGrid::Find(const UWorld* World)
