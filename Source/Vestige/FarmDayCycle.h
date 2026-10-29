@@ -25,10 +25,10 @@ class AFarmDayCycle : public AActor
 public:
 	AFarmDayCycle();
 
-	/** Returns the level's day cycle, spawning one if the level has none. */
+	/** Returns the world's day cycle, spawning one if the world has none. */
 	static AFarmDayCycle* Get(UWorld* World);
 
-	/** Returns the level's day cycle, or nullptr if there is none yet. Never spawns one. */
+	/** Returns the world's day cycle, or nullptr if there is none yet. Never spawns one. */
 	static AFarmDayCycle* Find(const UWorld* World);
 
 	/** Ends the current day and sets the clock to the next morning, then broadcasts OnNewDay. */
@@ -63,9 +63,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Farming|Time", meta = (ClampMin = 1, ClampMax = 30))
 	float DayEndHour = 26.f;
 
+	/** Hour the sun rises above the horizon. Before it, the moon lights the farm. */
 	UPROPERTY(EditAnywhere, Category = "Farming|Time", meta = (ClampMin = 0, ClampMax = 23))
 	float SunriseHour = 6.f;
 
+	/** Hour the sun sets. Must be later than SunriseHour. */
 	UPROPERTY(EditAnywhere, Category = "Farming|Time", meta = (ClampMin = 1, ClampMax = 24))
 	float SunsetHour = 20.f;
 
@@ -92,16 +94,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Farming|Lighting", meta = (ClampMin = -8, ClampMax = 0))
 	float NightExposureBias = -2.5f;
 
+	/** Sun color near the horizon. It blends to the sun's color as placed in the level as the sun rises. */
 	UPROPERTY(EditAnywhere, Category = "Farming|Lighting")
 	FLinearColor SunriseColor = FLinearColor(1.f, 0.55f, 0.3f);
 
+	/** Color of the directional light at night, when it stands in for the moon. */
 	UPROPERTY(EditAnywhere, Category = "Farming|Lighting")
 	FLinearColor MoonColor = FLinearColor(0.5f, 0.6f, 1.f);
 
-	virtual void Tick(float DeltaSeconds) override;
-
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 private:
 	void FindLights();
@@ -112,7 +115,7 @@ private:
 	TObjectPtr<UPostProcessComponent> NightPostProcess;
 
 	int32 CurrentDay = 1;
-	float TimeOfDay = 6.f;
+	float TimeOfDay = DayStartHour;
 
 	// The lights' settings as placed in the level, used as the daytime values.
 	float SunYaw = 0.f;

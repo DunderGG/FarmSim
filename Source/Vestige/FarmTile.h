@@ -13,6 +13,7 @@ class UStaticMeshComponent;
 class UMaterialInstanceDynamic;
 class UMaterialInterface;
 
+/** What is on a farm tile. Watering is separate, because tilled and planted soil can both be wet. */
 UENUM(BlueprintType)
 enum class EFarmTileState : uint8
 {
@@ -28,13 +29,21 @@ class AFarmTile : public AActor
 	GENERATED_BODY()
 
 public:
+	/** Width of a tile at scale 1, in cm. The grid scales tiles from this to its own tile size. */
+	static constexpr float UnscaledSize = 100.f;
+
 	AFarmTile();
 
-	// Each action returns true if it changed the tile.
+	/** Turns grass into tilled soil. Returns false, changing nothing, if the tile isn't grass. */
 	bool Till();
-	/** Also returns false without a crop to plant. */
+
+	/** Plants InCrop in tilled soil. Returns false, changing nothing, if the soil isn't empty and tilled or InCrop is null. */
 	bool Plant(const UFarmCropData* InCrop);
+
+	/** Waters tilled or planted soil until the next day. Returns false if the tile is grass or already watered. */
 	bool Water();
+
+	/** Removes a ripe crop, leaving tilled soil. Returns false, changing nothing, if nothing ripe grows here. */
 	bool Harvest();
 
 	/** Called once per in-game day. Watered crops grow one stage, then the soil dries out. */
@@ -53,7 +62,7 @@ public:
 
 	// Optional art. Anything left empty falls back to the colored placeholder shapes.
 
-	/** Mesh for tilled, planted and watered soil. Origin at the bottom center, 1 m wide. */
+	/** Mesh for tilled, planted and watered soil. Origin at the bottom center, UnscaledSize wide. */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals")
 	TObjectPtr<UStaticMesh> TilledSoilMesh;
 

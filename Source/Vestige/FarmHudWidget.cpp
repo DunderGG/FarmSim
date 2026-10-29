@@ -20,15 +20,36 @@ namespace FarmHudStyle
 	const FLinearColor Hint(0.8f, 0.8f, 0.8f);
 	const FLinearColor Message(1.f, 0.9f, 0.55f);
 	const FVector2D ShadowOffset(1.f, 1.f);
+
+	const FName BackdropBrush(TEXT("WhiteBrush"));
+	const FName BoldFont(TEXT("Bold"));
+	const FName RegularFont(TEXT("Regular"));
+	constexpr int32 StatusFontSize = 20;
+	constexpr int32 InventoryFontSize = 16;
+	constexpr int32 MessageFontSize = 18;
+	constexpr int32 HintFontSize = 13;
+
+	// Spacing in Slate units, which scale with the screen's DPI.
+	constexpr float ScreenMargin = 24.f;
+	constexpr float LineSpacing = 4.f;
+	constexpr float MessageBottomMargin = 80.f;
+	const FMargin PanelPadding(16.f, 10.f);
+	const FMargin MessagePadding(16.f, 8.f);
 }
 
 namespace
 {
-	/** Formats hours since midnight as a 24-hour clock in 10 minute steps, like "18:40". */
+	constexpr int32 MinutesPerHour = 60;
+	constexpr int32 HoursPerDay = 24;
+
+	/** The clock moves in steps of this many minutes, so it doesn't flicker every game minute. */
+	constexpr int32 ClockStepMinutes = 10;
+
+	/** Formats hours since midnight as a 24-hour clock in ClockStepMinutes steps, like "18:40". */
 	FString FormatClock(float Hours)
 	{
-		const int32 TotalMinutes = FMath::FloorToInt(Hours * 6.f) * 10;
-		return FString::Printf(TEXT("%02d:%02d"), (TotalMinutes / 60) % 24, TotalMinutes % 60);
+		const int32 TotalMinutes = FMath::FloorToInt(Hours * MinutesPerHour / ClockStepMinutes) * ClockStepMinutes;
+		return FString::Printf(TEXT("%02d:%02d"), (TotalMinutes / MinutesPerHour) % HoursPerDay, TotalMinutes % MinutesPerHour);
 	}
 }
 
@@ -36,7 +57,7 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 {
 	Hud = InArgs._Hud;
 
-	const FSlateBrush* Backdrop = FCoreStyle::Get().GetBrush("WhiteBrush");
+	const FSlateBrush* Backdrop = FCoreStyle::Get().GetBrush(FarmHudStyle::BackdropBrush);
 
 	// clang-format off
 	ChildSlot
@@ -48,29 +69,29 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 		+ SOverlay::Slot()
 		.HAlign(HAlign_Left)
 		.VAlign(VAlign_Top)
-		.Padding(24.f)
+		.Padding(FarmHudStyle::ScreenMargin)
 		[
 			SNew(SBorder)
 			.BorderImage(Backdrop)
 			.BorderBackgroundColor(FarmHudStyle::Backdrop)
-			.Padding(FMargin(16.f, 10.f))
+			.Padding(FarmHudStyle::PanelPadding)
 			[
 				SNew(SVerticalBox)
 				+ SVerticalBox::Slot()
 				.AutoHeight()
 				[
 					SNew(STextBlock)
-					.Font(FCoreStyle::GetDefaultFontStyle("Bold", 20))
+					.Font(FCoreStyle::GetDefaultFontStyle(FarmHudStyle::BoldFont, FarmHudStyle::StatusFontSize))
 					.ColorAndOpacity(FarmHudStyle::Text)
 					.ShadowOffset(FarmHudStyle::ShadowOffset)
 					.Text(this, &SFarmHudWidget::GetStatusText)
 				]
 				+ SVerticalBox::Slot()
 				.AutoHeight()
-				.Padding(0.f, 4.f, 0.f, 0.f)
+				.Padding(0.f, FarmHudStyle::LineSpacing, 0.f, 0.f)
 				[
 					SNew(STextBlock)
-					.Font(FCoreStyle::GetDefaultFontStyle("Regular", 16))
+					.Font(FCoreStyle::GetDefaultFontStyle(FarmHudStyle::RegularFont, FarmHudStyle::InventoryFontSize))
 					.ColorAndOpacity(FarmHudStyle::Text)
 					.ShadowOffset(FarmHudStyle::ShadowOffset)
 					.Text(this, &SFarmHudWidget::GetInventoryText)
@@ -82,16 +103,16 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 		+ SOverlay::Slot()
 		.HAlign(HAlign_Center)
 		.VAlign(VAlign_Bottom)
-		.Padding(FMargin(0.f, 0.f, 0.f, 80.f))
+		.Padding(FMargin(0.f, 0.f, 0.f, FarmHudStyle::MessageBottomMargin))
 		[
 			SNew(SBorder)
 			.Visibility(this, &SFarmHudWidget::GetMessageVisibility)
 			.BorderImage(Backdrop)
 			.BorderBackgroundColor(FarmHudStyle::Backdrop)
-			.Padding(FMargin(16.f, 8.f))
+			.Padding(FarmHudStyle::MessagePadding)
 			[
 				SNew(STextBlock)
-				.Font(FCoreStyle::GetDefaultFontStyle("Bold", 18))
+				.Font(FCoreStyle::GetDefaultFontStyle(FarmHudStyle::BoldFont, FarmHudStyle::MessageFontSize))
 				.ColorAndOpacity(FarmHudStyle::Message)
 				.ShadowOffset(FarmHudStyle::ShadowOffset)
 				.Text(this, &SFarmHudWidget::GetMessageText)
@@ -102,10 +123,10 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 		+ SOverlay::Slot()
 		.HAlign(HAlign_Center)
 		.VAlign(VAlign_Bottom)
-		.Padding(FMargin(0.f, 0.f, 0.f, 24.f))
+		.Padding(FMargin(0.f, 0.f, 0.f, FarmHudStyle::ScreenMargin))
 		[
 			SNew(STextBlock)
-			.Font(FCoreStyle::GetDefaultFontStyle("Regular", 13))
+			.Font(FCoreStyle::GetDefaultFontStyle(FarmHudStyle::RegularFont, FarmHudStyle::HintFontSize))
 			.ColorAndOpacity(FarmHudStyle::Hint)
 			.ShadowOffset(FarmHudStyle::ShadowOffset)
 			.Text(this, &SFarmHudWidget::GetControlsText)

@@ -21,10 +21,19 @@ namespace FarmTileColors
 
 namespace FarmTilePlaceholder
 {
-	// The engine cube is 100 units wide, so this makes a thin 95x95 cm slab with a small gap between tiles.
+	// The engine cube is AFarmTile::UnscaledSize wide, so this makes a thin 95x95 cm slab with a small gap between tiles.
 	const FVector SoilScale(0.95f, 0.95f, 0.04f);
 	const FVector SoilLocation(0.f, 0.f, 2.f);
-	const float SoilTop = 4.f;
+	constexpr float SoilTop = 4.f;
+
+	// The engine cylinder is 100 units tall and centered on its origin. It grows taller each stage.
+	constexpr float CropWidthScale = 0.3f;
+	constexpr float CropSeedlingHeightScale = 0.15f;
+	constexpr float CropHeightScalePerDay = 0.25f;
+	constexpr float CylinderHalfHeight = 50.f;
+
+	/** Vector parameter of the engine's basic shape material that sets its color. */
+	const FName ColorParameter(TEXT("Color"));
 }
 
 AFarmTile::AFarmTile()
@@ -174,7 +183,7 @@ void AFarmTile::RefreshSoil()
 	SoilMesh->SetRelativeLocation(FarmTilePlaceholder::SoilLocation);
 	if (SoilMaterial)
 	{
-		SoilMaterial->SetVectorParameterValue(TEXT("Color"), GetPlaceholderSoilColor());
+		SoilMaterial->SetVectorParameterValue(FarmTilePlaceholder::ColorParameter, GetPlaceholderSoilColor());
 		SoilMesh->SetMaterial(0, SoilMaterial);
 	}
 }
@@ -208,14 +217,14 @@ void AFarmTile::RefreshCrop()
 		return;
 	}
 
-	// The engine cylinder is 100 units tall, centered on its origin. Grow it taller each stage.
-	const float Height = 0.15f + 0.25f * GrowthDays;
+	using namespace FarmTilePlaceholder;
+	const float HeightScale = CropSeedlingHeightScale + CropHeightScalePerDay * GrowthDays;
 	CropMesh->SetStaticMesh(PlaceholderCropMesh);
-	CropMesh->SetRelativeScale3D(FVector(0.3f, 0.3f, Height));
-	CropMesh->SetRelativeLocation(FVector(0.f, 0.f, SurfaceZ + Height * 50.f));
+	CropMesh->SetRelativeScale3D(FVector(CropWidthScale, CropWidthScale, HeightScale));
+	CropMesh->SetRelativeLocation(FVector(0.f, 0.f, SurfaceZ + HeightScale * CylinderHalfHeight));
 	if (CropMaterial)
 	{
-		CropMaterial->SetVectorParameterValue(TEXT("Color"), IsRipe() ? FarmTileColors::Ripe : FarmTileColors::Growing);
+		CropMaterial->SetVectorParameterValue(ColorParameter, IsRipe() ? FarmTileColors::Ripe : FarmTileColors::Growing);
 		CropMesh->SetMaterial(0, CropMaterial);
 	}
 }

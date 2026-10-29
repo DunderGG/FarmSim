@@ -8,6 +8,12 @@
 #include "FarmDayCycle.h"
 #include "FarmTile.h"
 
+namespace FarmGridEditor
+{
+	/** Half the height of the box that outlines the grid in the editor, in cm. Only needs to be visible. */
+	constexpr float BoundsHalfHeight = 10.f;
+}
+
 AFarmGrid::AFarmGrid()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -26,7 +32,7 @@ void AFarmGrid::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	const FVector HalfSize(Width * TileSize * 0.5f, Height * TileSize * 0.5f, 10.f);
+	const FVector HalfSize(Width * TileSize * 0.5f, Height * TileSize * 0.5f, FarmGridEditor::BoundsHalfHeight);
 	Bounds->SetBoxExtent(HalfSize);
 	Bounds->SetRelativeLocation(FVector(HalfSize.X, HalfSize.Y, 0.f));
 }
@@ -45,8 +51,7 @@ void AFarmGrid::BeginPlay()
 		return;
 	}
 
-	// Engine shapes are 100 units wide, so scale tiles to match TileSize.
-	const FVector TileScale(TileSize / 100.f);
+	const FVector TileScale(TileSize / AFarmTile::UnscaledSize);
 	const FTransform GridTransform = GetActorTransform();
 
 	FActorSpawnParameters SpawnParams;

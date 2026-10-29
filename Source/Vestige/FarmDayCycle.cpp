@@ -11,6 +11,28 @@
 #include "Engine/World.h"
 #include "EngineUtils.h"
 
+namespace FarmDayCycleLighting
+{
+	constexpr float HoursPerDay = 24.f;
+
+	/** Sun elevation at sunrise and sunset, in degrees: a little above the horizon, for long shadows rather than darkness. */
+	constexpr float MinSunElevation = 5.f;
+
+	/** How far the sun turns between sunrise and sunset, and the moon between sunset and sunrise, in degrees of yaw. */
+	constexpr float SunArcYaw = 180.f;
+
+	// How soon each effect reaches full strength as the sun or moon rises: 3 means a third of the way to its highest point.
+	constexpr float DaylightFadeRate = 3.f;
+	constexpr float WarmColorFadeRate = 2.f;
+	constexpr float NightExposureFadeRate = 6.f;
+
+	/** 0 at the horizon (Arc 0), rising to 1 once Arc reaches 1 / Rate. */
+	float FadeIn(float Arc, float Rate)
+	{
+		return FMath::Clamp(Arc * Rate, 0.f, 1.f);
+	}
+}
+
 AFarmDayCycle::AFarmDayCycle()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -115,24 +137,26 @@ void AFarmDayCycle::UpdateLighting()
 		return;
 	}
 
+	using namespace FarmDayCycleLighting;
+
 	// Progress runs 0 to 1 from sunrise to sunset by day, and from sunset to the next sunrise by night.
 	// The sun arcs across the sky by day and the moon takes the same path by night.
-	const float Hour = FMath::Fmod(TimeOfDay, 24.f);
+	const float Hour = FMath::Fmod(TimeOfDay, HoursPerDay);
 	const float DayLength = SunsetHour - SunriseHour;
 	const bool bDaytime = Hour >= SunriseHour && Hour < SunsetHour;
-	const float Progress = bDaytime ? (Hour - SunriseHour) / DayLength : FMath::Fmod(Hour - SunsetHour + 24.f, 24.f) / (24.f - DayLength);
+	const float HoursSinceSunset = FMath::Fmod(Hour - SunsetHour + HoursPerDay, HoursPerDay);
+	const float Progress = bDaytime ? (Hour - SunriseHour) / DayLength : HoursSinceSunset / (HoursPerDay - DayLength);
 	const float Arc = FMath::Sin(Progress * PI);
 
-	// A few degrees above the horizon at the ends so mornings and evenings get long shadows, not darkness.
-	const float Elevation = FMath::Lerp(5.f, MaxSunElevation, Arc);
-	Sun->SetActorRotation(FRotator(-Elevation, SunYaw + Progress * 180.f, 0.f));
+	const float Elevation = FMath::Lerp(MinSunElevation, MaxSunElevation, Arc);
+	Sun->SetActorRotation(FRotator(-Elevation, SunYaw + Progress * SunArcYaw, 0.f));
 
 	// Light fades in after sunrise and out before sunset, warm near the horizon.
-	const float Daylight = bDaytime ? FMath::Clamp(Arc * 3.f, 0.f, 1.f) : 0.f;
+	const float Daylight = bDaytime ? FadeIn(Arc, DaylightFadeRate) : 0.f;
 	const float Brightness = FMath::Lerp(NightLightFraction, 1.f, Daylight);
 	ULightComponent* SunLight = Sun->GetLightComponent();
 	SunLight->SetIntensity(DaySunIntensity * Brightness);
-	SunLight->SetLightColor(bDaytime ? FMath::Lerp(SunriseColor, DaySunColor, FMath::Clamp(Arc * 2.f, 0.f, 1.f)) : MoonColor);
+	SunLight->SetLightColor(bDaytime ? FMath::Lerp(SunriseColor, DaySunColor, FadeIn(Arc, WarmColorFadeRate)) : MoonColor);
 
 	if (SkyLight)
 	{
@@ -141,6 +165,6 @@ void AFarmDayCycle::UpdateLighting()
 
 	// Darken the exposure over the first part of the night and ease it off again toward sunrise,
 	// so daytime, mornings and evenings keep the normal exposure.
-	const float Darkness = bDaytime ? 0.f : FMath::Clamp(Arc * 6.f, 0.f, 1.f);
+	const float Darkness = bDaytime ? 0.f : FadeIn(Arc, NightExposureFadeRate);
 	NightPostProcess->Settings.AutoExposureBias = NightExposureBias * Darkness;
 }

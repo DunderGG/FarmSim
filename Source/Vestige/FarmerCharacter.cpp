@@ -10,19 +10,31 @@
 #include "Engine/LocalPlayer.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
+#include "FarmingComponent.h"
 #include "FarmSaveSubsystem.h"
 #include "FarmToolData.h"
 #include "GameFramework/PlayerController.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
 
+namespace FarmerInput
+{
+	/** Above the template's movement contexts (priority 0), so farming keys win if a key is ever mapped twice. */
+	constexpr int32 MappingContextPriority = 1;
+}
+
+namespace FarmerMesh
+{
+	/** The right hand bone on the UE5 mannequin skeleton. */
+	const FName HandSocket(TEXT("hand_r"));
+}
+
 AFarmerCharacter::AFarmerCharacter()
 {
 	Farming = CreateDefaultSubobject<UFarmingComponent>(TEXT("Farming"));
 
-	// hand_r is the right hand bone on the UE5 mannequin skeleton.
 	HeldTool = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HeldTool"));
-	HeldTool->SetupAttachment(GetMesh(), TEXT("hand_r"));
+	HeldTool->SetupAttachment(GetMesh(), FarmerMesh::HandSocket);
 	HeldTool->SetMobility(EComponentMobility::Movable);
 	HeldTool->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
@@ -75,7 +87,7 @@ void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
 				ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
-			Subsystem->AddMappingContext(FarmingMappingContext, 1);
+			Subsystem->AddMappingContext(FarmingMappingContext, FarmerInput::MappingContextPriority);
 		}
 	}
 }
