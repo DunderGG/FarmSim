@@ -4,7 +4,6 @@
 #include "FarmSaveSubsystem.h"
 
 #include "Engine/World.h"
-#include "EngineUtils.h"
 #include "FarmDayCycle.h"
 #include "FarmGrid.h"
 #include "FarmHUD.h"
@@ -59,9 +58,7 @@ void UFarmSaveSubsystem::StartNewGame()
 
 void UFarmSaveSubsystem::BindAndLoad()
 {
-	// The prototype has a single field, so just use the first grid in the level.
-	TActorIterator<AFarmGrid> It(GetWorld());
-	Grid = It ? *It : nullptr;
+	Grid = AFarmGrid::Find(GetWorld());
 	DayCycle = AFarmDayCycle::Find(GetWorld());
 	if (!Grid || !DayCycle)
 	{

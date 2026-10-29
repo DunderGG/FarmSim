@@ -86,7 +86,7 @@ Placed actors versus subsystems: use an actor when something needs a place in th
 A placed actor that the game can't run without may **find-or-spawn** itself through a static `Get(UWorld*)` (`AFarmDayCycle::Get`), so a level that's missing it still runs. This is a convenience with side effects, so it follows these rules:
 
 - **World-scoped and game-thread only.** `Get` takes the world it works in and never caches an instance across worlds.
-- **Only in a running game world.** It spawns only in game and Play in Editor worlds that have begun play and aren't being torn down. Anywhere else (editor and preview worlds, teardown) it returns what `Find` returns, possibly null, and callers handle null.
+- **Only in a running game world.** It spawns only in game and Play in Editor worlds whose actors are initialized for play and that aren't being torn down. (The engine marks a world as begun only after every actor's `BeginPlay` has run, so `HasBegunPlay` can't be the test: `Get` is mostly called from `BeginPlay`.) Anywhere else (editor and preview worlds, teardown) it returns what `Find` returns, possibly null, and callers handle null.
 - **One creation authority.** `Get` is the only code that spawns the actor. Everything else calls `Get` or `Find`.
 - **Bad level setup is visible, not hidden.** Spawning a missing instance logs a warning, and finding more than one logs an error and uses the first. A level that needs designer settings on the actor should place it rather than rely on the fallback.
 - **Actors only.** A service with no transform or per-level settings belongs in a subsystem, which Unreal creates exactly once per world; don't copy this pattern for it.
@@ -126,7 +126,7 @@ Rules:
 
 - **No circular dependencies.** If A calls B, B doesn't call A. B broadcasts an event that A listens to.
 - **Ask, don't reach in.** Never change another class's state directly. Call a function that says what you want; the owner keeps itself consistent.
-- **Find things in one place.** Each well-known object has one static `Find` / `Get` function. Don't scatter `TActorIterator` searches through the code.
+- **Find things in one place.** Each well-known object has one static `Find` / `Get` function (`AFarmGrid::Find`, `AFarmDayCycle::Find`), built on `FarmActorLookup::FindSingle`, which logs an error when a level has more than one. Don't scatter `TActorIterator` searches through the code, and call `Find` once and keep the result rather than every frame.
 - **Bind with object-safe helpers** (`AddUObject`, `AddWeakLambda`) so a destroyed listener is never called, and unbind in `EndPlay` / `Deinitialize`.
 - **C++-only events use non-dynamic delegates.** Use dynamic delegates only when Blueprints need to bind.
 
@@ -325,12 +325,12 @@ All of these have to exist and be tested in a packaged build first:
 | Class | Kind | Owns | Does not own |
 |---|---|---|---|
 | `AFarmTile` | Actor | One tile's state (grass, tilled, planted, watered, growth, the crop planted in it) and its visuals | Crop definitions, time, input, saving |
-| `AFarmGrid` | Actor, placed in the level | Spawning tiles, finding a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
+| `AFarmGrid` | Actor, placed in the level, found with `Find` | Spawning tiles (then broadcasting `OnTilesReady`), finding a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
 | `AFarmDayCycle` | Actor, placed or found-or-spawned by `Get` ([section 2](#2-unreals-gameplay-framework-where-things-go)) | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished` | Tiles, saving, HUD |
 | `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting, using a tool, sleeping and passing out | UI, input bindings, meshes |
 | `FFarmToolbar` | Struct inside `UFarmingComponent` | The toolbar's slots and which slot is in hand, with the rules for selecting one | Loading or using tools |
 | `AFarmerCharacter` | Character (parent of `BP_ThirdPersonCharacter`) | Input bindings (keys 1 to 9 pick toolbar slots) and showing the current tool's held mesh | Farming rules, which tools exist |
-| `AFarmHUD` + `SFarmHudWidget` | HUD + Slate widget | Display only. Reads from the day cycle and farming component; keeps fading messages | Any game state |
+| `AFarmHUD` + `SFarmHudWidget` | HUD + Slate widget | Display only. Keeps weak references to the day cycle (from `Get` at `BeginPlay`) and the possessed pawn's farming component (updated on `OnPossessedPawnChanged`), and reads from them; keeps fading messages | Any game state |
 | `UFarmSaveSubsystem` | World subsystem | The current world's snapshot: saving it on `OnNewDayFinished` and loading it at play start, in the single save slot. Starting a new game (deletes that slot, then reopens the map) | Game rules; save slot or profile choice that must survive a map change ([section 6](#6-saving)) |
 | `UFarmSaveGame` | Save game | The saved data layout | Logic |
 | `UFarmContentData` | Abstract base of every content data asset | What all content shares: the `ContentId`, the primary asset ID built from it, the display name, the `Visuals` bundle name, and loading content with its visuals at play start | Anything specific to one kind of content |
@@ -406,6 +406,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | Actors the game expects one of are found through `FarmActorLookup::FindSingle`, wrapped in each class's static `Find` (`AFarmGrid::Find` is new). It logs an error when a level has more than one and uses the first. `AFarmDayCycle::Get` spawns only in a game world whose actors are initialized for play and that isn't tearing down, and warns when it spawns. The grid broadcasts `OnTilesReady` once its tiles exist. The HUD keeps weak references to the day cycle and the possessed pawn's farming component, updated from the controller's `OnPossessedPawnChanged`, instead of searching every frame | One search, written once, makes a duplicate actor visible instead of silently picking one, and keeps lookups out of per-frame code. `HasBegunPlay` is only true after every actor's `BeginPlay`, where `Get` is mostly called, so the spawn check uses actor initialization instead. The HUD reacts to possession rather than polling, so a respawned pawn is picked up too |
 | 2026-10-29 | Stamina design in `Systems.md` section 9 approved as written | Reviewed against the game design's stamina rules before any code, as the system-guide rule requires |
 | 2026-10-29 | Target hardware confirmed: a 2020-era mid-range PC (RTX 2060 or RX 5600 XT class GPU, 6-core CPU, 16 GB, SSD) at 1080p and High, 60 fps | Ordinary PCs are the audience for a cozy farming game. It keeps Lumen available while hardware ray tracing stays an Epic-only option |
 | 2026-10-29 | Adopt the Gameplay Ability System, starting with stamina: a `UFarmStaminaSet` on the ability system component of a new `AFarmPlayerState`, tool use as an ability with a stamina cost effect, and the late-night drain, zero-stamina slowdown, exhaustion and sleep refill as gameplay effects and tags. Sleep and the late-night rules move to a new `UFarmRestComponent`. Design in `Systems.md` section 9, to be approved before code | Stamina is the first of several numbers (health, exposure, buffs from food and mutated crops) that change through costs, drains over time and temporary states. Building it on the ability system now avoids moving it later, and it's small enough to learn the system on. The player state keeps stamina when the pawn is replaced |
@@ -452,11 +453,8 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 - **Tiles are saved by grid position.** If the grid size changes, saved tiles land in the wrong place. Save each tile's grid coordinates (or an ID) with its data.
 - **No save version number** in `UFarmSaveGame`.
 - **An unreadable save gets overwritten.** When loading fails, `UFarmSaveSubsystem` shows a message but still saves on the next new day, replacing the file it couldn't read. Turn saving off for the session instead ([section 6](#6-saving)). A failed write may also leave no good save, since `SaveGameToSlot` writes over the old file.
-- **`AFarmDayCycle::Get` doesn't follow the find-or-spawn rules yet** ([section 2](#2-unreals-gameplay-framework-where-things-go)). It spawns in any world without checking the world type or teardown, and logs nothing when it spawns or when the level has more than one.
-- **Load waits a tick** for the grid to spawn tiles ([section 3](#3-lifetimes-and-initialization-order)). Better: the grid broadcasts when its tiles are ready, or registers with the save subsystem.
-- **The grid is found with `TActorIterator` in several places.** Add `AFarmGrid::Find(const UWorld*)` like `AFarmDayCycle::Find`.
+- **Load waits a tick** for the grid to spawn tiles ([section 3](#3-lifetimes-and-initialization-order)). The grid now broadcasts `OnTilesReady`; the save subsystem should wait for that instead.
 - **The farming component ticks every frame** to poll the day cycle for bedtime and to draw the target highlight with debug drawing, which shipping builds compile out ([section 10](#10-performance-by-design); ArchitectureAudit A-10, A-11). The day cycle should broadcast when the day ends, and a cosmetic component should show the highlight.
-- **The HUD searches the world every frame.** Its widget's bound getters call `AFarmDayCycle::Find` and `FindComponentByClass` each frame (CodingGuidelinesAudit C-09). Keep the references in the HUD instead.
 - **No `TRACE_CPUPROFILER_EVENT_SCOPE` yet** on the new-day, load and save code, so Unreal Insights can't show their cost by name.
 - **Rendering settings aren't set for a target.** Hardware ray tracing, Lumen, virtual shadow maps and Substrate are on, with Maximum as the default performance level ([section 10](#10-performance-by-design)).
 - **Tile rules and visuals live in the same class.** Fine for now. Separate them (a plain tile-state struct the actor owns) before writing tile tests or growing the field a lot.

@@ -122,9 +122,9 @@ The code changes that the slice's content depends on. Doing them first means add
 **Tiles and the farm grid**
 
 - [ ] Tile rules in a plain state struct, separate from the tile actor that shows them
-- [ ] A shared way to find the grid (`AFarmGrid::Find`), replacing the repeated searches
+- [x] A shared way to find the grid (`AFarmGrid::Find`), replacing the repeated searches
 - [ ] The grid announces when its tiles are ready, so loading no longer waits a frame
-- [ ] `AFarmDayCycle::Get` follows the find-or-spawn rules: spawns only in a running game world and logs a warning when it spawns or finds more than one ([Architecture.md section 2](Architecture.md#2-unreals-gameplay-framework-where-things-go))
+- [x] `AFarmDayCycle::Get` follows the find-or-spawn rules: spawns only in a running game world and logs a warning when it spawns or finds more than one ([Architecture.md section 2](Architecture.md#2-unreals-gameplay-framework-where-things-go))
 
 **Saving**
 
@@ -162,7 +162,7 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] Set the rendering settings and the four scalability levels for the target: hardware ray tracing and other expensive features only at Epic
 - [ ] The day cycle broadcasts the end of the day, so the farming component stops polling it every frame
 - [ ] A shipping-safe highlight for the targeted tile, replacing the debug box
-- [ ] The HUD keeps its references instead of searching the world every frame
+- [x] The HUD keeps its references instead of searching the world every frame
 - [ ] Trace scopes on the new day, loading and saving
 - [ ] First performance baseline, measured in a packaged build on the target hardware and recorded in Architecture.md
 

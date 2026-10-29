@@ -5,8 +5,10 @@
 
 #include "Components/BoxComponent.h"
 #include "Engine/World.h"
+#include "FarmActorLookup.h"
 #include "FarmDayCycle.h"
 #include "FarmTile.h"
+#include "Vestige.h"
 
 namespace FarmGridEditor
 {
@@ -46,8 +48,21 @@ void AFarmGrid::BeginPlay()
 		DayCycle->OnNewDay.AddUObject(this, &AFarmGrid::AdvanceTiles);
 	}
 
+	SpawnTiles();
+	bTilesReady = true;
+	OnTilesReady.Broadcast();
+}
+
+AFarmGrid* AFarmGrid::Find(const UWorld* World)
+{
+	return Cast<AFarmGrid>(FarmActorLookup::FindSingle(World, StaticClass()));
+}
+
+void AFarmGrid::SpawnTiles()
+{
 	if (!TileClass)
 	{
+		UE_LOG(LogVestige, Warning, TEXT("%s has no Tile Class, so the field is empty."), *GetName());
 		return;
 	}
 

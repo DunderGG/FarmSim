@@ -5,7 +5,6 @@
 
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
-#include "EngineUtils.h"
 #include "FarmContentData.h"
 #include "FarmCropData.h"
 #include "FarmDayCycle.h"
@@ -29,10 +28,7 @@ void UFarmingComponent::BeginPlay()
 	LoadSeedCrop();
 	LoadToolbar();
 	DayCycle = AFarmDayCycle::Get(GetWorld());
-
-	// The prototype has a single field, so just use the first grid in the level.
-	TActorIterator<AFarmGrid> It(GetWorld());
-	Grid = It ? *It : nullptr;
+	Grid = AFarmGrid::Find(GetWorld());
 	if (!Grid)
 	{
 		// The player's HUD may not exist yet during BeginPlay.

@@ -10,9 +10,11 @@
 class AFarmTile;
 class UBoxComponent;
 
+DECLARE_MULTICAST_DELEGATE(FOnFarmTilesReady);
+
 /**
  * A rectangle of farm tiles, spawned at BeginPlay with the actor's location as one corner.
- * Advances every tile when the level's AFarmDayCycle starts a new day.
+ * Advances every tile when the world's AFarmDayCycle starts a new day.
  */
 UCLASS()
 class AFarmGrid : public AActor
@@ -22,11 +24,23 @@ class AFarmGrid : public AActor
 public:
 	AFarmGrid();
 
+	/**
+	 * Returns the world's farm grid, or nullptr if the level has none. The game has a single field.
+	 * Searches the world, so call it once and keep the result.
+	 */
+	static AFarmGrid* Find(const UWorld* World);
+
 	/** Returns the tile under a world location, ignoring height, or nullptr if it's outside the grid. */
 	AFarmTile* GetTileAtLocation(const FVector& WorldLocation) const;
 
 	/** Every tile, row by row. Empty until BeginPlay has spawned them. */
 	const TArray<TObjectPtr<AFarmTile>>& GetTiles() const { return Tiles; }
+
+	/** True once BeginPlay has spawned the tiles. Check it before binding to OnTilesReady, which only fires once. */
+	bool AreTilesReady() const { return bTilesReady; }
+
+	/** Broadcast once, at the end of BeginPlay, when every tile has been spawned. */
+	FOnFarmTilesReady OnTilesReady;
 
 	/** Number of tiles along the actor's X axis. */
 	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 1))
@@ -49,6 +63,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	/** Spawns Width x Height tiles of TileClass, row by row. */
+	void SpawnTiles();
+
 	/** Grows watered crops and dries the soil on every tile. */
 	void AdvanceTiles(int32 NewDay);
 
@@ -58,4 +75,6 @@ private:
 
 	UPROPERTY()
 	TArray<TObjectPtr<AFarmTile>> Tiles;
+
+	bool bTilesReady = false;
 };

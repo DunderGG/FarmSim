@@ -10,6 +10,8 @@
 #include "Engine/SkyLight.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "FarmActorLookup.h"
+#include "Vestige.h"
 
 namespace FarmDayCycleLighting
 {
@@ -46,23 +48,33 @@ AFarmDayCycle::AFarmDayCycle()
 
 AFarmDayCycle* AFarmDayCycle::Get(UWorld* World)
 {
+	check(IsInGameThread());
+	if (!World)
+	{
+		UE_LOG(LogVestige, Error, TEXT("AFarmDayCycle::Get was called without a world."));
+		return nullptr;
+	}
+
 	if (AFarmDayCycle* Existing = Find(World))
 	{
 		return Existing;
 	}
-	return World ? World->SpawnActor<AFarmDayCycle>() : nullptr;
-}
 
-AFarmDayCycle* AFarmDayCycle::Find(const UWorld* World)
-{
-	if (!World)
+	// Actors' BeginPlay runs before the world counts as begun, so "running" means initialized for play and not ending.
+	const bool bRunningGameWorld = World->IsGameWorld() && World->AreActorsInitialized() && !World->bIsTearingDown;
+	if (!bRunningGameWorld)
 	{
 		return nullptr;
 	}
 
-	// The prototype has a single day cycle, so just use the first one in the level.
-	TActorIterator<AFarmDayCycle> It(World);
-	return It ? *It : nullptr;
+	UE_LOG(LogVestige, Warning, TEXT("%s has no FarmDayCycle, so one was spawned with default settings. Place one to tune it."),
+		*World->GetMapName());
+	return World->SpawnActor<AFarmDayCycle>();
+}
+
+AFarmDayCycle* AFarmDayCycle::Find(const UWorld* World)
+{
+	return Cast<AFarmDayCycle>(FarmActorLookup::FindSingle(World, StaticClass()));
 }
 
 void AFarmDayCycle::BeginPlay()

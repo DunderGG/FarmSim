@@ -27,12 +27,20 @@ void AFarmHUD::BeginPlay()
 		return;
 	}
 
+	DayCycle = AFarmDayCycle::Get(GetWorld());
+	PlayerOwner->OnPossessedPawnChanged.AddDynamic(this, &AFarmHUD::FollowPawn);
+	FollowPawn(nullptr, PlayerOwner->GetPawn());
+
 	HudWidget = SNew(SFarmHudWidget).Hud(this);
 	Viewport->AddViewportWidgetContent(HudWidget.ToSharedRef());
 }
 
 void AFarmHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	if (PlayerOwner)
+	{
+		PlayerOwner->OnPossessedPawnChanged.RemoveDynamic(this, &AFarmHUD::FollowPawn);
+	}
 	if (HudWidget)
 	{
 		if (UGameViewportClient* Viewport = GetWorld() ? GetWorld()->GetGameViewport() : nullptr)
@@ -60,13 +68,7 @@ bool AFarmHUD::HasMessage() const
 	return !Message.IsEmpty() && GetWorld()->GetTimeSeconds() < MessageEndTime;
 }
 
-const UFarmingComponent* AFarmHUD::GetFarming() const
+void AFarmHUD::FollowPawn(APawn* OldPawn, APawn* NewPawn)
 {
-	const APawn* Pawn = PlayerOwner ? PlayerOwner->GetPawn() : nullptr;
-	return Pawn ? Pawn->FindComponentByClass<UFarmingComponent>() : nullptr;
-}
-
-const AFarmDayCycle* AFarmHUD::GetDayCycle() const
-{
-	return AFarmDayCycle::Find(GetWorld());
+	Farming = NewPawn ? NewPawn->FindComponentByClass<UFarmingComponent>() : nullptr;
 }

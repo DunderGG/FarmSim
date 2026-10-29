@@ -35,8 +35,11 @@ public:
 	const FString& GetMessage() const { return Message; }
 	bool HasMessage() const;
 
-	const UFarmingComponent* GetFarming() const;
-	const AFarmDayCycle* GetDayCycle() const;
+	/** The farming component of the pawn this HUD's player controls, or nullptr. Kept, so it is cheap to call every frame. */
+	const UFarmingComponent* GetFarming() const { return Farming.Get(); }
+
+	/** The world's day cycle, or nullptr. Kept, so it is cheap to call every frame. */
+	const AFarmDayCycle* GetDayCycle() const { return DayCycle.Get(); }
 
 	/** How long feedback messages stay on screen, in seconds. */
 	UPROPERTY(EditAnywhere, Category = "Farming|HUD", meta = (ClampMin = 0.5))
@@ -47,8 +50,15 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
+	/** Keeps the new pawn's farming component. Bound to the controller's OnPossessedPawnChanged. */
+	UFUNCTION()
+	void FollowPawn(APawn* OldPawn, APawn* NewPawn);
+
 	FString Message;
 	double MessageEndTime = 0.0;
 
 	TSharedPtr<SFarmHudWidget> HudWidget;
+
+	TWeakObjectPtr<const AFarmDayCycle> DayCycle;
+	TWeakObjectPtr<const UFarmingComponent> Farming;
 };

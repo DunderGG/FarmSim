@@ -25,10 +25,17 @@ class AFarmDayCycle : public AActor
 public:
 	AFarmDayCycle();
 
-	/** Returns the world's day cycle, spawning one if the world has none. */
+	/**
+	 * Returns the world's day cycle, spawning one with a warning if a running game world has none.
+	 * The only code that spawns a day cycle. Returns nullptr without spawning in editor and preview worlds,
+	 * before the world is initialized for play and while it is torn down. Game thread only.
+	 */
 	static AFarmDayCycle* Get(UWorld* World);
 
-	/** Returns the world's day cycle, or nullptr if there is none yet. Never spawns one. */
+	/**
+	 * Returns the world's day cycle, or nullptr if there is none yet. Never spawns one.
+	 * Searches the world, so call it once and keep the result.
+	 */
 	static AFarmDayCycle* Find(const UWorld* World);
 
 	/** Ends the current day and sets the clock to the next morning, then broadcasts OnNewDay. */
