@@ -15,13 +15,11 @@ namespace FarmToolbarTests
 	{
 		FActorTestSpawner Spawner;
 
-		/** A tool asset with this ContentId. The ID is edit-only, so the test sets it through reflection. */
+		/** A tool asset with this ContentId. */
 		const UFarmToolData* MakeTool(FName ContentId)
 		{
 			UFarmToolData& Tool = Spawner.SpawnObject<UFarmToolData>();
-			const FNameProperty* IdProperty = FindFProperty<FNameProperty>(UFarmContentData::StaticClass(), TEXT("ContentId"));
-			check(IdProperty);
-			IdProperty->SetPropertyValue_InContainer(&Tool, ContentId);
+			Tool.SetContentIdForTests(ContentId);
 			return &Tool;
 		}
 

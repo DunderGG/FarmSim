@@ -36,6 +36,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
    - `UFarmFeedbackSubsystem`: carries messages for the player from game code to the HUD. Game code calls `Notify`; it never calls the HUD.
    - `UFarmSaveSubsystem` / `UFarmSaveGame`: saving and loading.
    - `UFarmContentData`: base of every content data asset. Owns the `ContentId`, display name and loading through the Asset Manager.
+   - `UFarmAssetManager`: the project's Asset Manager; startup checks of all content (duplicate content IDs).
    - `UFarmCropData`: one crop's definition (growth, meshes, yield, prices). No runtime state.
    - `UFarmToolData`: one tool's definition (action, held mesh, stamina cost). No runtime state.
 2. **Epic naming.** `A`/`U`/`S`/`F`/`E`/`I`/`T` type prefixes, `b` for booleans, PascalCase everywhere, and the `Farm` project prefix on every new type (`AFarmShop`, `EFarmSeason`, `FOnFarmNewDay`).

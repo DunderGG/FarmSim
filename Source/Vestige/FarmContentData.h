@@ -26,8 +26,19 @@ public:
 	 */
 	static const UFarmContentData* LoadWithVisuals(const FPrimaryAssetId& ContentAssetId);
 
+#if WITH_EDITOR
+	/** Reports a missing or badly formed ContentId, so a mistake shows up when the asset is saved or validated. */
+	virtual EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
+#endif
+
 	/** Built from the content type and ContentId, so renaming or moving the asset keeps the ID. Invalid while ContentId is empty. */
 	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
+
+	/**
+	 * True if Id has the content ID format: a namespace and a name joined by exactly one dot (Base.Turnip, MyMod.BlueCorn),
+	 * each starting with a capital letter and made only of ASCII letters and digits.
+	 */
+	static bool IsWellFormedContentId(FName Id);
 
 	FName GetContentId() const { return ContentId; }
 	const FText& GetDisplayName() const { return DisplayName; }

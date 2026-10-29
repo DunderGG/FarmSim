@@ -117,7 +117,8 @@ The code changes that the slice's content depends on. Doing them first means add
 - [x] The current turnip becomes the first crop asset, `Base.Turnip`, and its settings move off the tile Blueprint
 - [x] Tool data assets (`UFarmToolData`), replacing the hard-coded tool list (`EFarmTool`)
 - [ ] Item data assets (`UFarmItemData`) for seeds, harvested crops and other things the player can carry
-- [ ] All content uses namespaced IDs (`Base.<Name>`) in a `ContentId` property that also builds the asset's primary asset ID, with data validation of the format, a startup check for duplicate IDs, and an ID redirect list ([Architecture.md section 5](Architecture.md#5-data-and-content))
+- [x] All content uses namespaced IDs (`Base.<Name>`) in a `ContentId` property that also builds the asset's primary asset ID, with data validation of the format and a startup check for duplicate IDs ([Architecture.md section 5](Architecture.md#5-data-and-content))
+- [ ] An ID redirect list, once an ID first has to change (deferred, see the decision log)
 
 **Tiles and the farm grid**
 
@@ -154,7 +155,8 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] Day clock tests: the time and day roll over correctly
 - [x] Save tests: tile, farming and clock state survive a save and load round trip through each owner's own save and restore functions
 - [x] Save failure tests: a corrupt or newer-version save is not overwritten, and unknown content IDs are skipped
-- [ ] Content ID tests: a redirected ID, a duplicate ID and an unknown ID
+- [x] Content ID tests: the format, a duplicate ID and an unknown ID in a save
+- [ ] A redirected ID test, with the redirect list
 
 **Performance** ([Architecture.md section 10](Architecture.md#10-performance-by-design))
 

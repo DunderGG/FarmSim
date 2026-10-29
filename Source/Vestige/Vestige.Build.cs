@@ -17,8 +17,9 @@ public class Vestige : ModuleRules
 			"GameplayTags"
 		});
 
-		// UI modules are private: no other module uses our widgets, so our public headers don't need to expose them.
+		// Private: no other module uses our headers, so they don't need to expose these modules' types.
 		PrivateDependencyModuleNames.AddRange(new string[] {
+			"AssetRegistry",
 			"Slate",
 			"SlateCore",
 			"UMG"

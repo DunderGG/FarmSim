@@ -63,7 +63,7 @@ Contents
 
 ## 2. Content and the Asset Manager
 
-**Status:** built for crops and tools (`UFarmContentData`, `UFarmCropData`, `UFarmToolData`). ID validation and duplicate checks are roadmap items.
+**Status:** built for crops and tools (`UFarmContentData`, `UFarmCropData`, `UFarmToolData`). `UFarmContentData::IsDataValid` checks the ID format, and `UFarmAssetManager` reports duplicate IDs after the initial asset scan. The ID redirect list is deferred until an ID has to change.
 
 **References:** Epic's "Asset Management" and "Data Assets" pages (`UPrimaryDataAsset`, primary asset types in Project Settings > Asset Manager, asset bundles, `UAssetManager::LoadPrimaryAsset`); Lyra's `ULyraAssetManager` (a project subclass that loads global game data at startup) and its data assets (`ULyraPawnData`, `ULyraExperienceDefinition`, `ULyraInventoryItemDefinition`).
 
@@ -73,7 +73,7 @@ Contents
 - Definitions hold no runtime state. Per-instance state (a crop's growth, an item's durability) lives on the owner of the instance.
 - Meshes, materials, sounds and effects in a content asset are soft references in an asset bundle (`Visuals`, later `Audio`), loaded with the asset when it's needed.
 - **Data validation:** each content class overrides `IsDataValid` to check its ID format and required fields, so mistakes show up in the editor (right-click > Asset Actions > Validate Assets) instead of at play time.
-- When the game needs global data at startup (lists of starting items, default settings), add a `UFarmAssetManager` subclass that loads it once, as `ULyraAssetManager` does, rather than having each system load its own.
+- When the game needs global data at startup (lists of starting items, default settings), `UFarmAssetManager` loads it once, as `ULyraAssetManager` does, rather than having each system load its own.
 
 **Pitfalls:**
 
