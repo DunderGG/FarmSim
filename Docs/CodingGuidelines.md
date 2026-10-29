@@ -73,6 +73,8 @@ Like Lyra prefixes its classes with `Lyra` (`ALyraCharacter`, `ULyraHealthCompon
 
 The template classes (`AVestigeCharacter`, `AVestigeGameMode`, `AVestigePlayerController`) keep the template's naming: the module name plus the class role.
 
+**Epic template code isn't ours to maintain.** The template files (`VestigeCharacter`, `VestigeGameMode`, `VestigePlayerController`) keep Epic's style and copyright header, and this guide doesn't apply to them: don't reformat or tidy them in passing, and don't copy their style (raw `UObject*` properties, their own log category) into new code. Delete a template file once nothing uses it. If we ever need to change one substantially, first bring it up to this guide in a commit of its own.
+
 ### 2.3 Case and wording
 
 - **PascalCase for everything**: types, functions, members, locals, parameters, constants. No `snake_case`, no `m_` or `_` prefixes, no Hungarian notation beyond the prefixes above.
@@ -106,8 +108,9 @@ Other common traps in actors and pawns: `Controller`, `Owner`, `Tags`, `Instigat
 The repo has a **`.clang-format`** file that encodes these rules, so formatting is automatic rather than something to review.
 
 - In Visual Studio, check *Tools > Options > Text Editor > C/C++ > Code Style > Formatting > Enable ClangFormat support*. VS then uses the repo's file. Format a document with *Ctrl+K, Ctrl+D*.
-- Format the files you change. Don't reformat files you aren't otherwise touching, and don't mix a first-time reformat of a file with behavior changes in the same commit.
-- clang-format can't lay out Slate argument blocks. Wrap `SLATE_BEGIN_ARGS` ... `SLATE_END_ARGS()` in `// clang-format off` and `// clang-format on`.
+- **The reference formatter is the clang-format that ships with Visual Studio** (version 22.1 in Visual Studio 2026, at `VC\Tools\Llvm\x64\bin\clang-format.exe`). Other versions can differ in small details; when they disagree, this one wins.
+- All of our files (`Farm*` and `Tests/`) are clean under it. Format the files you change, so a diff only shows your own lines. The Epic template files keep Epic's formatting ([section 2.2](#22-the-farm-project-prefix)).
+- clang-format can't lay out Slate's declarative syntax. Wrap `SLATE_BEGIN_ARGS` ... `SLATE_END_ARGS()` and each `ChildSlot [ ... ]` layout in `// clang-format off` and `// clang-format on`.
 - The rules below still apply where the formatter has no opinion (blank lines between groups, where to break long expressions).
 
 - **Tabs for indentation**, 4 spaces wide. No trailing whitespace.
@@ -494,7 +497,6 @@ Existing code that doesn't yet match these guidelines. Fix them when touching th
 
 - `UFarmingComponent::Seeds` and `HarvestedCrops` are public mutable properties, and `UFarmSaveSubsystem` writes them directly. Make them private with getters and a `RestoreInventory(...)` function.
 - Tunable properties on `AFarmTile`, `AFarmGrid` and `AFarmDayCycle` are public. Move them to `protected` / `private` with `AllowPrivateAccess` and add getters where other classes read them.
-- `FarmHudWidget.h` needs `// clang-format off` / `on` around its Slate argument block.
 
 ## 17. Review checklist
 

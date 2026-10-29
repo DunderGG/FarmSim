@@ -82,7 +82,10 @@ private:
 	UPROPERTY()
 	TObjectPtr<const UFarmCropData> SeedCrop;
 
-	/** Tool assets in the toolbar slots, in order (FarmTool:Base.Hoe). Keys 1 to 9 select the first nine; the first is in hand at the start. */
+	/**
+	 * Tool assets in the toolbar slots, in order (FarmTool:Base.Hoe).
+	 * Keys 1 to 9 select the first nine; the first is in hand at the start.
+	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", AllowedTypes = "FarmTool"))
 	TArray<FPrimaryAssetId> ToolbarIds;
 

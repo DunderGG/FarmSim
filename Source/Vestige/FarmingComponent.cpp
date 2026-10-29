@@ -36,13 +36,14 @@ void UFarmingComponent::BeginPlay()
 	if (!Grid)
 	{
 		// The player's HUD may not exist yet during BeginPlay.
-		GetWorld()->GetTimerManager().SetTimerForNextTick([WeakThis = TWeakObjectPtr<UFarmingComponent>(this)]()
-		{
-			if (const UFarmingComponent* Farming = WeakThis.Get())
+		GetWorld()->GetTimerManager().SetTimerForNextTick(
+			[WeakThis = TWeakObjectPtr<UFarmingComponent>(this)]()
 			{
-				Farming->ShowMessage(TEXT("No FarmGrid in the level. Drag one in from the Place Actors panel."));
-			}
-		});
+				if (const UFarmingComponent* Farming = WeakThis.Get())
+				{
+					Farming->ShowMessage(TEXT("No FarmGrid in the level. Drag one in from the Place Actors panel."));
+				}
+			});
 	}
 }
 
@@ -91,8 +92,8 @@ void UFarmingComponent::RestoreCurrentTool(FName ToolContentId)
 {
 	if (!Toolbar.SelectTool(ToolContentId))
 	{
-		UE_LOG(LogVestige, Warning, TEXT("The saved tool %s isn't on the toolbar, so the first slot is in hand."),
-			*ToolContentId.ToString());
+		UE_LOG(
+			LogVestige, Warning, TEXT("The saved tool %s isn't on the toolbar, so the first slot is in hand."), *ToolContentId.ToString());
 		Toolbar.SelectSlot(0);
 	}
 	OnToolChanged.Broadcast(GetCurrentTool());

@@ -120,9 +120,7 @@ void AFarmDayCycle::UpdateLighting()
 	const float Hour = FMath::Fmod(TimeOfDay, 24.f);
 	const float DayLength = SunsetHour - SunriseHour;
 	const bool bDaytime = Hour >= SunriseHour && Hour < SunsetHour;
-	const float Progress = bDaytime
-		? (Hour - SunriseHour) / DayLength
-		: FMath::Fmod(Hour - SunsetHour + 24.f, 24.f) / (24.f - DayLength);
+	const float Progress = bDaytime ? (Hour - SunriseHour) / DayLength : FMath::Fmod(Hour - SunsetHour + 24.f, 24.f) / (24.f - DayLength);
 	const float Arc = FMath::Sin(Progress * PI);
 
 	// A few degrees above the horizon at the ends so mornings and evenings get long shadows, not darkness.

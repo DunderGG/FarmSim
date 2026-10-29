@@ -15,9 +15,11 @@ class AFarmHUD;
 class SFarmHudWidget : public SCompoundWidget
 {
 public:
+	// clang-format off
 	SLATE_BEGIN_ARGS(SFarmHudWidget) {}
 		SLATE_ARGUMENT(TWeakObjectPtr<const AFarmHUD>, Hud)
 	SLATE_END_ARGS()
+	// clang-format on
 
 	void Construct(const FArguments& InArgs);
 

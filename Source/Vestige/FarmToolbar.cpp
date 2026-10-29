@@ -23,10 +23,11 @@ bool FFarmToolbar::SelectSlot(int32 Slot)
 
 bool FFarmToolbar::SelectTool(FName ToolContentId)
 {
-	const int32 Slot = Tools.IndexOfByPredicate([ToolContentId](const UFarmToolData* Tool)
-	{
-		return Tool && Tool->GetContentId() == ToolContentId;
-	});
+	const int32 Slot = Tools.IndexOfByPredicate(
+		[ToolContentId](const UFarmToolData* Tool)
+		{
+			return Tool && Tool->GetContentId() == ToolContentId;
+		});
 	return !ToolContentId.IsNone() && SelectSlot(Slot);
 }
 

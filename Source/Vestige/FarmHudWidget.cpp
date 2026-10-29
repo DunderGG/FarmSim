@@ -5,7 +5,6 @@
 
 #include "FarmDayCycle.h"
 #include "FarmHUD.h"
-
 #include "FarmingComponent.h"
 #include "FarmToolData.h"
 #include "Styling/CoreStyle.h"
@@ -39,6 +38,7 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 
 	const FSlateBrush* Backdrop = FCoreStyle::Get().GetBrush("WhiteBrush");
 
+	// clang-format off
 	ChildSlot
 	[
 		SNew(SOverlay)
@@ -111,6 +111,7 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 			.Text(this, &SFarmHudWidget::GetControlsText)
 		]
 	];
+	// clang-format on
 }
 
 FText SFarmHudWidget::GetStatusText() const
@@ -123,9 +124,8 @@ FText SFarmHudWidget::GetStatusText() const
 		return FText::GetEmpty();
 	}
 	const UFarmToolData* Tool = Farming->GetCurrentTool();
-	return FText::FromString(FString::Printf(TEXT("Day %d   %s   |   %s"),
-		DayCycle->GetCurrentDay(), *FormatClock(DayCycle->GetTimeOfDay()),
-		Tool ? *Tool->GetDisplayName().ToString() : TEXT("No tool")));
+	return FText::FromString(FString::Printf(TEXT("Day %d   %s   |   %s"), DayCycle->GetCurrentDay(),
+		*FormatClock(DayCycle->GetTimeOfDay()), Tool ? *Tool->GetDisplayName().ToString() : TEXT("No tool")));
 }
 
 FText SFarmHudWidget::GetControlsText() const

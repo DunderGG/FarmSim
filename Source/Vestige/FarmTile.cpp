@@ -35,7 +35,8 @@ AFarmTile::AFarmTile()
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("/Engine/BasicShapes/Cube.Cube"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CylinderMesh(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> ShapeMaterial(TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> ShapeMaterial(
+		TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
 
 	PlaceholderSoilMesh = CubeMesh.Object;
 	PlaceholderCropMesh = CylinderMesh.Object;

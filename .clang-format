@@ -54,5 +54,10 @@ StatementMacros:
   - UENUM
   - UINTERFACE
 
-# clang-format can't lay out Slate argument blocks (SLATE_BEGIN_ARGS ... SLATE_END_ARGS).
-# Wrap them in // clang-format off and // clang-format on.
+# CQTest declares test fixtures with a macro. Without this, the formatter reads a reference parameter
+# in a fixture's helper function as a multiplication (AFarmTile & FarmTile).
+Macros:
+  - TEST_CLASS(Name, Directory)=class Name
+
+# clang-format can't lay out Slate argument blocks (SLATE_BEGIN_ARGS ... SLATE_END_ARGS) or the
+# declarative layout inside ChildSlot [ ... ]. Wrap them in // clang-format off and // clang-format on.

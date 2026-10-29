@@ -72,7 +72,8 @@ void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
+				ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(FarmingMappingContext, 1);
 		}
