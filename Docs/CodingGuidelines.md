@@ -80,7 +80,7 @@ The template classes (`AVestigeCharacter`, `AVestigeGameMode`, `AVestigePlayerCo
 - **PascalCase for everything**: types, functions, members, locals, parameters, constants. No `snake_case`, no `m_` or `_` prefixes, no Hungarian notation beyond the prefixes above.
 - Names are **descriptive and unabbreviated**: `ReachDistance`, not `RchDst`; `HarvestedCrops`, not `NumHarv`. Common, well-known short forms are fine (`HUD`, `UI`, `Max`, `Min`, `Num`).
 - Functions that do something are **verbs**: `Till()`, `StartNextDay()`, `RefreshVisuals()`.
-- Functions that only **query state** and return a `bool` ask a **question**: `IsRipe()`, `IsPastBedtime()`, `HasMessage()`.
+- Functions that only **query state** and return a `bool` ask a **question**: `IsRipe()`, `AreTilesReady()`, `HasMessages()`.
 - Functions that **do something that can fail** keep their verb name and return `bool` for success: `AFarmTile::Till()` returns `false` when the tile isn't grass. Say in the `/** */` comment what `false` means. Don't rename them as questions (`DidTillSucceed()`) or add a `Try` prefix.
 - Getters use `Get`: `GetCurrentDay()`. `Find` returns `nullptr` when nothing exists; `Get` may create it (see `AFarmDayCycle::Find` vs `AFarmDayCycle::Get`).
 - Delegates: the type is `FOnFarm<Event>`, the member is `On<Event>`: `FOnFarmNewDay OnNewDay`.

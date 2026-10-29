@@ -62,12 +62,17 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	void LoadSeedCrop();
 	void LoadToolbar();
 	AFarmTile* GetTargetTile() const;
+
+	/** Starts the next day when the clock reaches the end of the day. Bound to AFarmDayCycle::OnDayEndReached. */
+	void PassOut(int32 EndedDay);
+
 	void StartNextDay(const TCHAR* Reason);
 	void ShowMessage(const FString& Message) const;
 

@@ -28,6 +28,10 @@ void UFarmingComponent::BeginPlay()
 	LoadSeedCrop();
 	LoadToolbar();
 	DayCycle = AFarmDayCycle::Get(GetWorld());
+	if (DayCycle)
+	{
+		DayCycle->OnDayEndReached.AddUObject(this, &UFarmingComponent::PassOut);
+	}
 	Grid = AFarmGrid::Find(GetWorld());
 	if (!Grid)
 	{
@@ -41,6 +45,15 @@ void UFarmingComponent::BeginPlay()
 				}
 			});
 	}
+}
+
+void UFarmingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (DayCycle)
+	{
+		DayCycle->OnDayEndReached.RemoveAll(this);
+	}
+	Super::EndPlay(EndPlayReason);
 }
 
 void UFarmingComponent::LoadSeedCrop()
@@ -156,9 +169,15 @@ void UFarmingComponent::Sleep()
 	StartNextDay(TEXT("You slept."));
 }
 
+void UFarmingComponent::PassOut(int32 EndedDay)
+{
+	StartNextDay(TEXT("You stayed up too late and passed out."));
+}
+
 void UFarmingComponent::StartNextDay(const TCHAR* Reason)
 {
-	if (!Grid || !DayCycle)
+	// Starting a day doesn't need the grid: the grid listens to OnNewDay, and without one there is nothing to grow.
+	if (!DayCycle)
 	{
 		return;
 	}
@@ -181,11 +200,6 @@ AFarmTile* UFarmingComponent::GetTargetTile() const
 void UFarmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (DayCycle && DayCycle->IsPastBedtime())
-	{
-		StartNextDay(TEXT("You stayed up too late and passed out."));
-	}
 
 	if (const AFarmTile* Tile = GetTargetTile())
 	{

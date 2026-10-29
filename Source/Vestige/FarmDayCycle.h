@@ -49,14 +49,17 @@ public:
 	/** Hours since midnight at the start of the current day. Goes past 24 after midnight, up to DayEndHour. */
 	float GetTimeOfDay() const { return TimeOfDay; }
 
-	/** True once the clock reaches DayEndHour and the player should pass out. */
-	bool IsPastBedtime() const { return TimeOfDay >= DayEndHour; }
-
 	/** Broadcast with the new day's number every time a new day starts. The farm reacts here, e.g. crops grow. */
 	FOnFarmNewDay OnNewDay;
 
 	/** Broadcast right after OnNewDay, once everything has reacted to the new day. Saving listens here. */
 	FOnFarmNewDay OnNewDayFinished;
+
+	/**
+	 * Broadcast once per day, with the day's number, when the clock reaches DayEndHour. The clock then stops until
+	 * StartNextDay. Whoever owns the end of the player's day (UFarmRestComponent) reacts here.
+	 */
+	FOnFarmNewDay OnDayEndReached;
 
 	/** Real seconds per in-game hour. */
 	UPROPERTY(EditAnywhere, Category = "Farming|Time", meta = (ClampMin = 0.1))
@@ -66,7 +69,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Farming|Time", meta = (ClampMin = 0, ClampMax = 23))
 	float DayStartHour = 6.f;
 
-	/** Hour the player passes out. 26 is 2:00 the next morning. */
+	/** Hour the day ends and the clock stops: OnDayEndReached is broadcast. 26 is 02:00 the next morning. */
 	UPROPERTY(EditAnywhere, Category = "Farming|Time", meta = (ClampMin = 1, ClampMax = 30))
 	float DayEndHour = 26.f;
 
@@ -123,6 +126,9 @@ private:
 
 	int32 CurrentDay = 1;
 	float TimeOfDay = DayStartHour;
+
+	/** Set when OnDayEndReached is broadcast, so it is broadcast once per day. */
+	bool bDayEndReached = false;
 
 	// The lights' settings as placed in the level, used as the daytime values.
 	float SunYaw = 0.f;

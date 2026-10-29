@@ -37,6 +37,7 @@ namespace FarmDayCycleLighting
 
 AFarmDayCycle::AFarmDayCycle()
 {
+	// Ticks to run the clock and move the sun. Stops while the clock is stopped at the end of the day.
 	PrimaryActorTick.bCanEverTick = true;
 
 	NightPostProcess = CreateDefaultSubobject<UPostProcessComponent>(TEXT("NightPostProcess"));
@@ -90,6 +91,8 @@ void AFarmDayCycle::StartNextDay()
 {
 	++CurrentDay;
 	TimeOfDay = DayStartHour;
+	bDayEndReached = false;
+	SetActorTickEnabled(true);
 	UpdateLighting();
 	OnNewDay.Broadcast(CurrentDay);
 	OnNewDayFinished.Broadcast(CurrentDay);
@@ -99,6 +102,10 @@ void AFarmDayCycle::RestoreClock(int32 SavedDay, float SavedTimeOfDay)
 {
 	CurrentDay = FMath::Max(1, SavedDay);
 	TimeOfDay = FMath::Clamp(SavedTimeOfDay, DayStartHour, DayEndHour);
+	bDayEndReached = false;
+
+	// A clock restored at DayEndHour reaches the end on the next tick, so OnDayEndReached isn't lost.
+	SetActorTickEnabled(true);
 	UpdateLighting();
 }
 
@@ -106,9 +113,18 @@ void AFarmDayCycle::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	// The clock stops at DayEndHour until the player sleeps or passes out.
 	TimeOfDay = FMath::Min(TimeOfDay + DeltaSeconds / RealSecondsPerGameHour, DayEndHour);
 	UpdateLighting();
+	if (TimeOfDay < DayEndHour || bDayEndReached)
+	{
+		return;
+	}
+
+	// The clock stops at DayEndHour until the next day starts, and nothing changes meanwhile. Stop ticking first,
+	// so a listener that starts the next day turns it back on.
+	bDayEndReached = true;
+	SetActorTickEnabled(false);
+	OnDayEndReached.Broadcast(CurrentDay);
 }
 
 void AFarmDayCycle::FindLights()

@@ -160,7 +160,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 - [x] Confirm the target hardware and the frame budget
 - [ ] Set the rendering settings and the four scalability levels for the target: hardware ray tracing and other expensive features only at Epic
-- [ ] The day cycle broadcasts the end of the day, so the farming component stops polling it every frame
+- [x] The day cycle broadcasts the end of the day, so the farming component stops polling it every frame
 - [ ] A shipping-safe highlight for the targeted tile, replacing the debug box
 - [x] The HUD keeps its references instead of searching the world every frame
 - [ ] Trace scopes on the new day, loading and saving
