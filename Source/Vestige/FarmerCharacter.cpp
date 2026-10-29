@@ -44,6 +44,7 @@ AFarmerCharacter::AFarmerCharacter()
 	HeldTool->SetupAttachment(GetMesh(), FarmerMesh::HandSocket);
 	HeldTool->SetMobility(EComponentMobility::Movable);
 	HeldTool->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	HeldTool->SetGenerateOverlapEvents(false);
 }
 
 void AFarmerCharacter::PostInitializeComponents()

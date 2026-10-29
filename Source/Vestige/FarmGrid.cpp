@@ -27,6 +27,7 @@ AFarmGrid::AFarmGrid()
 	Bounds = CreateDefaultSubobject<UBoxComponent>(TEXT("Bounds"));
 	Bounds->SetupAttachment(RootComponent);
 	Bounds->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Bounds->SetGenerateOverlapEvents(false);
 	Bounds->SetHiddenInGame(true);
 
 	TileClass = AFarmTile::StaticClass();

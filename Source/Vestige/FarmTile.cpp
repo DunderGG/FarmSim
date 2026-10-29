@@ -60,6 +60,7 @@ AFarmTile::AFarmTile()
 	SoilMesh->SetRelativeScale3D(FarmTilePlaceholder::SoilScale);
 	SoilMesh->SetRelativeLocation(FarmTilePlaceholder::SoilLocation);
 	SoilMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SoilMesh->SetGenerateOverlapEvents(false);
 
 	CropMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CropMesh"));
 	CropMesh->SetupAttachment(RootComponent);
@@ -67,6 +68,7 @@ AFarmTile::AFarmTile()
 	CropMesh->SetStaticMesh(PlaceholderCropMesh);
 	CropMesh->SetMaterial(0, ShapeMaterial.Object);
 	CropMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CropMesh->SetGenerateOverlapEvents(false);
 	CropMesh->SetVisibility(false);
 }
 

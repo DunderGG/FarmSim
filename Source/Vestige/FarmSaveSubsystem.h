@@ -38,6 +38,7 @@ enum class EFarmLoadOutcome : uint8
 	RefuseNewer
 };
 
+/** What loading should do, and with which slot. */
 struct FFarmLoadDecision
 {
 	EFarmLoadOutcome Outcome = EFarmLoadOutcome::NewGame;
