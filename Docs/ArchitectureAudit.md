@@ -1,7 +1,7 @@
 # Architecture document audit
 
-**Reviewed:** 2026-10-26  
-**Scope:** A critical review of [Architecture.md](Architecture.md) as guidance for a C++ / Unreal Engine 5.7 game project. This assesses the document's accuracy, completeness, internal consistency and usefulness as an implementation guide. It does not certify that the code follows the document.
+**Reviewed:** 2026-10-26 (the document), 2026-10-29 (the code against the document)  
+**Scope:** A critical review of [Architecture.md](Architecture.md) as guidance for a C++ / Unreal Engine 5.7 game project. The first review (A-01 to A-09) assesses the document's accuracy, completeness, internal consistency and usefulness as an implementation guide, and does not check the code. The second review (A-10 onward, [Code review findings](#code-review-findings-2026-10-29)) checks the code in `Source/Vestige/`, `Config/` and the project's Blueprints against the document's design and Unreal practice. Code-style findings from the same review are in [CodingGuidelinesAudit.md](CodingGuidelinesAudit.md) (C-09 onward).
 
 ## Executive assessment
 
@@ -21,6 +21,19 @@ Scores use a 1–10 scale: 1 means misleading or absent; 5 means usable but has 
 | Testability and verification | 5/10 | Testing principles exist in the coding guide, but the architecture decision log and roadmap disagree about whether CQTest is set up. |
 | Performance and growth guidance | 6/10 | Event-driven defaults and measurement are good; the actor-count transition example is an arbitrary threshold and an overly direct optimization prescription. |
 | Decision traceability and known gaps | 8/10 | The decision log and gap list are unusually useful. They would benefit from priority, risk and completion criteria. |
+
+### Code conformance (2026-10-29)
+
+**Overall: 6/10.** The code follows the ownership table closely, and the newest work is the best example of the design: crops and tools are discovered data assets with typed-in IDs and soft-loaded visuals, the toolbar's rules sit in a testable struct, and old saves keep loading. The score is held back by the known gaps, which are all still open (gameplay calls the HUD, the save subsystem writes other classes' state, no save version, an unreadable save gets overwritten), and by a few problems the gap list doesn't name: the tile highlight is debug drawing that disappears from shipping builds, bedtime is polled every frame, and the farming component is collecting jobs.
+
+| Area | Score | Assessment |
+|---|---:|---|
+| Ownership and separation of concerns | 7/10 | Matches the ownership table. The farming component also draws the target highlight and checks the clock every frame, which aren't its jobs. |
+| Dependency direction | 5/10 | Gameplay and saving call the HUD (known gap), and the save data header includes the tile actor. |
+| Events instead of polling | 6/10 | New days are event driven; bedtime and the HUD are polled every frame. |
+| Lifetimes and initialization | 6/10 | `Get`/`Find` and the one-tick load wait are known gaps; nothing unbinds in `EndPlay`. |
+| Saving | 4/10 | Works for the prototype, but none of section 6's safety rules are implemented yet; all are tracked as known gaps and roadmap items. |
+| Content and mod readiness | 7/10 | Crops and tools follow section 12. ID validation, duplicates and extension points are still missing (known gaps). |
 
 ## Findings
 
@@ -132,6 +145,96 @@ Section 10 contrasts an 8×8 field of tile actors with “fields of thousands”
 
 **Recommended change:** Keep the current actor design until profiling demonstrates a bottleneck. Present data-oriented storage and instancing as options to evaluate against measured CPU, memory, collision and rendering costs, not as a threshold-based next step.
 
+## Code review findings (2026-10-29)
+
+Findings from checking the code against this document. Problems already listed in [Known gaps](Architecture.md#17-known-gaps) aren't repeated here; their status is in [Status of earlier findings and known gaps](#status-of-earlier-findings-and-known-gaps-2026-10-29).
+
+### A-10 — The tile highlight is debug drawing in the farming component
+
+**Severity: High**
+
+The roadmap lists "Highlight on the tile the player is facing" as done. It is drawn by `UFarmingComponent::TickComponent`, which calls `DrawDebugBox` around the target tile every frame. Unreal compiles debug drawing out of shipping builds (`ENABLE_DRAW_DEBUG` is off there), so the highlight silently disappears from a packaged game. It also puts presentation in a game-rules component, against [section 7](Architecture.md#7-presentation-ui-audio-and-effects), and it is the reason the component ticks at all.
+
+**Why it matters:** A finished feature will be missing from the first shipping build, with no error to point at it. Leaving it where it is also invites the next cosmetic (a tool preview, a "can't do that" flash) into the same tick.
+
+**Recommended change:** Keep target finding in `UFarmingComponent`, which owns targeting: it exposes the target tile and broadcasts a change event (for example `OnTargetTileChanged`) when the tile in front of the farmer changes. A new cosmetic component on the farmer (for example `UFarmTargetHighlightComponent`) listens and shows a real highlight, such as a decal or an outline mesh, that ships. Checking the target on a short timer or when the farmer moves is enough; it doesn't need every frame. Add the new component to the ownership table.
+
+### A-11 — Bedtime is polled every frame, and passing out depends on the grid
+
+**Severity: Medium**
+
+`UFarmingComponent::TickComponent` asks `AFarmDayCycle::IsPastBedtime()` every frame. The day cycle owns the clock and already knows the moment it reaches `DayEndHour` (its `Tick` clamps there), but it broadcasts nothing. `UFarmingComponent::StartNextDay` also returns early when there is no grid, so in a level without a grid the farmer can't sleep, and at 02:00 the component calls `StartNextDay` again every frame while the clock stays stopped.
+
+**Why it matters:** `AGENTS.md` rule 12 and [section 10](Architecture.md#10-performance-by-design) ask for events instead of polling. More importantly, milestone 2 replaces passing out with stamina and late-night rules (GameDesign G-03, G-04), and every new consumer of "the night is over" would add another poll. Starting a day doesn't need the grid: the grid listens to `OnNewDay` and simply isn't there to listen.
+
+**Recommended change:** Give `AFarmDayCycle` an event such as `OnDayEndReached`, broadcast once when the clock reaches `DayEndHour`. `UFarmingComponent` binds to it and starts the next day. Drop the grid check from `StartNextDay`. With A-10 done too, `UFarmingComponent` no longer needs to tick. Record the event in the ownership table and the day-flow diagram.
+
+### A-12 — The save data layer depends on the tile actor
+
+**Severity: Low**
+
+[Section 14](Architecture.md#14-dependencies) puts `UFarmSaveGame` in the data layer, below the world-state actors, and says lower layers never include higher ones. `FarmSaveGame.h` includes `FarmTile.h`, an actor header, only to get `EFarmTileState`. `FFarmTileSaveData` is defined by the save game rather than by the tile that should produce and restore it ([section 6](Architecture.md#6-saving)).
+
+**Why it matters:** Every file that includes the save game also compiles the tile actor's header, and the dependency points the wrong way. It will matter more when the tile's rules move into a plain state struct (a known gap): the save data should depend on that struct, not on the actor.
+
+**Recommended change:** When doing the roadmap's "each owner saves and restores its own state" item, move `EFarmTileState` and `FFarmTileSaveData` into a small header with no actor dependency (for example `FarmTileState.h`, which can later hold the tile-state struct), and have `AFarmTile` provide `GetSaveData()` and `RestoreFromSaveData()`.
+
+### A-13 — `UFarmingComponent` is collecting jobs
+
+**Severity: Low**
+
+The component's row in the ownership table already lists the toolbar, seeds and the seed crop, the harvest count, targeting, tool use, sleeping and passing out. In code it also finds the grid, sends player messages to the HUD and draws the target highlight (A-10). Milestone 2 plans stamina, money, more items and late-night rules, and each has an obvious but wrong home here.
+
+**Why it matters:** [Principle 1](Architecture.md#1-core-principles) is one job per class. A component that is the default home for "something the player does" will become the class the rest of the game reaches into, and the hardest one to test (see C-17).
+
+**Recommended change:** No change yet beyond A-10 and A-11. Decide the split before adding stamina or money, and record it: inventory and money move to an inventory component on the player state ([Expected changes](Architecture.md#18-expected-changes)); stamina becomes its own component; sleeping and the late-night rules belong with whichever of the day cycle or a new rest component owns "the day is over". `UFarmingComponent` keeps the toolbar, targeting and tool use.
+
+### A-14 — Key hints repeat the key bindings
+
+**Severity: Low**
+
+`AFarmerCharacter::SetupPlayerInputComponent` binds E, N and F9, and `SFarmHudWidget::GetControlsText` writes "E Use tool | N Sleep | F9 New game" as a literal. Only the toolbar part of the hint is built from data. The HUD therefore knows the farmer's keys without asking the class that owns them.
+
+**Why it matters:** Changing a key, or later letting the player rebind keys, leaves a wrong hint on screen. [Principle 2](Architecture.md#1-core-principles) is one source of truth.
+
+**Recommended change:** Keep the bindings in one place that the HUD can read. Today that can be a small table of action names and keys owned by the character; when input moves to `IA_`/`IMC_` assets ([section 11](Architecture.md#11-patterns-borrowed-from-lyra)), the HUD can ask Enhanced Input for each action's mapped key, which also makes rebinding work.
+
+### A-15 — Part B, the roadmap and the gap list lag the code in places
+
+**Severity: Low**
+
+- The dependency diagram in [section 14](Architecture.md#14-dependencies) has no arrows for the edges the gap list names (farming component and save subsystem to the HUD), for the character starting a new game through the save subsystem, or for the HUD finding the farming component on the pawn.
+- The tile gap says to separate rules from visuals "before writing tile tests"; tile tests now exist without that split.
+- The decision log's 2026-10-25 entry still reads "setup is pending" for CQTest. A newer entry records the setup, which is how the log should work, but nothing points from the old entry to the new one.
+- The roadmap's crop item lists "days per stage" and "radiation tolerance"; the code and the decision log have no per-stage days and call the field `ContaminationTolerance`.
+- The roadmap's "Tile rule tests" item is unticked although five tile tests exist (see C-17). ("Tool data assets" was also unticked at review time; the assets and the tick landed in 3f16cfa the same day.)
+
+**Why it matters:** Part B is meant to be the map a returning developer trusts. A diagram that hides the known wrong-way edges makes them easy to forget.
+
+**Recommended change:** Draw the known-gap edges in the diagram as dashed lines labelled "known gap", and remove them as the gaps close. Reword the tile gap to "before the field grows a lot or tile rules get more complex". Align the roadmap's crop and test items with the code.
+
+## Status of earlier findings and known gaps (2026-10-29)
+
+A-01 to A-09 were documentation findings and stay resolved: the document still says what their status paragraphs describe. A-08's follow-up is done: CQTest is set up and the roadmap item is ticked.
+
+The [known gaps](Architecture.md#17-known-gaps), checked against the code. All are still open; none of them has been made worse by the crop and tool work.
+
+| Known gap | Status |
+|---|---|
+| Game logic calls the HUD | **Open.** `UFarmingComponent::ShowMessage` and `UFarmSaveSubsystem` (`AppendMessage`, `ShowMessage`) still call `AFarmHUD`. |
+| The save subsystem reads and writes other classes' state | **Open.** It writes `Seeds` and `HarvestedCrops` directly and reads tile fields one by one. The tool now goes through `RestoreCurrentTool`, which is the right pattern. |
+| Content IDs aren't checked | **Open.** No `IsDataValid`, duplicate check or redirect list. |
+| No extension points | **Open.** Nothing is `BlueprintCallable` or Blueprint-assignable. |
+| The toolbar is fixed per farmer Blueprint | **Open**, as designed for now. |
+| Saves don't record a tile's crop | **Open.** Tracked by the `TODO` in `UFarmSaveSubsystem::LoadFarm`. |
+| Tiles are saved by grid position | **Open.** |
+| No save version number | **Open.** An empty `CurrentToolId` is the only marker of an older save. |
+| An unreadable save gets overwritten | **Open.** `SaveFarm` runs on the next new day whether or not loading failed. |
+| `AFarmDayCycle::Get` doesn't follow the find-or-spawn rules | **Open.** It is called from both `AFarmGrid::BeginPlay` and `UFarmingComponent::BeginPlay`, so whichever runs first spawns the fallback. |
+| Load waits a tick | **Open.** |
+| The grid is found with `TActorIterator` in several places | **Open.** Still in `UFarmingComponent::BeginPlay` and `UFarmSaveSubsystem::BindAndLoad`. |
+| Tile rules and visuals live in the same class | **Open.** See A-15 for the wording. |
+
 ## Positive foundations to preserve
 
 - The ownership table and “ask the owner to change its state” rule are strong; preserve them as systems are added.
@@ -139,6 +242,14 @@ Section 10 contrasts an 8×8 field of tile actors with “fields of thousands”
 - The distinction between game rules and presentation is sound, and the known-gap section clearly records current violations.
 - The save-data direction—plain values/IDs, owner-provided serialization and restore without replaying gameplay—is a good target once the ownership boundary is implemented.
 - The decision log and explicit “not adopted yet” entries prevent unnecessary framework adoption. Keep documenting choices, but distinguish decisions, current implementation and future intent.
+
+Seen in the code on 2026-10-29:
+
+- Crops and tools follow the mod rules: discovered by the Asset Manager, typed-in `ContentId`s that build the primary asset ID, soft-referenced meshes in a `Visuals` bundle loaded at play start, and no list of content in code.
+- Each content and data change was recorded in the decision log in the same commit, including why `EFarmToolAction` is an enum and tools aren't.
+- Old saves keep loading across the tool change through a small, tested mapping, and the restore goes through the owner's own function (`RestoreCurrentTool`), the pattern section 6 asks for.
+- `AFarmTile::RestoreState` refuses impossible states (a planted tile without a crop), in line with principle 7.
+- The farmer's input reaches the toolbar only through `SelectToolbarSlot`, and the held mesh follows `OnToolChanged`, so commands go down and events come up as principle 8 says.
 
 ## Recommended correction order
 
@@ -149,6 +260,16 @@ Section 10 contrasts an 8×8 field of tile actors with “fields of thousands”
 5. [x] Specify the synchronous day-event contract and constrain find-or-spawn behavior (A-06, A-07).
 6. [x] Align the CQTest decision log with the roadmap, then revisit the actor-scale example (A-08, A-09).
 
+From the 2026-10-29 code review:
+
+7. [ ] Replace the debug tile highlight with a shipping cosmetic component fed by a target-changed event (A-10).
+8. [ ] Broadcast the end of the day from the day cycle instead of polling it, and let sleeping work without a grid (A-11).
+9. [ ] Decide how `UFarmingComponent` splits before stamina, money or late-night rules are added (A-13).
+10. [ ] Move the tile's save types out of the actor header with the owner-saves-itself roadmap item (A-12).
+11. [ ] Give key hints one source of truth (A-14), and bring the diagram, roadmap and gap wording up to date (A-15).
+
 ## Review limits
 
-This is a document audit, not a code audit or a certification against every Epic recommendation. The codebase was not traced to confirm each implementation statement. The CQTest status was cross-checked against the project roadmap and coding guidelines; other findings evaluate the claims and omissions in the architecture document itself. Revisit the audit when save migration, packaged mod loading, or world travel becomes an implemented feature.
+The first review (A-01 to A-09) is a document audit, not a code audit or a certification against every Epic recommendation. The codebase was not traced to confirm each implementation statement. The CQTest status was cross-checked against the project roadmap and coding guidelines; other findings evaluate the claims and omissions in the architecture document itself. Revisit the audit when save migration, packaged mod loading, or world travel becomes an implemented feature.
+
+The code review (A-10 onward) read every file in `Source/` and `Config/` on `main` at commit `d9f10d7` (2026-10-28, tools as data assets) and traced each known gap to the code. David's PC wasn't reachable, so uncommitted local work (the tool data assets themselves) wasn't seen. Blueprints and data assets were checked only through the class and asset references stored in the `.uasset` files, not opened in the editor. Nothing was compiled or run: the cloud environment has no Unreal Engine. The shipping-build claim in A-10 follows from how the engine defines `ENABLE_DRAW_DEBUG`; confirm it by packaging a Shipping build.

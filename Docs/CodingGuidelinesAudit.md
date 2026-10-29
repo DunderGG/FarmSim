@@ -1,7 +1,7 @@
 # Coding guidelines audit
 
-**Reviewed:** 2026-10-26  
-**Scope:** A critical review of [CodingGuidelines.md](CodingGuidelines.md) as practical C++ and Unreal Engine 5.7 guidance for FarmSim. This assesses correctness, consistency, clarity and fit for this project; it does not certify that the code follows the guide.
+**Reviewed:** 2026-10-26 (the guide), 2026-10-29 (the code against the guide)  
+**Scope:** A critical review of [CodingGuidelines.md](CodingGuidelines.md) as practical C++ and Unreal Engine 5.7 guidance for FarmSim. This assesses correctness, consistency, clarity and fit for this project. The first review (C-01 to C-08) did not check the code. The second review (C-09 onward, [Code review findings](#code-review-findings-2026-10-29)) checks the code in `Source/Vestige/`, `Config/` and the project's Blueprints against the guide and general Unreal C++ practice.
 
 ## Executive assessment
 
@@ -21,6 +21,21 @@ Scores use a 1–10 scale: 1 means misleading or absent; 5 means usable but has 
 | Testing and verification | 4/10 | Useful test intent, but CQTest is described as the standard before setup is complete. |
 | Error handling and diagnostics | 6/10 | Good distinction between programmer errors and runtime failures; HUD advice needs to respect dependency direction. |
 | Maintainability and usability | 7/10 | Strong layout and checklist; numeric thresholds and absolutes need rationale or softer language. |
+
+### Code conformance (2026-10-29)
+
+**Overall: 7/10.** The code is small, readable and mostly follows the guide: every class has one job and a header comment, names and prefixes are consistent, UObject references use the right pointer types, content uses soft references with asset bundles, and the newest code (`FFarmToolbar`, `UFarmContentData`) is tested and cleanly separated. The gaps are concentrated in a few places: the three known deviations from section 16 are still open, the code isn't clean under the repo's own `.clang-format`, player-facing text isn't `FText`, the HUD searches the level every frame, and tests cover the tile and toolbar but not the farming component, clock or saving.
+
+| Area | Score | Assessment |
+|---|---:|---|
+| Naming, headers and comments | 8/10 | Prefixes, `Farm` prefix, SPDX headers and class comments are consistent. A few engine overrides are public and some action results are undocumented. |
+| Formatting | 6/10 | Hand-formatted code is close to the rules, but eight files change under clang-format and three lines exceed 140 characters. |
+| Memory, pointers and lifetime | 8/10 | Strong, weak and soft references are used as section 7 describes. Delegate bindings and spawned tiles are never cleaned up in `EndPlay`. |
+| Encapsulation | 5/10 | Seed and harvest counts and many tunables are still public mutable members, as section 16 already records. |
+| Functions, constants and duplication | 7/10 | Functions are short with early returns. Magic numbers remain in visual code, and key hints duplicate the key bindings. |
+| Errors, logging and player text | 6/10 | Good warnings for content mistakes. Player-facing strings are `FString`, and gameplay still calls the HUD. |
+| Performance and ticking | 6/10 | Ticking is off by default, but the HUD searches the level every frame and the farming component polls the clock and draws debug shapes every frame. |
+| Tests | 6/10 | CQTest is set up and 13 tests pass. The farming component, clock and save round trip have none. |
 
 ## Findings
 
@@ -120,6 +135,158 @@ Sections 8 and 14 prescribe a split at about 40 function lines and a folder rest
 
 **Recommended change:** Retain these as review prompts rather than pass/fail rules: split when a function has multiple responsibilities or is hard to understand; organize folders when finding and changing related code becomes difficult.
 
+## Code review findings (2026-10-29)
+
+Findings from checking the code against the guide. Design-level findings from the same review are in [ArchitectureAudit.md](ArchitectureAudit.md) (A-10 onward). Problems already listed in the guide's [known deviations](CodingGuidelines.md#16-known-deviations-to-clean-up) or the architecture's [known gaps](Architecture.md#17-known-gaps) are not repeated as findings; their status is in [Status of earlier findings and known deviations](#status-of-earlier-findings-and-known-deviations-2026-10-29).
+
+### C-09 — The HUD searches the level every frame
+
+**Severity: Medium**
+
+`SFarmHudWidget` binds its texts as Slate attributes, which Slate evaluates every frame. `GetStatusText` calls `AFarmHUD::GetDayCycle`, which calls `AFarmDayCycle::Find`, a `TActorIterator` search of the world. `GetStatusText`, `GetInventoryText` and `GetControlsText` each call `AFarmHUD::GetFarming`, which runs `FindComponentByClass` on the pawn. Section 12 says not to search the level every frame.
+
+**Why it matters:** The cost is small today, but the HUD is the pattern the next widgets (inventory, shop, relationships) will copy, and each one would add its own per-frame searches. It also means the HUD silently shows nothing if the day cycle is missing, rather than noticing once.
+
+**Recommended change:** Let `AFarmHUD` find the day cycle and the farming component once (at `BeginPlay`, and again when the controller possesses a new pawn) and keep them in `TWeakObjectPtr`s that the widget reads. Better still, as the HUD grows, have the widget update its texts from events (`OnNewDay`, `OnToolChanged`, an inventory change event) instead of polling. Bound attributes are fine for values that really change every frame, such as the clock.
+
+### C-10 — Player-facing text is `FString`, not `FText`
+
+**Severity: Medium**
+
+Section 9 says `FText` is for anything the player reads. All feedback messages are `TEXT("...")` literals passed as `FString` (`UFarmingComponent::UseTool`, `UFarmSaveSubsystem::SaveFarm` and `LoadFarm`), `AFarmHUD::ShowMessage` and `AppendMessage` take and store `FString`, and `SFarmHudWidget` builds its texts with `FString::Printf` and wraps them in `FText::FromString`. The tool's localizable `DisplayName` is turned back into a string with `ToString()` before display.
+
+**Why it matters:** None of this text can be gathered for translation, and the 24-hour clock and number formats can't follow the player's culture. Converting later means touching every message, and `AppendMessage` concatenates sentences, which doesn't translate (word order differs between languages).
+
+**Recommended change:** Do it together with the feedback event from the [known gaps](Architecture.md#17-known-gaps): the event carries an `FText`, messages are written with `LOCTEXT`/`NSLOCTEXT` and `FText::Format`, and the HUD formats its lines with `FText::Format` and `FText::AsNumber`. Replace `AppendMessage` with a list of messages the HUD shows one after another, or one message per event.
+
+### C-11 — The code isn't clean under the repo's `.clang-format`, and the formatter disagrees with the written rules
+
+**Severity: Medium**
+
+Running clang-format 18 with the repo's `.clang-format` changes eight of our files: `FarmHudWidget.cpp` (the Slate layout, 104 lines), `FarmingComponent.cpp`, `FarmToolbar.cpp`, `FarmTile.cpp`, `FarmDayCycle.cpp`, `FarmerCharacter.cpp`, `FarmHudWidget.h` and `Tests/FarmTileTests.cpp`. Three lines are over the 140-character limit (`FarmingComponent.h:85`, `FarmTile.cpp:38`, `FarmerCharacter.cpp:75`). Some of the differences are the formatter fighting the guide:
+
+- Section 3 points to the nested ternary in `AFarmTile::RefreshSoil` as the model for breaking a ternary. The formatter re-aligns it with runs of spaces, against the tabs rule.
+- The formatter re-indents lambda bodies (`FFarmToolbar::SelectTool`, the timer lambda in `UFarmingComponent::BeginPlay`) differently from how they are written.
+- `FarmHudWidget.h` still lacks the `// clang-format off` / `on` the guide asks for around the Slate arguments, and `FarmHudWidget.cpp` has no such markers around the `ChildSlot` layout, which the formatter flattens.
+
+Visual Studio bundles its own clang-format version, so results may differ slightly from version 18, but the over-long lines and the Slate layout differ under any version.
+
+**Why it matters:** Rule 4 in `AGENTS.md` says to format changed files. While the files aren't already clean, formatting one for a small change rewrites unrelated lines and mixes a reformat into a behavior commit, which section 3 forbids.
+
+**Recommended change:** Record which clang-format version the project uses (the one Visual Studio ships). Wrap the Slate layout in `FarmHudWidget.cpp` and the arguments in `FarmHudWidget.h` in `// clang-format off` / `on`. Replace the nested ternary in `RefreshSoil` with an `if`/`else` (clearer anyway), or pick a different example in section 3. Then format all of our files once in a formatting-only commit, so later changes only show their own lines.
+
+### C-12 — Magic numbers remain, and some values are defined twice
+
+**Severity: Low**
+
+Section 8 asks for named constants. Unnamed values remain mostly in visual code:
+
+- `AFarmTile::RefreshCrop`: the placeholder crop's height formula (`0.15f + 0.25f * GrowthDays`), width (`0.3f`) and half height (`50.f`); `TEXT("Color")` is written twice as a material parameter name.
+- `AFarmDayCycle::UpdateLighting`: the lowest sun elevation (`5.f`), the fade rates (`3.f`, `2.f`, `6.f`), `180.f` and `24.f`.
+- `AFarmGrid`: the engine shapes' 100-unit size (`TileSize / 100.f`, also assumed in `FarmTile.cpp`) and the bounds box height (`10.f`).
+- `AFarmerCharacter`: the `hand_r` socket name and the mapping context priority `1`.
+- `SFarmHudWidget`: font sizes and paddings, while the colors already have a `FarmHudStyle` namespace.
+
+Some values are defined twice: `AFarmDayCycle::TimeOfDay` and `UFarmSaveGame::TimeOfDay` both start at `6.f`, repeating `DayStartHour`; the HUD's `"E Use tool | N Sleep | F9 New game"` repeats the keys bound in `AFarmerCharacter::SetupPlayerInputComponent`.
+
+**Why it matters:** Tuning the look means hunting for literals, and a key or start-hour change has to be made in two places; missing one shows the player a wrong hint.
+
+**Recommended change:** Move the visual numbers into the existing `FarmTilePlaceholder` and `FarmHudStyle` namespaces and a new `FarmDayCycleLighting` namespace, or into tunable properties where a designer would want them. Initialize `TimeOfDay` from `DayStartHour`. For the key hints, see [A-14](ArchitectureAudit.md#a-14--key-hints-repeat-the-key-bindings).
+
+### C-13 — Header layout and API comments miss a few rules
+
+**Severity: Low**
+
+- Section 5.2 keeps engine overrides `protected` unless outside callers need them. `AFarmDayCycle::Tick`, `UFarmingComponent::TickComponent` and `AFarmGrid::OnConstruction` are public.
+- Section 2.3 says an action that can fail documents what `false` means. `AFarmTile` covers `Till`, `Water` and `Harvest` with one `//` comment (not `/** */`, so IDE tooltips don't show it), and `UFarmingComponent::UseTool` and `Sleep` have no comment.
+- `EFarmTileState`, `FFarmTileSaveData`, the day cycle's `SunriseHour`, `SunsetHour`, `SunriseColor` and `MoonColor`, and the grid's `Width` and `Height` have no `/** */` comment.
+- Header comments still say "level" where [Architecture.md](Architecture.md) now says "world": `AFarmDayCycle::Get`/`Find` ("the level's day cycle") and `UFarmSaveSubsystem` ("a fresh one comes with every level load").
+- `UFarmingComponent`'s class comment says it "reports what happened on the player's AFarmHUD", describing the known gap as its job.
+
+**Why it matters:** Small inconsistencies, but the header comments are what a returning developer and the planned mod API read first.
+
+**Recommended change:** Move the three overrides to `protected`, give each tile action its own `/** */` saying what `false` means, and correct the wording when the files are next touched. Drop the HUD sentence from `UFarmingComponent`'s comment when the feedback event replaces the calls.
+
+### C-14 — Bindings and spawned actors aren't cleaned up
+
+**Severity: Low**
+
+[Architecture.md, section 4](Architecture.md#4-how-systems-talk-to-each-other) says to unbind in `EndPlay` / `Deinitialize`. Nothing does: `AFarmGrid` binds `OnNewDay`, `UFarmSaveSubsystem` binds `OnNewDayFinished` and `AFarmerCharacter` binds `OnToolChanged`, and none of them has an `EndPlay` or `Deinitialize` that removes the binding. `AFarmGrid` spawns its tiles but doesn't destroy them in `EndPlay`. `AFarmerCharacter::SetupPlayerInputComponent` creates new input actions and adds the mapping context again each time it runs (each possession) without removing the old context.
+
+**Why it matters:** `AddUObject` makes a stale binding harmless today, and with one world and no streaming the tiles die with the world. These become real bugs as soon as the grid can be streamed out or replaced, or the farmer is possessed again (respawn, cutscene): orphaned tiles stay in the world, and the input mapping is added twice.
+
+**Recommended change:** Keep the `FDelegateHandle` from each `AddUObject` and remove it in `EndPlay` / `Deinitialize` (or call `RemoveAll(this)`). Destroy the grid's tiles in `AFarmGrid::EndPlay`. In the farmer, create the input actions once and remove the mapping context in `PawnClientRestart`/`UnPossessed`, or move the context to an `IMC_` asset when input moves to assets.
+
+### C-15 — Includes, module dependencies and small hygiene
+
+**Severity: Low**
+
+- `FarmerCharacter.h` includes `FarmingComponent.h` though a forward declaration is enough for a `TObjectPtr<UFarmingComponent>` member (section 5.3).
+- `FarmHudWidget.cpp` has a stray blank line splitting its alphabetical include block.
+- `Vestige.Build.cs` lists `Slate`, `SlateCore` and `UMG` as public dependencies, though no public header exposes their types (`SFarmHudWidget` is used only inside the module); section 5.3 prefers private dependencies. It also keeps the template's commented-out lines.
+- Slate style lookups use plain string literals (`"WhiteBrush"`, `"Bold"`, `"Regular"`) instead of `TEXT(...)` (section 9).
+- `FarmHudWidget.cpp`, `Vestige.h` and `Vestige.cpp` have no final newline.
+
+**Why it matters:** Each is minor; together they make the next clang-format or IWYU pass noisier than it needs to be.
+
+**Recommended change:** Fix them in the formatting-only commit from C-11, or when each file is next touched.
+
+### C-16 — The template classes don't follow the guide, and the guide doesn't say whether they should
+
+**Severity: Low**
+
+`AVestigeCharacter` and `AVestigePlayerController` are Epic's template code. They use raw `UObject*` members in `UPROPERTY`s (`UInputAction* JumpAction`, `TArray<UInputMappingContext*>`), `} else {`, multiple `public:`/`protected:` sections, a second log category (`LogTemplateCharacter`) and a 247-character line in `VestigeCharacter.cpp`. Section 2.2 only says they keep their names.
+
+**Why it matters:** An agent following the hard rules literally would "fix" these files in passing and mix Epic's code with ours, or copy their style into new code because it compiles.
+
+**Recommended change:** Say in section 2.2 or 16 that the template files keep Epic's style until we change them for a reason, and that a file we change substantially is brought up to the guide (raw `UPROPERTY` pointers become `TObjectPtr`, its log calls use `LogVestige`) in its own commit.
+
+### C-17 — Tests cover the tile and toolbar, not the rest of the rules
+
+**Severity: Medium**
+
+CQTest works and the 13 tests are well named and namespaced as section 13 asks. Section 13's "what to test" list is only partly covered:
+
+- **Tile:** refusals are untested (tilling non-grass, watering grass, harvesting an unripe crop, planting twice), as is `RestoreState` clamping the growth days.
+- **Farming component:** nothing. Planting uses a seed, an empty seed count refuses, harvesting adds the crop's yield, an empty slot does nothing.
+- **Day clock:** nothing. `StartNextDay` advances the day and resets the clock, `IsPastBedtime`, and `RestoreClock` clamping without broadcasting.
+- **Saving:** only the old-tool mapping. No save and load round trip.
+
+`FarmToolbarTests` sets the private `ContentId` with `FindFProperty` by its string name, so renaming the property breaks the test at run time, not at compile time. The roadmap's "Tile rule tests" item is still unticked although five tile tests exist.
+
+**Why it matters:** The farming component and the clock carry the rules milestone 2 is about to change (stamina, late nights, seasons). They are the riskiest code to change without tests.
+
+**Recommended change:** Add the missing tile refusal tests and tick the roadmap item. Test the clock with a spawned `AFarmDayCycle` (no lights needed: `UpdateLighting` returns early without a sun). For the farming component, either spawn a grid and farmer in the test world or pull its rules into a testable struct like `FFarmToolbar`. Give `UFarmContentData` a test-only way to set the ID (a `protected` setter used by a test subclass, or `#if WITH_DEV_AUTOMATION_TESTS` friend) instead of reflection by name.
+
+### C-18 — Config and content leftovers from the template
+
+**Severity: Low**
+
+- `DefaultEditor.ini` (`SimpleMapName`) and `DefaultEditorPerProjectUserSettings.ini` point at `/Game/ThirdPersonCPP`, which doesn't exist.
+- `DefaultEngine.ini` repeats `ExtendDefaultLuminanceRange` and `DefaultGraphicsRHI`, and keeps an Android File Server `SecurityToken` (only used to connect to a USB Android device, and excluded from shipping, but worth regenerating or removing before the repository goes public).
+- `DefaultInput.ini` keeps the template's legacy axis mappings for VR controllers and `bEnableMotionControls=True`, which the game doesn't use.
+- `BP_ThirdPersonGameMode` and `BP_ThirdPersonPlayerController` are still saved against `/Script/TP_ThirdPerson` and load only through the `ActiveClassRedirects` in `DefaultEngine.ini`.
+- Section 14.2 says our content is split by type. `BP_FarmTile` sits at the root of `Content/Farm/`, and the `M_` materials live in `Content/Farm/Meshes/`.
+
+**Why it matters:** None of this breaks the game. It is noise for a new contributor, and the redirects can never be removed while assets still depend on them.
+
+**Recommended change:** In one housekeeping commit: remove the dead `ThirdPersonCPP` settings and duplicate keys, regenerate or remove the token, and trim the unused axis mappings. Open and resave the two template Blueprints so they reference `/Script/Vestige`. Move `BP_FarmTile` to `Content/Farm/Blueprints/` and the materials to `Content/Farm/Materials/` in the editor (so references are fixed up), then fix up redirectors.
+
+## Status of earlier findings and known deviations (2026-10-29)
+
+C-01 to C-08 were documentation findings and stay resolved; the guide still says what their status paragraphs describe. Two follow-ups:
+
+- **C-03:** CQTest is now set up as section 13 describes (developer-tools-only dependency, no plugin), the first tests run, and the roadmap item is ticked. The finding is fully closed.
+- **C-04:** the guide is right, but the code it names as a known gap is unchanged: `UFarmingComponent` and `UFarmSaveSubsystem` still call `AFarmHUD::ShowMessage` and `AppendMessage`.
+
+The guide's [known deviations](CodingGuidelines.md#16-known-deviations-to-clean-up), checked against the code:
+
+| Deviation | Status |
+|---|---|
+| `UFarmingComponent::Seeds` and `HarvestedCrops` are public and written by the save subsystem | **Open.** Also read directly by `SFarmHudWidget::GetInventoryText`. |
+| Tunables on `AFarmTile`, `AFarmGrid` and `AFarmDayCycle` are public | **Open.** The same holds for `UFarmingComponent::ReachDistance` and `AFarmHUD::MessageDuration`, which the list doesn't name. The newer classes (`UFarmContentData`, `UFarmCropData`, `UFarmToolData`) follow the rule. |
+| `FarmHudWidget.h` needs `// clang-format off` / `on` | **Open.** See C-11. |
+
 ## Positive foundations to preserve
 
 - The ownership guidance and links to the architecture document make code placement a deliberate decision rather than a convenience.
@@ -129,6 +296,14 @@ Sections 8 and 14 prescribe a split at about 40 function lines and a folder rest
 - The error-handling section distinguishes programmer invariants (`check`/`ensure`) from recoverable runtime conditions and designer mistakes.
 - The review checklist and known-deviation list are practical tools for a small project, provided they stay synchronized with the actual build and architecture.
 
+Seen in the code on 2026-10-29:
+
+- `FFarmToolbar` keeps rules in a plain struct the component owns, so they're tested without a level. It is the model for the tile-state struct and for testing the farming component.
+- `UFarmContentData` puts the content ID, primary asset ID and bundle loading in one place, and the newest classes (`UFarmContentData`, `UFarmCropData`, `UFarmToolData`) follow the encapsulation rule with private `AllowPrivateAccess` tunables and getters.
+- Content mistakes degrade with a clear warning (a missing crop or tool asset, an empty toolbar, a restored planted tile without a crop) instead of crashing.
+- Lambdas that can outlive their object capture a `TWeakObjectPtr`, as section 9 asks.
+- Every one of our source files carries the SPDX header, and every one of our classes has a class comment.
+
 ## Recommended correction order
 
 1. [x] Clarify strong, weak and soft UObject reference rules (C-02; resolved 2026-10-28).
@@ -137,6 +312,18 @@ Sections 8 and 14 prescribe a split at about 40 function lines and a folder rest
 4. [x] Tighten module include-path guidance before source folders are reorganized (C-05; resolved 2026-10-28).
 5. [x] Qualify the standard-library and synchronous-load rules; soften numeric thresholds (C-06 through C-08; resolved 2026-10-28).
 
+From the 2026-10-29 code review:
+
+6. [ ] Make the code clean under `.clang-format` in one formatting-only commit, after settling the formatter version and the ternary and Slate exceptions (C-11, C-15).
+7. [ ] Add the missing tile, clock and farming tests, and tick the roadmap's tile test item (C-17).
+8. [ ] Cache the HUD's references instead of searching every frame (C-09).
+9. [ ] Move player-facing text to `FText` together with the feedback event (C-10).
+10. [ ] Clean up bindings and spawned tiles in `EndPlay` / `Deinitialize` (C-14).
+11. [ ] Name the remaining magic numbers, fix the header details and decide the template code rule (C-12, C-13, C-16).
+12. [ ] Clear the template leftovers in config and content (C-18).
+
 ## Review limits
 
-This is a documentation audit, not a compiler or static-analysis audit. Project configuration was checked for the CQTest setup claim, and the architecture document was checked for the HUD dependency rule. No C++ build, tests or formatter were run because no code changed. The findings assess the coding guide as guidance and do not claim that every rule is violated in the implementation.
+The first review (C-01 to C-08) is a documentation audit, not a compiler or static-analysis audit. Project configuration was checked for the CQTest setup claim, and the architecture document was checked for the HUD dependency rule. No C++ build, tests or formatter were run because no code changed. Those findings assess the coding guide as guidance and do not claim that every rule is violated in the implementation.
+
+The code review (C-09 onward) read every file in `Source/` and `Config/` on `main` at commit `d9f10d7` (2026-10-28, tools as data assets). David's PC wasn't reachable, so uncommitted local work (the tool data assets themselves) wasn't seen. clang-format 18.1 was run with the repo's `.clang-format`; Visual Studio's bundled version may differ in details. Blueprints and data assets were checked only through the asset and class references stored in the `.uasset` files, not opened in the editor, so their graphs weren't reviewed. Nothing was compiled and no tests were run: the cloud environment has no Unreal Engine.
