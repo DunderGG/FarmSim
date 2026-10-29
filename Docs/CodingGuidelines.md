@@ -132,7 +132,7 @@ bool AFarmTile::Till()
 - A space after `if`, `for`, `while`, `switch` and around binary operators. No space between a function name and its `(`.
 - Pointer and reference symbols attach to the type: `AFarmTile* Tile`, `const FVector& WorldLocation`.
 - Keep lines under 140 characters. Break long argument lists after a comma and indent one extra tab.
-- When a ternary breaks over lines, the `?` and `:` start the new lines, as in `AFarmTile::RefreshSoil`.
+- When a ternary breaks over lines, the `?` and `:` start the new lines (the formatter does this). Don't nest ternaries: write an `if` with early returns instead, as `AFarmTile::GetPlaceholderSoilColor` does.
 - Function bodies in `.cpp` files always go on their own lines, even one-liners.
 - One blank line between functions. Group related statements inside a function and separate groups with a blank line.
 

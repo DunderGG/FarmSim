@@ -173,12 +173,18 @@ void AFarmTile::RefreshSoil()
 	SoilMesh->SetRelativeLocation(FarmTilePlaceholder::SoilLocation);
 	if (SoilMaterial)
 	{
-		const FLinearColor SoilColor = State == EFarmTileState::Grass ? FarmTileColors::Grass
-			: bWatered ? FarmTileColors::Watered
-			: FarmTileColors::Tilled;
-		SoilMaterial->SetVectorParameterValue(TEXT("Color"), SoilColor);
+		SoilMaterial->SetVectorParameterValue(TEXT("Color"), GetPlaceholderSoilColor());
 		SoilMesh->SetMaterial(0, SoilMaterial);
 	}
+}
+
+FLinearColor AFarmTile::GetPlaceholderSoilColor() const
+{
+	if (State == EFarmTileState::Grass)
+	{
+		return FarmTileColors::Grass;
+	}
+	return bWatered ? FarmTileColors::Watered : FarmTileColors::Tilled;
 }
 
 void AFarmTile::RefreshCrop()

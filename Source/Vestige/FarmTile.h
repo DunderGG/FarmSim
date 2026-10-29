@@ -73,6 +73,9 @@ private:
 	void RefreshSoil();
 	void RefreshCrop();
 
+	/** The placeholder soil's color for the current state: grass, dry soil or watered soil. */
+	FLinearColor GetPlaceholderSoilColor() const;
+
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UStaticMeshComponent> SoilMesh;
 
