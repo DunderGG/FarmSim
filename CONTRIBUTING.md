@@ -102,10 +102,11 @@ Read these before making larger changes:
 1. **Talk first for anything bigger than a small fix.** Open an issue that describes the change and which class or system would own it. It saves you from building something that doesn't fit.
 2. **Follow the architecture.** The most important rule: every actor, component and subsystem has one job, and new logic goes on the class whose job it is. If nothing fits, propose a new class. See [Architecture.md](Docs/Architecture.md).
 3. **Follow the coding guidelines.** Epic's naming (`AFarm...`, `UFarm...`, `bIsSomething`), tabs and braces on their own lines, small functions, no magic numbers. The repo's `.clang-format` handles formatting: enable *ClangFormat support* in Visual Studio and format the files you change.
-4. **Build for mods.** Content (crops, tools, items) is data, not hard-coded lists or enums. See [Designing for mods](Docs/Architecture.md#12-designing-for-mods).
-5. **Test it.** Game rule changes come with automated tests (CQTest, in `Source/Vestige/Tests/`). Run the `Vestige` tests from the editor's Test Automation window, and play the change in the editor.
-6. **No new warnings.** The build treats some warnings as errors, for example a local variable that hides a member (`Mesh` inside a character class).
-7. **Update the docs.** If your change adds a system, moves a responsibility or makes a design choice, update `Docs/Architecture.md` (the ownership table and the decision log) in the same pull request.
+4. **Keep it fast.** Performance is a requirement: no ticking without a reason, no per-frame polling or searching, soft references for content and no loading during play. See [Performance](Docs/CodingGuidelines.md#12-performance) and the [budget](Docs/Architecture.md#10-performance-by-design).
+5. **Build for mods.** Content (crops, tools, items) is data, not hard-coded lists or enums. See [Designing for mods](Docs/Architecture.md#12-designing-for-mods).
+6. **Test it.** Game rule changes come with automated tests (CQTest, in `Source/Vestige/Tests/`). Run the `Vestige` tests from the editor's Test Automation window, and play the change in the editor.
+7. **No new warnings.** The build treats some warnings as errors, for example a local variable that hides a member (`Mesh` inside a character class).
+8. **Update the docs.** If your change adds a system, moves a responsibility or makes a design choice, update `Docs/Architecture.md` (the ownership table and the decision log) in the same pull request.
 
 ## 5. Contributing art
 
@@ -134,7 +135,7 @@ Follow Epic's [recommended asset naming](https://dev.epicgames.com/documentation
 
 ### Budgets
 
-Keep things light so big farms stay fast: a crop or small prop in the hundreds of triangles, a tool under about 2,000, a building under about 10,000. Textures 1024 × 1024 or smaller unless there's a reason. These are guidelines, not hard limits.
+Keep things light so big farms stay fast: a crop or small prop in the hundreds of triangles, a tool under about 2,000, a building under about 10,000. Textures 1024 × 1024 or smaller unless there's a reason. Going over one needs a reason in the pull request. Small props and crops also don't cast dynamic shadows unless they visibly need to, and swaying plants keep their movement subtle and switch it off at a distance. The reasons are in [Architecture.md, Performance by design](Docs/Architecture.md#10-performance-by-design).
 
 ## 6. Contributing audio
 

@@ -201,12 +201,60 @@ The usual Unreal split, and Epic's own recommendation, is **C++ for systems, Blu
 
 ## 10. Performance by design
 
-Don't optimize early, but don't choose designs that can't scale either.
+**Performance is a requirement.** Unreal Engine 5 games are often known for stutter and high hardware demands, and most of that comes from choices made early: what ticks, what loads, what references what, and which rendering features are on. We make those choices deliberately, against a budget, and check the budget at every milestone. The code rules are in [CodingGuidelines.md, section 12](CodingGuidelines.md#12-performance).
 
-- **Ticking is opt-in.** Most things react to events or timers. Only things that genuinely change every frame tick (`AFarmDayCycle` moves the sun).
-- **Event-driven daily updates.** Farm logic mostly happens once a day, on `OnNewDay`. Nothing needs to check crops every frame.
+Two things stay true at the same time: designs and code follow the always-on rules from the start, and optimizations that make code harder to read wait for a measurement.
+
+### Budget
+
+**Target hardware (provisional, pending David's choice):** a 2020-era mid-range PC (an RTX 2060 or RX 5600 XT class GPU, a 6-core CPU, 16 GB of memory, an SSD) at 1920x1080 and the High scalability level.
+
+| Budget | Limit | Notes |
+|---|---|---|
+| Frame time | 16.6 ms (60 fps) | On the target hardware at High, in a busy part of the farm |
+| Game thread | 10 ms | All game thread work, engine included (`stat unit`) |
+| Our gameplay code | 2 ms per frame | Everything in `Source/Vestige` that runs during normal play (Unreal Insights) |
+| Hitches during play | No frame over 33 ms | Two frames at 60 fps. Includes first-time shader and PSO compilation and streaming |
+| New day | 100 ms in total | All `OnNewDay` work plus the save, hidden by the sleep transition |
+| Loading into the farm | 10 seconds | From the main menu or start of play, on an SSD |
+| Memory | Set at the first baseline | Once there is enough content to measure |
+
+A change that breaks the budget is a bug and is fixed before more features go in. If the budget itself turns out wrong, change it here and log the decision.
+
+### Scalability
+
+- The game runs at all four scalability levels (Low, Medium, High, Epic). The target hardware holds the budget at High; weaker machines play at Low or Medium.
+- Expensive rendering features are options, not requirements: hardware ray tracing, high-quality Lumen reflections and similar features are only on at Epic. The game's look must hold up without them.
+- The project's rendering settings (`Config/DefaultEngine.ini`) are reviewed against the target: today hardware ray tracing, Lumen, virtual shadow maps and Substrate are all on, and the default performance level is Maximum.
+
+### Design rules
+
+- **Ticking is opt-in.** Most things react to events or timers. Only things that genuinely change every frame tick (`AFarmDayCycle` moves the sun). Owners broadcast state changes so nobody has to poll them.
+- **Event-driven daily updates.** Farm logic mostly happens once a day, on `OnNewDay`, while the sleep transition hides the work. Nothing checks crops every frame.
+- **Find once, keep the reference.** Well-known objects are found through one `Find` / `Get` or registration ([section 4](#4-how-systems-talk-to-each-other)), never searched for every frame.
+- **Load ahead, load softly.** Content is soft-referenced and loaded with its bundle before it's needed ([section 5](#5-data-and-content)). Nothing loads synchronously while the player is playing.
+- **Scale with distance and relevance.** When there are many robots, animals or effects, things far away or off screen update less often or not at all (tick intervals, Unreal's significance manager, animation update rate optimization). Design new crowds with this in mind from the first version.
 - **Change structure when a profile says so, not at a tile count.** One actor per tile is the current design and stays until profiling shows tiles are a real cost. If they are, look at what is expensive (CPU, memory, collision, draw calls) and pick the fix that targets it. Options to weigh include keeping tile state in an array of structs owned by the grid, drawing tiles with instanced static mesh components (which changes how tiles are drawn, not their rules or collision), and merging collision. Keeping tile rules out of tile visuals ([principle 4](#1-core-principles)) keeps all of these open.
-- **Measure before optimizing.** Use `stat unit`, `stat game` and Unreal Insights to find real costs.
+
+### Content rules
+
+What content does to performance is decided when it is made, so these apply to art and level work as well as code:
+
+- **Meshes:** Nanite for static, detailed meshes (buildings, rocks, ruins). Skinned meshes (the farmer, robots) and anything Nanite doesn't suit get LODs.
+- **Swaying crops and foliage** use World Position Offset sparingly: it makes virtual shadow maps redraw those shadows every frame. Set the mesh's WPO disable distance so distant plants stop moving.
+- **Lights:** the sun and sky light are the main lights. Extra movable lights (robot lamps, windows) are small, few and usually don't cast shadows.
+- **Translucency:** the haze and similar effects use fog (exponential height fog, volumetric fog) and post-processing, not stacked translucent planes, which multiply GPU cost.
+- **Triangle and texture budgets** are in [CONTRIBUTING.md, Budgets](../CONTRIBUTING.md#budgets): textures 1024 or smaller and props in the hundreds of triangles, unless there's a stated reason.
+- **References:** check the Size Map of every new Blueprint and data asset ([CodingGuidelines.md, section 12.4](CodingGuidelines.md#124-assets-and-loading)).
+
+### Measuring
+
+- Use `stat unit`, `stat game`, `stat gpu` and Unreal Insights to find real costs, in a packaged Development build or a Standalone Game launch rather than Play in Editor ([CodingGuidelines.md, section 12.9](CodingGuidelines.md#129-measuring)).
+- At the end of each roadmap milestone, measure on the target hardware in a fixed scene (the farm at midday and at night, the sleep transition, loading in) and add a row to the baseline below. Compare with the previous row; a regression gets fixed or explained.
+
+| Date | Build | Hardware | Scene | Frame | Game thread | GPU | Worst hitch | New day |
+|---|---|---|---|---|---|---|---|---|
+| Not measured yet | | | | | | | | |
 
 ## 11. Patterns borrowed from Lyra
 
@@ -357,6 +405,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | Performance is a requirement with a budget: 60 fps at 1080p, High scalability, on a provisional mid-range target PC; no frame over 33 ms during play; 2 ms per frame for our gameplay code; the new day within 100 ms. Always-on performance rules in `CodingGuidelines.md` section 12 apply to every change; optimizations that cost readability still need a measurement. Expensive rendering features are scalability options. A performance pass with a recorded baseline ends every milestone | Unreal Engine 5 projects often end up stuttering or demanding high-end hardware because of early choices about ticking, loading, references and rendering features. A budget makes those choices checkable, and cheap rules applied from the start avoid a late, expensive clean-up. The target hardware is provisional until David confirms it |
 | 2026-10-28 | `EFarmTool` replaced by tool data. The farming component owns the toolbar: `ToolbarIds`, a list of `FarmTool` IDs set on the farmer Blueprint, loaded with their visuals at `BeginPlay` into an `FFarmToolbar`. A missing tool leaves its slot empty, with a warning. The character binds keys 1 to 9 to slots and shows the held mesh of whatever tool is in hand. The HUD shows the tool's display name and builds its key hints from the toolbar. Saves store the tool in hand as its `ContentId` (`CurrentToolId`). Saves made before this only have the old `EFarmTool` value, which stays in `FarmSaveGame.h` and is mapped to the base tool IDs when loading. There is still no save version number | The toolbar is per player, so it belongs with the other tool state, while input stays on the character. Keeping the slot rules in a plain struct lets them be tested without a level. Mapping the old enum keeps existing saves loading the right tool. An empty `CurrentToolId` already marks a save as older, so a version number can wait for its own roadmap item |
 | 2026-10-28 | Tools are `UFarmToolData` primary data assets of type `FarmTool`, scanned in `/Game/Farm/Tools` and always cooked. What a tool does is an `EFarmToolAction` enum (till, plant, water, harvest), not a gameplay tag. The held mesh is a soft reference in the `Visuals` bundle. There is no per-tool grip offset: the farmer Blueprint's `HeldTool` component keeps the one hand transform it has today. `StaminaCost` is defined but unused until stamina exists | The actions are fixed mechanics that code switches on, which is what enums are for ([section 12](#12-designing-for-mods), rule 2). The compiler then flags a missing case, and modders combine actions rather than invent new ones. A per-tool offset can move into the asset when a second held mesh needs a different grip |
 | 2026-10-28 | `ContentId`, the display name, the primary asset ID and loading with the `Visuals` bundle moved from `UFarmCropData` into an abstract `UFarmContentData` base. Each content type only names its primary asset type | Tools are the second kind of content, and both need the same ID and loading code. One copy keeps the ID rules from [section 5](#5-data-and-content) in one place |
@@ -401,6 +450,10 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 - **`AFarmDayCycle::Get` doesn't follow the find-or-spawn rules yet** ([section 2](#2-unreals-gameplay-framework-where-things-go)). It spawns in any world without checking the world type or teardown, and logs nothing when it spawns or when the level has more than one.
 - **Load waits a tick** for the grid to spawn tiles ([section 3](#3-lifetimes-and-initialization-order)). Better: the grid broadcasts when its tiles are ready, or registers with the save subsystem.
 - **The grid is found with `TActorIterator` in several places.** Add `AFarmGrid::Find(const UWorld*)` like `AFarmDayCycle::Find`.
+- **The farming component ticks every frame** to poll the day cycle for bedtime and to draw the target highlight with debug drawing, which shipping builds compile out ([section 10](#10-performance-by-design); ArchitectureAudit A-10, A-11). The day cycle should broadcast when the day ends, and a cosmetic component should show the highlight.
+- **The HUD searches the world every frame.** Its widget's bound getters call `AFarmDayCycle::Find` and `FindComponentByClass` each frame (CodingGuidelinesAudit C-09). Keep the references in the HUD instead.
+- **No `TRACE_CPUPROFILER_EVENT_SCOPE` yet** on the new-day, load and save code, so Unreal Insights can't show their cost by name.
+- **Rendering settings aren't set for a target.** Hardware ray tracing, Lumen, virtual shadow maps and Substrate are on, with Maximum as the default performance level ([section 10](#10-performance-by-design)).
 - **Tile rules and visuals live in the same class.** Fine for now. Separate them (a plain tile-state struct the actor owns) before writing tile tests or growing the field a lot.
 
 ## 18. Expected changes

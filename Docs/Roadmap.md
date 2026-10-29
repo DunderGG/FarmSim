@@ -156,6 +156,16 @@ The code changes that the slice's content depends on. Doing them first means add
 - [ ] Save failure tests: a corrupt or newer-version save is not overwritten, and unknown content IDs are skipped
 - [ ] Content ID tests: a redirected ID, a duplicate ID and an unknown ID
 
+**Performance** ([Architecture.md section 10](Architecture.md#10-performance-by-design))
+
+- [ ] Confirm the target hardware and the frame budget
+- [ ] Set the rendering settings and the four scalability levels for the target: hardware ray tracing and other expensive features only at Epic
+- [ ] The day cycle broadcasts the end of the day, so the farming component stops polling it every frame
+- [ ] A shipping-safe highlight for the targeted tile, replacing the debug box
+- [ ] The HUD keeps its references instead of searching the world every frame
+- [ ] Trace scopes on the new day, loading and saving
+- [ ] First performance baseline, measured in a packaged build on the target hardware and recorded in Architecture.md
+
 ### 4.2 Farming depth
 
 - [ ] Three or four crops for the season, each with its own meshes

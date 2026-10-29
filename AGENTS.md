@@ -44,7 +44,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
 9. **Dependencies point one way.** Game rules never call UI, audio or effects; presentation reads state and listens to events. No circular dependencies between classes.
 10. **Record design decisions.** A change that adds a system, moves a responsibility or makes a design choice updates `Docs/Architecture.md` (Part B and the decision log) in the same commit.
 11. **Design for mods.** Content (crops, tools, items) is data assets found through the Asset Manager, never hard-coded lists or enums. Content has namespaced IDs (`Base.Parsnip`). Saves store IDs and skip unknown content. See `Docs/Architecture.md`, section 12.
-12. **Ticking off by default.** Use events and timers instead of per-frame polling.
+12. **Performance is a requirement.** Ticking off by default; use events and timers instead of per-frame polling. Nothing in `Tick`, timers or UI bindings searches the world, loads assets, spawns, creates `UObject`s or rebuilds unchanged strings. Content is soft-referenced and never loaded synchronously during play. No debug drawing as a feature. Expensive loops and new-day work get a `TRACE_CPUPROFILER_EVENT_SCOPE`. Optimizations that cost readability need a measurement. Rules in `Docs/CodingGuidelines.md` section 12, budget in `Docs/Architecture.md` section 10.
 13. **Tests for rules.** Game rule changes get CQTest tests in `Source/Vestige/Tests/`, named `Vestige.<Area>.<Behavior>`. A bug fix gets a test that would have caught it. How to write and run them is in guidelines section 13.
 
 ## Building and testing

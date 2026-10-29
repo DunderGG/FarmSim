@@ -25,7 +25,7 @@ Contents
 9. [Modern C++ usage](#9-modern-c-usage)
 10. [Errors, logging and assertions](#10-errors-logging-and-assertions)
 11. [Comments and documentation](#11-comments-and-documentation)
-12. [Performance and ticking](#12-performance-and-ticking)
+12. [Performance](#12-performance)
 13. [Testing](#13-testing)
 14. [Project layout and assets](#14-project-layout-and-assets)
 15. [Git workflow](#15-git-workflow)
@@ -337,14 +337,77 @@ UE_LOG(LogVestige, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
 
   They don't carry the Epic copyright line; the template's files keep theirs.
 
-## 12. Performance and ticking
+## 12. Performance
 
-- Turn ticking **off by default** (`PrimaryActorTick.bCanEverTick = false`) and turn it on only for classes that really need per-frame work (`AFarmDayCycle` moves the sun).
-- Prefer events, timers (`FTimerManager`) and delegates over checking something every frame.
-- Don't search the level (`TActorIterator`, `GetAllActorsOfClass`) every frame. Find things once in `BeginPlay` and keep the reference.
-- Don't load assets with `ConstructorHelpers` outside constructors.
-- Don't block the game thread with a synchronous load while the player is playing; it causes a visible hitch. Load assets that may be large or slow asynchronously (`FStreamableManager` / the Asset Manager). Synchronous loads are fine during startup or behind a loading screen, where nobody is waiting on the next frame and the cost is known.
-- Optimize when something is measurably slow. Clear code first.
+Performance is a requirement, not a polish step. Unreal Engine 5 makes it easy to ship a game that stutters, and stutter is far cheaper to prevent than to find later. The frame budget, the target hardware and how we measure are in [Architecture.md, section 10](Architecture.md#10-performance-by-design). This section is the code side.
+
+There are two kinds of performance rule:
+
+- **Always-on rules** (12.1 to 12.8). Cheap patterns that cost nothing in clarity. They apply to every change without a measurement, and breaking one fails review the same way a naming or ownership mistake does.
+- **Optimizations that make code harder to read**: caching tricks, pooling, data-oriented rewrites, spreading work over frames, threads. These need a measurement that shows the problem, and the commit message says what was measured before and after. Clear code first; clever code only with numbers.
+
+### 12.1 Ticking
+
+- Ticking is **off by default**: `PrimaryActorTick.bCanEverTick = false` in actors, `PrimaryComponentTick.bCanEverTick = false` in components.
+- A class that ticks says why in a comment next to `bCanEverTick = true` (`AFarmDayCycle` moves the sun). If it doesn't need every frame, it sets `TickInterval`, and it turns its tick off while it has nothing to do (`SetActorTickEnabled(false)`, `SetComponentTickEnabled(false)`).
+- **Never poll another object's state in `Tick`.** Ask its owner for an event and bind to it (rule 12 in `AGENTS.md`).
+- **No Event Tick in Blueprints.** Per-frame Blueprint logic is slow and invisible in code review; if something really needs it, it moves to C++.
+- Work that has to happen often but not every frame uses a timer (`FTimerManager`) at the rate it needs.
+
+### 12.2 What never happens every frame
+
+Not in `Tick`, not in a timer that runs every frame, and not in a Slate or UMG binding:
+
+- Searching the world: `TActorIterator`, `GetAllActorsOfClass`, `GetActorOfClass`, `FindComponentByClass`, `GetComponents`. Find things once (in `BeginPlay`, through a `Find` helper or by registration) and keep the reference, strong or weak as [section 7](#7-memory-pointers-and-object-lifetime) says.
+- Loading assets, spawning or destroying actors, or creating `UObject`s.
+- Building strings for display (`FString::Printf`, `FText::Format`) when the value hasn't changed.
+- Debug drawing (`DrawDebug*`) as a game feature. It is compiled out of shipping builds; it is only for debugging tools behind a console variable.
+- Physics traces that could be math. The target tile is found with the grid's lookup, not a trace.
+
+### 12.3 Memory and allocation
+
+- `Reserve` an array when its final size is known. Pass and return containers by `const&`, and move (`MoveTemp`) into sink parameters.
+- Every `UObject` costs memory and garbage collection time. Short-lived data is a struct, not a `UObject`. Don't create `UObject`s or spawn actors per action for something that could be reused; when something is spawned often (projectiles, effects, floating text), measure and pool it.
+- Look things up by key with `TMap` or `TSet` once a collection can grow past a few dozen entries. Content is looked up by `FName` ID, which compares as cheaply as an integer.
+
+### 12.4 Assets and loading
+
+- **A hard reference loads everything it points to, and everything those assets point to in turn.** Use `TObjectPtr` / `TSubclassOf` for assets only when the class always needs them. Content uses soft references and asset bundles ([section 7](#7-memory-pointers-and-object-lifetime), [Architecture.md, section 5](Architecture.md#5-data-and-content)).
+- **No synchronous loads during interactive play.** `LoadSynchronous`, `TryLoad`, `WaitUntilComplete` and `UFarmContentData::LoadWithVisuals` are only for play start and loading screens, where the cost is known. Everything else loads asynchronously (`FStreamableManager`, the Asset Manager) before it is needed.
+- In Blueprints, a **Cast To** node or a variable of another Blueprint's type is a hard reference that loads that Blueprint and everything it references. Cast to C++ base classes or use interfaces instead.
+- Check the **Size Map** and **Reference Viewer** (right-click the asset in the Content Browser) for every new or changed Blueprint and data asset, and make sure it doesn't drag in unrelated content.
+- `ConstructorHelpers` only in constructors, and only for engine placeholder assets.
+
+### 12.5 Components and rendering from code
+
+- Components that don't need collision have `NoCollision`. Primitive components generate overlap events by default; turn that off (`SetGenerateOverlapEvents(false)`) unless something listens.
+- Small cosmetic meshes (crops, held tools, props) don't cast dynamic shadows unless they visibly need them (`SetCastShadow(false)`).
+- Use `Movable` mobility only for components that move or change at runtime.
+- Many copies of the same mesh (fences, rocks, a large field) use instanced static meshes or Nanite rather than one actor or component each, once profiling shows the count matters ([Architecture.md, section 10](Architecture.md#10-performance-by-design)).
+- Prefer material parameters that don't need a dynamic material instance per object (per-instance custom data, a few shared material instances) for anything there will be many of. Each dynamic material instance is its own material for the renderer.
+
+### 12.6 User interface
+
+- Slate attribute bindings (`.Text(this, &SFarmHudWidget::GetStatusText)`) and UMG property bindings run every frame. Bind only values that change every frame (the clock). Everything else is set when an event says it changed.
+- A bound getter only reads values the widget or HUD already holds. It never searches, loads or calls into game code that does.
+
+### 12.7 Bulk and once-a-day work
+
+- Work that touches every tile, crop or robot happens while the player isn't playing: in the sleep transition or behind a loading screen, never in the middle of play.
+- Each such pass stays within the hitch budget in [Architecture.md, section 10](Architecture.md#10-performance-by-design). When it doesn't, spread it over frames or move it behind the transition, and measure again.
+- Saving is synchronous while a save stays within that budget; when it doesn't, it moves to `AsyncSaveGameToSlot`.
+
+### 12.8 Instrument the expensive parts
+
+- Every function that loops over many objects, runs on the new day, loads or saves, or runs on a frequent timer starts with `TRACE_CPUPROFILER_EVENT_SCOPE(ClassName::FunctionName);` so it shows up by name in Unreal Insights. It costs nothing when tracing is off.
+
+### 12.9 Measuring
+
+- Measure in a **packaged Development build** or a Standalone Game launch, not in Play in Editor: the editor adds its own cost and hides loading and shader hitches.
+- Quick checks: `stat unit` (game thread, render thread, GPU and frame time), `stat unitgraph`, `stat game`, `stat gpu`. `ProfileGPU` breaks down one frame on the GPU.
+- Detailed profiling: start the game with `-trace=default`, then open the trace in Unreal Insights (`Engine\Binaries\Win64\UnrealInsights.exe`).
+- First-time stutter (shader and PSO compilation, asset streaming) only shows in a packaged build run for the first time. Test that before every milestone build.
+- Each roadmap milestone ends with a **performance pass**: the numbers in the [baseline table](Architecture.md#10-performance-by-design) are measured again on the target hardware and recorded. A change that breaks the budget is a bug, fixed before more features go in.
 
 ## 13. Testing
 
@@ -446,7 +509,9 @@ Before committing, check:
 - [ ] Strong `UObject` references are `UPROPERTY() TObjectPtr<>`; non-owning ones are weak, deferred assets are soft. Pointers that can be null are checked.
 - [ ] Runtime state is private. Nothing new is exposed to Blueprints without a reason.
 - [ ] No magic numbers, no duplicated logic, no commented-out code, no stray debug messages.
-- [ ] Ticking is off unless needed. No per-frame searches of the level.
+- [ ] Ticking is off unless needed and justified in a comment. Nothing polls another object's state; nothing in `Tick`, timers or UI bindings searches the world, loads, spawns, allocates `UObject`s or rebuilds unchanged strings ([section 12](#12-performance)).
+- [ ] New assets and Blueprints are soft-referenced where they aren't always needed, and their Size Map doesn't pull in unrelated content. No synchronous loads during play.
+- [ ] Loops over many objects, new-day work, loading and saving have a `TRACE_CPUPROFILER_EVENT_SCOPE`.
 - [ ] Classes and non-obvious public members have `/** */` comments.
 - [ ] Changed game rules have tests, and the `Vestige` tests pass.
 - [ ] It compiles and works in Play in Editor.
