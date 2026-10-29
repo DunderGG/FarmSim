@@ -5,13 +5,13 @@
 
 #include "CoreMinimal.h"
 #include "VestigeCharacter.h"
-#include "FarmingComponent.h"
 #include "FarmerCharacter.generated.h"
 
+class UFarmingComponent;
 class UFarmToolData;
-class UStaticMeshComponent;
 class UInputAction;
 class UInputMappingContext;
+class UStaticMeshComponent;
 
 /**
  * The template's third person character plus farming.

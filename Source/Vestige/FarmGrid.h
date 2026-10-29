@@ -28,9 +28,11 @@ public:
 	/** Every tile, row by row. Empty until BeginPlay has spawned them. */
 	const TArray<TObjectPtr<AFarmTile>>& GetTiles() const { return Tiles; }
 
+	/** Number of tiles along the actor's X axis. */
 	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 1))
 	int32 Width = 8;
 
+	/** Number of tiles along the actor's Y axis. */
 	UPROPERTY(EditAnywhere, Category = "Farming", meta = (ClampMin = 1))
 	int32 Height = 8;
 
@@ -42,9 +44,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Farming")
 	TSubclassOf<AFarmTile> TileClass;
 
-	virtual void OnConstruction(const FTransform& Transform) override;
-
 protected:
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
 
 private:

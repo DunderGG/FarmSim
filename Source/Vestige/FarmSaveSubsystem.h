@@ -15,8 +15,8 @@ class UFarmSaveGame;
 
 /**
  * Saves the farm every time a new day starts and loads it when play begins.
- * A world subsystem because everything it saves lives in the level, and a fresh one comes with every level load,
- * so starting a new game is just deleting the save and reloading the level.
+ * A world subsystem because everything it saves lives in the world, and a fresh one comes with every new world,
+ * so starting a new game is just deleting the save and opening the map again.
  */
 UCLASS()
 class UFarmSaveSubsystem : public UWorldSubsystem

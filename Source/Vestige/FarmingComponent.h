@@ -38,7 +38,10 @@ public:
 	const UFarmToolData* GetCurrentTool() const { return Toolbar.GetCurrentTool(); }
 	const FFarmToolbar& GetToolbar() const { return Toolbar; }
 
+	/** Uses the tool in hand on the tile in front of the owner. Does nothing to the farm without a tile or a tool. */
 	void UseTool();
+
+	/** Ends the day and starts the next one. */
 	void Sleep();
 
 	/** The crop the Seeds tool plants, or nullptr if SeedCropId doesn't name a crop asset. Loaded at BeginPlay. */
@@ -46,8 +49,6 @@ public:
 
 	/** Broadcast whenever the current tool changes, including when a save is loaded. */
 	FOnFarmToolChanged OnToolChanged;
-
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	/** How far in front of the owner the targeted tile is, in cm. */
 	UPROPERTY(EditAnywhere, Category = "Farming")
@@ -61,6 +62,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	void LoadSeedCrop();
