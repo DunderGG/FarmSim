@@ -25,11 +25,11 @@ Contents
 ## 1. Where we are
 
 - **Done:** milestone 1, the playable prototype, plus the project's documents and rules.
-- **Now:** housekeeping (push, play-test), then milestone 2.
+- **Now:** the code follows the guidelines and the architecture (both audits' code reviews are closed, 2026-10-29). Next: play-test that clean-up, the editor housekeeping steps in [section 3](#3-housekeeping), then the rest of the milestone 2 foundations.
 - **Next up**, in order:
-  1. Crops as data assets, with the current turnip as the first one (`Base.Turnip`).
-  2. Tile rules separated from tile visuals, with the first automated tests.
-  3. Tools and items as data assets, replacing the hard-coded tool list.
+  1. Item data assets (`UFarmItemData`), with the inventory on the player state.
+  2. The Gameplay Ability System and stamina ([section 4.3](#43-stamina-and-late-nights)).
+  3. The interaction interface (`IFarmInteractable`) and the bed.
 
 ## 2. Milestone 1: playable prototype (done)
 
@@ -93,6 +93,7 @@ A third-person farmer on a small field who can till, plant, water and harvest, w
 
 Small things to finish before milestone 2 starts.
 
+- [ ] Play-test the 2026-10-29 code clean-up in Play in Editor, with the checklist at the end of [ArchitectureAudit.md](ArchitectureAudit.md#play-in-editor-checklist-2026-10-29)
 - [x] Play-test the latest changes: the HUD looks the same, sleeping saves the game, stopping and playing again restores the farm, and F9 starts a new game
 - [x] Force-push the rewritten Git history to GitHub
 - [x] Push the newer local commits (a normal `git push`)
@@ -100,7 +101,7 @@ Small things to finish before milestone 2 starts.
 - [x] Delete the merged pull request branches on GitHub (`step2-farming-loop`, `step3-asset-script`, `step3-custom-meshes`, `fix-held-tool-shadowing`)
 - [x] Delete the unused template code and content (`Variant_*`, `LevelPrototyping`, `Lvl_ThirdPerson` and the unused mannequin assets)
 - [x] Remove the leftover redirector `Content/L_Farm` at the content root (right-click > Fix Up Redirectors)
-- [ ] In the editor, open and save `BP_ThirdPersonGameMode` and `BP_ThirdPersonPlayerController` (Content/ThirdPerson/Blueprints), which still name `/Script/TP_ThirdPerson`, and save `L_Farm`, whose grid and day cycle still name `/Script/FarmSim`. Then the `ActiveClassRedirects` and `[CoreRedirects]` in `DefaultEngine.ini` can go, once nothing else needs them (old save files name no classes)
+- [ ] In the editor, open and save `BP_ThirdPersonGameMode` and `BP_ThirdPersonPlayerController` (Content/ThirdPerson/Blueprints), which still name `/Script/TP_ThirdPerson`, and save `L_Farm`, whose grid and day cycle still name `/Script/FarmSim`. Then the `ActiveClassRedirects` for `TP_ThirdPerson` in `DefaultEngine.ini` can go. Keep the `FarmSim` `[CoreRedirects]`: save files made before the rename name `/Script/FarmSim`
 - [ ] In the editor, move `BP_FarmTile` from `Content/Farm/` to `Content/Farm/Blueprints/` and the `M_` materials from `Content/Farm/Meshes/` to `Content/Farm/Materials/` by dragging them in the Content Browser (choose Move Here), then right-click `Content/Farm` > Fix Up Redirectors. Moving the files outside the editor would break the references to them
 - [ ] If the Android File Server was ever used with this project, regenerate its security token (Project Settings > Platforms > Android File Server). The old token was removed from `DefaultEngine.ini` but stays in the Git history
 
@@ -116,7 +117,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 **Content as data**
 
-- [x] Crop data assets (`UFarmCropData`) found through the Asset Manager: ID, name, seasons, growth stage meshes, days per stage, water need, radiation tolerance, yield, seed price and sell price
+- [x] Crop data assets (`UFarmCropData`) found through the Asset Manager: ID, name, seasons, growth stage meshes, days to mature (one stage per watered day), water need, contamination tolerance, yield, seed price and sell price
 - [x] The current turnip becomes the first crop asset, `Base.Turnip`, and its settings move off the tile Blueprint
 - [x] Tool data assets (`UFarmToolData`), replacing the hard-coded tool list (`EFarmTool`)
 - [ ] Item data assets (`UFarmItemData`) for seeds, harvested crops and other things the player can carry

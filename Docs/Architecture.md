@@ -328,11 +328,11 @@ All of these have to exist and be tested in a packaged build first:
 
 | Class | Kind | Owns | Does not own |
 |---|---|---|---|
-| `AFarmTile` | Actor | One tile in the world: owns its `FFarmTileState`, applies the farming actions to it and shows the result (meshes, placeholder colors) | Crop definitions, time, input, saving |
+| `AFarmTile` | Actor | One tile in the world: owns its `FFarmTileState`, applies the farming actions to it and shows the result (meshes, placeholder colors). Writing and restoring its own save data | Crop definitions, time, input, where saves are written |
 | `FFarmTileState` | Struct inside `AFarmTile` (`FarmTileState.h`) | One tile's state (grass, tilled, planted, watered, growth, the crop planted in it) and the rules that change it | Visuals, the tile's place in the grid |
-| `AFarmGrid` | Actor, placed in the level, found with `Find` | Spawning tiles (then broadcasting `OnTilesReady`), finding a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
-| `AFarmDayCycle` | Actor, placed or found-or-spawned by `Get` ([section 2](#2-unreals-gameplay-framework-where-things-go)) | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished`; broadcasts `OnDayEndReached` once when the clock reaches `DayEndHour`, then stops the clock and its tick until the next day | Tiles, saving, HUD |
-| `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting (follows the owner's movement and broadcasts `OnTargetTileChanged`; no tick) and using a tool | UI, input bindings, meshes, sleeping |
+| `AFarmGrid` | Actor, placed in the level, found with `Find` | Spawning tiles (then broadcasting `OnTilesReady`), finding a tile by location or coordinates, advancing tiles on a new day, saving and restoring its tiles by coordinates. Destroys its tiles when it alone ends | The clock, lighting, the day number, loading crops |
+| `AFarmDayCycle` | Actor, placed or found-or-spawned by `Get` ([section 2](#2-unreals-gameplay-framework-where-things-go)) | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished`; broadcasts `OnDayEndReached` once when the clock reaches `DayEndHour`, then stops the clock and its tick until the next day. Saving and restoring its day and clock | Tiles, saving, HUD |
+| `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting (follows the owner's movement and broadcasts `OnTargetTileChanged`; no tick) and using a tool. Saving and restoring its inventory and tool in hand | UI, input bindings, meshes, sleeping |
 | `UFarmTargetHighlightComponent` | Instanced static mesh component on the farmer | Showing a frame around the target tile, moved only on `OnTargetTileChanged`. Presentation only, and ships (no debug drawing) | Which tile is targeted |
 | `UFarmRestComponent` | Component on the farmer | The end of the player's day: sleeping (N), and passing out when the day cycle broadcasts `OnDayEndReached`. Later the late-night rules and exhaustion ([Systems.md, section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system)) | The clock, what happens on a new day |
 | `FFarmToolbar` | Struct inside `UFarmingComponent` | The toolbar's slots and which slot is in hand, with the rules for selecting one | Loading or using tools |
@@ -354,32 +354,44 @@ Arrows point from a class to what it knows about. Nothing points back up.
 
 ```mermaid
 flowchart TD
-    Input[AFarmerCharacter<br/>input, held tool] --> Farming[UFarmingComponent<br/>tools, inventory, targeting]
+    Input[AFarmerCharacter<br/>input, key hints, held tool] --> Farming[UFarmingComponent<br/>tools, inventory, targeting]
     Input --> Rest[UFarmRestComponent<br/>sleep, passing out]
+    Input --> Save
     HUD[AFarmHUD / SFarmHudWidget<br/>display] -.reads.-> Farming
     HUD -.reads.-> DayCycle
     HUD -.key hints.-> Input
-    Highlight[UFarmTargetHighlightComponent<br/>target frame] -. OnTargetTileChanged .-> Farming
+    Highlight[UFarmTargetHighlightComponent<br/>target frame] -.reads.-> Farming
     Save[UFarmSaveSubsystem<br/>save / load] --> Farming
     Save --> Grid
     Save --> DayCycle
     Farming --> Grid[AFarmGrid<br/>tile layout]
     Rest --> DayCycle[AFarmDayCycle<br/>clock, lighting]
-    DayCycle -. OnDayEndReached event .-> Rest
-    Grid --> Tile[AFarmTile<br/>tile state, visuals]
-    DayCycle -. OnNewDay event .-> Grid
-    DayCycle -. OnNewDayFinished event .-> Save
+    Grid --> Tile[AFarmTile<br/>tile, visuals]
+    Tile --> TileState[FFarmTileState<br/>tile rules]
+    Farming --> Feedback[UFarmFeedbackSubsystem<br/>player messages]
+    Rest --> Feedback
+    Save --> Feedback
+    DayCycle -. OnDayEndReached .-> Rest
+    DayCycle -. OnNewDay .-> Grid
+    DayCycle -. OnNewDayFinished .-> Save
+    Grid -. OnTilesReady .-> Farming
+    Farming -. OnTargetTileChanged .-> Highlight
+    Farming -. OnToolChanged, OnInventoryChanged .-> HUD
+    Feedback -. OnFeedback .-> HUD
 ```
+
+Solid arrows are calls and dotted arrows labelled "reads" are reads. The other dotted arrows are events, drawn from the class that broadcasts to the one that listens; the listener is the one that knows about the broadcaster.
 
 Layers, from bottom to top:
 
 1. **Data**: `UFarmSaveGame` and the save structs (`FarmSaveData.h`), content data assets (`UFarmContentData` and its subclasses), `FFarmTileState`, enums and other structs. None of these include an actor header.
-2. **World state**: `AFarmTile`, `AFarmGrid`, `AFarmDayCycle`.
-3. **Player actions**: `UFarmingComponent`, `UFarmRestComponent`.
-4. **Services**: `UFarmSaveSubsystem`.
-5. **Input and presentation**: `AFarmerCharacter`, `AFarmHUD`, `UFarmTargetHighlightComponent`.
+2. **Shared services that know no game rules**: `UFarmFeedbackSubsystem` (player messages), `UFarmAssetManager` (content checks at startup) and `FarmActorLookup`.
+3. **World state**: `AFarmTile`, `AFarmGrid`, `AFarmDayCycle`.
+4. **Player actions**: `UFarmingComponent`, `UFarmRestComponent`.
+5. **Saving**: `UFarmSaveSubsystem`.
+6. **Input and presentation**: `AFarmerCharacter`, `AFarmHUD`, `UFarmTargetHighlightComponent`.
 
-Lower layers broadcast events; they never include or call higher layers. Exceptions are listed in [Known gaps](#17-known-gaps).
+Lower layers broadcast events; they never include or call higher layers. There are no exceptions today; any that appear are listed in [Known gaps](#17-known-gaps).
 
 ## 15. The day flow
 
@@ -422,6 +434,10 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | Epic's template code (`VestigeCharacter`, `VestigeGameMode`, `VestigePlayerController`) is not maintained to our guide: it keeps Epic's style and is deleted once nothing uses it. This is a documentation rule (`CodingGuidelines.md` section 2.2), not a code change | Tidying Epic's files in passing mixes their code with ours and churns files we mean to replace (Roadmap, before a public release). A file we change substantially is first brought up to the guide in its own commit |
+| 2026-10-29 | The toolbar stays fixed per farmer Blueprint (`ToolbarIds` on the farming component's defaults); only the tool in hand is saved | There are no items to put on a toolbar yet. When items exist the toolbar becomes part of the inventory and is saved with it; building that now would be a second inventory |
+| 2026-10-29 | Seeds, the harvest count and later money stay on `UFarmingComponent` until the inventory work moves them to an inventory component on the player state (section 18) | Moving two integers now means building a player state and an inventory component before the item design exists. They are private with getters and a save struct, so the move only touches the farming component and its save part |
+| 2026-10-29 | Blueprint extension points (section 12, rule 4) wait until the systems they would expose exist: tool use as an ability, items, interaction | Every exposed function and event is a promise to modders. Exposing today's prototype functions would promise an API that the stamina, item and interaction work is about to change. Each of those systems adds its extension points, marked `/** Extension point: ... */`, when it is built |
 | 2026-10-29 | Rendering for the target PC: Lumen's hardware ray tracing is on only at Epic and Cinematic (`DefaultScalability.ini`), new players start at High (`DefaultGameUserSettings.ini`), and Lumen, virtual shadow maps and Substrate stay on. The default performance level stays Maximum, against the earlier plan to move off it | Section 10 makes hardware ray tracing an Epic-only option and the target holds the budget at High. "Maximum" versus "Scalable" isn't a quality level: on desktop, Scalable only switches off auto-exposure, motion blur and anti-aliasing by default, which would break the dark nights (they use the auto-exposure bias) and leave edges unsmoothed without saving the frame time that scalability controls. Turning off Substrate or virtual shadow maps would change the look and needs a measurement first |
 | 2026-10-29 | Content IDs are checked twice: `UFarmContentData::IsDataValid` rejects a missing or badly formed `ContentId` (exactly one dot, both parts PascalCase ASCII letters and digits), and a new `UFarmAssetManager` reports duplicate IDs after the initial asset scan, reading each asset's primary asset ID from its Asset Registry tags so nothing loads. The ID redirect list is deferred until an ID first has to change | Two assets with one ID collapse into one primary asset, so one would vanish without a word; a startup error names both. A project Asset Manager is Lyra's place for startup content work, and the same class will load global game data later. No ID has been renamed and none has shipped, so a redirect list would be untested code with nothing to redirect. `LoadWithVisuals` stays synchronous: it is only called at play start (the farmer's `BeginPlay` and loading a save), which section 10 allows |
 | 2026-10-29 | Saving follows section 6 and `Systems.md` section 1. `UFarmSaveGame` has a `SaveVersion` (1 now; files from before read as 0) and a `SaveSequence`, and holds one struct per owner: the day cycle, the farming component and the grid each write and restore their own part, and the grid saves tiles by coordinates with their crop's `ContentId`. Saves alternate between the slots `Farm` and `Farm2`; loading takes the readable save with the highest sequence. A corrupt file, a newer version or a failed upgrade turns saving off for the session and leaves the files alone; a corrupt slot next to a readable one is treated as a failed write and replaced by the next save. A version 0 save is copied to `Farm_Version0` and upgraded in place: tiles get coordinates from their grid order and planted tiles the turnip, the only crop version 0 could plant, and the old `EFarmTool` value maps to a tool ID. Unknown content IDs are skipped with a warning and one message to the player. Loading waits for `UWorld::OnWorldBeginPlay` instead of a tick | Each rule closes a known gap: owners keep their own fields private, a grid resize or new crops no longer scramble saves, and no path overwrites the only copy of a save the game couldn't read. Two slots keep a good save through a failed or interrupted write without platform-specific file renames. `EFarmTool` stays because the version 0 upgrade needs it to read old saves; it is now confined to that upgrade. The grid's `OnTilesReady` was considered for the load and rejected: it doesn't say the farmer's toolbar is loaded, and the world's begin-play broadcast covers both |
@@ -455,7 +471,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 | 2026-10-26 | Code under GPL-3.0-or-later with an Unreal Engine linking permission; assets under CC BY-NC-SA 4.0; contributors grant the maintainer commercial use (see `LICENSING.md`) | Open for contributors and modders, no closed-source forks, and only the maintainer sells complete builds. The linking permission is needed because the engine isn't free software |
 | 2026-10-26 | Design for content and Blueprint mods; don't build mod loading yet | David wants the game to be easy to mod later. Following the rules in [section 12](#12-designing-for-mods) costs little now; retrofitting them later would mean rewriting content and saves |
 | 2026-10-26 | Architecture documented here; code style in `CodingGuidelines.md` | Keep "how it fits together" apart from "how code looks" |
-| 2026-10-25 | Adopt CQTest for game-rule tests; setup is pending (see the Tests checklist in [Roadmap.md](Roadmap.md)) | Epic's newest C++ test framework; simpler than Automation Spec |
+| 2026-10-25 | Adopt CQTest for game-rule tests; setup is pending (see the Tests checklist in [Roadmap.md](Roadmap.md)) | Epic's newest C++ test framework; simpler than Automation Spec. Setup was done on 2026-10-28 (see that entry) |
 | 2026-10-25 | Save in a `UWorldSubsystem`, written when a new day starts | Saving is a world-wide service with no transform. A new world means a fresh subsystem, so a new game is "delete save, reopen the map". Saving at day start keeps saves consistent |
 | 2026-10-25 | HUD is an `AHUD` hosting a C++ Slate widget | No widget assets to maintain for a tiny HUD. Revisit with UMG when menus arrive |
 | 2026-10-25 | Clock, lighting and night exposure moved from `AFarmGrid` to a new `AFarmDayCycle` | The grid's job is tiles. Time has its own owner, which the grid listens to |
@@ -469,8 +485,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 Places where the current code doesn't follow Part A yet. Fix them when working nearby, each in its own commit, and remove the line when it's done. Code-style gaps are listed in [CodingGuidelines.md](CodingGuidelines.md#16-known-deviations-to-clean-up).
 
-- **No extension points.** Nothing is exposed to Blueprints yet, and the C++ delegates can't be bound from Blueprints. A tool can only do one of the fixed `EFarmToolAction` actions; custom tool behavior needs a Blueprint hook for using a tool.
-- **The toolbar is fixed per farmer Blueprint.** `ToolbarIds` lives on the farming component's defaults, and only which slot is in hand is saved. It moves to the inventory once there is one.
+None at the moment. Deliberate deferrals, such as Blueprint extension points and the content ID redirect list, are recorded in the [decision log](#16-decision-log) instead, with the reason and when to revisit them.
 
 ## 18. Expected changes
 
@@ -483,4 +498,4 @@ Likely next steps as the game grows, with the design we intend. These aren't com
 - **Interaction** (doors, chests, NPCs, shipping bin) goes through an `IFarmInteractable` interface, so the farmer's interact key doesn't need to know every type.
 - **Seasons and weather** belong to the game state, or to the day cycle if they stay small. They broadcast changes like `OnNewDay`.
 - **Menus and inventory UI** move to UMG Widget Blueprints with C++ base classes.
-- **Source folders** split by feature once there are about 20 of our own files (see [CodingGuidelines.md](CodingGuidelines.md#141-source)).
+- **Source folders** split by feature (see [CodingGuidelines.md](CodingGuidelines.md#141-source)). There are now 20 headers and 38 source files of our own, so the question is due; it is David's call and a move-only commit.
