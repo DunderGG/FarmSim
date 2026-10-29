@@ -19,6 +19,8 @@
 #include "InputAction.h"
 #include "InputMappingContext.h"
 
+#define LOCTEXT_NAMESPACE "FarmerCharacter"
+
 namespace FarmerInput
 {
 	/** Above the template's movement contexts (priority 0), so farming keys win if a key is ever mapped twice. */
@@ -44,6 +46,13 @@ AFarmerCharacter::AFarmerCharacter()
 	HeldTool->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+void AFarmerCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	CreateInput();
+}
+
 void AFarmerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -51,6 +60,37 @@ void AFarmerCharacter::BeginPlay()
 	// Follow the component's tool so the hand also updates when a save is loaded.
 	Farming->OnToolChanged.AddUObject(this, &AFarmerCharacter::ShowHeldTool);
 	ShowHeldTool(Farming->GetCurrentTool());
+}
+
+void AFarmerCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Farming->OnToolChanged.RemoveAll(this);
+	Super::EndPlay(EndPlayReason);
+}
+
+void AFarmerCharacter::CreateInput()
+{
+	FarmingMappingContext = NewObject<UInputMappingContext>(this, NAME_None, RF_Transient);
+
+	UseToolAction = AddInputAction(EKeys::E, LOCTEXT("UseTool", "Use tool"));
+	SleepAction = AddInputAction(EKeys::N, LOCTEXT("Sleep", "Sleep"));
+	NewGameAction = AddInputAction(EKeys::F9, LOCTEXT("NewGame", "New game"));
+
+	// The number keys pick toolbar slots. Their hints name the tool in the slot, so the actions have no description.
+	const FKey ToolbarKeys[] = {
+		EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five, EKeys::Six, EKeys::Seven, EKeys::Eight, EKeys::Nine};
+	for (const FKey& Key : ToolbarKeys)
+	{
+		ToolbarSlotActions.Add(AddInputAction(Key, FText::GetEmpty()));
+	}
+}
+
+UInputAction* AFarmerCharacter::AddInputAction(const FKey& Key, const FText& Description)
+{
+	UInputAction* Action = NewObject<UInputAction>(this, NAME_None, RF_Transient);
+	Action->ActionDescription = Description;
+	FarmingMappingContext->MapKey(Action, Key);
+	return Action;
 }
 
 void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -63,38 +103,81 @@ void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		return;
 	}
 
-	FarmingMappingContext = NewObject<UInputMappingContext>(this);
-	FarmingActions.Reset();
-
-	auto MakeAction = [this](FKey Key) -> UInputAction*
-	{
-		UInputAction* Action = NewObject<UInputAction>(this);
-		FarmingMappingContext->MapKey(Action, Key);
-		FarmingActions.Add(Action);
-		return Action;
-	};
-
-	EnhancedInput->BindAction(MakeAction(EKeys::E), ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::UseTool);
-	EnhancedInput->BindAction(MakeAction(EKeys::N), ETriggerEvent::Started, Rest.Get(), &UFarmRestComponent::Sleep);
-	EnhancedInput->BindAction(MakeAction(EKeys::F9), ETriggerEvent::Started, this, &AFarmerCharacter::StartNewGame);
-
-	// The number keys pick toolbar slots; which tool sits in each slot is the farming component's data.
-	const FKey ToolbarKeys[] = {
-		EKeys::One, EKeys::Two, EKeys::Three, EKeys::Four, EKeys::Five, EKeys::Six, EKeys::Seven, EKeys::Eight, EKeys::Nine};
-	for (int32 Slot = 0; Slot < UE_ARRAY_COUNT(ToolbarKeys); ++Slot)
+	EnhancedInput->BindAction(UseToolAction, ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::UseTool);
+	EnhancedInput->BindAction(SleepAction, ETriggerEvent::Started, Rest.Get(), &UFarmRestComponent::Sleep);
+	EnhancedInput->BindAction(NewGameAction, ETriggerEvent::Started, this, &AFarmerCharacter::StartNewGame);
+	for (int32 Slot = 0; Slot < ToolbarSlotActions.Num(); ++Slot)
 	{
 		EnhancedInput->BindAction(
-			MakeAction(ToolbarKeys[Slot]), ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::SelectToolbarSlot, Slot);
+			ToolbarSlotActions[Slot], ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::SelectToolbarSlot, Slot);
 	}
 
-	if (const APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = GetInputSubsystem())
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-				ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		Subsystem->AddMappingContext(FarmingMappingContext, FarmerInput::MappingContextPriority);
+	}
+}
+
+void AFarmerCharacter::UnPossessed()
+{
+	// Removed while the old controller is still known, so a later possession doesn't stack a second copy.
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = GetInputSubsystem())
+	{
+		Subsystem->RemoveMappingContext(FarmingMappingContext);
+	}
+	Super::UnPossessed();
+}
+
+UEnhancedInputLocalPlayerSubsystem* AFarmerCharacter::GetInputSubsystem() const
+{
+	const APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	return PlayerController ? ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()) : nullptr;
+}
+
+TArray<FFarmKeyHint> AFarmerCharacter::GetToolbarKeyHints() const
+{
+	TArray<FFarmKeyHint> Hints;
+	const TArray<TObjectPtr<const UFarmToolData>>& Tools = Farming->GetToolbar().GetTools();
+	for (int32 Slot = 0; Slot < FMath::Min(Tools.Num(), ToolbarSlotActions.Num()); ++Slot)
+	{
+		if (const UFarmToolData* Tool = Tools[Slot])
 		{
-			Subsystem->AddMappingContext(FarmingMappingContext, FarmerInput::MappingContextPriority);
+			Hints.Add({GetMappedKey(ToolbarSlotActions[Slot]).GetDisplayName(false), Tool->GetDisplayName()});
 		}
 	}
+	return Hints;
+}
+
+TArray<FFarmKeyHint> AFarmerCharacter::GetActionKeyHints() const
+{
+	TArray<FFarmKeyHint> Hints;
+	if (!FarmingMappingContext)
+	{
+		return Hints;
+	}
+	for (const FEnhancedActionKeyMapping& Mapping : FarmingMappingContext->GetMappings())
+	{
+		if (Mapping.Action && !Mapping.Action->ActionDescription.IsEmpty())
+		{
+			Hints.Add({Mapping.Key.GetDisplayName(false), Mapping.Action->ActionDescription});
+		}
+	}
+	return Hints;
+}
+
+FKey AFarmerCharacter::GetMappedKey(const UInputAction* Action) const
+{
+	if (FarmingMappingContext)
+	{
+		for (const FEnhancedActionKeyMapping& Mapping : FarmingMappingContext->GetMappings())
+		{
+			if (Mapping.Action == Action)
+			{
+				return Mapping.Key;
+			}
+		}
+	}
+	return EKeys::Invalid;
 }
 
 void AFarmerCharacter::StartNewGame()
@@ -109,3 +192,5 @@ void AFarmerCharacter::ShowHeldTool(const UFarmToolData* Tool)
 {
 	HeldTool->SetStaticMesh(Tool ? Tool->GetHeldMesh() : nullptr);
 }
+
+#undef LOCTEXT_NAMESPACE
