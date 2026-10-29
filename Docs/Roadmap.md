@@ -158,7 +158,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 **Performance** ([Architecture.md section 10](Architecture.md#10-performance-by-design))
 
-- [ ] Confirm the target hardware and the frame budget
+- [x] Confirm the target hardware and the frame budget
 - [ ] Set the rendering settings and the four scalability levels for the target: hardware ray tracing and other expensive features only at Epic
 - [ ] The day cycle broadcasts the end of the day, so the farming component stops polling it every frame
 - [ ] A shipping-safe highlight for the targeted tile, replacing the debug box
@@ -182,7 +182,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 ### 4.3 Stamina and late nights
 
-- [ ] Approve the stamina design in [Systems.md section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system)
+- [x] Approve the stamina design in [Systems.md section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system)
 - [ ] Gameplay Ability System set up: plugin and modules, `AFarmPlayerState` with the ability system component, `UFarmStaminaSet`, an ability set data asset
 - [ ] Sleep and the late-night rules move from the farming component to a `UFarmRestComponent`
 - [ ] Stamina: tool actions cost stamina, shown on the HUD

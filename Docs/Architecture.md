@@ -207,7 +207,7 @@ Two things stay true at the same time: designs and code follow the always-on rul
 
 ### Budget
 
-**Target hardware (provisional, pending David's choice):** a 2020-era mid-range PC (an RTX 2060 or RX 5600 XT class GPU, a 6-core CPU, 16 GB of memory, an SSD) at 1920x1080 and the High scalability level.
+**Target hardware (confirmed by David, 2026-10-29):** a 2020-era mid-range PC (an RTX 2060 or RX 5600 XT class GPU, a 6-core CPU, 16 GB of memory, an SSD) at 1920x1080 and the High scalability level.
 
 | Budget | Limit | Notes |
 |---|---|---|
@@ -406,6 +406,8 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | Stamina design in `Systems.md` section 9 approved as written | Reviewed against the game design's stamina rules before any code, as the system-guide rule requires |
+| 2026-10-29 | Target hardware confirmed: a 2020-era mid-range PC (RTX 2060 or RX 5600 XT class GPU, 6-core CPU, 16 GB, SSD) at 1080p and High, 60 fps | Ordinary PCs are the audience for a cozy farming game. It keeps Lumen available while hardware ray tracing stays an Epic-only option |
 | 2026-10-29 | Adopt the Gameplay Ability System, starting with stamina: a `UFarmStaminaSet` on the ability system component of a new `AFarmPlayerState`, tool use as an ability with a stamina cost effect, and the late-night drain, zero-stamina slowdown, exhaustion and sleep refill as gameplay effects and tags. Sleep and the late-night rules move to a new `UFarmRestComponent`. Design in `Systems.md` section 9, to be approved before code | Stamina is the first of several numbers (health, exposure, buffs from food and mutated crops) that change through costs, drains over time and temporary states. Building it on the ability system now avoids moving it later, and it's small enough to learn the system on. The player state keeps stamina when the pawn is replaced |
 | 2026-10-29 | Every game system has a best-practice guide in `Systems.md`, based on Epic's documentation and Lyra. A system without a guide gets one, approved by David, before its first code; adopting an engine framework is logged here | Systems built ad hoc drift from engine practice and are expensive to fix later. Writing the guide first makes us read how Epic and Lyra solve the problem, and records what we adopt and skip before code depends on it |
 | 2026-10-29 | Performance is a requirement with a budget: 60 fps at 1080p, High scalability, on a provisional mid-range target PC; no frame over 33 ms during play; 2 ms per frame for our gameplay code; the new day within 100 ms. Always-on performance rules in `CodingGuidelines.md` section 12 apply to every change; optimizations that cost readability still need a measurement. Expensive rendering features are scalability options. A performance pass with a recorded baseline ends every milestone | Unreal Engine 5 projects often end up stuttering or demanding high-end hardware because of early choices about ticking, loading, references and rendering features. A budget makes those choices checkable, and cheap rules applied from the start avoid a late, expensive clean-up. The target hardware is provisional until David confirms it |
