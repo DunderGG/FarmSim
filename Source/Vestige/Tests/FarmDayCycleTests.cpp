@@ -6,6 +6,7 @@
 #include "Components/ActorTestSpawner.h"
 #include "CQTest.h"
 #include "FarmDayCycle.h"
+#include "FarmSaveData.h"
 
 // A namespace keeps the fixture's short name from hiding other declarations in unity builds.
 namespace FarmDayCycleTests
@@ -26,6 +27,14 @@ namespace FarmDayCycleTests
 						*LastDay = Day;
 					}
 				});
+		}
+
+		static FFarmClockSaveData MakeClock(int32 Day, float TimeOfDay)
+		{
+			FFarmClockSaveData Clock;
+			Clock.Day = Day;
+			Clock.TimeOfDay = TimeOfDay;
+			return Clock;
 		}
 
 		/** Runs the clock forward by GameHours, the way a frame's tick does. */
@@ -94,7 +103,7 @@ namespace FarmDayCycleTests
 			CountBroadcasts(Cycle.OnNewDayFinished, Broadcasts);
 			CountBroadcasts(Cycle.OnDayEndReached, Broadcasts);
 
-			Cycle.RestoreClock(0, Cycle.GetDayEndHour() + 5.f);
+			Cycle.RestoreFromSaveData(MakeClock(0, Cycle.GetDayEndHour() + 5.f));
 
 			ASSERT_THAT(IsTrue(Cycle.GetCurrentDay() == 1));
 			ASSERT_THAT(IsTrue(Cycle.GetTimeOfDay() == Cycle.GetDayEndHour()));
@@ -107,7 +116,7 @@ namespace FarmDayCycleTests
 			int32 Broadcasts = 0;
 			CountBroadcasts(Cycle.OnDayEndReached, Broadcasts);
 
-			Cycle.RestoreClock(3, Cycle.GetDayEndHour());
+			Cycle.RestoreFromSaveData(MakeClock(3, Cycle.GetDayEndHour()));
 			PassHours(Cycle, 0.1f);
 
 			ASSERT_THAT(IsTrue(Broadcasts == 1));

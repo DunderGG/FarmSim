@@ -9,6 +9,7 @@
 #include "FarmCropData.h"
 #include "FarmFeedbackSubsystem.h"
 #include "FarmGrid.h"
+#include "FarmSaveData.h"
 #include "FarmTile.h"
 #include "FarmToolData.h"
 #include "TimerManager.h"
@@ -111,22 +112,35 @@ void UFarmingComponent::SelectToolbarSlot(int32 Slot)
 	}
 }
 
-void UFarmingComponent::RestoreCurrentTool(FName ToolContentId)
+bool UFarmingComponent::RestoreCurrentTool(FName ToolContentId)
 {
-	if (!Toolbar.SelectTool(ToolContentId))
+	const bool bFound = Toolbar.SelectTool(ToolContentId);
+	if (!bFound)
 	{
 		UE_LOG(
 			LogVestige, Warning, TEXT("The saved tool %s isn't on the toolbar, so the first slot is in hand."), *ToolContentId.ToString());
 		Toolbar.SelectSlot(0);
 	}
 	OnToolChanged.Broadcast(GetCurrentTool());
+	return bFound;
 }
 
-void UFarmingComponent::RestoreInventory(int32 SavedSeeds, int32 SavedHarvestedCrops)
+FFarmFarmingSaveData UFarmingComponent::GetSaveData() const
 {
-	Seeds = FMath::Max(0, SavedSeeds);
-	HarvestedCrops = FMath::Max(0, SavedHarvestedCrops);
+	FFarmFarmingSaveData Data;
+	Data.Seeds = Seeds;
+	Data.HarvestedCrops = HarvestedCrops;
+	const UFarmToolData* Tool = GetCurrentTool();
+	Data.CurrentToolId = Tool ? Tool->GetContentId() : NAME_None;
+	return Data;
+}
+
+bool UFarmingComponent::RestoreFromSaveData(const FFarmFarmingSaveData& Data)
+{
+	Seeds = FMath::Max(0, Data.Seeds);
+	HarvestedCrops = FMath::Max(0, Data.HarvestedCrops);
 	OnInventoryChanged.Broadcast();
+	return RestoreCurrentTool(Data.CurrentToolId);
 }
 
 void UFarmingComponent::UseTool()

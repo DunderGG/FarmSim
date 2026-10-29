@@ -123,17 +123,17 @@ The code changes that the slice's content depends on. Doing them first means add
 
 - [x] Tile rules in a plain state struct, separate from the tile actor that shows them
 - [x] A shared way to find the grid (`AFarmGrid::Find`), replacing the repeated searches
-- [ ] The grid announces when its tiles are ready, so loading no longer waits a frame
+- [x] The grid announces when its tiles are ready, so loading no longer waits a frame (loading waits for the world's begin-play broadcast, which also covers the farmer's toolbar)
 - [x] `AFarmDayCycle::Get` follows the find-or-spawn rules: spawns only in a running game world and logs a warning when it spawns or finds more than one ([Architecture.md section 2](Architecture.md#2-unreals-gameplay-framework-where-things-go))
 
 **Saving**
 
-- [ ] Each owner saves and restores its own state, instead of the save subsystem writing into other classes
-- [ ] Tiles are saved with their grid coordinates, not by position in a list
-- [ ] Saves store content IDs, and skip content that no longer exists with a warning
-- [ ] A save version number
-- [ ] A save that can't be loaded (corrupt, newer version, failed migration) is left untouched: saving stays off until the player starts a new game ([Architecture.md section 6](Architecture.md#6-saving))
-- [ ] A failed save write keeps the previous save
+- [x] Each owner saves and restores its own state, instead of the save subsystem writing into other classes
+- [x] Tiles are saved with their grid coordinates, not by position in a list
+- [x] Saves store content IDs, and skip content that no longer exists with a warning
+- [x] A save version number
+- [x] A save that can't be loaded (corrupt, newer version, failed migration) is left untouched: saving stays off until the player starts a new game ([Architecture.md section 6](Architecture.md#6-saving))
+- [x] A failed save write keeps the previous save
 
 **Communication and extension points**
 
@@ -152,8 +152,8 @@ The code changes that the slice's content depends on. Doing them first means add
 - [x] Set up CQTest in the project
 - [ ] Tile rule tests: tilling, planting, watered crops grow, dry crops don't, harvesting only when ripe
 - [ ] Day clock tests: the time and day roll over correctly
-- [ ] Save tests: tile, farming and clock state survive a save and load round trip through each owner's own save and restore functions
-- [ ] Save failure tests: a corrupt or newer-version save is not overwritten, and unknown content IDs are skipped
+- [x] Save tests: tile, farming and clock state survive a save and load round trip through each owner's own save and restore functions
+- [x] Save failure tests: a corrupt or newer-version save is not overwritten, and unknown content IDs are skipped
 - [ ] Content ID tests: a redirected ID, a duplicate ID and an unknown ID
 
 **Performance** ([Architecture.md section 10](Architecture.md#10-performance-by-design))

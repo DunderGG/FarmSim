@@ -9,7 +9,9 @@
 
 class AFarmDayCycle;
 class AFarmTile;
+class UFarmCropData;
 class UBoxComponent;
+struct FFarmTileSaveData;
 
 DECLARE_MULTICAST_DELEGATE(FOnFarmTilesReady);
 
@@ -34,8 +36,24 @@ public:
 	/** Returns the tile under a world location, ignoring height, or nullptr if it's outside the grid. */
 	AFarmTile* GetTileAtLocation(const FVector& WorldLocation) const;
 
+	/** Returns the tile at grid coordinates (column X, row Y), or nullptr if they are outside the grid. */
+	AFarmTile* GetTileAt(const FIntPoint& Coordinates) const;
+
 	/** Every tile, row by row. Empty until BeginPlay has spawned them. */
 	const TArray<TObjectPtr<AFarmTile>>& GetTiles() const { return Tiles; }
+
+	/** Number of tiles along the actor's X axis. */
+	int32 GetWidth() const { return Width; }
+
+	/** Every tile's saved state with its coordinates, for saving. */
+	TArray<FFarmTileSaveData> GetTilesSaveData() const;
+
+	/**
+	 * Restores the tiles a save mentions, each found by its coordinates, with its crop looked up in Crops by ContentId.
+	 * Tiles the save doesn't mention keep their state. Entries outside the grid are skipped, and a crop missing from Crops
+	 * leaves its tile as empty tilled soil, each with a warning. Returns how many entries it couldn't fully restore.
+	 */
+	int32 RestoreTilesFromSaveData(const TArray<FFarmTileSaveData>& SavedTiles, const TMap<FName, const UFarmCropData*>& Crops);
 
 	/** True once BeginPlay has spawned the tiles. Check it before binding to OnTilesReady, which only fires once. */
 	bool AreTilesReady() const { return bTilesReady; }

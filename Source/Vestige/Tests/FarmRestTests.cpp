@@ -7,6 +7,7 @@
 #include "CQTest.h"
 #include "FarmDayCycle.h"
 #include "FarmRestComponent.h"
+#include "FarmSaveData.h"
 
 // A namespace keeps the fixture's short name from hiding other declarations in unity builds.
 namespace FarmRestTests
@@ -46,7 +47,9 @@ namespace FarmRestTests
 		{
 			const FRestSetup Setup = MakeRestingActor();
 
-			Setup.Cycle->RestoreClock(1, Setup.Cycle->GetDayEndHour());
+			FFarmClockSaveData LateClock;
+			LateClock.TimeOfDay = Setup.Cycle->GetDayEndHour();
+			Setup.Cycle->RestoreFromSaveData(LateClock);
 			Setup.Cycle->TickActor(0.1f, LEVELTICK_All, Setup.Cycle->PrimaryActorTick);
 
 			ASSERT_THAT(IsTrue(Setup.Cycle->GetCurrentDay() == 2));

@@ -217,7 +217,7 @@ private:
 
 - **Runtime state is private.** Expose it through getters, and change it only through functions that keep the object consistent (`AFarmTile::Till` updates the state *and* the visuals).
 - **Tunables** that designers edit are `UPROPERTY(EditAnywhere / EditDefaultsOnly)`. Prefer making them `protected` or `private` with `meta = (AllowPrivateAccess = "true")`, as Lyra does, and add a getter when other classes need to read them.
-- Public mutable data members are a smell. If another class needs to set a value, add a function with a name that says why (`RestoreState`, `RestoreClock`).
+- Public mutable data members are a smell. If another class needs to set a value, add a function with a name that says why (`RestoreFromSaveData`, `SelectToolbarSlot`).
 
 ## 6. UPROPERTY, UFUNCTION and Blueprint exposure
 
@@ -272,10 +272,10 @@ Choose a member's pointer type by what the reference **means**, not by habit:
 - **Return early** to keep the happy path unindented:
 
 ```cpp
-void UFarmSaveSubsystem::LoadFarm()
+void UFarmSaveSubsystem::SaveFarm(int32 NewDay)
 {
-	UFarmingComponent* Farming = GetPlayerFarming();
-	if (!Farming || !UGameplayStatics::DoesSaveGameExist(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex))
+	const UFarmingComponent* Farming = GetPlayerFarming();
+	if (!Farming || !bSavingAllowed)
 	{
 		return;
 	}
@@ -302,7 +302,7 @@ void UFarmSaveSubsystem::LoadFarm()
 - Range-based `for` over containers. Use an index loop only when you need the index.
 - `auto`: only where the type is obvious from the right-hand side (`auto* Hud = Cast<AFarmHUD>(...)`), for iterators and for lambdas. Spell out the type otherwise. Write `auto*` and `const auto&` so pointers and references stay visible.
 - Lambdas: capture explicitly (`[this]`, `[Tile]`). Never capture `this` in a lambda that can outlive the object; bind delegates with `AddUObject` / `AddWeakLambda` instead.
-- `constexpr` for compile-time constants. `static constexpr` for class constants (`UFarmSaveGame::SlotName`).
+- `constexpr` for compile-time constants. `static constexpr` for class constants (`UFarmSaveGame::CurrentVersion`).
 - `FMath` is the normal choice for math, especially on engine types (`FVector`, `FRotator`) and for helpers like `FMath::Clamp` and `FMath::Lerp`. Use `<cmath>` only for something `FMath` lacks.
 - No exceptions and no RTTI; the engine builds without them.
 

@@ -39,7 +39,7 @@ Contents
 
 ## 1. Saving and loading
 
-**Status:** built for the prototype (`UFarmSaveSubsystem`, `UFarmSaveGame`). The safety rules in [Architecture.md, section 6](Architecture.md#6-saving) are roadmap items in milestone 2.
+**Status:** built (`UFarmSaveSubsystem`, `UFarmSaveGame`, the structs in `FarmSaveData.h`), with the safety rules in [Architecture.md, section 6](Architecture.md#6-saving): save version 1 with an upgrade from version 0, owners saving their own parts, tiles by coordinates with crop IDs, two alternating slots, and a save that can't be read left untouched with saving off. The decision of what to load (`UFarmSaveSubsystem::DecideLoad`) is a static function, so its rules are tested without touching the player's save files.
 
 **References:** Epic's "Saving and Loading Your Game" (`USaveGame`, `UGameplayStatics::SaveGameToSlot` and `AsyncSaveGameToSlot`); `UPROPERTY(SaveGame)` with `FObjectAndNameAsStringProxyArchive` (`ArIsSaveGame = true`) for serializing marked properties; `FCustomVersion` for versioned binary data. Lyra only saves settings (`ULyraSettingsShared`, a `USaveGame` written with `AsyncSaveGameToSlot`), not the world, so this guide relies on Epic's documentation more than on Lyra.
 
@@ -58,6 +58,7 @@ Contents
 
 - `UPROPERTY(SaveGame)` with archive serialization is tempting for "save every actor automatically", but it couples the save layout to class layouts and breaks on renames. Use it at most inside an owner's own save struct, not across the world.
 - Saving a world subsystem's state that should survive a map change. Slot choice moves to a game-instance subsystem first ([Architecture.md, section 6](Architecture.md#6-saving)).
+- **Changing the default value of a saved property.** Unreal leaves a property out of the save file when its value equals the default, so an old save would read the new default instead of the value it had. Keep defaults of saved properties as they are; add a new property (and a version step) instead.
 - Testing only the round trip. Also test an old version, a corrupt file and a newer version.
 
 ## 2. Content and the Asset Manager

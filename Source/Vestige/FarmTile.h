@@ -13,6 +13,7 @@ class UStaticMesh;
 class UStaticMeshComponent;
 class UMaterialInstanceDynamic;
 class UMaterialInterface;
+struct FFarmTileSaveData;
 
 /**
  * One square of farmland, in the world: it can be tilled, planted, watered and harvested.
@@ -46,8 +47,14 @@ public:
 	/** The crop growing here, or nullptr if nothing is planted. */
 	const UFarmCropData* GetCrop() const { return TileState.GetCrop(); }
 
-	/** Puts the tile straight into a saved state, as FFarmTileState::Restore does, and shows it. */
-	void RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays, const UFarmCropData* SavedCrop);
+	/** The tile's state and its crop's ContentId, for saving. The grid adds the tile's coordinates. */
+	FFarmTileSaveData GetSaveData() const;
+
+	/**
+	 * Puts the tile straight into a saved state, as FFarmTileState::Restore does, and shows it. SavedCrop is the crop
+	 * Data.CropId names, already loaded, or nullptr if there is none or it no longer exists.
+	 */
+	void RestoreFromSaveData(const FFarmTileSaveData& Data, const UFarmCropData* SavedCrop);
 
 protected:
 	virtual void BeginPlay() override;

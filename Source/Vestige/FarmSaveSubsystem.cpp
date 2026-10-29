@@ -4,39 +4,156 @@
 #include "FarmSaveSubsystem.h"
 
 #include "Engine/World.h"
+#include "FarmContentData.h"
+#include "FarmCropData.h"
 #include "FarmDayCycle.h"
-#include "FarmGrid.h"
 #include "FarmFeedbackSubsystem.h"
+#include "FarmGrid.h"
 #include "FarmingComponent.h"
 #include "FarmSaveGame.h"
-#include "FarmTile.h"
-#include "FarmToolData.h"
 #include "GameFramework/Pawn.h"
-#include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
-#include "TimerManager.h"
+#include "ProfilingDebugging/CpuProfilerTrace.h"
+#include "Vestige.h"
 
 #define LOCTEXT_NAMESPACE "FarmSaveSubsystem"
 
-FName UFarmSaveSubsystem::GetSavedToolId(const UFarmSaveGame& Save)
+namespace FarmSaveUpgrade
 {
-	if (!Save.CurrentToolId.IsNone())
+	/** Version 0 saves could only plant the seed crop, and the seed crop was always the turnip. */
+	const FName Version0CropId(TEXT("Base.Turnip"));
+
+	/** The ContentId of the tool in hand in a version 0 save, which may only have the old tool enum. */
+	FName GetVersion0ToolId(const UFarmSaveGame& Save)
 	{
-		return Save.CurrentToolId;
+		if (!Save.CurrentToolId.IsNone())
+		{
+			return Save.CurrentToolId;
+		}
+
+		switch (Save.CurrentTool)
+		{
+		case EFarmTool::Hoe:
+			return TEXT("Base.Hoe");
+		case EFarmTool::Seeds:
+			return TEXT("Base.Seeds");
+		case EFarmTool::WateringCan:
+			return TEXT("Base.WateringCan");
+		case EFarmTool::Hand:
+			return TEXT("Base.Hand");
+		}
+		return NAME_None;
 	}
 
-	switch (Save.CurrentTool)
+	/** Moves the flat version 0 fields into the owners' structs and gives tiles their coordinates and crop. */
+	bool UpgradeFromVersion0(UFarmSaveGame& Save, int32 GridWidth)
 	{
-	case EFarmTool::Hoe:
-		return TEXT("Base.Hoe");
-	case EFarmTool::Seeds:
-		return TEXT("Base.Seeds");
-	case EFarmTool::WateringCan:
-		return TEXT("Base.WateringCan");
-	case EFarmTool::Hand:
-		return TEXT("Base.Hand");
+		if (GridWidth <= 0)
+		{
+			return false;
+		}
+
+		Save.Clock.Day = Save.Day;
+		Save.Clock.TimeOfDay = Save.TimeOfDay;
+		Save.Farming.Seeds = Save.Seeds;
+		Save.Farming.HarvestedCrops = Save.HarvestedCrops;
+		Save.Farming.CurrentToolId = GetVersion0ToolId(Save);
+
+		// Version 0 wrote every tile in grid order, row by row, into a grid of the same width.
+		for (int32 Index = 0; Index < Save.Tiles.Num(); ++Index)
+		{
+			FFarmTileSaveData& Tile = Save.Tiles[Index];
+			Tile.Coordinates = FIntPoint(Index % GridWidth, Index / GridWidth);
+			Tile.CropId = Tile.State == EFarmTileState::Planted ? Version0CropId : NAME_None;
+		}
+		Save.SaveVersion = 1;
+		return true;
 	}
-	return NAME_None;
+}
+
+namespace FarmSaveSlots
+{
+	FFarmSaveSlotRead ReadSlot(const TCHAR* SlotName)
+	{
+		FFarmSaveSlotRead Read;
+		Read.bExists = UGameplayStatics::DoesSaveGameExist(SlotName, UFarmSaveGame::UserIndex);
+		if (Read.bExists)
+		{
+			Read.Save = Cast<UFarmSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, UFarmSaveGame::UserIndex));
+		}
+		return Read;
+	}
+
+	/** Loads each crop the saved tiles name, once, with its meshes. Crops that no longer exist are left out. */
+	TMap<FName, const UFarmCropData*> LoadSavedCrops(const TArray<FFarmTileSaveData>& SavedTiles)
+	{
+		TMap<FName, const UFarmCropData*> Crops;
+		TSet<FName> Missing;
+		for (const FFarmTileSaveData& Tile : SavedTiles)
+		{
+			if (Tile.CropId.IsNone() || Crops.Contains(Tile.CropId) || Missing.Contains(Tile.CropId))
+			{
+				continue;
+			}
+
+			// Loading at play start, before the player can act, is when waiting for a load is allowed.
+			const FPrimaryAssetId CropAssetId(UFarmCropData::AssetType, Tile.CropId);
+			if (const UFarmCropData* Crop = Cast<UFarmCropData>(UFarmContentData::LoadWithVisuals(CropAssetId)))
+			{
+				Crops.Add(Tile.CropId, Crop);
+			}
+			else
+			{
+				Missing.Add(Tile.CropId);
+			}
+		}
+		return Crops;
+	}
+}
+
+FFarmLoadDecision UFarmSaveSubsystem::DecideLoad(TConstArrayView<FFarmSaveSlotRead> Slots)
+{
+	FFarmLoadDecision Decision;
+	bool bAnyFile = false;
+	for (int32 Slot = 0; Slot < Slots.Num(); ++Slot)
+	{
+		const FFarmSaveSlotRead& Read = Slots[Slot];
+		bAnyFile |= Read.bExists;
+		if (!Read.Save)
+		{
+			continue;
+		}
+
+		// Loading an older slot and then writing over the newer one would lose the newer game's progress.
+		if (Read.Save->SaveVersion > UFarmSaveGame::CurrentVersion)
+		{
+			return {EFarmLoadOutcome::RefuseNewer, Slot};
+		}
+		if (Decision.Slot == INDEX_NONE || Read.Save->SaveSequence > Slots[Decision.Slot].Save->SaveSequence)
+		{
+			Decision = {EFarmLoadOutcome::Load, Slot};
+		}
+	}
+
+	if (Decision.Slot == INDEX_NONE && bAnyFile)
+	{
+		Decision.Outcome = EFarmLoadOutcome::RefuseUnreadable;
+	}
+	return Decision;
+}
+
+int32 UFarmSaveSubsystem::GetSlotToWrite(int32 NewestSlot)
+{
+	return NewestSlot == 0 ? 1 : 0;
+}
+
+bool UFarmSaveSubsystem::UpgradeToCurrentVersion(UFarmSaveGame& Save, int32 GridWidth)
+{
+	if (Save.SaveVersion == 0 && !FarmSaveUpgrade::UpgradeFromVersion0(Save, GridWidth))
+	{
+		return false;
+	}
+	return Save.SaveVersion == UFarmSaveGame::CurrentVersion;
 }
 
 bool UFarmSaveSubsystem::DoesSupportWorldType(const EWorldType::Type WorldType) const
@@ -48,22 +165,42 @@ void UFarmSaveSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
 
-	// This runs before the actors' BeginPlay, so wait a tick for the grid's tiles and the player.
-	InWorld.GetTimerManager().SetTimerForNextTick(this, &UFarmSaveSubsystem::BindAndLoad);
+	// This runs before the actors' BeginPlay. The world broadcasts OnWorldBeginPlay once all of them have run, so the
+	// grid's tiles and the farmer's toolbar are ready by then.
+	WorldBeginPlayHandle = InWorld.OnWorldBeginPlay.AddUObject(this, &UFarmSaveSubsystem::BindAndLoad);
+}
+
+void UFarmSaveSubsystem::Deinitialize()
+{
+	if (UWorld* World = GetWorld())
+	{
+		World->OnWorldBeginPlay.Remove(WorldBeginPlayHandle);
+	}
+	if (DayCycle)
+	{
+		DayCycle->OnNewDayFinished.RemoveAll(this);
+	}
+	Super::Deinitialize();
 }
 
 void UFarmSaveSubsystem::StartNewGame()
 {
-	UGameplayStatics::DeleteGameInSlot(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex);
+	for (const TCHAR* SlotName : UFarmSaveGame::SlotNames)
+	{
+		UGameplayStatics::DeleteGameInSlot(SlotName, UFarmSaveGame::UserIndex);
+	}
 	UGameplayStatics::OpenLevel(GetWorld(), FName(*UGameplayStatics::GetCurrentLevelName(GetWorld())));
 }
 
 void UFarmSaveSubsystem::BindAndLoad()
 {
+	GetWorld()->OnWorldBeginPlay.Remove(WorldBeginPlayHandle);
+
 	Grid = AFarmGrid::Find(GetWorld());
 	DayCycle = AFarmDayCycle::Find(GetWorld());
 	if (!Grid || !DayCycle)
 	{
+		UE_LOG(LogVestige, Warning, TEXT("Saving is off in %s: it needs a FarmGrid and a FarmDayCycle."), *GetWorld()->GetMapName());
 		return;
 	}
 
@@ -73,69 +210,150 @@ void UFarmSaveSubsystem::BindAndLoad()
 
 void UFarmSaveSubsystem::SaveFarm(int32 NewDay)
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(UFarmSaveSubsystem::SaveFarm);
+
 	const UFarmingComponent* Farming = GetPlayerFarming();
 	if (!Farming)
 	{
 		return;
 	}
-
-	UFarmSaveGame* Save = Cast<UFarmSaveGame>(UGameplayStatics::CreateSaveGameObject(UFarmSaveGame::StaticClass()));
-	Save->Day = DayCycle->GetCurrentDay();
-	Save->TimeOfDay = DayCycle->GetTimeOfDay();
-	Save->Seeds = Farming->GetSeeds();
-	Save->HarvestedCrops = Farming->GetHarvestedCrops();
-	const UFarmToolData* Tool = Farming->GetCurrentTool();
-	Save->CurrentToolId = Tool ? Tool->GetContentId() : NAME_None;
-	for (const AFarmTile* Tile : Grid->GetTiles())
+	if (!bSavingAllowed)
 	{
-		FFarmTileSaveData& TileData = Save->Tiles.AddDefaulted_GetRef();
-		if (Tile)
-		{
-			TileData.State = Tile->GetState();
-			TileData.bWatered = Tile->IsWatered();
-			TileData.GrowthDays = Tile->GetGrowthDays();
-		}
+		UE_LOG(LogVestige, Warning, TEXT("Not saving day %d: the save couldn't be loaded, so it is kept as it is."), NewDay);
+		return;
 	}
 
-	const bool bSaved = UGameplayStatics::SaveGameToSlot(Save, UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex);
-	UFarmFeedbackSubsystem::Notify(GetWorld(), bSaved ? LOCTEXT("Saved", "Game saved.") : LOCTEXT("SaveFailed", "Couldn't save the game."));
+	UFarmSaveGame* Save = Cast<UFarmSaveGame>(UGameplayStatics::CreateSaveGameObject(UFarmSaveGame::StaticClass()));
+	Save->SaveVersion = UFarmSaveGame::CurrentVersion;
+	Save->SaveSequence = NewestSequence + 1;
+	Save->Clock = DayCycle->GetSaveData();
+	Save->Farming = Farming->GetSaveData();
+	Save->Tiles = Grid->GetTilesSaveData();
+
+	const int32 Slot = GetSlotToWrite(NewestSlot);
+	if (!UGameplayStatics::SaveGameToSlot(Save, UFarmSaveGame::SlotNames[Slot], UFarmSaveGame::UserIndex))
+	{
+		UE_LOG(LogVestige, Error, TEXT("Couldn't write the save to slot %s. The previous save is kept."), UFarmSaveGame::SlotNames[Slot]);
+		UFarmFeedbackSubsystem::Notify(GetWorld(), LOCTEXT("SaveFailed", "Couldn't save the game. The previous save is kept."));
+		return;
+	}
+
+	NewestSlot = Slot;
+	NewestSequence = Save->SaveSequence;
+	UFarmFeedbackSubsystem::Notify(GetWorld(), LOCTEXT("Saved", "Game saved."));
 }
 
 void UFarmSaveSubsystem::LoadFarm()
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(UFarmSaveSubsystem::LoadFarm);
+
 	UFarmingComponent* Farming = GetPlayerFarming();
-	if (!Farming || !UGameplayStatics::DoesSaveGameExist(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex))
+	if (!Farming)
 	{
 		return;
 	}
 
-	const UFarmSaveGame* Save = Cast<UFarmSaveGame>(UGameplayStatics::LoadGameFromSlot(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex));
-	if (!Save)
+	TArray<FFarmSaveSlotRead, TInlineAllocator<UE_ARRAY_COUNT(UFarmSaveGame::SlotNames)>> Slots;
+	for (const TCHAR* SlotName : UFarmSaveGame::SlotNames)
 	{
-		UFarmFeedbackSubsystem::Notify(GetWorld(), LOCTEXT("LoadFailed", "Couldn't load the save. Press F9 to start a new game."));
-		return;
+		Slots.Add(FarmSaveSlots::ReadSlot(SlotName));
 	}
 
-	DayCycle->RestoreClock(Save->Day, Save->TimeOfDay);
-	Farming->RestoreInventory(Save->Seeds, Save->HarvestedCrops);
-	Farming->RestoreCurrentTool(GetSavedToolId(*Save));
-
-	// Saves don't record which crop a tile grows yet. Every crop so far is the seed crop, so planted tiles get that.
-	// TODO: Save each planted tile's crop ContentId once saves store content IDs.
-	const UFarmCropData* SavedCrop = Farming->GetSeedCrop();
-
-	// If the grid's size changed since saving, tiles beyond the saved ones stay as grass.
-	const TArray<TObjectPtr<AFarmTile>>& Tiles = Grid->GetTiles();
-	for (int32 Index = 0; Index < FMath::Min(Tiles.Num(), Save->Tiles.Num()); ++Index)
+	for (int32 Slot = 0; Slot < Slots.Num(); ++Slot)
 	{
-		if (AFarmTile* Tile = Tiles[Index])
+		if (Slots[Slot].bExists && !Slots[Slot].Save)
 		{
-			const FFarmTileSaveData& TileData = Save->Tiles[Index];
-			Tile->RestoreState(TileData.State, TileData.bWatered, TileData.GrowthDays, SavedCrop);
+			UE_LOG(LogVestige, Warning, TEXT("Save slot %s couldn't be read as a farm save."), UFarmSaveGame::SlotNames[Slot]);
 		}
 	}
 
-	UFarmFeedbackSubsystem::Notify(GetWorld(), FText::FormatNamed(LOCTEXT("Loaded", "Welcome back. Day {Day}."), TEXT("Day"), Save->Day));
+	const FFarmLoadDecision Decision = DecideLoad(Slots);
+	switch (Decision.Outcome)
+	{
+	case EFarmLoadOutcome::NewGame:
+		return;
+
+	case EFarmLoadOutcome::RefuseUnreadable:
+		UE_LOG(LogVestige, Error, TEXT("No save slot could be read. The files are left as they are and saving is off."));
+		RefuseToSave(LOCTEXT(
+			"SaveUnreadable", "The save couldn't be read. It is kept as it is, and the game won't save until you start a new game."));
+		return;
+
+	case EFarmLoadOutcome::RefuseNewer:
+		UE_LOG(LogVestige, Error, TEXT("Slot %s holds a save from a newer version (%d, this build writes %d). Saving is off."),
+			UFarmSaveGame::SlotNames[Decision.Slot], Slots[Decision.Slot].Save->SaveVersion, UFarmSaveGame::CurrentVersion);
+		RefuseToSave(LOCTEXT("SaveTooNew",
+			"The save is from a newer version of the game. It is kept as it is, and the game won't save until you start a new game."));
+		return;
+
+	case EFarmLoadOutcome::Load:
+		break;
+	}
+
+	UFarmSaveGame& Save = *Slots[Decision.Slot].Save;
+	const int32 SavedVersion = Save.SaveVersion;
+	if (SavedVersion < UFarmSaveGame::CurrentVersion)
+	{
+		BackUpBeforeUpgrade(Decision.Slot, SavedVersion);
+		if (!UpgradeToCurrentVersion(Save, Grid->GetWidth()))
+		{
+			UE_LOG(LogVestige, Error, TEXT("The save in slot %s (version %d) couldn't be upgraded. Saving is off."),
+				UFarmSaveGame::SlotNames[Decision.Slot], SavedVersion);
+			RefuseToSave(LOCTEXT(
+				"SaveNotUpgraded", "The save couldn't be read. It is kept as it is, and the game won't save until you start a new game."));
+			return;
+		}
+	}
+
+	UE_LOG(LogVestige, Log, TEXT("Loading day %d from save slot %s (version %d, save %d)."), Save.Clock.Day,
+		UFarmSaveGame::SlotNames[Decision.Slot], SavedVersion, Save.SaveSequence);
+	NewestSlot = Decision.Slot;
+	NewestSequence = Save.SaveSequence;
+	if (ApplySave(Save, *Farming) > 0)
+	{
+		UFarmFeedbackSubsystem::Notify(
+			GetWorld(), LOCTEXT("ContentMissing", "Some saved things no longer exist in the game and were left out."));
+	}
+	UFarmFeedbackSubsystem::Notify(
+		GetWorld(), FText::FormatNamed(LOCTEXT("Loaded", "Welcome back. Day {Day}."), TEXT("Day"), Save.Clock.Day));
+}
+
+int32 UFarmSaveSubsystem::ApplySave(const UFarmSaveGame& Save, UFarmingComponent& Farming)
+{
+	int32 SkippedCount = 0;
+	DayCycle->RestoreFromSaveData(Save.Clock);
+	if (!Farming.RestoreFromSaveData(Save.Farming))
+	{
+		++SkippedCount;
+	}
+	SkippedCount += Grid->RestoreTilesFromSaveData(Save.Tiles, FarmSaveSlots::LoadSavedCrops(Save.Tiles));
+	return SkippedCount;
+}
+
+void UFarmSaveSubsystem::RefuseToSave(const FText& Reason)
+{
+	bSavingAllowed = false;
+	UFarmFeedbackSubsystem::Notify(GetWorld(), Reason);
+}
+
+void UFarmSaveSubsystem::BackUpBeforeUpgrade(int32 Slot, int32 Version) const
+{
+	const FString BackupSlot = FString::Printf(TEXT("%s_Version%d"), UFarmSaveGame::SlotNames[Slot], Version);
+	if (UGameplayStatics::DoesSaveGameExist(BackupSlot, UFarmSaveGame::UserIndex))
+	{
+		return;
+	}
+
+	TArray<uint8> Bytes;
+	if (!UGameplayStatics::LoadDataFromSlot(Bytes, UFarmSaveGame::SlotNames[Slot], UFarmSaveGame::UserIndex)
+		|| !UGameplayStatics::SaveDataToSlot(Bytes, BackupSlot, UFarmSaveGame::UserIndex))
+	{
+		UE_LOG(LogVestige, Warning, TEXT("Couldn't back up the version %d save in slot %s before upgrading it."), Version,
+			UFarmSaveGame::SlotNames[Slot]);
+		return;
+	}
+	UE_LOG(LogVestige, Log, TEXT("Backed up the version %d save in slot %s to %s before upgrading it."), Version,
+		UFarmSaveGame::SlotNames[Slot], *BackupSlot);
 }
 
 UFarmingComponent* UFarmSaveSubsystem::GetPlayerFarming() const

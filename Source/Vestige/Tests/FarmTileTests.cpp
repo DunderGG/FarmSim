@@ -6,6 +6,7 @@
 #include "Components/ActorTestSpawner.h"
 #include "CQTest.h"
 #include "FarmCropData.h"
+#include "FarmSaveData.h"
 #include "FarmTile.h"
 
 // A namespace keeps the fixture's short name from hiding other declarations in unity builds.
@@ -77,7 +78,11 @@ namespace FarmTileTests
 		{
 			AFarmTile& FarmTile = Spawner.SpawnActor<AFarmTile>();
 
-			FarmTile.RestoreState(EFarmTileState::Planted, true, 1, nullptr);
+			FFarmTileSaveData Saved;
+			Saved.State = EFarmTileState::Planted;
+			Saved.bWatered = true;
+			Saved.GrowthDays = 1;
+			FarmTile.RestoreFromSaveData(Saved, nullptr);
 
 			ASSERT_THAT(IsTrue(FarmTile.GetState() == EFarmTileState::Tilled));
 			ASSERT_THAT(IsTrue(FarmTile.GetGrowthDays() == 0));

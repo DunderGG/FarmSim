@@ -11,6 +11,7 @@
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "FarmActorLookup.h"
+#include "FarmSaveData.h"
 #include "Vestige.h"
 
 namespace FarmDayCycleLighting
@@ -98,10 +99,18 @@ void AFarmDayCycle::StartNextDay()
 	OnNewDayFinished.Broadcast(CurrentDay);
 }
 
-void AFarmDayCycle::RestoreClock(int32 SavedDay, float SavedTimeOfDay)
+FFarmClockSaveData AFarmDayCycle::GetSaveData() const
 {
-	CurrentDay = FMath::Max(1, SavedDay);
-	TimeOfDay = FMath::Clamp(SavedTimeOfDay, DayStartHour, DayEndHour);
+	FFarmClockSaveData Data;
+	Data.Day = CurrentDay;
+	Data.TimeOfDay = TimeOfDay;
+	return Data;
+}
+
+void AFarmDayCycle::RestoreFromSaveData(const FFarmClockSaveData& Data)
+{
+	CurrentDay = FMath::Max(1, Data.Day);
+	TimeOfDay = FMath::Clamp(Data.TimeOfDay, DayStartHour, DayEndHour);
 	bDayEndReached = false;
 
 	// A clock restored at DayEndHour reaches the end on the next tick, so OnDayEndReached isn't lost.

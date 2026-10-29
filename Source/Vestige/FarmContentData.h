@@ -32,6 +32,11 @@ public:
 	FName GetContentId() const { return ContentId; }
 	const FText& GetDisplayName() const { return DisplayName; }
 
+#if WITH_DEV_AUTOMATION_TESTS
+	/** For tests only. Content assets get their ID in the editor, and it never changes after that. */
+	void SetContentIdForTests(FName InContentId) { ContentId = InContentId; }
+#endif
+
 protected:
 	/** The primary asset type of this kind of content, as registered in Config/DefaultGame.ini. */
 	virtual FPrimaryAssetType GetContentType() const PURE_VIRTUAL(UFarmContentData::GetContentType, return FPrimaryAssetType(););

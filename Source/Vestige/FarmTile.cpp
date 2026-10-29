@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
 #include "FarmCropData.h"
+#include "FarmSaveData.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -104,9 +105,19 @@ void AFarmTile::AdvanceDay()
 	RefreshVisuals();
 }
 
-void AFarmTile::RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays, const UFarmCropData* SavedCrop)
+FFarmTileSaveData AFarmTile::GetSaveData() const
 {
-	TileState.Restore(SavedState, bSavedWatered, SavedGrowthDays, SavedCrop);
+	FFarmTileSaveData Data;
+	Data.State = GetState();
+	Data.bWatered = IsWatered();
+	Data.GrowthDays = GetGrowthDays();
+	Data.CropId = GetCrop() ? GetCrop()->GetContentId() : NAME_None;
+	return Data;
+}
+
+void AFarmTile::RestoreFromSaveData(const FFarmTileSaveData& Data, const UFarmCropData* SavedCrop)
+{
+	TileState.Restore(Data.State, Data.bWatered, Data.GrowthDays, SavedCrop);
 	RefreshVisuals();
 }
 

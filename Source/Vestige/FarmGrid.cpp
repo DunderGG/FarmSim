@@ -7,7 +7,9 @@
 #include "Engine/World.h"
 #include "FarmActorLookup.h"
 #include "FarmDayCycle.h"
+#include "FarmSaveData.h"
 #include "FarmTile.h"
+#include "ProfilingDebugging/CpuProfilerTrace.h"
 #include "Vestige.h"
 
 namespace FarmGridEditor
@@ -113,15 +115,63 @@ void AFarmGrid::SpawnTiles()
 AFarmTile* AFarmGrid::GetTileAtLocation(const FVector& WorldLocation) const
 {
 	const FVector Local = GetActorTransform().InverseTransformPosition(WorldLocation);
-	const int32 X = FMath::FloorToInt(Local.X / TileSize);
-	const int32 Y = FMath::FloorToInt(Local.Y / TileSize);
-	if (X < 0 || X >= Width || Y < 0 || Y >= Height)
+	return GetTileAt(FIntPoint(FMath::FloorToInt(Local.X / TileSize), FMath::FloorToInt(Local.Y / TileSize)));
+}
+
+AFarmTile* AFarmGrid::GetTileAt(const FIntPoint& Coordinates) const
+{
+	if (Coordinates.X < 0 || Coordinates.X >= Width || Coordinates.Y < 0 || Coordinates.Y >= Height)
 	{
 		return nullptr;
 	}
 
-	const int32 Index = Y * Width + X;
+	const int32 Index = Coordinates.Y * Width + Coordinates.X;
 	return Tiles.IsValidIndex(Index) ? Tiles[Index].Get() : nullptr;
+}
+
+TArray<FFarmTileSaveData> AFarmGrid::GetTilesSaveData() const
+{
+	TRACE_CPUPROFILER_EVENT_SCOPE(AFarmGrid::GetTilesSaveData);
+
+	TArray<FFarmTileSaveData> SavedTiles;
+	SavedTiles.Reserve(Tiles.Num());
+	for (int32 Index = 0; Index < Tiles.Num(); ++Index)
+	{
+		if (const AFarmTile* Tile = Tiles[Index])
+		{
+			FFarmTileSaveData& Data = SavedTiles.Add_GetRef(Tile->GetSaveData());
+			Data.Coordinates = FIntPoint(Index % Width, Index / Width);
+		}
+	}
+	return SavedTiles;
+}
+
+int32 AFarmGrid::RestoreTilesFromSaveData(const TArray<FFarmTileSaveData>& SavedTiles, const TMap<FName, const UFarmCropData*>& Crops)
+{
+	TRACE_CPUPROFILER_EVENT_SCOPE(AFarmGrid::RestoreTilesFromSaveData);
+
+	int32 SkippedCount = 0;
+	for (const FFarmTileSaveData& Data : SavedTiles)
+	{
+		AFarmTile* Tile = GetTileAt(Data.Coordinates);
+		if (!Tile)
+		{
+			UE_LOG(LogVestige, Warning, TEXT("The save has a tile at %s, outside %s, so it was skipped."), *Data.Coordinates.ToString(),
+				*GetName());
+			++SkippedCount;
+			continue;
+		}
+
+		const UFarmCropData* SavedCrop = Crops.FindRef(Data.CropId);
+		if (!Data.CropId.IsNone() && !SavedCrop)
+		{
+			UE_LOG(LogVestige, Warning, TEXT("The save has a crop %s that no longer exists, so tile %s is empty."), *Data.CropId.ToString(),
+				*Data.Coordinates.ToString());
+			++SkippedCount;
+		}
+		Tile->RestoreFromSaveData(Data, SavedCrop);
+	}
+	return SkippedCount;
 }
 
 void AFarmGrid::AdvanceTiles(int32 NewDay)

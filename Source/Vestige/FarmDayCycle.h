@@ -10,6 +10,7 @@
 class ADirectionalLight;
 class ASkyLight;
 class UPostProcessComponent;
+struct FFarmClockSaveData;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnFarmNewDay, int32 /* Day */);
 
@@ -41,8 +42,14 @@ public:
 	/** Ends the current day and sets the clock to the next morning, then broadcasts OnNewDay. */
 	void StartNextDay();
 
-	/** Sets the day and clock from a save without broadcasting OnNewDay. */
-	void RestoreClock(int32 SavedDay, float SavedTimeOfDay);
+	/** The day and clock, for saving. */
+	FFarmClockSaveData GetSaveData() const;
+
+	/**
+	 * Sets the day and clock from a save without broadcasting anything. The day becomes at least 1 and the clock is
+	 * clamped between DayStartHour and DayEndHour; a clock at DayEndHour still broadcasts OnDayEndReached on its next tick.
+	 */
+	void RestoreFromSaveData(const FFarmClockSaveData& Data);
 
 	int32 GetCurrentDay() const { return CurrentDay; }
 
