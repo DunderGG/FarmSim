@@ -1,6 +1,6 @@
 # Project Vestige architecture
 
-How the game is put together and why. [CodingGuidelines.md](CodingGuidelines.md) covers how the code looks. This document covers how classes, systems and data fit together.
+How the game is put together and why. [CodingGuidelines.md](CodingGuidelines.md) covers how the code looks. This document covers how classes, systems and data fit together. [Systems.md](Systems.md) has a best-practice guide for each game system (saving, input, UI, the Gameplay Ability System, AI and so on).
 
 It has three parts:
 
@@ -258,7 +258,7 @@ What content does to performance is decided when it is made, so these apply to a
 
 ## 11. Patterns borrowed from Lyra
 
-Lyra is Epic's reference for a well-structured UE5 game. It is built for a large team and multiplayer, so **we adopt a Lyra pattern when we have a concrete need for it, not before.**
+Lyra is Epic's reference for a well-structured UE5 game. It is built for a large team and multiplayer, so **we adopt a Lyra pattern when we have a concrete need for it, not before.** When we do, we follow how Lyra and Epic's documentation build it, as written down per system in [Systems.md](Systems.md).
 
 | Lyra pattern | Status in Project Vestige |
 |---|---|
@@ -270,7 +270,7 @@ Lyra is Epic's reference for a well-structured UE5 game. It is built for a large
 | Input actions mapped to tags through data assets | **Later.** Input actions are created in code today. Move to `IA_` / `IMC_` assets when input grows. |
 | Gameplay Message Router | **Not yet.** Plain delegates are enough. |
 | Game Feature plugins and modular gameplay actors (actors that accept components from plugins) | **Later**, as a likely building block for mod loading ([section 12](#12-designing-for-mods)). |
-| Gameplay Ability System, Experiences, Common UI, replication | **Not adopted.** Each adds a lot of setup that a single-player prototype doesn't need. Revisit when a feature calls for one. |
+| Gameplay Ability System, Experiences, Common UI, replication | **Not adopted.** Each adds a lot of setup that a single-player prototype doesn't need. Revisit when a feature calls for one. The Gameplay Ability System is the likely first: [Systems.md, section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system) says when and how to adopt it, and Common UI is covered in [section 6](Systems.md#6-user-interface). |
 
 ## 12. Designing for mods
 
@@ -405,6 +405,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | Every game system has a best-practice guide in `Systems.md`, based on Epic's documentation and Lyra. A system without a guide gets one, approved by David, before its first code; adopting an engine framework is logged here | Systems built ad hoc drift from engine practice and are expensive to fix later. Writing the guide first makes us read how Epic and Lyra solve the problem, and records what we adopt and skip before code depends on it |
 | 2026-10-29 | Performance is a requirement with a budget: 60 fps at 1080p, High scalability, on a provisional mid-range target PC; no frame over 33 ms during play; 2 ms per frame for our gameplay code; the new day within 100 ms. Always-on performance rules in `CodingGuidelines.md` section 12 apply to every change; optimizations that cost readability still need a measurement. Expensive rendering features are scalability options. A performance pass with a recorded baseline ends every milestone | Unreal Engine 5 projects often end up stuttering or demanding high-end hardware because of early choices about ticking, loading, references and rendering features. A budget makes those choices checkable, and cheap rules applied from the start avoid a late, expensive clean-up. The target hardware is provisional until David confirms it |
 | 2026-10-28 | `EFarmTool` replaced by tool data. The farming component owns the toolbar: `ToolbarIds`, a list of `FarmTool` IDs set on the farmer Blueprint, loaded with their visuals at `BeginPlay` into an `FFarmToolbar`. A missing tool leaves its slot empty, with a warning. The character binds keys 1 to 9 to slots and shows the held mesh of whatever tool is in hand. The HUD shows the tool's display name and builds its key hints from the toolbar. Saves store the tool in hand as its `ContentId` (`CurrentToolId`). Saves made before this only have the old `EFarmTool` value, which stays in `FarmSaveGame.h` and is mapped to the base tool IDs when loading. There is still no save version number | The toolbar is per player, so it belongs with the other tool state, while input stays on the character. Keeping the slot rules in a plain struct lets them be tested without a level. Mapping the old enum keeps existing saves loading the right tool. An empty `CurrentToolId` already marks a save as older, so a version number can wait for its own roadmap item |
 | 2026-10-28 | Tools are `UFarmToolData` primary data assets of type `FarmTool`, scanned in `/Game/Farm/Tools` and always cooked. What a tool does is an `EFarmToolAction` enum (till, plant, water, harvest), not a gameplay tag. The held mesh is a soft reference in the `Visuals` bundle. There is no per-tool grip offset: the farmer Blueprint's `HeldTool` component keeps the one hand transform it has today. `StaminaCost` is defined but unused until stamina exists | The actions are fixed mechanics that code switches on, which is what enums are for ([section 12](#12-designing-for-mods), rule 2). The compiler then flags a missing case, and modders combine actions rather than invent new ones. A per-tool offset can move into the asset when a second held mesh needs a different grip |

@@ -309,6 +309,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 
 Collected from the other documents. Each one is settled in its own document and decision log.
 
+- **Stamina and the Gameplay Ability System:** whether stamina, its costs and the late-night drain are the first use of the Gameplay Ability System or a small stamina component, before milestone 2's stamina work starts. ([Systems.md](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system))
 - **Land health:** one value per map or varying across it, how fast it changes, and whether damage spreads. ([GameDesign.md](GameDesign.md#15-open-questions))
 - **Energy balance:** how much charge panels give and machines use. ([GameDesign.md](GameDesign.md#15-open-questions))
 - **Mutated crops:** which effects are good and which are risky, and how often normal crops mutate. ([GameDesign.md](GameDesign.md#15-open-questions))

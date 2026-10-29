@@ -1,6 +1,6 @@
 # Project Vestige coding guidelines
 
-How code in this project should look. How the systems fit together, who owns what and why, is in [Architecture.md](Architecture.md).
+How code in this project should look. How the systems fit together, who owns what and why, is in [Architecture.md](Architecture.md). How each game system (saving, input, UI, abilities, AI...) is built is in [Systems.md](Systems.md).
 
 This document builds on three sources:
 
@@ -502,6 +502,7 @@ Before committing, check:
 
 - [ ] Each change lives on the class that owns that responsibility ([section 1](#1-ownership-and-separation-of-concerns)).
 - [ ] Design changes are reflected in [Architecture.md](Architecture.md) (ownership table, decision log).
+- [ ] The change follows the guide in [Systems.md](Systems.md) for each system it touches, and the guide is updated if the system changed.
 - [ ] Names follow the prefixes, the `Farm` prefix and PascalCase, and nothing shadows a base class member.
 - [ ] Changed files are formatted with clang-format.
 - [ ] New source files start with the copyright and SPDX license header.

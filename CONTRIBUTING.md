@@ -96,6 +96,7 @@ Read these before making larger changes:
 
 - **[Docs/Architecture.md](Docs/Architecture.md)**: how the game is structured, which class owns what, the design rules, and why decisions were made. Its *Known gaps* and *Expected changes* sections are a good list of things that need doing.
 - **[Docs/CodingGuidelines.md](Docs/CodingGuidelines.md)**: how code should look, naming for code and assets, testing.
+- **[Docs/Systems.md](Docs/Systems.md)**: how each game system is built, following Epic's recommendations and the Lyra sample. Read the guide for the system you're working on.
 
 ## 4. Contributing code
 
