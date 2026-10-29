@@ -6,16 +6,12 @@
 #include "Engine/GameViewportClient.h"
 #include "Engine/World.h"
 #include "FarmDayCycle.h"
+#include "FarmFeedbackSubsystem.h"
 #include "FarmHudWidget.h"
 #include "FarmingComponent.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
-
-AFarmHUD* AFarmHUD::GetFor(const APawn* Pawn)
-{
-	const APlayerController* PlayerController = Pawn ? Cast<APlayerController>(Pawn->GetController()) : nullptr;
-	return PlayerController ? Cast<AFarmHUD>(PlayerController->GetHUD()) : nullptr;
-}
+#include "TimerManager.h"
 
 void AFarmHUD::BeginPlay()
 {
@@ -30,6 +26,10 @@ void AFarmHUD::BeginPlay()
 	DayCycle = AFarmDayCycle::Get(GetWorld());
 	PlayerOwner->OnPossessedPawnChanged.AddDynamic(this, &AFarmHUD::FollowPawn);
 	FollowPawn(nullptr, PlayerOwner->GetPawn());
+	if (UFarmFeedbackSubsystem* Feedback = GetWorld()->GetSubsystem<UFarmFeedbackSubsystem>())
+	{
+		Feedback->OnFeedback.AddUObject(this, &AFarmHUD::ShowMessage);
+	}
 
 	HudWidget = SNew(SFarmHudWidget).Hud(this);
 	Viewport->AddViewportWidgetContent(HudWidget.ToSharedRef());
@@ -40,6 +40,10 @@ void AFarmHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	if (PlayerOwner)
 	{
 		PlayerOwner->OnPossessedPawnChanged.RemoveDynamic(this, &AFarmHUD::FollowPawn);
+	}
+	if (UFarmFeedbackSubsystem* Feedback = UWorld::GetSubsystem<UFarmFeedbackSubsystem>(GetWorld()))
+	{
+		Feedback->OnFeedback.RemoveAll(this);
 	}
 	if (HudWidget)
 	{
@@ -52,23 +56,51 @@ void AFarmHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-void AFarmHUD::ShowMessage(const FString& NewMessage)
-{
-	Message = NewMessage;
-	MessageEndTime = GetWorld()->GetTimeSeconds() + MessageDuration;
-}
-
-void AFarmHUD::AppendMessage(const FString& Extra)
-{
-	ShowMessage(HasMessage() ? Message + TEXT(" ") + Extra : Extra);
-}
-
-bool AFarmHUD::HasMessage() const
-{
-	return !Message.IsEmpty() && GetWorld()->GetTimeSeconds() < MessageEndTime;
-}
-
 void AFarmHUD::FollowPawn(APawn* OldPawn, APawn* NewPawn)
 {
 	Farming = NewPawn ? NewPawn->FindComponentByClass<UFarmingComponent>() : nullptr;
+}
+
+void AFarmHUD::ShowMessage(const FText& Message)
+{
+	if (Messages.Num() >= MaxMessages)
+	{
+		Messages.RemoveAt(0);
+	}
+	Messages.Add({Message, GetWorld()->GetTimeSeconds() + MessageDuration});
+	RebuildMessagesText();
+
+	// Every message lasts as long, so the oldest fades first; one timer for it is enough.
+	if (!GetWorldTimerManager().IsTimerActive(FadeTimer))
+	{
+		GetWorldTimerManager().SetTimer(FadeTimer, this, &AFarmHUD::RemoveFadedMessages, MessageDuration);
+	}
+}
+
+void AFarmHUD::RemoveFadedMessages()
+{
+	const double Now = GetWorld()->GetTimeSeconds();
+	const int32 FadedCount = Messages.IndexOfByPredicate(
+		[Now](const FMessage& Message)
+		{
+			return Message.EndTime > Now;
+		});
+	Messages.RemoveAt(0, FadedCount == INDEX_NONE ? Messages.Num() : FadedCount);
+	RebuildMessagesText();
+
+	if (!Messages.IsEmpty())
+	{
+		GetWorldTimerManager().SetTimer(FadeTimer, this, &AFarmHUD::RemoveFadedMessages, Messages[0].EndTime - Now);
+	}
+}
+
+void AFarmHUD::RebuildMessagesText()
+{
+	TArray<FText> Lines;
+	Lines.Reserve(Messages.Num());
+	for (const FMessage& Message : Messages)
+	{
+		Lines.Add(Message.Text);
+	}
+	MessagesText = FText::Join(FText::AsCultureInvariant(TEXT("\n")), Lines);
 }

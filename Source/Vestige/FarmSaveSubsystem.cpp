@@ -6,7 +6,7 @@
 #include "Engine/World.h"
 #include "FarmDayCycle.h"
 #include "FarmGrid.h"
-#include "FarmHUD.h"
+#include "FarmFeedbackSubsystem.h"
 #include "FarmingComponent.h"
 #include "FarmSaveGame.h"
 #include "FarmTile.h"
@@ -15,6 +15,8 @@
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+
+#define LOCTEXT_NAMESPACE "FarmSaveSubsystem"
 
 FName UFarmSaveSubsystem::GetSavedToolId(const UFarmSaveGame& Save)
 {
@@ -96,10 +98,7 @@ void UFarmSaveSubsystem::SaveFarm(int32 NewDay)
 	}
 
 	const bool bSaved = UGameplayStatics::SaveGameToSlot(Save, UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex);
-	if (AFarmHUD* Hud = GetPlayerHud())
-	{
-		Hud->AppendMessage(bSaved ? TEXT("Game saved.") : TEXT("Couldn't save the game."));
-	}
+	UFarmFeedbackSubsystem::Notify(GetWorld(), bSaved ? LOCTEXT("Saved", "Game saved.") : LOCTEXT("SaveFailed", "Couldn't save the game."));
 }
 
 void UFarmSaveSubsystem::LoadFarm()
@@ -113,10 +112,7 @@ void UFarmSaveSubsystem::LoadFarm()
 	const UFarmSaveGame* Save = Cast<UFarmSaveGame>(UGameplayStatics::LoadGameFromSlot(UFarmSaveGame::SlotName, UFarmSaveGame::UserIndex));
 	if (!Save)
 	{
-		if (AFarmHUD* Hud = GetPlayerHud())
-		{
-			Hud->ShowMessage(TEXT("Couldn't load the save. Press F9 to start a new game."));
-		}
+		UFarmFeedbackSubsystem::Notify(GetWorld(), LOCTEXT("LoadFailed", "Couldn't load the save. Press F9 to start a new game."));
 		return;
 	}
 
@@ -140,10 +136,7 @@ void UFarmSaveSubsystem::LoadFarm()
 		}
 	}
 
-	if (AFarmHUD* Hud = GetPlayerHud())
-	{
-		Hud->ShowMessage(FString::Printf(TEXT("Welcome back. Day %d."), Save->Day));
-	}
+	UFarmFeedbackSubsystem::Notify(GetWorld(), FText::FormatNamed(LOCTEXT("Loaded", "Welcome back. Day {Day}."), TEXT("Day"), Save->Day));
 }
 
 UFarmingComponent* UFarmSaveSubsystem::GetPlayerFarming() const
@@ -152,7 +145,4 @@ UFarmingComponent* UFarmSaveSubsystem::GetPlayerFarming() const
 	return Pawn ? Pawn->FindComponentByClass<UFarmingComponent>() : nullptr;
 }
 
-AFarmHUD* UFarmSaveSubsystem::GetPlayerHud() const
-{
-	return AFarmHUD::GetFor(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-}
+#undef LOCTEXT_NAMESPACE

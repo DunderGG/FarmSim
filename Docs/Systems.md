@@ -335,7 +335,7 @@ Who owns what: `AFarmPlayerState` owns the ability system component; `UFarmStami
 - **Niagara systems use effect types** with scalability settings and culling distances, so effects shrink or disappear at lower scalability and distance.
 - Short, frequent effects are pooled (Niagara's pooling method on the spawn call).
 - Effects are soft references in content data and load with the content that uses them.
-- Player feedback messages go through a presentation-neutral feedback event ([Architecture.md, section 17](Architecture.md#17-known-gaps)).
+- Player feedback messages go through a presentation-neutral feedback event, `UFarmFeedbackSubsystem` ([Architecture.md, section 13](Architecture.md#13-systems-and-ownership)).
 
 **Pitfalls:**
 

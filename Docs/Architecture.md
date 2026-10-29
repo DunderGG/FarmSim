@@ -333,6 +333,7 @@ All of these have to exist and be tested in a packaged build first:
 | `AFarmHUD` + `SFarmHudWidget` | HUD + Slate widget | Display only. Keeps weak references to the day cycle (from `Get` at `BeginPlay`) and the possessed pawn's farming component (updated on `OnPossessedPawnChanged`), and reads from them; keeps fading messages | Any game state |
 | `UFarmSaveSubsystem` | World subsystem | The current world's snapshot: saving it on `OnNewDayFinished` and loading it at play start, in the single save slot. Starting a new game (deletes that slot, then reopens the map) | Game rules; save slot or profile choice that must survive a map change ([section 6](#6-saving)) |
 | `UFarmSaveGame` | Save game | The saved data layout | Logic |
+| `UFarmFeedbackSubsystem` | World subsystem | Carrying short messages for the player (`FText`) from game code to presentation: game code calls `Notify`, the HUD listens to `OnFeedback` | Showing messages, or knowing who listens |
 | `UFarmContentData` | Abstract base of every content data asset | What all content shares: the `ContentId`, the primary asset ID built from it, the display name, the `Visuals` bundle name, and loading content with its visuals at play start | Anything specific to one kind of content |
 | `UFarmToolData` | Primary data asset (type `FarmTool`), one per tool in `Content/Farm/Tools` | One tool's definition: its action (`EFarmToolAction`), held mesh (in the `Visuals` bundle) and stamina cost | Which tools the player has, the grip offset in the hand |
 | `UFarmCropData` | Primary data asset (type `FarmCrop`), one per crop in `Content/Farm/Crops` | One crop's definition: seasons, days to mature, water need, contamination tolerance, growth stage meshes (in the `Visuals` bundle), yield, seed and sell price | Runtime state such as growth or which tiles grow it |
@@ -378,6 +379,7 @@ sequenceDiagram
     participant DayCycle as AFarmDayCycle
     participant Grid as AFarmGrid
     participant Save as UFarmSaveSubsystem
+    participant Feedback as UFarmFeedbackSubsystem
     participant HUD as AFarmHUD
     Farming->>DayCycle: StartNextDay()
     DayCycle->>DayCycle: day + 1, clock to 06:00, update lighting
@@ -385,7 +387,8 @@ sequenceDiagram
     Grid->>Grid: AdvanceDay() on every tile
     DayCycle-->>Save: OnNewDayFinished(Day)
     Save->>Save: collect state, write save slot
-    Save->>HUD: "Game saved."
+    Save->>Feedback: Notify("Game saved.")
+    Feedback-->>HUD: OnFeedback(message)
 ```
 
 `OnNewDayFinished` exists so saving always runs after every system has reacted to the new day, whatever order they subscribed in. The day cycle broadcasts it as soon as the `OnNewDay` broadcast returns, so it only marks the end of work done **synchronously**. That's a contract for every `OnNewDay` listener:
@@ -406,6 +409,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | Messages for the player go through `UFarmFeedbackSubsystem`, a world subsystem: game code calls `Notify(World, Text)` with `LOCTEXT` text, and `AFarmHUD` listens to `OnFeedback`. The HUD shows up to three messages at once, one per line, each for `MessageDuration`, instead of concatenating them. `AFarmHUD::GetFor`, `ShowMessage` and `AppendMessage` are gone from its public interface | Game rules no longer depend on the HUD (principle 3, section 7). A single channel is the smallest thing that works for many senders; a delegate per sender would make the HUD bind to every new system. A world subsystem is enough while the game is single-player; a split-screen or networked game would need one per player. One line per message keeps sentences whole for translators (CodingGuidelinesAudit C-10) |
 | 2026-10-29 | The end of the day is an event: `AFarmDayCycle` broadcasts `OnDayEndReached` once when the clock reaches `DayEndHour`, then stops ticking until the next day starts (a clock restored at the end still broadcasts on its next tick). Starting the next day no longer needs a grid | The day cycle already knew the moment the clock stopped, so polling it every frame was wasted work, and every new "the night is over" rule would have added another poll (ArchitectureAudit A-11). A field without a grid still has days |
 | 2026-10-29 | Actors the game expects one of are found through `FarmActorLookup::FindSingle`, wrapped in each class's static `Find` (`AFarmGrid::Find` is new). It logs an error when a level has more than one and uses the first. `AFarmDayCycle::Get` spawns only in a game world whose actors are initialized for play and that isn't tearing down, and warns when it spawns. The grid broadcasts `OnTilesReady` once its tiles exist. The HUD keeps weak references to the day cycle and the possessed pawn's farming component, updated from the controller's `OnPossessedPawnChanged`, instead of searching every frame | One search, written once, makes a duplicate actor visible instead of silently picking one, and keeps lookups out of per-frame code. `HasBegunPlay` is only true after every actor's `BeginPlay`, where `Get` is mostly called, so the spawn check uses actor initialization instead. The HUD reacts to possession rather than polling, so a respawned pawn is picked up too |
 | 2026-10-29 | Stamina design in `Systems.md` section 9 approved as written | Reviewed against the game design's stamina rules before any code, as the system-guide rule requires |
@@ -445,7 +449,6 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 Places where the current code doesn't follow Part A yet. Fix them when working nearby, each in its own commit, and remove the line when it's done. Code-style gaps are listed in [CodingGuidelines.md](CodingGuidelines.md#16-known-deviations-to-clean-up).
 
-- **Game logic calls the HUD.** `UFarmingComponent` and `UFarmSaveSubsystem` call `AFarmHUD::ShowMessage` directly, so gameplay depends on presentation. Replace with a feedback event (for example an `OnFarmMessage` delegate on a small subsystem) that the HUD listens to.
 - **The save subsystem reads and writes other classes' state.** It sets `UFarmingComponent::Seeds` directly and pulls tile fields one by one. Give each owner its own save and restore functions that use its save struct ([section 6](#6-saving)).
 - **Content IDs aren't checked yet.** `UFarmContentData::ContentId` has no format validation, duplicate check or redirect list ([section 5](#5-data-and-content)). A content asset with an empty ID has no valid primary asset ID, so the Asset Manager doesn't register it.
 - **No extension points.** Nothing is exposed to Blueprints yet, and the C++ delegates can't be bound from Blueprints. A tool can only do one of the fixed `EFarmToolAction` actions; custom tool behavior needs a Blueprint hook for using a tool.

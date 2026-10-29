@@ -321,7 +321,7 @@ UE_LOG(LogVestige, Warning, TEXT("No FarmGrid in %s; farming is disabled."), *Ge
   - `ensure(Condition)` / `ensureMsgf`: something is wrong but the game can carry on. Logs a callstack once.
   - Plain `if` with a graceful fallback for things that can legitimately happen at runtime or through level setup (a missing grid, a missing save).
 - Content mistakes a designer can make (a missing mesh, no grid in the level) must not crash. Fall back to a placeholder and warn, as `AFarmTile` does with its placeholder shapes.
-- Failures the player should know about (a save that couldn't be written) must reach the player, but game code never calls the HUD to do it. The code that failed logs the failure, returns or broadcasts it, and raises a presentation-neutral feedback event; the HUD listens and displays it (see [Architecture.md, section 7](Architecture.md#7-presentation-ui-audio-and-effects)). Today `UFarmingComponent` and `UFarmSaveSubsystem` still call `AFarmHUD::ShowMessage` directly; that is a [known gap](Architecture.md#17-known-gaps), not the pattern to copy.
+- Failures the player should know about (a save that couldn't be written) must reach the player, but game code never calls the HUD to do it. The code that failed logs the failure, returns or broadcasts it, and raises a presentation-neutral feedback event; the HUD listens and displays it (see [Architecture.md, section 7](Architecture.md#7-presentation-ui-audio-and-effects)). The event is `UFarmFeedbackSubsystem::Notify(World, Text)`, with the message written as `LOCTEXT`.
 
 ## 11. Comments and documentation
 

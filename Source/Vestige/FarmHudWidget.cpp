@@ -186,11 +186,11 @@ FText SFarmHudWidget::GetInventoryText() const
 FText SFarmHudWidget::GetMessageText() const
 {
 	const AFarmHUD* FarmHud = Hud.Get();
-	return FarmHud ? FText::FromString(FarmHud->GetMessage()) : FText::GetEmpty();
+	return FarmHud ? FarmHud->GetMessagesText() : FText::GetEmpty();
 }
 
 EVisibility SFarmHudWidget::GetMessageVisibility() const
 {
 	const AFarmHUD* FarmHud = Hud.Get();
-	return FarmHud && FarmHud->HasMessage() ? EVisibility::HitTestInvisible : EVisibility::Collapsed;
+	return FarmHud && FarmHud->HasMessages() ? EVisibility::HitTestInvisible : EVisibility::Collapsed;
 }

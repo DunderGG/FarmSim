@@ -8,13 +8,14 @@
 #include "FarmContentData.h"
 #include "FarmCropData.h"
 #include "FarmDayCycle.h"
+#include "FarmFeedbackSubsystem.h"
 #include "FarmGrid.h"
-#include "FarmHUD.h"
 #include "FarmTile.h"
 #include "FarmToolData.h"
-#include "GameFramework/Pawn.h"
 #include "TimerManager.h"
 #include "Vestige.h"
+
+#define LOCTEXT_NAMESPACE "FarmingComponent"
 
 UFarmingComponent::UFarmingComponent()
 {
@@ -41,7 +42,7 @@ void UFarmingComponent::BeginPlay()
 			{
 				if (const UFarmingComponent* Farming = WeakThis.Get())
 				{
-					Farming->ShowMessage(TEXT("No FarmGrid in the level. Drag one in from the Place Actors panel."));
+					Farming->Notify(LOCTEXT("NoGrid", "No FarmGrid in the level. Drag one in from the Place Actors panel."));
 				}
 			});
 	}
@@ -113,52 +114,52 @@ void UFarmingComponent::UseTool()
 	AFarmTile* Tile = GetTargetTile();
 	if (!Tile)
 	{
-		ShowMessage(TEXT("Stand facing a farm tile."));
+		Notify(LOCTEXT("NoTile", "Stand facing a farm tile."));
 		return;
 	}
 
 	const UFarmToolData* Tool = GetCurrentTool();
 	if (!Tool)
 	{
-		ShowMessage(TEXT("No tool in this slot."));
+		Notify(LOCTEXT("NoTool", "No tool in this slot."));
 		return;
 	}
 
 	switch (Tool->GetAction())
 	{
 	case EFarmToolAction::Till:
-		ShowMessage(Tile->Till() ? TEXT("Tilled the soil.") : TEXT("Only grass can be tilled."));
+		Notify(Tile->Till() ? LOCTEXT("Tilled", "Tilled the soil.") : LOCTEXT("CantTill", "Only grass can be tilled."));
 		break;
 
 	case EFarmToolAction::Plant:
 		if (Seeds <= 0 || !SeedCrop)
 		{
-			ShowMessage(TEXT("Out of seeds."));
+			Notify(LOCTEXT("OutOfSeeds", "Out of seeds."));
 		}
 		else if (Tile->Plant(SeedCrop))
 		{
 			--Seeds;
-			ShowMessage(TEXT("Planted a seed."));
+			Notify(LOCTEXT("Planted", "Planted a seed."));
 		}
 		else
 		{
-			ShowMessage(TEXT("Seeds need empty tilled soil."));
+			Notify(LOCTEXT("CantPlant", "Seeds need empty tilled soil."));
 		}
 		break;
 
 	case EFarmToolAction::Water:
-		ShowMessage(Tile->Water() ? TEXT("Watered.") : TEXT("Nothing to water here."));
+		Notify(Tile->Water() ? LOCTEXT("Watered", "Watered.") : LOCTEXT("CantWater", "Nothing to water here."));
 		break;
 
 	case EFarmToolAction::Harvest:
 		if (const UFarmCropData* RipeCrop = Tile->GetCrop(); RipeCrop && Tile->Harvest())
 		{
 			HarvestedCrops += RipeCrop->GetYield();
-			ShowMessage(TEXT("Harvested a crop!"));
+			Notify(LOCTEXT("Harvested", "Harvested a crop!"));
 		}
 		else
 		{
-			ShowMessage(TEXT("Nothing ripe here."));
+			Notify(LOCTEXT("NothingRipe", "Nothing ripe here."));
 		}
 		break;
 	}
@@ -166,15 +167,15 @@ void UFarmingComponent::UseTool()
 
 void UFarmingComponent::Sleep()
 {
-	StartNextDay(TEXT("You slept."));
+	StartNextDay(LOCTEXT("Slept", "You slept. Day {Day} begins."));
 }
 
 void UFarmingComponent::PassOut(int32 EndedDay)
 {
-	StartNextDay(TEXT("You stayed up too late and passed out."));
+	StartNextDay(LOCTEXT("PassedOut", "You stayed up too late and passed out. Day {Day} begins."));
 }
 
-void UFarmingComponent::StartNextDay(const TCHAR* Reason)
+void UFarmingComponent::StartNextDay(const FText& MessageFormat)
 {
 	// Starting a day doesn't need the grid: the grid listens to OnNewDay, and without one there is nothing to grow.
 	if (!DayCycle)
@@ -182,8 +183,8 @@ void UFarmingComponent::StartNextDay(const TCHAR* Reason)
 		return;
 	}
 
-	// Shown first so that anything reacting to the new day, like saving, can add to it.
-	ShowMessage(FString::Printf(TEXT("%s Day %d begins."), Reason, DayCycle->GetCurrentDay() + 1));
+	// Raised first, so messages from anything reacting to the new day, like saving, follow it.
+	Notify(FText::FormatNamed(MessageFormat, TEXT("Day"), DayCycle->GetCurrentDay() + 1));
 	DayCycle->StartNextDay();
 }
 
@@ -209,10 +210,9 @@ void UFarmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	}
 }
 
-void UFarmingComponent::ShowMessage(const FString& Message) const
+void UFarmingComponent::Notify(const FText& Message) const
 {
-	if (AFarmHUD* Hud = AFarmHUD::GetFor(Cast<APawn>(GetOwner())))
-	{
-		Hud->ShowMessage(Message);
-	}
+	UFarmFeedbackSubsystem::Notify(GetWorld(), Message);
 }
+
+#undef LOCTEXT_NAMESPACE

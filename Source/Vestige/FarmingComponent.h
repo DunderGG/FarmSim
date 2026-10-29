@@ -18,7 +18,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FOnFarmToolChanged, const UFarmToolData* /* 
 
 /**
  * Gives its owner farming tools, a tiny inventory and the ability to sleep.
- * Uses the tile directly in front of the owner and reports what happened on the player's AFarmHUD.
+ * Uses the tile directly in front of the owner, and tells the player what happened through UFarmFeedbackSubsystem.
  */
 UCLASS(ClassGroup = (Farming), meta = (BlueprintSpawnableComponent))
 class UFarmingComponent : public UActorComponent
@@ -73,8 +73,11 @@ private:
 	/** Starts the next day when the clock reaches the end of the day. Bound to AFarmDayCycle::OnDayEndReached. */
 	void PassOut(int32 EndedDay);
 
-	void StartNextDay(const TCHAR* Reason);
-	void ShowMessage(const FString& Message) const;
+	/** Starts the next day and tells the player, with MessageFormat's {Day} set to the new day. */
+	void StartNextDay(const FText& MessageFormat);
+
+	/** Tells the player what happened, through UFarmFeedbackSubsystem. */
+	void Notify(const FText& Message) const;
 
 	UPROPERTY()
 	TObjectPtr<AFarmGrid> Grid;

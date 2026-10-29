@@ -137,7 +137,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 **Communication and extension points**
 
-- [ ] A feedback event for player messages, so gameplay code stops calling the HUD directly
+- [x] A feedback event for player messages, so gameplay code stops calling the HUD directly
 - [ ] Blueprint events for key moments (new day, crop harvested, tool used), marked as extension points
 - [ ] An interaction interface (`IFarmInteractable`) for anything the player can use: bed, shipping bin, water source, robots
 

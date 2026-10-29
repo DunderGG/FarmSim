@@ -9,7 +9,6 @@
 
 class AFarmDayCycle;
 class AFarmGrid;
-class AFarmHUD;
 class UFarmingComponent;
 class UFarmSaveGame;
 
@@ -43,7 +42,6 @@ private:
 	void LoadFarm();
 
 	UFarmingComponent* GetPlayerFarming() const;
-	AFarmHUD* GetPlayerHud() const;
 
 	UPROPERTY()
 	TObjectPtr<AFarmDayCycle> DayCycle;
