@@ -15,6 +15,7 @@ class UFarmToolData;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnFarmToolChanged, const UFarmToolData* /* Tool */);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnFarmTargetTileChanged, const AFarmTile* /* Tile */);
+DECLARE_MULTICAST_DELEGATE(FOnFarmInventoryChanged);
 
 /**
  * Gives its owner farming tools and a tiny inventory.
@@ -44,6 +45,12 @@ public:
 	/** The crop the Seeds tool plants, or nullptr if SeedCropId doesn't name a crop asset. Loaded at BeginPlay. */
 	const UFarmCropData* GetSeedCrop() const { return SeedCrop; }
 
+	int32 GetSeeds() const { return Seeds; }
+	int32 GetHarvestedCrops() const { return HarvestedCrops; }
+
+	/** Puts saved counts back, without replaying any action. Negative counts become 0. Broadcasts OnInventoryChanged. */
+	void RestoreInventory(int32 SavedSeeds, int32 SavedHarvestedCrops);
+
 	/** The tile in front of the owner, or nullptr if it isn't facing one. Updated whenever the owner moves or turns. */
 	const AFarmTile* GetTargetTile() const { return TargetTile.Get(); }
 
@@ -53,15 +60,8 @@ public:
 	/** Broadcast when the tile in front of the owner changes, with nullptr when it stops facing one. */
 	FOnFarmTargetTileChanged OnTargetTileChanged;
 
-	/** How far in front of the owner the targeted tile is, in cm. */
-	UPROPERTY(EditAnywhere, Category = "Farming")
-	float ReachDistance = 100.f;
-
-	UPROPERTY(EditAnywhere, Category = "Farming")
-	int32 Seeds = 10;
-
-	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
-	int32 HarvestedCrops = 0;
+	/** Broadcast when the seed or harvest count changes, including when a save is loaded. */
+	FOnFarmInventoryChanged OnInventoryChanged;
 
 protected:
 	virtual void BeginPlay() override;
@@ -81,6 +81,20 @@ private:
 
 	/** Tells the player what happened, through UFarmFeedbackSubsystem. */
 	void Notify(const FText& Message) const;
+
+	/** How far in front of the owner the targeted tile is, in cm. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", ClampMin = 0))
+	float ReachDistance = 100.f;
+
+	/** Seeds the farmer has when a game starts without a save. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", ClampMin = 0))
+	int32 StartingSeeds = 10;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
+	int32 Seeds = 0;
+
+	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
+	int32 HarvestedCrops = 0;
 
 	UPROPERTY()
 	TObjectPtr<AFarmGrid> Grid;

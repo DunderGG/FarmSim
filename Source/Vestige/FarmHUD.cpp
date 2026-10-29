@@ -6,12 +6,49 @@
 #include "Engine/GameViewportClient.h"
 #include "Engine/World.h"
 #include "FarmDayCycle.h"
+#include "FarmerCharacter.h"
 #include "FarmFeedbackSubsystem.h"
 #include "FarmHudWidget.h"
 #include "FarmingComponent.h"
+#include "FarmToolData.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
 #include "TimerManager.h"
+
+#define LOCTEXT_NAMESPACE "FarmHUD"
+
+namespace FarmHudClock
+{
+	constexpr int32 MinutesPerHour = 60;
+	constexpr int32 HoursPerDay = 24;
+
+	/** The clock moves in steps of this many minutes, so it doesn't flicker every game minute. */
+	constexpr int32 StepMinutes = 10;
+
+	/** Hours since midnight, rounded down to the clock's step, in minutes. */
+	int32 ToShownMinutes(float Hours)
+	{
+		return FMath::FloorToInt(Hours * MinutesPerHour / StepMinutes) * StepMinutes;
+	}
+
+	/** A 24-hour clock, like "18:40". Minutes past midnight of the next day wrap around to 00:00. */
+	FText Format(int32 Minutes)
+	{
+		FNumberFormattingOptions TwoDigits;
+		TwoDigits.SetMinimumIntegralDigits(2).SetUseGrouping(false);
+		return FText::FormatNamed(LOCTEXT("Clock", "{Hours}:{Minutes}"), TEXT("Hours"),
+			FText::AsNumber((Minutes / MinutesPerHour) % HoursPerDay, &TwoDigits), TEXT("Minutes"),
+			FText::AsNumber(Minutes % MinutesPerHour, &TwoDigits));
+	}
+}
+
+namespace FarmHudHints
+{
+	FText Format(const FFarmKeyHint& Hint)
+	{
+		return FText::FormatNamed(LOCTEXT("KeyHint", "{Key} {Action}"), TEXT("Key"), Hint.Key, TEXT("Action"), Hint.Action);
+	}
+}
 
 void AFarmHUD::BeginPlay()
 {
@@ -41,6 +78,7 @@ void AFarmHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	{
 		PlayerOwner->OnPossessedPawnChanged.RemoveDynamic(this, &AFarmHUD::FollowPawn);
 	}
+	StopFollowingFarming();
 	if (UFarmFeedbackSubsystem* Feedback = UWorld::GetSubsystem<UFarmFeedbackSubsystem>(GetWorld()))
 	{
 		Feedback->OnFeedback.RemoveAll(this);
@@ -56,9 +94,98 @@ void AFarmHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
+FText AFarmHUD::GetStatusText() const
+{
+	const AFarmDayCycle* Cycle = DayCycle.Get();
+	if (!Cycle)
+	{
+		return FText::GetEmpty();
+	}
+
+	const int32 Day = Cycle->GetCurrentDay();
+	const int32 ClockMinutes = FarmHudClock::ToShownMinutes(Cycle->GetTimeOfDay());
+	if (Day != StatusDay || ClockMinutes != StatusClockMinutes)
+	{
+		StatusDay = Day;
+		StatusClockMinutes = ClockMinutes;
+		StatusText = FText::FormatNamed(LOCTEXT("Status", "Day {Day}   {Clock}   |   {Tool}"), TEXT("Day"), Day, TEXT("Clock"),
+			FarmHudClock::Format(ClockMinutes), TEXT("Tool"), ToolText);
+	}
+	return StatusText;
+}
+
 void AFarmHUD::FollowPawn(APawn* OldPawn, APawn* NewPawn)
 {
+	StopFollowingFarming();
+	Farmer = Cast<AFarmerCharacter>(NewPawn);
 	Farming = NewPawn ? NewPawn->FindComponentByClass<UFarmingComponent>() : nullptr;
+
+	UFarmingComponent* NewFarming = Farming.Get();
+	if (NewFarming)
+	{
+		NewFarming->OnToolChanged.AddUObject(this, &AFarmHUD::RefreshToolTexts);
+		NewFarming->OnInventoryChanged.AddUObject(this, &AFarmHUD::RefreshInventoryText);
+	}
+	RefreshToolTexts(NewFarming ? NewFarming->GetCurrentTool() : nullptr);
+	RefreshInventoryText();
+}
+
+void AFarmHUD::StopFollowingFarming()
+{
+	if (UFarmingComponent* OldFarming = Farming.Get())
+	{
+		OldFarming->OnToolChanged.RemoveAll(this);
+		OldFarming->OnInventoryChanged.RemoveAll(this);
+	}
+}
+
+void AFarmHUD::RefreshToolTexts(const UFarmToolData* Tool)
+{
+	ToolText = Tool ? Tool->GetDisplayName() : LOCTEXT("NoTool", "No tool");
+
+	// The status line shows the tool, so it is built again on its next read.
+	StatusDay = INDEX_NONE;
+	RefreshControlsText();
+}
+
+void AFarmHUD::RefreshInventoryText()
+{
+	const UFarmingComponent* CurrentFarming = Farming.Get();
+	if (!CurrentFarming)
+	{
+		InventoryText = FText::GetEmpty();
+		return;
+	}
+	InventoryText = FText::FormatNamed(LOCTEXT("Inventory", "Seeds: {Seeds}   Harvested: {Harvested}"), TEXT("Seeds"),
+		CurrentFarming->GetSeeds(), TEXT("Harvested"), CurrentFarming->GetHarvestedCrops());
+}
+
+void AFarmHUD::RefreshControlsText()
+{
+	const AFarmerCharacter* CurrentFarmer = Farmer.Get();
+	if (!CurrentFarmer)
+	{
+		ControlsText = FText::GetEmpty();
+		return;
+	}
+
+	TArray<FText> ToolbarHints;
+	for (const FFarmKeyHint& Hint : CurrentFarmer->GetToolbarKeyHints())
+	{
+		ToolbarHints.Add(FarmHudHints::Format(Hint));
+	}
+
+	// The toolbar hints belong together; the other hints are set apart from them and from each other.
+	TArray<FText> Groups;
+	if (!ToolbarHints.IsEmpty())
+	{
+		Groups.Add(FText::Join(FText::AsCultureInvariant(TEXT("   ")), ToolbarHints));
+	}
+	for (const FFarmKeyHint& Hint : CurrentFarmer->GetActionKeyHints())
+	{
+		Groups.Add(FarmHudHints::Format(Hint));
+	}
+	ControlsText = FText::Join(FText::AsCultureInvariant(TEXT("   |   ")), Groups);
 }
 
 void AFarmHUD::ShowMessage(const FText& Message)
@@ -104,3 +231,5 @@ void AFarmHUD::RebuildMessagesText()
 	}
 	MessagesText = FText::Join(FText::AsCultureInvariant(TEXT("\n")), Lines);
 }
+
+#undef LOCTEXT_NAMESPACE

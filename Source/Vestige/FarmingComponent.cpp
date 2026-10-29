@@ -25,6 +25,7 @@ void UFarmingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Seeds = StartingSeeds;
 	LoadSeedCrop();
 	LoadToolbar();
 	Grid = AFarmGrid::Find(GetWorld());
@@ -99,6 +100,7 @@ void UFarmingComponent::LoadToolbar()
 		Tools.Add(Tool);
 	}
 	Toolbar.SetTools(MoveTemp(Tools));
+	OnToolChanged.Broadcast(GetCurrentTool());
 }
 
 void UFarmingComponent::SelectToolbarSlot(int32 Slot)
@@ -118,6 +120,13 @@ void UFarmingComponent::RestoreCurrentTool(FName ToolContentId)
 		Toolbar.SelectSlot(0);
 	}
 	OnToolChanged.Broadcast(GetCurrentTool());
+}
+
+void UFarmingComponent::RestoreInventory(int32 SavedSeeds, int32 SavedHarvestedCrops)
+{
+	Seeds = FMath::Max(0, SavedSeeds);
+	HarvestedCrops = FMath::Max(0, SavedHarvestedCrops);
+	OnInventoryChanged.Broadcast();
 }
 
 void UFarmingComponent::UseTool()
@@ -150,6 +159,7 @@ void UFarmingComponent::UseTool()
 		else if (Tile->Plant(SeedCrop))
 		{
 			--Seeds;
+			OnInventoryChanged.Broadcast();
 			Notify(LOCTEXT("Planted", "Planted a seed."));
 		}
 		else
@@ -166,6 +176,7 @@ void UFarmingComponent::UseTool()
 		if (const UFarmCropData* RipeCrop = Tile->GetCrop(); RipeCrop && Tile->Harvest())
 		{
 			HarvestedCrops += RipeCrop->GetYield();
+			OnInventoryChanged.Broadcast();
 			Notify(LOCTEXT("Harvested", "Harvested a crop!"));
 		}
 		else

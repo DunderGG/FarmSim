@@ -10,7 +10,7 @@ class AFarmHUD;
 
 /**
  * The farming HUD's layout, built in Slate so it needs no widget assets.
- * Asks its AFarmHUD for everything it shows, every frame.
+ * Shows the texts its AFarmHUD keeps. Its bindings run every frame, but only read text the HUD has already built.
  */
 class SFarmHudWidget : public SCompoundWidget
 {

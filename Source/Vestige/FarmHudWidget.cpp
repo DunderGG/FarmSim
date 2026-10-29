@@ -3,10 +3,7 @@
 
 #include "FarmHudWidget.h"
 
-#include "FarmDayCycle.h"
 #include "FarmHUD.h"
-#include "FarmingComponent.h"
-#include "FarmToolData.h"
 #include "Styling/CoreStyle.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/SBoxPanel.h"
@@ -35,22 +32,6 @@ namespace FarmHudStyle
 	constexpr float MessageBottomMargin = 80.f;
 	const FMargin PanelPadding(16.f, 10.f);
 	const FMargin MessagePadding(16.f, 8.f);
-}
-
-namespace
-{
-	constexpr int32 MinutesPerHour = 60;
-	constexpr int32 HoursPerDay = 24;
-
-	/** The clock moves in steps of this many minutes, so it doesn't flicker every game minute. */
-	constexpr int32 ClockStepMinutes = 10;
-
-	/** Formats hours since midnight as a 24-hour clock in ClockStepMinutes steps, like "18:40". */
-	FString FormatClock(float Hours)
-	{
-		const int32 TotalMinutes = FMath::FloorToInt(Hours * MinutesPerHour / ClockStepMinutes) * ClockStepMinutes;
-		return FString::Printf(TEXT("%02d:%02d"), (TotalMinutes / MinutesPerHour) % HoursPerDay, TotalMinutes % MinutesPerHour);
-	}
 }
 
 void SFarmHudWidget::Construct(const FArguments& InArgs)
@@ -138,49 +119,19 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 FText SFarmHudWidget::GetStatusText() const
 {
 	const AFarmHUD* FarmHud = Hud.Get();
-	const AFarmDayCycle* DayCycle = FarmHud ? FarmHud->GetDayCycle() : nullptr;
-	const UFarmingComponent* Farming = FarmHud ? FarmHud->GetFarming() : nullptr;
-	if (!DayCycle || !Farming)
-	{
-		return FText::GetEmpty();
-	}
-	const UFarmToolData* Tool = Farming->GetCurrentTool();
-	return FText::FromString(FString::Printf(TEXT("Day %d   %s   |   %s"), DayCycle->GetCurrentDay(),
-		*FormatClock(DayCycle->GetTimeOfDay()), Tool ? *Tool->GetDisplayName().ToString() : TEXT("No tool")));
-}
-
-FText SFarmHudWidget::GetControlsText() const
-{
-	FString Controls;
-	const AFarmHUD* FarmHud = Hud.Get();
-	if (const UFarmingComponent* Farming = FarmHud ? FarmHud->GetFarming() : nullptr)
-	{
-		const TArray<TObjectPtr<const UFarmToolData>>& Tools = Farming->GetToolbar().GetTools();
-		for (int32 Slot = 0; Slot < Tools.Num(); ++Slot)
-		{
-			if (const UFarmToolData* Tool = Tools[Slot])
-			{
-				Controls += FString::Printf(TEXT("%d %s   "), Slot + 1, *Tool->GetDisplayName().ToString());
-			}
-		}
-		if (!Controls.IsEmpty())
-		{
-			Controls += TEXT("|   ");
-		}
-	}
-	Controls += TEXT("E Use tool   |   N Sleep   |   F9 New game");
-	return FText::FromString(Controls);
+	return FarmHud ? FarmHud->GetStatusText() : FText::GetEmpty();
 }
 
 FText SFarmHudWidget::GetInventoryText() const
 {
 	const AFarmHUD* FarmHud = Hud.Get();
-	const UFarmingComponent* Farming = FarmHud ? FarmHud->GetFarming() : nullptr;
-	if (!Farming)
-	{
-		return FText::GetEmpty();
-	}
-	return FText::FromString(FString::Printf(TEXT("Seeds: %d   Harvested: %d"), Farming->Seeds, Farming->HarvestedCrops));
+	return FarmHud ? FarmHud->GetInventoryText() : FText::GetEmpty();
+}
+
+FText SFarmHudWidget::GetControlsText() const
+{
+	const AFarmHUD* FarmHud = Hud.Get();
+	return FarmHud ? FarmHud->GetControlsText() : FText::GetEmpty();
 }
 
 FText SFarmHudWidget::GetMessageText() const

@@ -495,7 +495,6 @@ Blender sources go in `Art/Blender/`, exported FBX files in `Art/Export/`, with 
 
 Existing code that doesn't yet match these guidelines. Fix them when touching the code nearby, each in a small commit. Don't do a sweeping cleanup in the middle of a feature. Design-level gaps are listed in [Architecture.md, Known gaps](Architecture.md#17-known-gaps).
 
-- `UFarmingComponent::Seeds` and `HarvestedCrops` are public mutable properties, and `UFarmSaveSubsystem` writes them directly. Make them private with getters and a `RestoreInventory(...)` function.
 - Tunable properties on `AFarmTile`, `AFarmGrid` and `AFarmDayCycle` are public. Move them to `protected` / `private` with `AllowPrivateAccess` and add getters where other classes read them.
 
 ## 17. Review checklist

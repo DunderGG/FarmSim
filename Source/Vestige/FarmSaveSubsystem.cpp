@@ -82,8 +82,8 @@ void UFarmSaveSubsystem::SaveFarm(int32 NewDay)
 	UFarmSaveGame* Save = Cast<UFarmSaveGame>(UGameplayStatics::CreateSaveGameObject(UFarmSaveGame::StaticClass()));
 	Save->Day = DayCycle->GetCurrentDay();
 	Save->TimeOfDay = DayCycle->GetTimeOfDay();
-	Save->Seeds = Farming->Seeds;
-	Save->HarvestedCrops = Farming->HarvestedCrops;
+	Save->Seeds = Farming->GetSeeds();
+	Save->HarvestedCrops = Farming->GetHarvestedCrops();
 	const UFarmToolData* Tool = Farming->GetCurrentTool();
 	Save->CurrentToolId = Tool ? Tool->GetContentId() : NAME_None;
 	for (const AFarmTile* Tile : Grid->GetTiles())
@@ -117,8 +117,7 @@ void UFarmSaveSubsystem::LoadFarm()
 	}
 
 	DayCycle->RestoreClock(Save->Day, Save->TimeOfDay);
-	Farming->Seeds = Save->Seeds;
-	Farming->HarvestedCrops = Save->HarvestedCrops;
+	Farming->RestoreInventory(Save->Seeds, Save->HarvestedCrops);
 	Farming->RestoreCurrentTool(GetSavedToolId(*Save));
 
 	// Saves don't record which crop a tile grows yet. Every crop so far is the seed crop, so planted tiles get that.
