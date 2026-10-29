@@ -12,6 +12,7 @@
 #include "EngineUtils.h"
 #include "FarmActorLookup.h"
 #include "FarmSaveData.h"
+#include "ProfilingDebugging/CpuProfilerTrace.h"
 #include "Vestige.h"
 
 namespace FarmDayCycleLighting
@@ -90,6 +91,8 @@ void AFarmDayCycle::BeginPlay()
 
 void AFarmDayCycle::StartNextDay()
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(AFarmDayCycle::StartNextDay);
+
 	++CurrentDay;
 	TimeOfDay = DayStartHour;
 	bDayEndReached = false;

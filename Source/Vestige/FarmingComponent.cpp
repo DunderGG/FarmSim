@@ -12,6 +12,7 @@
 #include "FarmSaveData.h"
 #include "FarmTile.h"
 #include "FarmToolData.h"
+#include "ProfilingDebugging/CpuProfilerTrace.h"
 #include "TimerManager.h"
 #include "Vestige.h"
 
@@ -72,6 +73,8 @@ void UFarmingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void UFarmingComponent::LoadSeedCrop()
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(UFarmingComponent::LoadSeedCrop);
+
 	// Waiting is fine at play start, and with the meshes loaded now, planting never stalls on a load.
 	SeedCrop = Cast<UFarmCropData>(UFarmContentData::LoadWithVisuals(SeedCropId));
 	if (!SeedCrop)
@@ -83,6 +86,8 @@ void UFarmingComponent::LoadSeedCrop()
 
 void UFarmingComponent::LoadToolbar()
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(UFarmingComponent::LoadToolbar);
+
 	if (ToolbarIds.IsEmpty())
 	{
 		UE_LOG(LogVestige, Warning, TEXT("%s has no Toolbar Ids, so the farmer has no tools."), *GetPathName());

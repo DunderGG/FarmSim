@@ -466,7 +466,6 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 
 - **No extension points.** Nothing is exposed to Blueprints yet, and the C++ delegates can't be bound from Blueprints. A tool can only do one of the fixed `EFarmToolAction` actions; custom tool behavior needs a Blueprint hook for using a tool.
 - **The toolbar is fixed per farmer Blueprint.** `ToolbarIds` lives on the farming component's defaults, and only which slot is in hand is saved. It moves to the inventory once there is one.
-- **No `TRACE_CPUPROFILER_EVENT_SCOPE` yet** on the new-day, load and save code, so Unreal Insights can't show their cost by name.
 - **Rendering settings aren't set for a target.** Hardware ray tracing, Lumen, virtual shadow maps and Substrate are on, with Maximum as the default performance level ([section 10](#10-performance-by-design)).
 
 ## 18. Expected changes

@@ -165,7 +165,7 @@ The code changes that the slice's content depends on. Doing them first means add
 - [x] The day cycle broadcasts the end of the day, so the farming component stops polling it every frame
 - [x] A shipping-safe highlight for the targeted tile, replacing the debug box
 - [x] The HUD keeps its references instead of searching the world every frame
-- [ ] Trace scopes on the new day, loading and saving
+- [x] Trace scopes on the new day, loading and saving
 - [ ] First performance baseline, measured in a packaged build on the target hardware and recorded in Architecture.md
 
 ### 4.2 Farming depth

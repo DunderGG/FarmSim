@@ -87,6 +87,8 @@ AFarmGrid* AFarmGrid::Find(const UWorld* World)
 
 void AFarmGrid::SpawnTiles()
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(AFarmGrid::SpawnTiles);
+
 	if (!TileClass)
 	{
 		UE_LOG(LogVestige, Warning, TEXT("%s has no Tile Class, so the field is empty."), *GetName());
@@ -176,6 +178,8 @@ int32 AFarmGrid::RestoreTilesFromSaveData(const TArray<FFarmTileSaveData>& Saved
 
 void AFarmGrid::AdvanceTiles(int32 NewDay)
 {
+	TRACE_CPUPROFILER_EVENT_SCOPE(AFarmGrid::AdvanceTiles);
+
 	for (AFarmTile* Tile : Tiles)
 	{
 		if (Tile)
