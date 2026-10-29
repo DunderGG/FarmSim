@@ -3,7 +3,7 @@
 
 #include "FarmingComponent.h"
 
-#include "DrawDebugHelpers.h"
+#include "Components/SceneComponent.h"
 #include "Engine/World.h"
 #include "FarmContentData.h"
 #include "FarmCropData.h"
@@ -18,7 +18,7 @@
 
 UFarmingComponent::UFarmingComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UFarmingComponent::BeginPlay()
@@ -28,9 +28,16 @@ void UFarmingComponent::BeginPlay()
 	LoadSeedCrop();
 	LoadToolbar();
 	Grid = AFarmGrid::Find(GetWorld());
-	if (!Grid)
+	if (Grid)
 	{
-		// The player's HUD may not exist yet during BeginPlay.
+		// The grid spawns its tiles in its own BeginPlay, which may run after this one.
+		Grid->OnTilesReady.AddUObject(this, &UFarmingComponent::UpdateTargetTile);
+	}
+	else
+	{
+		UE_LOG(LogVestige, Warning, TEXT("No FarmGrid in %s, so there is nothing to farm."), *GetWorld()->GetMapName());
+
+		// The HUD may not be listening for feedback yet during BeginPlay.
 		GetWorld()->GetTimerManager().SetTimerForNextTick(
 			[WeakThis = TWeakObjectPtr<UFarmingComponent>(this)]()
 			{
@@ -40,6 +47,25 @@ void UFarmingComponent::BeginPlay()
 				}
 			});
 	}
+
+	if (USceneComponent* Root = GetOwner() ? GetOwner()->GetRootComponent() : nullptr)
+	{
+		Root->TransformUpdated.AddUObject(this, &UFarmingComponent::FollowOwnerTransform);
+	}
+	UpdateTargetTile();
+}
+
+void UFarmingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (Grid)
+	{
+		Grid->OnTilesReady.RemoveAll(this);
+	}
+	if (USceneComponent* Root = GetOwner() ? GetOwner()->GetRootComponent() : nullptr)
+	{
+		Root->TransformUpdated.RemoveAll(this);
+	}
+	Super::EndPlay(EndPlayReason);
 }
 
 void UFarmingComponent::LoadSeedCrop()
@@ -96,7 +122,7 @@ void UFarmingComponent::RestoreCurrentTool(FName ToolContentId)
 
 void UFarmingComponent::UseTool()
 {
-	AFarmTile* Tile = GetTargetTile();
+	AFarmTile* Tile = FindTargetTile();
 	if (!Tile)
 	{
 		Notify(LOCTEXT("NoTile", "Stand facing a farm tile."));
@@ -150,7 +176,7 @@ void UFarmingComponent::UseTool()
 	}
 }
 
-AFarmTile* UFarmingComponent::GetTargetTile() const
+AFarmTile* UFarmingComponent::FindTargetTile() const
 {
 	const AActor* Owner = GetOwner();
 	if (!Grid || !Owner)
@@ -160,16 +186,21 @@ AFarmTile* UFarmingComponent::GetTargetTile() const
 	return Grid->GetTileAtLocation(Owner->GetActorLocation() + Owner->GetActorForwardVector() * ReachDistance);
 }
 
-void UFarmingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UFarmingComponent::UpdateTargetTile()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (const AFarmTile* Tile = GetTargetTile())
+	AFarmTile* NewTarget = FindTargetTile();
+	if (NewTarget == TargetTile.Get())
 	{
-		FVector Origin, Extent;
-		Tile->GetActorBounds(false, Origin, Extent);
-		DrawDebugBox(GetWorld(), Origin, Extent + FVector(2.f), FColor::Yellow, false, -1.f, 0, 2.f);
+		return;
 	}
+	TargetTile = NewTarget;
+	OnTargetTileChanged.Broadcast(NewTarget);
+}
+
+void UFarmingComponent::FollowOwnerTransform(
+	USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport)
+{
+	UpdateTargetTile();
 }
 
 void UFarmingComponent::Notify(const FText& Message) const

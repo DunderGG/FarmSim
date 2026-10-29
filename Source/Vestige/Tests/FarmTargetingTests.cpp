@@ -1,0 +1,87 @@
+// Copyright (C) 2026 David Bennehag and the Project Vestige contributors.
+// SPDX-License-Identifier: GPL-3.0-or-later WITH AdditionRef-Vestige-Unreal-Exception
+
+#if WITH_DEV_AUTOMATION_TESTS
+
+#include "Components/ActorTestSpawner.h"
+#include "CQTest.h"
+#include "FarmerCharacter.h"
+#include "FarmGrid.h"
+#include "FarmingComponent.h"
+#include "FarmTargetHighlightComponent.h"
+#include "FarmTile.h"
+
+// A namespace keeps the fixture's short name from hiding other declarations in unity builds.
+namespace FarmTargetingTests
+{
+	TEST_CLASS(Targeting, "Vestige")
+	{
+		FActorTestSpawner Spawner;
+		AFarmGrid* Grid = nullptr;
+		AFarmerCharacter* Farmer = nullptr;
+		UFarmingComponent* Farming = nullptr;
+
+		/** A default 8 x 8 grid of 1 m tiles with a corner at the origin, and a farmer, both playing. */
+		BEFORE_EACH()
+		{
+			Grid = &Spawner.SpawnActor<AFarmGrid>();
+			Grid->DispatchBeginPlay();
+			Farmer = &Spawner.SpawnActor<AFarmerCharacter>();
+			Farmer->DispatchBeginPlay();
+			Farming = Farmer->FindComponentByClass<UFarmingComponent>();
+		}
+
+		/** The tile with grid coordinates X, Y in the default grid. */
+		const AFarmTile* TileAt(int32 X, int32 Y) const
+		{
+			const float TileSize = AFarmTile::UnscaledSize;
+			return Grid->GetTileAtLocation(FVector((X + 0.5f) * TileSize, (Y + 0.5f) * TileSize, 0.f));
+		}
+
+		TEST_METHOD(TargetIsTheTileInFrontOfTheFarmer)
+		{
+			ASSERT_THAT(IsNotNull(Farming));
+
+			Farmer->SetActorLocationAndRotation(FVector(250.f, 50.f, 0.f), FRotator::ZeroRotator);
+			ASSERT_THAT(IsTrue(Farming->GetTargetTile() == TileAt(3, 0)));
+
+			Farmer->SetActorRotation(FRotator(0.f, 90.f, 0.f));
+			ASSERT_THAT(IsTrue(Farming->GetTargetTile() == TileAt(2, 1)));
+		}
+
+		TEST_METHOD(TargetChangeIsBroadcastOnlyWhenTheTileChanges)
+		{
+			ASSERT_THAT(IsNotNull(Farming));
+			int32 Changes = 0;
+			Farming->OnTargetTileChanged.AddLambda(
+				[&Changes](const AFarmTile* Tile)
+				{
+					++Changes;
+				});
+
+			Farmer->SetActorLocationAndRotation(FVector(250.f, 50.f, 0.f), FRotator::ZeroRotator);
+			Farmer->SetActorLocation(FVector(260.f, 60.f, 0.f));
+			ASSERT_THAT(IsTrue(Changes == 1));
+
+			Farmer->SetActorLocation(FVector(-500.f, -500.f, 0.f));
+			ASSERT_THAT(IsTrue(Changes == 2));
+			ASSERT_THAT(IsNull(Farming->GetTargetTile()));
+		}
+
+		TEST_METHOD(HighlightFramesTheTargetAndHidesWithoutOne)
+		{
+			const UFarmTargetHighlightComponent* Highlight = Farmer->FindComponentByClass<UFarmTargetHighlightComponent>();
+			ASSERT_THAT(IsNotNull(Highlight));
+
+			Farmer->SetActorLocationAndRotation(FVector(250.f, 50.f, 0.f), FRotator::ZeroRotator);
+			ASSERT_THAT(IsFalse(Highlight->bHiddenInGame));
+			ASSERT_THAT(IsTrue(Highlight->GetComponentLocation().Equals(TileAt(3, 0)->GetActorLocation())));
+			ASSERT_THAT(IsTrue(Highlight->GetInstanceCount() == 4));
+
+			Farmer->SetActorLocation(FVector(-500.f, -500.f, 0.f));
+			ASSERT_THAT(IsTrue(Highlight->bHiddenInGame));
+		}
+	};
+}
+
+#endif

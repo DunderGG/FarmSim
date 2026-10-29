@@ -327,7 +327,8 @@ All of these have to exist and be tested in a packaged build first:
 | `AFarmTile` | Actor | One tile's state (grass, tilled, planted, watered, growth, the crop planted in it) and its visuals | Crop definitions, time, input, saving |
 | `AFarmGrid` | Actor, placed in the level, found with `Find` | Spawning tiles (then broadcasting `OnTilesReady`), finding a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
 | `AFarmDayCycle` | Actor, placed or found-or-spawned by `Get` ([section 2](#2-unreals-gameplay-framework-where-things-go)) | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished`; broadcasts `OnDayEndReached` once when the clock reaches `DayEndHour`, then stops the clock and its tick until the next day | Tiles, saving, HUD |
-| `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting and using a tool | UI, input bindings, meshes, sleeping |
+| `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting (follows the owner's movement and broadcasts `OnTargetTileChanged`; no tick) and using a tool | UI, input bindings, meshes, sleeping |
+| `UFarmTargetHighlightComponent` | Instanced static mesh component on the farmer | Showing a frame around the target tile, moved only on `OnTargetTileChanged`. Presentation only, and ships (no debug drawing) | Which tile is targeted |
 | `UFarmRestComponent` | Component on the farmer | The end of the player's day: sleeping (N), and passing out when the day cycle broadcasts `OnDayEndReached`. Later the late-night rules and exhaustion ([Systems.md, section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system)) | The clock, what happens on a new day |
 | `FFarmToolbar` | Struct inside `UFarmingComponent` | The toolbar's slots and which slot is in hand, with the rules for selecting one | Loading or using tools |
 | `AFarmerCharacter` | Character (parent of `BP_ThirdPersonCharacter`) | Input bindings (keys 1 to 9 pick toolbar slots, N goes to the rest component) and showing the current tool's held mesh | Farming rules, which tools exist |
@@ -351,6 +352,7 @@ flowchart TD
     Input --> Rest[UFarmRestComponent<br/>sleep, passing out]
     HUD[AFarmHUD / SFarmHudWidget<br/>display] -.reads.-> Farming
     HUD -.reads.-> DayCycle
+    Highlight[UFarmTargetHighlightComponent<br/>target frame] -. OnTargetTileChanged .-> Farming
     Save[UFarmSaveSubsystem<br/>save / load] --> Farming
     Save --> Grid
     Save --> DayCycle
@@ -368,7 +370,7 @@ Layers, from bottom to top:
 2. **World state**: `AFarmTile`, `AFarmGrid`, `AFarmDayCycle`.
 3. **Player actions**: `UFarmingComponent`, `UFarmRestComponent`.
 4. **Services**: `UFarmSaveSubsystem`.
-5. **Input and presentation**: `AFarmerCharacter`, `AFarmHUD`.
+5. **Input and presentation**: `AFarmerCharacter`, `AFarmHUD`, `UFarmTargetHighlightComponent`.
 
 Lower layers broadcast events; they never include or call higher layers. Exceptions are listed in [Known gaps](#17-known-gaps).
 
@@ -413,6 +415,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | The tile highlight is a `UFarmTargetHighlightComponent` on the farmer: an instanced static mesh of four thin engine cubes framing the tile, in the tile's own space, moved only when `UFarmingComponent::OnTargetTileChanged` fires. The farming component finds the target when its owner's root component moves or turns (`TransformUpdated`) and when the grid's tiles are ready, so it no longer ticks. The default material is the engine's unlit `DebugMeshMaterial`, replaceable through `HighlightMaterial` | Debug drawing is compiled out of shipping builds, so the highlight would have vanished from a packaged game (ArchitectureAudit A-10), and drawing it was the only reason the farming component ticked. A frame needs no new mesh or decal asset, ships today and stays visible at night because it is unlit. Following the transform event costs nothing while the farmer stands still. A project material (`M_TileHighlight`) can replace the engine one without code |
 | 2026-10-29 | Sleeping and passing out move from `UFarmingComponent` to a new `UFarmRestComponent` on the farmer, which listens to `OnDayEndReached`. It has no Gameplay Ability System parts yet; the late-night drain and exhaustion join it with stamina | This is the split `Systems.md` section 9 and ArchitectureAudit A-13 planned: the farming component keeps tools and targeting, and the end of the day gets one owner before stamina and late-night rules arrive. Adding the ability system pieces now would build ahead of the stamina work they belong to |
 | 2026-10-29 | Messages for the player go through `UFarmFeedbackSubsystem`, a world subsystem: game code calls `Notify(World, Text)` with `LOCTEXT` text, and `AFarmHUD` listens to `OnFeedback`. The HUD shows up to three messages at once, one per line, each for `MessageDuration`, instead of concatenating them. `AFarmHUD::GetFor`, `ShowMessage` and `AppendMessage` are gone from its public interface | Game rules no longer depend on the HUD (principle 3, section 7). A single channel is the smallest thing that works for many senders; a delegate per sender would make the HUD bind to every new system. A world subsystem is enough while the game is single-player; a split-screen or networked game would need one per player. One line per message keeps sentences whole for translators (CodingGuidelinesAudit C-10) |
 | 2026-10-29 | The end of the day is an event: `AFarmDayCycle` broadcasts `OnDayEndReached` once when the clock reaches `DayEndHour`, then stops ticking until the next day starts (a clock restored at the end still broadcasts on its next tick). Starting the next day no longer needs a grid | The day cycle already knew the moment the clock stopped, so polling it every frame was wasted work, and every new "the night is over" rule would have added another poll (ArchitectureAudit A-11). A field without a grid still has days |
@@ -463,7 +466,6 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 - **No save version number** in `UFarmSaveGame`.
 - **An unreadable save gets overwritten.** When loading fails, `UFarmSaveSubsystem` shows a message but still saves on the next new day, replacing the file it couldn't read. Turn saving off for the session instead ([section 6](#6-saving)). A failed write may also leave no good save, since `SaveGameToSlot` writes over the old file.
 - **Load waits a tick** for the grid to spawn tiles ([section 3](#3-lifetimes-and-initialization-order)). The grid now broadcasts `OnTilesReady`; the save subsystem should wait for that instead.
-- **The farming component ticks every frame** to draw the target highlight with debug drawing, which shipping builds compile out ([section 10](#10-performance-by-design); ArchitectureAudit A-10). A cosmetic component should show the highlight.
 - **No `TRACE_CPUPROFILER_EVENT_SCOPE` yet** on the new-day, load and save code, so Unreal Insights can't show their cost by name.
 - **Rendering settings aren't set for a target.** Hardware ray tracing, Lumen, virtual shadow maps and Substrate are on, with Maximum as the default performance level ([section 10](#10-performance-by-design)).
 - **Tile rules and visuals live in the same class.** Fine for now. Separate them (a plain tile-state struct the actor owns) before writing tile tests or growing the field a lot.

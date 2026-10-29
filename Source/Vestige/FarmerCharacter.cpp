@@ -13,6 +13,7 @@
 #include "FarmingComponent.h"
 #include "FarmRestComponent.h"
 #include "FarmSaveSubsystem.h"
+#include "FarmTargetHighlightComponent.h"
 #include "FarmToolData.h"
 #include "GameFramework/PlayerController.h"
 #include "InputAction.h"
@@ -34,6 +35,8 @@ AFarmerCharacter::AFarmerCharacter()
 {
 	Farming = CreateDefaultSubobject<UFarmingComponent>(TEXT("Farming"));
 	Rest = CreateDefaultSubobject<UFarmRestComponent>(TEXT("Rest"));
+	TargetHighlight = CreateDefaultSubobject<UFarmTargetHighlightComponent>(TEXT("TargetHighlight"));
+	TargetHighlight->SetupAttachment(GetRootComponent());
 
 	HeldTool = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HeldTool"));
 	HeldTool->SetupAttachment(GetMesh(), FarmerMesh::HandSocket);

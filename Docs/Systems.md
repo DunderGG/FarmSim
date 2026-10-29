@@ -395,7 +395,7 @@ Who owns what: `AFarmPlayerState` owns the ability system component; `UFarmStami
 
 ## 19. Debugging and cheats
 
-**Status:** the debug highlight and F9 new game exist; no cheat system.
+**Status:** F9 starts a new game; no cheat system. The target tile highlight is a shipping component, not debug drawing.
 
 **References:** Epic's `UCheatManager` (console commands in development builds), console variables (`TAutoConsoleVariable`), the Gameplay Debugger and Visual Logger; Lyra's `ULyraCheatManager`.
 

@@ -9,6 +9,7 @@
 
 class UFarmingComponent;
 class UFarmRestComponent;
+class UFarmTargetHighlightComponent;
 class UFarmToolData;
 class UInputAction;
 class UInputMappingContext;
@@ -41,6 +42,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UFarmRestComponent> Rest;
+
+	/** Frames the tile the farming component targets. */
+	UPROPERTY(VisibleAnywhere, Category = "Farming")
+	TObjectPtr<UFarmTargetHighlightComponent> TargetHighlight;
 
 	/** Attached to the right hand. Move and rotate it in the Blueprint to line up each tool's grip. */
 	UPROPERTY(VisibleAnywhere, Category = "Farming")

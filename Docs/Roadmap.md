@@ -161,7 +161,7 @@ The code changes that the slice's content depends on. Doing them first means add
 - [x] Confirm the target hardware and the frame budget
 - [ ] Set the rendering settings and the four scalability levels for the target: hardware ray tracing and other expensive features only at Epic
 - [x] The day cycle broadcasts the end of the day, so the farming component stops polling it every frame
-- [ ] A shipping-safe highlight for the targeted tile, replacing the debug box
+- [x] A shipping-safe highlight for the targeted tile, replacing the debug box
 - [x] The HUD keeps its references instead of searching the world every frame
 - [ ] Trace scopes on the new day, loading and saving
 - [ ] First performance baseline, measured in a packaged build on the target hardware and recorded in Architecture.md
@@ -216,7 +216,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 - [ ] An inventory or hotbar for several seed and crop types, built in UMG with C++ base classes
 - [ ] Input actions as assets once there are more keys than the prototype's handful *(decide when)*
-- [ ] A real highlight on the targeted tile (a decal or outline material), because the current debug box doesn't show in packaged builds
+- [ ] A project material for the tile highlight frame (`M_TileHighlight`, unlit), replacing the engine material it uses today
 - [ ] Meshes for the new crops, the sprinkler, the shipping bin, the water source and the bed
 
 ## 5. Milestone 3 and later
