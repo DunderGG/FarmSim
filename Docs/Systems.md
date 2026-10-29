@@ -195,7 +195,7 @@ Contents
 
 ## 9. Abilities, attributes and effects (Gameplay Ability System)
 
-**Status:** adopted 2026-10-29, starting with stamina (milestone 2, [Roadmap 4.3](Roadmap.md#43-stamina-and-late-nights)); not built yet. Health and combat (milestone 3) build on the same setup. David approved the stamina design below on 2026-10-29.
+**Status:** adopted 2026-10-29, starting with stamina (milestone 2, [Roadmap 4.3](Roadmap.md#43-stamina-and-late-nights)); not built yet. `UFarmRestComponent` exists and owns sleep and passing out, without ability system parts so far. Health and combat (milestone 3) build on the same setup. David approved the stamina design below on 2026-10-29.
 
 **References:** Epic's "Gameplay Ability System" pages (ability system component, attribute sets, gameplay effects, gameplay abilities, ability tasks, gameplay cues); Lyra's setup: `ULyraAbilitySystemComponent` on the player state, `ULyraAbilitySet` data assets that grant abilities, effects and attribute sets together, attribute sets such as `ULyraHealthSet`, abilities with an activation policy, and gameplay cues for cosmetics.
 

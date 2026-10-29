@@ -8,6 +8,7 @@
 #include "FarmerCharacter.generated.h"
 
 class UFarmingComponent;
+class UFarmRestComponent;
 class UFarmToolData;
 class UInputAction;
 class UInputMappingContext;
@@ -37,6 +38,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UFarmingComponent> Farming;
+
+	UPROPERTY(VisibleAnywhere, Category = "Farming")
+	TObjectPtr<UFarmRestComponent> Rest;
 
 	/** Attached to the right hand. Move and rotate it in the Blueprint to line up each tool's grip. */
 	UPROPERTY(VisibleAnywhere, Category = "Farming")

@@ -11,6 +11,7 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/World.h"
 #include "FarmingComponent.h"
+#include "FarmRestComponent.h"
 #include "FarmSaveSubsystem.h"
 #include "FarmToolData.h"
 #include "GameFramework/PlayerController.h"
@@ -32,6 +33,7 @@ namespace FarmerMesh
 AFarmerCharacter::AFarmerCharacter()
 {
 	Farming = CreateDefaultSubobject<UFarmingComponent>(TEXT("Farming"));
+	Rest = CreateDefaultSubobject<UFarmRestComponent>(TEXT("Rest"));
 
 	HeldTool = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HeldTool"));
 	HeldTool->SetupAttachment(GetMesh(), FarmerMesh::HandSocket);
@@ -70,7 +72,7 @@ void AFarmerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	};
 
 	EnhancedInput->BindAction(MakeAction(EKeys::E), ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::UseTool);
-	EnhancedInput->BindAction(MakeAction(EKeys::N), ETriggerEvent::Started, Farming.Get(), &UFarmingComponent::Sleep);
+	EnhancedInput->BindAction(MakeAction(EKeys::N), ETriggerEvent::Started, Rest.Get(), &UFarmRestComponent::Sleep);
 	EnhancedInput->BindAction(MakeAction(EKeys::F9), ETriggerEvent::Started, this, &AFarmerCharacter::StartNewGame);
 
 	// The number keys pick toolbar slots; which tool sits in each slot is the farming component's data.

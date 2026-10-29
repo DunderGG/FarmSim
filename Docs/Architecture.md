@@ -327,9 +327,10 @@ All of these have to exist and be tested in a packaged build first:
 | `AFarmTile` | Actor | One tile's state (grass, tilled, planted, watered, growth, the crop planted in it) and its visuals | Crop definitions, time, input, saving |
 | `AFarmGrid` | Actor, placed in the level, found with `Find` | Spawning tiles (then broadcasting `OnTilesReady`), finding a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
 | `AFarmDayCycle` | Actor, placed or found-or-spawned by `Get` ([section 2](#2-unreals-gameplay-framework-where-things-go)) | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished`; broadcasts `OnDayEndReached` once when the clock reaches `DayEndHour`, then stops the clock and its tick until the next day | Tiles, saving, HUD |
-| `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting, using a tool, sleeping and passing out | UI, input bindings, meshes |
+| `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting and using a tool | UI, input bindings, meshes, sleeping |
+| `UFarmRestComponent` | Component on the farmer | The end of the player's day: sleeping (N), and passing out when the day cycle broadcasts `OnDayEndReached`. Later the late-night rules and exhaustion ([Systems.md, section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system)) | The clock, what happens on a new day |
 | `FFarmToolbar` | Struct inside `UFarmingComponent` | The toolbar's slots and which slot is in hand, with the rules for selecting one | Loading or using tools |
-| `AFarmerCharacter` | Character (parent of `BP_ThirdPersonCharacter`) | Input bindings (keys 1 to 9 pick toolbar slots) and showing the current tool's held mesh | Farming rules, which tools exist |
+| `AFarmerCharacter` | Character (parent of `BP_ThirdPersonCharacter`) | Input bindings (keys 1 to 9 pick toolbar slots, N goes to the rest component) and showing the current tool's held mesh | Farming rules, which tools exist |
 | `AFarmHUD` + `SFarmHudWidget` | HUD + Slate widget | Display only. Keeps weak references to the day cycle (from `Get` at `BeginPlay`) and the possessed pawn's farming component (updated on `OnPossessedPawnChanged`), and reads from them; keeps fading messages | Any game state |
 | `UFarmSaveSubsystem` | World subsystem | The current world's snapshot: saving it on `OnNewDayFinished` and loading it at play start, in the single save slot. Starting a new game (deletes that slot, then reopens the map) | Game rules; save slot or profile choice that must survive a map change ([section 6](#6-saving)) |
 | `UFarmSaveGame` | Save game | The saved data layout | Logic |
@@ -346,14 +347,16 @@ Arrows point from a class to what it knows about. Nothing points back up.
 
 ```mermaid
 flowchart TD
-    Input[AFarmerCharacter<br/>input, held tool] --> Farming[UFarmingComponent<br/>tools, inventory, sleep]
+    Input[AFarmerCharacter<br/>input, held tool] --> Farming[UFarmingComponent<br/>tools, inventory, targeting]
+    Input --> Rest[UFarmRestComponent<br/>sleep, passing out]
     HUD[AFarmHUD / SFarmHudWidget<br/>display] -.reads.-> Farming
     HUD -.reads.-> DayCycle
     Save[UFarmSaveSubsystem<br/>save / load] --> Farming
     Save --> Grid
     Save --> DayCycle
     Farming --> Grid[AFarmGrid<br/>tile layout]
-    Farming --> DayCycle[AFarmDayCycle<br/>clock, lighting]
+    Rest --> DayCycle[AFarmDayCycle<br/>clock, lighting]
+    DayCycle -. OnDayEndReached event .-> Rest
     Grid --> Tile[AFarmTile<br/>tile state, visuals]
     DayCycle -. OnNewDay event .-> Grid
     DayCycle -. OnNewDayFinished event .-> Save
@@ -363,7 +366,7 @@ Layers, from bottom to top:
 
 1. **Data**: `UFarmSaveGame`, content data assets (`UFarmContentData` and its subclasses), enums and structs.
 2. **World state**: `AFarmTile`, `AFarmGrid`, `AFarmDayCycle`.
-3. **Player actions**: `UFarmingComponent`.
+3. **Player actions**: `UFarmingComponent`, `UFarmRestComponent`.
 4. **Services**: `UFarmSaveSubsystem`.
 5. **Input and presentation**: `AFarmerCharacter`, `AFarmHUD`.
 
@@ -371,17 +374,18 @@ Lower layers broadcast events; they never include or call higher layers. Excepti
 
 ## 15. The day flow
 
-What happens when the player sleeps (N) or passes out at 02:00:
+What happens when the player sleeps (N), or when the clock reaches 02:00 and the day cycle's `OnDayEndReached` makes the rest component pass the player out:
 
 ```mermaid
 sequenceDiagram
-    participant Farming as UFarmingComponent
+    participant Rest as UFarmRestComponent
     participant DayCycle as AFarmDayCycle
     participant Grid as AFarmGrid
     participant Save as UFarmSaveSubsystem
     participant Feedback as UFarmFeedbackSubsystem
     participant HUD as AFarmHUD
-    Farming->>DayCycle: StartNextDay()
+    Rest->>Feedback: Notify("You slept. Day 2 begins.")
+    Rest->>DayCycle: StartNextDay()
     DayCycle->>DayCycle: day + 1, clock to 06:00, update lighting
     DayCycle-->>Grid: OnNewDay(Day)
     Grid->>Grid: AdvanceDay() on every tile
@@ -409,6 +413,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | Sleeping and passing out move from `UFarmingComponent` to a new `UFarmRestComponent` on the farmer, which listens to `OnDayEndReached`. It has no Gameplay Ability System parts yet; the late-night drain and exhaustion join it with stamina | This is the split `Systems.md` section 9 and ArchitectureAudit A-13 planned: the farming component keeps tools and targeting, and the end of the day gets one owner before stamina and late-night rules arrive. Adding the ability system pieces now would build ahead of the stamina work they belong to |
 | 2026-10-29 | Messages for the player go through `UFarmFeedbackSubsystem`, a world subsystem: game code calls `Notify(World, Text)` with `LOCTEXT` text, and `AFarmHUD` listens to `OnFeedback`. The HUD shows up to three messages at once, one per line, each for `MessageDuration`, instead of concatenating them. `AFarmHUD::GetFor`, `ShowMessage` and `AppendMessage` are gone from its public interface | Game rules no longer depend on the HUD (principle 3, section 7). A single channel is the smallest thing that works for many senders; a delegate per sender would make the HUD bind to every new system. A world subsystem is enough while the game is single-player; a split-screen or networked game would need one per player. One line per message keeps sentences whole for translators (CodingGuidelinesAudit C-10) |
 | 2026-10-29 | The end of the day is an event: `AFarmDayCycle` broadcasts `OnDayEndReached` once when the clock reaches `DayEndHour`, then stops ticking until the next day starts (a clock restored at the end still broadcasts on its next tick). Starting the next day no longer needs a grid | The day cycle already knew the moment the clock stopped, so polling it every frame was wasted work, and every new "the night is over" rule would have added another poll (ArchitectureAudit A-11). A field without a grid still has days |
 | 2026-10-29 | Actors the game expects one of are found through `FarmActorLookup::FindSingle`, wrapped in each class's static `Find` (`AFarmGrid::Find` is new). It logs an error when a level has more than one and uses the first. `AFarmDayCycle::Get` spawns only in a game world whose actors are initialized for play and that isn't tearing down, and warns when it spawns. The grid broadcasts `OnTilesReady` once its tiles exist. The HUD keeps weak references to the day cycle and the possessed pawn's farming component, updated from the controller's `OnPossessedPawnChanged`, instead of searching every frame | One search, written once, makes a duplicate actor visible instead of silently picking one, and keeps lookups out of per-frame code. `HasBegunPlay` is only true after every actor's `BeginPlay`, where `Get` is mostly called, so the spawn check uses actor initialization instead. The HUD reacts to possession rather than polling, so a respawned pawn is picked up too |
@@ -467,7 +472,7 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 
 Likely next steps as the game grows, with the design we intend. These aren't commitments; record the real decision in the log when we get there.
 
-- **Stamina and the ability system** arrive with a new `AFarmPlayerState` holding the ability system component, and a `UFarmRestComponent` taking sleep and the late-night rules from `UFarmingComponent` ([Systems.md, section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system)). Add both to the ownership table when they're built.
+- **Stamina and the ability system** arrive with a new `AFarmPlayerState` holding the ability system component; `UFarmRestComponent`, which already owns sleep and passing out, gains the late-night rules and exhaustion ([Systems.md, section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system)). Add the player state to the ownership table when it is built.
 - **Inventory and money** move off the pawn into an inventory component on the player state, because they must outlive the body ([section 2](#2-unreals-gameplay-framework-where-things-go)).
 - **Items** become data assets (`UFarmItemData`) found through the Asset Manager, like crops and tools already are. Tiles, the farming component and saves refer to content by its `ContentId` ([section 5](#5-data-and-content)).
 - **Save slots, a main menu or map travel** split the save subsystem: the active slot moves to a `UGameInstanceSubsystem`, and the world subsystem keeps collecting and applying the world's snapshot ([section 6](#6-saving)).

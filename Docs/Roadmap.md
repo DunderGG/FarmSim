@@ -184,7 +184,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 - [x] Approve the stamina design in [Systems.md section 9](Systems.md#9-abilities-attributes-and-effects-gameplay-ability-system)
 - [ ] Gameplay Ability System set up: plugin and modules, `AFarmPlayerState` with the ability system component, `UFarmStaminaSet`, an ability set data asset
-- [ ] Sleep and the late-night rules move from the farming component to a `UFarmRestComponent`
+- [x] Sleep and the late-night rules move from the farming component to a `UFarmRestComponent` (sleep and passing out moved; the late-night drain and exhaustion are built there with stamina)
 - [ ] Stamina: tool actions cost stamina, shown on the HUD
 - [ ] At zero stamina every action still works but takes twice as long; stamina never goes below zero
 - [ ] No forced sleep: remove the pass-out at 02:00

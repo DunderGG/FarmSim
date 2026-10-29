@@ -7,7 +7,6 @@
 #include "Engine/World.h"
 #include "FarmContentData.h"
 #include "FarmCropData.h"
-#include "FarmDayCycle.h"
 #include "FarmFeedbackSubsystem.h"
 #include "FarmGrid.h"
 #include "FarmTile.h"
@@ -28,11 +27,6 @@ void UFarmingComponent::BeginPlay()
 
 	LoadSeedCrop();
 	LoadToolbar();
-	DayCycle = AFarmDayCycle::Get(GetWorld());
-	if (DayCycle)
-	{
-		DayCycle->OnDayEndReached.AddUObject(this, &UFarmingComponent::PassOut);
-	}
 	Grid = AFarmGrid::Find(GetWorld());
 	if (!Grid)
 	{
@@ -46,15 +40,6 @@ void UFarmingComponent::BeginPlay()
 				}
 			});
 	}
-}
-
-void UFarmingComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
-{
-	if (DayCycle)
-	{
-		DayCycle->OnDayEndReached.RemoveAll(this);
-	}
-	Super::EndPlay(EndPlayReason);
 }
 
 void UFarmingComponent::LoadSeedCrop()
@@ -163,29 +148,6 @@ void UFarmingComponent::UseTool()
 		}
 		break;
 	}
-}
-
-void UFarmingComponent::Sleep()
-{
-	StartNextDay(LOCTEXT("Slept", "You slept. Day {Day} begins."));
-}
-
-void UFarmingComponent::PassOut(int32 EndedDay)
-{
-	StartNextDay(LOCTEXT("PassedOut", "You stayed up too late and passed out. Day {Day} begins."));
-}
-
-void UFarmingComponent::StartNextDay(const FText& MessageFormat)
-{
-	// Starting a day doesn't need the grid: the grid listens to OnNewDay, and without one there is nothing to grow.
-	if (!DayCycle)
-	{
-		return;
-	}
-
-	// Raised first, so messages from anything reacting to the new day, like saving, follow it.
-	Notify(FText::FormatNamed(MessageFormat, TEXT("Day"), DayCycle->GetCurrentDay() + 1));
-	DayCycle->StartNextDay();
 }
 
 AFarmTile* UFarmingComponent::GetTargetTile() const
