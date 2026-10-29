@@ -324,7 +324,8 @@ All of these have to exist and be tested in a packaged build first:
 
 | Class | Kind | Owns | Does not own |
 |---|---|---|---|
-| `AFarmTile` | Actor | One tile's state (grass, tilled, planted, watered, growth, the crop planted in it) and its visuals | Crop definitions, time, input, saving |
+| `AFarmTile` | Actor | One tile in the world: owns its `FFarmTileState`, applies the farming actions to it and shows the result (meshes, placeholder colors) | Crop definitions, time, input, saving |
+| `FFarmTileState` | Struct inside `AFarmTile` (`FarmTileState.h`) | One tile's state (grass, tilled, planted, watered, growth, the crop planted in it) and the rules that change it | Visuals, the tile's place in the grid |
 | `AFarmGrid` | Actor, placed in the level, found with `Find` | Spawning tiles (then broadcasting `OnTilesReady`), finding a tile by location, advancing tiles on a new day | The clock, lighting, the day number |
 | `AFarmDayCycle` | Actor, placed or found-or-spawned by `Get` ([section 2](#2-unreals-gameplay-framework-where-things-go)) | Day number, clock, sun and sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished`; broadcasts `OnDayEndReached` once when the clock reaches `DayEndHour`, then stops the clock and its tick until the next day | Tiles, saving, HUD |
 | `UFarmingComponent` | Component on the farmer | The toolbar (`ToolbarIds`, loaded into an `FFarmToolbar` at `BeginPlay`) and the tool in hand, seeds and the crop they plant (`SeedCropId`, loaded at `BeginPlay`), harvest count, tile targeting (follows the owner's movement and broadcasts `OnTargetTileChanged`; no tick) and using a tool | UI, input bindings, meshes, sleeping |
@@ -367,7 +368,7 @@ flowchart TD
 
 Layers, from bottom to top:
 
-1. **Data**: `UFarmSaveGame`, content data assets (`UFarmContentData` and its subclasses), enums and structs.
+1. **Data**: `UFarmSaveGame` and the save structs (`FarmSaveData.h`), content data assets (`UFarmContentData` and its subclasses), `FFarmTileState`, enums and other structs. None of these include an actor header.
 2. **World state**: `AFarmTile`, `AFarmGrid`, `AFarmDayCycle`.
 3. **Player actions**: `UFarmingComponent`, `UFarmRestComponent`.
 4. **Services**: `UFarmSaveSubsystem`.
@@ -416,6 +417,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-29 | A tile's rules and state move into a plain `FFarmTileState` struct (`FarmTileState.h`, with `EFarmTileState`) that `AFarmTile` owns and shows. The save structs and the legacy `EFarmTool` move into `FarmSaveData.h`, so `FarmSaveGame.h` no longer includes an actor header | The data layer must not depend on the actors above it (section 14, ArchitectureAudit A-12). With the rules in a struct they can be tested without spawning a tile, as `FFarmToolbar` already is, and a later change to how tiles are drawn (instancing, section 10) leaves the rules alone |
 | 2026-10-29 | The HUD's texts are built when an event says what they show changed, and kept: `UFarmingComponent` broadcasts `OnInventoryChanged` (and `OnToolChanged` once its toolbar is loaded), and the seed and harvest counts are private with getters and `RestoreInventory`. Only the clock is read every frame. Key hints come from the farmer's mapping context: `AFarmerCharacter` creates its input actions and mapping context once, in `PostInitializeComponents`, gives each action an `ActionDescription`, and reports its keys through `GetToolbarKeyHints` and `GetActionKeyHints`. It removes the mapping context on `UnPossessed` | One source of truth for keys (ArchitectureAudit A-14): changing a binding changes the hint. Strings are no longer formatted every frame ([CodingGuidelines.md, section 12.6](CodingGuidelines.md#126-user-interface)). Creating input once means a second possession binds the same actions instead of new ones. Reading the mapping context rather than the player's active mappings is enough while keys can't be rebound; with player-mappable keys the hints should ask Enhanced Input for each action's key |
 | 2026-10-29 | The tile highlight is a `UFarmTargetHighlightComponent` on the farmer: an instanced static mesh of four thin engine cubes framing the tile, in the tile's own space, moved only when `UFarmingComponent::OnTargetTileChanged` fires. The farming component finds the target when its owner's root component moves or turns (`TransformUpdated`) and when the grid's tiles are ready, so it no longer ticks. The default material is the engine's unlit `DebugMeshMaterial`, replaceable through `HighlightMaterial` | Debug drawing is compiled out of shipping builds, so the highlight would have vanished from a packaged game (ArchitectureAudit A-10), and drawing it was the only reason the farming component ticked. A frame needs no new mesh or decal asset, ships today and stays visible at night because it is unlit. Following the transform event costs nothing while the farmer stands still. A project material (`M_TileHighlight`) can replace the engine one without code |
 | 2026-10-29 | Sleeping and passing out move from `UFarmingComponent` to a new `UFarmRestComponent` on the farmer, which listens to `OnDayEndReached`. It has no Gameplay Ability System parts yet; the late-night drain and exhaustion join it with stamina | This is the split `Systems.md` section 9 and ArchitectureAudit A-13 planned: the farming component keeps tools and targeting, and the end of the day gets one owner before stamina and late-night rules arrive. Adding the ability system pieces now would build ahead of the stamina work they belong to |
@@ -470,7 +472,6 @@ Places where the current code doesn't follow Part A yet. Fix them when working n
 - **Load waits a tick** for the grid to spawn tiles ([section 3](#3-lifetimes-and-initialization-order)). The grid now broadcasts `OnTilesReady`; the save subsystem should wait for that instead.
 - **No `TRACE_CPUPROFILER_EVENT_SCOPE` yet** on the new-day, load and save code, so Unreal Insights can't show their cost by name.
 - **Rendering settings aren't set for a target.** Hardware ray tracing, Lumen, virtual shadow maps and Substrate are on, with Maximum as the default performance level ([section 10](#10-performance-by-design)).
-- **Tile rules and visuals live in the same class.** Fine for now. Separate them (a plain tile-state struct the actor owns) before writing tile tests or growing the field a lot.
 
 ## 18. Expected changes
 

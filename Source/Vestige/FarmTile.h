@@ -4,6 +4,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FarmTileState.h"
 #include "GameFramework/Actor.h"
 #include "FarmTile.generated.h"
 
@@ -13,16 +14,10 @@ class UStaticMeshComponent;
 class UMaterialInstanceDynamic;
 class UMaterialInterface;
 
-/** What is on a farm tile. Watering is separate, because tilled and planted soil can both be wet. */
-UENUM(BlueprintType)
-enum class EFarmTileState : uint8
-{
-	Grass,
-	Tilled,
-	Planted
-};
-
-/** One square of farmland: can be tilled, planted, watered and harvested. */
+/**
+ * One square of farmland, in the world: it can be tilled, planted, watered and harvested.
+ * Its rules and state are an FFarmTileState; the actor applies them and shows the result with its meshes.
+ */
 UCLASS()
 class AFarmTile : public AActor
 {
@@ -34,36 +29,33 @@ public:
 
 	AFarmTile();
 
-	/** Turns grass into tilled soil. Returns false, changing nothing, if the tile isn't grass. */
+	// The farming actions follow FFarmTileState's rules, documented there, and return false when they change nothing.
 	bool Till();
-
-	/** Plants InCrop in tilled soil. Returns false, changing nothing, if the soil isn't empty and tilled or InCrop is null. */
 	bool Plant(const UFarmCropData* InCrop);
-
-	/** Waters tilled or planted soil until the next day. Returns false if the tile is grass or already watered. */
 	bool Water();
-
-	/** Removes a ripe crop, leaving tilled soil. Returns false, changing nothing, if nothing ripe grows here. */
 	bool Harvest();
 
 	/** Called once per in-game day. Watered crops grow one stage, then the soil dries out. */
 	void AdvanceDay();
 
-	EFarmTileState GetState() const { return State; }
-	bool IsWatered() const { return bWatered; }
-	bool IsRipe() const;
-	int32 GetGrowthDays() const { return GrowthDays; }
+	EFarmTileState GetState() const { return TileState.GetState(); }
+	bool IsWatered() const { return TileState.IsWatered(); }
+	bool IsRipe() const { return TileState.IsRipe(); }
+	int32 GetGrowthDays() const { return TileState.GetGrowthDays(); }
 
 	/** The crop growing here, or nullptr if nothing is planted. */
-	const UFarmCropData* GetCrop() const { return Crop; }
+	const UFarmCropData* GetCrop() const { return TileState.GetCrop(); }
 
-	/** Puts the tile straight into a saved state. A planted state without a crop restores as empty tilled soil. */
+	/** Puts the tile straight into a saved state, as FFarmTileState::Restore does, and shows it. */
 	void RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays, const UFarmCropData* SavedCrop);
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
+	/** Shows the state again if bChanged, and returns bChanged, so each action stays one line. */
+	bool RefreshIfChanged(bool bChanged);
+
 	void RefreshVisuals();
 	void RefreshSoil();
 	void RefreshCrop();
@@ -104,15 +96,5 @@ private:
 	TObjectPtr<UMaterialInstanceDynamic> CropMaterial;
 
 	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
-	EFarmTileState State = EFarmTileState::Grass;
-
-	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
-	bool bWatered = false;
-
-	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
-	int32 GrowthDays = 0;
-
-	/** Set exactly while the tile is planted. Whoever loads the crop also loads its meshes. */
-	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
-	TObjectPtr<const UFarmCropData> Crop;
+	FFarmTileState TileState;
 };

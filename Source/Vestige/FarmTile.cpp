@@ -80,76 +80,43 @@ void AFarmTile::BeginPlay()
 
 bool AFarmTile::Till()
 {
-	if (State != EFarmTileState::Grass)
-	{
-		return false;
-	}
-	State = EFarmTileState::Tilled;
-	RefreshVisuals();
-	return true;
+	return RefreshIfChanged(TileState.Till());
 }
 
 bool AFarmTile::Plant(const UFarmCropData* InCrop)
 {
-	if (State != EFarmTileState::Tilled || !InCrop)
-	{
-		return false;
-	}
-	State = EFarmTileState::Planted;
-	Crop = InCrop;
-	GrowthDays = 0;
-	RefreshVisuals();
-	return true;
+	return RefreshIfChanged(TileState.Plant(InCrop));
 }
 
 bool AFarmTile::Water()
 {
-	if (State == EFarmTileState::Grass || bWatered)
-	{
-		return false;
-	}
-	bWatered = true;
-	RefreshVisuals();
-	return true;
+	return RefreshIfChanged(TileState.Water());
 }
 
 bool AFarmTile::Harvest()
 {
-	if (!IsRipe())
-	{
-		return false;
-	}
-	State = EFarmTileState::Tilled;
-	Crop = nullptr;
-	GrowthDays = 0;
-	RefreshVisuals();
-	return true;
-}
-
-bool AFarmTile::IsRipe() const
-{
-	return State == EFarmTileState::Planted && Crop && GrowthDays >= Crop->GetDaysToMature();
+	return RefreshIfChanged(TileState.Harvest());
 }
 
 void AFarmTile::AdvanceDay()
 {
-	if (State == EFarmTileState::Planted && bWatered && !IsRipe())
-	{
-		++GrowthDays;
-	}
-	bWatered = false;
+	TileState.AdvanceDay();
 	RefreshVisuals();
 }
 
 void AFarmTile::RestoreState(EFarmTileState SavedState, bool bSavedWatered, int32 SavedGrowthDays, const UFarmCropData* SavedCrop)
 {
-	// A planted tile can't exist without its crop, so a missing crop leaves empty tilled soil.
-	const bool bPlanted = SavedState == EFarmTileState::Planted && SavedCrop;
-	State = SavedState == EFarmTileState::Planted && !bPlanted ? EFarmTileState::Tilled : SavedState;
-	Crop = bPlanted ? SavedCrop : nullptr;
-	bWatered = bSavedWatered && State != EFarmTileState::Grass;
-	GrowthDays = Crop ? FMath::Clamp(SavedGrowthDays, 0, Crop->GetDaysToMature()) : 0;
+	TileState.Restore(SavedState, bSavedWatered, SavedGrowthDays, SavedCrop);
 	RefreshVisuals();
+}
+
+bool AFarmTile::RefreshIfChanged(bool bChanged)
+{
+	if (bChanged)
+	{
+		RefreshVisuals();
+	}
+	return bChanged;
 }
 
 void AFarmTile::RefreshVisuals()
@@ -160,7 +127,7 @@ void AFarmTile::RefreshVisuals()
 
 void AFarmTile::RefreshSoil()
 {
-	if (State != EFarmTileState::Grass && TilledSoilMesh)
+	if (GetState() != EFarmTileState::Grass && TilledSoilMesh)
 	{
 		SoilMesh->SetStaticMesh(TilledSoilMesh);
 		SoilMesh->SetRelativeScale3D(FVector::OneVector);
@@ -168,7 +135,7 @@ void AFarmTile::RefreshSoil()
 
 		// Use the mesh's own materials, or the watered material on every slot.
 		SoilMesh->EmptyOverrideMaterials();
-		if (bWatered && WateredSoilMaterial)
+		if (IsWatered() && WateredSoilMaterial)
 		{
 			for (int32 Index = 0; Index < SoilMesh->GetNumMaterials(); ++Index)
 			{
@@ -190,16 +157,16 @@ void AFarmTile::RefreshSoil()
 
 FLinearColor AFarmTile::GetPlaceholderSoilColor() const
 {
-	if (State == EFarmTileState::Grass)
+	if (GetState() == EFarmTileState::Grass)
 	{
 		return FarmTileColors::Grass;
 	}
-	return bWatered ? FarmTileColors::Watered : FarmTileColors::Tilled;
+	return IsWatered() ? FarmTileColors::Watered : FarmTileColors::Tilled;
 }
 
 void AFarmTile::RefreshCrop()
 {
-	const bool bHasCrop = State == EFarmTileState::Planted;
+	const bool bHasCrop = GetState() == EFarmTileState::Planted;
 	CropMesh->SetVisibility(bHasCrop);
 	if (!bHasCrop)
 	{
@@ -207,7 +174,8 @@ void AFarmTile::RefreshCrop()
 	}
 
 	const float SurfaceZ = TilledSoilMesh ? SoilSurfaceHeight : FarmTilePlaceholder::SoilTop;
-	UStaticMesh* StageMesh = Crop ? Crop->GetGrowthStageMesh(GrowthDays) : nullptr;
+	const UFarmCropData* Crop = GetCrop();
+	UStaticMesh* StageMesh = Crop ? Crop->GetGrowthStageMesh(GetGrowthDays()) : nullptr;
 	if (StageMesh)
 	{
 		CropMesh->SetStaticMesh(StageMesh);
@@ -218,7 +186,7 @@ void AFarmTile::RefreshCrop()
 	}
 
 	using namespace FarmTilePlaceholder;
-	const float HeightScale = CropSeedlingHeightScale + CropHeightScalePerDay * GrowthDays;
+	const float HeightScale = CropSeedlingHeightScale + CropHeightScalePerDay * GetGrowthDays();
 	CropMesh->SetStaticMesh(PlaceholderCropMesh);
 	CropMesh->SetRelativeScale3D(FVector(CropWidthScale, CropWidthScale, HeightScale));
 	CropMesh->SetRelativeLocation(FVector(0.f, 0.f, SurfaceZ + HeightScale * CylinderHalfHeight));

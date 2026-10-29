@@ -4,37 +4,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FarmTile.h"
+#include "FarmSaveData.h"
 #include "GameFramework/SaveGame.h"
 #include "FarmSaveGame.generated.h"
-
-/**
- * The hard-coded tools from before tools were data assets. Only kept so that saves made then still load their tool.
- * The names must stay as they are, because saves store the enum by name.
- */
-UENUM()
-enum class EFarmTool : uint8
-{
-	Hoe,
-	Seeds,
-	WateringCan,
-	Hand
-};
-
-USTRUCT()
-struct FFarmTileSaveData
-{
-	GENERATED_BODY()
-
-	UPROPERTY()
-	EFarmTileState State = EFarmTileState::Grass;
-
-	UPROPERTY()
-	bool bWatered = false;
-
-	UPROPERTY()
-	int32 GrowthDays = 0;
-};
 
 /** Everything needed to pick the farm back up: the clock, the player's inventory and every tile, in grid order. */
 UCLASS()

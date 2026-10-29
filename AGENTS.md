@@ -25,7 +25,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
 ## Hard rules
 
 1. **Ownership.** Every actor, component and subsystem has one job. Put new logic, components and settings on the class that owns that responsibility, never on whichever class is convenient. If no class fits, create a new actor, component or subsystem and say so. Current owners (the full table is in `Docs/Architecture.md`, section 13; keep both in sync):
-   - `AFarmTile`: one tile's state (including the crop planted in it) and visuals.
+   - `AFarmTile` and its `FFarmTileState`: one tile's state and rules (including the crop planted in it), and its visuals.
    - `AFarmGrid`: spawns tiles, finds a tile by location, advances tiles on a new day. No clock, no lighting.
    - `AFarmDayCycle`: day number, clock, sun, sky light, night exposure. Broadcasts `OnNewDay`, then `OnNewDayFinished`, and `OnDayEndReached` when the clock reaches the end of the day.
    - `UFarmingComponent`: the toolbar and the tool in hand, seeds and the crop they plant, harvest count, tile targeting, using tools.

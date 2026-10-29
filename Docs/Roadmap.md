@@ -121,7 +121,7 @@ The code changes that the slice's content depends on. Doing them first means add
 
 **Tiles and the farm grid**
 
-- [ ] Tile rules in a plain state struct, separate from the tile actor that shows them
+- [x] Tile rules in a plain state struct, separate from the tile actor that shows them
 - [x] A shared way to find the grid (`AFarmGrid::Find`), replacing the repeated searches
 - [ ] The grid announces when its tiles are ready, so loading no longer waits a frame
 - [x] `AFarmDayCycle::Get` follows the find-or-spawn rules: spawns only in a running game world and logs a warning when it spawns or finds more than one ([Architecture.md section 2](Architecture.md#2-unreals-gameplay-framework-where-things-go))
