@@ -195,11 +195,11 @@ Contents
 
 ## 9. Abilities, attributes and effects (Gameplay Ability System)
 
-**Status:** not adopted ([Architecture.md, section 11](Architecture.md#11-patterns-borrowed-from-lyra)). Candidates: stamina and exhaustion (milestone 2), combat and health (milestone 3). Adopting it is a decision for David to log before the first use.
+**Status:** adopted 2026-10-29, starting with stamina (milestone 2, [Roadmap 4.3](Roadmap.md#43-stamina-and-late-nights)); not built yet. Health and combat (milestone 3) build on the same setup. The stamina design below needs David's approval before code, as for any guide.
 
 **References:** Epic's "Gameplay Ability System" pages (ability system component, attribute sets, gameplay effects, gameplay abilities, ability tasks, gameplay cues); Lyra's setup: `ULyraAbilitySystemComponent` on the player state, `ULyraAbilitySet` data assets that grant abilities, effects and attribute sets together, attribute sets such as `ULyraHealthSet`, abilities with an activation policy, and gameplay cues for cosmetics.
 
-**Rules when we adopt it:**
+**Rules:**
 
 - **The ability system component lives on the player state** for the player (so attributes survive the pawn), and on the pawn for robots and creatures that don't have a player state. The pawn's avatar is set when it's possessed.
 - **Attributes in attribute sets** (`UFarmStaminaSet`, later `UFarmHealthSet`), with clamping in `PreAttributeChange` and reactions in `PostGameplayEffectExecute`. Attributes change **only through gameplay effects**, never by setting the value from outside.
@@ -210,9 +210,24 @@ Contents
 - Single-player: no prediction keys or replication modes beyond the defaults; the ability system component uses minimal replication settings.
 - Saving: save attribute base values and active long-lived effects by ID; restore them through effects or the set's restore function, not by writing attributes directly.
 
+**Setup:** enable the Gameplay Abilities plugin in `Vestige.uproject`, and add `GameplayAbilities` and `GameplayTasks` to `Vestige.Build.cs` (`GameplayTags` is already there). Lyra calls `UAbilitySystemGlobals::Get().InitGlobalData()` once at startup, from its asset manager's `StartInitialLoading`; check during setup whether Unreal Engine 5.7 still needs that call, and record the answer here.
+
+**First use: stamina.** The rules in [GameDesign.md, section 5](GameDesign.md#5-time-days-and-seasons) mapped onto the system:
+
+| Rule | Built as |
+|---|---|
+| The player has stamina, shown on the HUD | `UFarmStaminaSet` with `Stamina` and `MaxStamina`, on the ability system component of a new `AFarmPlayerState`. The HUD listens to the attribute's change delegate |
+| Tool actions cost stamina | Using a tool becomes a gameplay ability (`UFarmGameplayAbility_UseTool`). Its cost is a gameplay effect whose magnitude is the tool's `StaminaCost`, passed as a set-by-caller value tagged `Farm.Data.StaminaCost` |
+| Stamina never goes below zero; at zero, actions still work but take twice as long | The set clamps `Stamina` to 0..`MaxStamina`. While it is 0, an infinite effect grants `Farm.State.OutOfStamina`, and tool abilities read that tag to double their duration. Costs are still applied, and clamp at 0 |
+| Stamina drains faster after midnight | An infinite periodic effect (`GE_LateNightDrain`) applied at midnight and removed on the new day, by the owner of the late-night rules |
+| Going to bed late makes the player exhausted: next day at 75%, one level, cleared by a night in bed before midnight | An `Exhausted` effect granting `Farm.State.Exhausted`, which never stacks. The new-day refill applies 75% instead of 100% while it is active, and an early night removes it |
+| Sleep refills stamina | An instant effect applied in the new-day flow, so it is saved state changed synchronously ([Architecture.md, section 15](Architecture.md#15-the-day-flow)) |
+
+Who owns what: `AFarmPlayerState` owns the ability system component; `UFarmStaminaSet` owns the numbers and their limits; the farming component keeps choosing the tile and the tool and activates the tool ability; a small `UFarmRestComponent` on the farmer owns sleep, the late-night rules and exhaustion (moving those out of `UFarmingComponent`, [ArchitectureAudit A-13](ArchitectureAudit.md)). Abilities and the stamina set are granted from a `UFarmAbilitySet` data asset. Effects are Blueprint assets (`GE_`) under `Content/Farm/Abilities/`, with every magnitude in data. Saving stores `Stamina` and whether `Exhausted` is active, and restores them without replaying effects. Tests cover the clamp, the cost, the zero-stamina tag and the exhausted refill.
+
 **Pitfalls:**
 
-- Adopting the whole system for one number. If only stamina exists, a small `UFarmStaminaComponent` is simpler. Adopt it when two or more of stamina, effects over time, tool costs and combat need it at once, and then move stamina into it.
+- Building more of the system than stamina needs. Start with the stamina set, the use-tool ability, the effects above and one ability set; add Lyra's extras (custom ability system component subclasses, activation groups, ability cost classes) only when a second use needs them.
 - Abilities that tick or poll. Use ability tasks and attribute change delegates.
 - Instancing policy: use instanced-per-actor abilities (non-instanced abilities are deprecated in recent engine versions); avoid instanced-per-execution, which creates an object on every use.
 
