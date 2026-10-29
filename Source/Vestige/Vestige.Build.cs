@@ -14,13 +14,15 @@ public class Vestige : ModuleRules
 			"Engine",
 			"InputCore",
 			"EnhancedInput",
-			"GameplayTags",
-			"UMG",
-			"Slate",
-			"SlateCore"
+			"GameplayTags"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		// UI modules are private: no other module uses our widgets, so our public headers don't need to expose them.
+		PrivateDependencyModuleNames.AddRange(new string[] {
+			"Slate",
+			"SlateCore",
+			"UMG"
+		});
 
 		// CQTest is a developer module, so it is only available to builds with developer tools (never shipping).
 		if (Target.bBuildDeveloperTools)
@@ -31,13 +33,5 @@ public class Vestige : ModuleRules
 		PublicIncludePaths.AddRange(new string[] {
 			"Vestige"
 		});
-
-		// Uncomment if you are using Slate UI
-		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
-
-		// Uncomment if you are using online features
-		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
-
-		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
 	}
 }
