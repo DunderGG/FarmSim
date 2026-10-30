@@ -72,3 +72,30 @@ private:
 	UPROPERTY(VisibleInstanceOnly, Category = "Farming")
 	TObjectPtr<const UFarmCropData> Crop;
 };
+
+/**
+ * One tile's part of a save: plain values and content IDs only. AFarmTile fills the state and crop, AFarmGrid adds where
+ * the tile is, and UFarmSaveGame holds the list.
+ */
+USTRUCT()
+struct FFarmTileSaveData
+{
+	GENERATED_BODY()
+
+	/** The tile's column (X) and row (Y) in the grid. Version 0 saves have none; the upgrade adds them. */
+	UPROPERTY()
+	FIntPoint Coordinates = FIntPoint::ZeroValue;
+
+	UPROPERTY()
+	EFarmTileState State = EFarmTileState::Grass;
+
+	UPROPERTY()
+	bool bWatered = false;
+
+	UPROPERTY()
+	int32 GrowthDays = 0;
+
+	/** ContentId of the crop growing here (Base.Turnip), or None. */
+	UPROPERTY()
+	FName CropId;
+};

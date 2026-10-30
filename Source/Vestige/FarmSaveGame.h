@@ -4,9 +4,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FarmSaveData.h"
+#include "FarmClockSaveData.h"
+#include "FarmFarmingSaveData.h"
+#include "FarmTileState.h"
 #include "GameFramework/SaveGame.h"
 #include "FarmSaveGame.generated.h"
+
+/**
+ * The hard-coded tools from before tools were data assets. Only read when upgrading a version 0 save.
+ * The names must stay as they are, because those saves store the enum by name.
+ */
+UENUM()
+enum class EFarmTool : uint8
+{
+	Hoe,
+	Seeds,
+	WateringCan,
+	Hand
+};
 
 /**
  * The saved data layout: everything needed to pick the farm back up, as plain values and content IDs.

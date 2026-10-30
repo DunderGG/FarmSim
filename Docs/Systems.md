@@ -39,7 +39,7 @@ Contents
 
 ## 1. Saving and loading
 
-**Status:** built (`UFarmSaveSubsystem`, `UFarmSaveGame`, the structs in `FarmSaveData.h`), with the safety rules in [Architecture.md, section 6](Architecture.md#6-saving): save version 1 with an upgrade from version 0, owners saving their own parts, tiles by coordinates with crop IDs, two alternating slots, and a save that can't be read left untouched with saving off. The decision of what to load (`UFarmSaveSubsystem::DecideLoad`) is a static function, so its rules are tested without touching the player's save files.
+**Status:** built (`UFarmSaveSubsystem`, `UFarmSaveGame`, and each owner's save struct next to the owner), with the safety rules in [Architecture.md, section 6](Architecture.md#6-saving): save version 1 with an upgrade from version 0, owners saving their own parts, tiles by coordinates with crop IDs, two alternating slots, and a save that can't be read left untouched with saving off. The decision of what to load (`UFarmSaveSubsystem::DecideLoad`) is a static function, so its rules are tested without touching the player's save files.
 
 **References:** Epic's "Saving and Loading Your Game" (`USaveGame`, `UGameplayStatics::SaveGameToSlot` and `AsyncSaveGameToSlot`); `UPROPERTY(SaveGame)` with `FObjectAndNameAsStringProxyArchive` (`ArIsSaveGame = true`) for serializing marked properties; `FCustomVersion` for versioned binary data. Lyra only saves settings (`ULyraSettingsShared`, a `USaveGame` written with `AsyncSaveGameToSlot`), not the world, so this guide relies on Epic's documentation more than on Lyra.
 
