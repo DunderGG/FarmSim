@@ -39,6 +39,15 @@ public:
 	/** Returns the tile at grid coordinates (column X, row Y), or nullptr if they are outside the grid. */
 	AFarmTile* GetTileAt(const FIntPoint& Coordinates) const;
 
+	/** The grid coordinates (column X, row Y) of a world location, ignoring height. Outside the grid they lie beyond its edges. */
+	FIntPoint GetCoordinatesAt(const FVector& WorldLocation) const;
+
+	/** A world direction in the grid's own space, on the ground: X along the columns, Y along the rows. */
+	FVector2D ToGridDirection(const FVector& WorldDirection) const;
+
+	/** A grid step (column, row) as a world direction on the ground, of length 1. */
+	FVector ToWorldDirection(const FIntPoint& Step) const;
+
 	/** Every tile, row by row. Empty until BeginPlay has spawned them. */
 	const TArray<TObjectPtr<AFarmTile>>& GetTiles() const { return Tiles; }
 

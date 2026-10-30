@@ -13,6 +13,7 @@
 #include "Farming/FarmFarmingSaveData.h"
 #include "Farming/FarmGrid.h"
 #include "Farming/FarmTile.h"
+#include "Farming/FarmTileTargeting.h"
 #include "ProfilingDebugging/CpuProfilerTrace.h"
 #include "TimerManager.h"
 
@@ -35,6 +36,14 @@ void UFarmingComponent::BeginPlay()
 	{
 		// The grid spawns its tiles in its own BeginPlay, which may run after this one.
 		Grid->OnTilesReady.AddUObject(this, &UFarmingComponent::UpdateTargetTile);
+
+		// Until the first movement input, aim where the owner faces.
+		const FIntPoint FacingStep = FarmTileTargeting::SnapToStep(Grid->ToGridDirection(GetOwner()->GetActorForwardVector()));
+		if (FacingStep != FIntPoint::ZeroValue)
+		{
+			AimStep = FacingStep;
+		}
+		OwnerCoordinates = Grid->GetCoordinatesAt(GetOwner()->GetActorLocation());
 	}
 	else
 	{
@@ -206,6 +215,28 @@ void UFarmingComponent::UseTool()
 	}
 }
 
+void UFarmingComponent::AimAt(const FVector& WorldDirection)
+{
+	if (!Grid)
+	{
+		return;
+	}
+
+	// Called every frame while a movement input is held, so the usual case stops here: no input, or the same direction.
+	const FIntPoint Step = FarmTileTargeting::SnapToStep(Grid->ToGridDirection(WorldDirection));
+	if (Step == FIntPoint::ZeroValue || Step == AimStep)
+	{
+		return;
+	}
+	AimStep = Step;
+	UpdateTargetTile();
+}
+
+FVector UFarmingComponent::GetAimDirection() const
+{
+	return Grid ? Grid->ToWorldDirection(AimStep) : FVector::ZeroVector;
+}
+
 AFarmTile* UFarmingComponent::FindTargetTile() const
 {
 	const AActor* Owner = GetOwner();
@@ -213,7 +244,7 @@ AFarmTile* UFarmingComponent::FindTargetTile() const
 	{
 		return nullptr;
 	}
-	return Grid->GetTileAtLocation(Owner->GetActorLocation() + Owner->GetActorForwardVector() * ReachDistance);
+	return Grid->GetTileAt(FarmTileTargeting::GetNeighbour(Grid->GetCoordinatesAt(Owner->GetActorLocation()), AimStep));
 }
 
 void UFarmingComponent::UpdateTargetTile()
@@ -230,6 +261,14 @@ void UFarmingComponent::UpdateTargetTile()
 void UFarmingComponent::FollowOwnerTransform(
 	USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport)
 {
+	// Fires on every move and turn; the target only changes when the owner reaches another tile.
+	const AActor* Owner = GetOwner();
+	const FIntPoint Coordinates = Grid && Owner ? Grid->GetCoordinatesAt(Owner->GetActorLocation()) : OwnerCoordinates;
+	if (Coordinates == OwnerCoordinates)
+	{
+		return;
+	}
+	OwnerCoordinates = Coordinates;
 	UpdateTargetTile();
 }
 

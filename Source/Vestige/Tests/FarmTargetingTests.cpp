@@ -38,15 +38,47 @@ namespace FarmTargetingTests
 			return Grid->GetTileAtLocation(FVector((X + 0.5f) * TileSize, (Y + 0.5f) * TileSize, 0.f));
 		}
 
-		TEST_METHOD(TargetIsTheTileInFrontOfTheFarmer)
+		TEST_METHOD(TargetStartsOnTheNeighbourTheFarmerFaces)
 		{
 			ASSERT_THAT(IsNotNull(Farming));
 
 			Farmer->SetActorLocationAndRotation(FVector(250.f, 50.f, 0.f), FRotator::ZeroRotator);
-			ASSERT_THAT(IsTrue(Farming->GetTargetTile() == TileAt(3, 0)));
 
+			ASSERT_THAT(IsTrue(Farming->GetTargetTile() == TileAt(3, 0)));
+		}
+
+		TEST_METHOD(AimingPicksTheNeighbourInThatDirectionIncludingDiagonals)
+		{
+			ASSERT_THAT(IsNotNull(Farming));
+			Farmer->SetActorLocation(FVector(250.f, 150.f, 0.f));
+
+			Farming->AimAt(FVector(0.f, 1.f, 0.f));
+			ASSERT_THAT(IsTrue(Farming->GetTargetTile() == TileAt(2, 2)));
+
+			Farming->AimAt(FVector(-1.f, -1.f, 0.f));
+			ASSERT_THAT(IsTrue(Farming->GetTargetTile() == TileAt(1, 0)));
+		}
+
+		TEST_METHOD(TurningOrStoppingKeepsTheAim)
+		{
+			ASSERT_THAT(IsNotNull(Farming));
+			Farmer->SetActorLocation(FVector(250.f, 150.f, 0.f));
+			Farming->AimAt(FVector(0.f, -1.f, 0.f));
+
+			Farming->AimAt(FVector::ZeroVector);
 			Farmer->SetActorRotation(FRotator(0.f, 90.f, 0.f));
-			ASSERT_THAT(IsTrue(Farming->GetTargetTile() == TileAt(2, 1)));
+
+			ASSERT_THAT(IsTrue(Farming->GetTargetTile() == TileAt(2, 0)));
+		}
+
+		TEST_METHOD(ANeighbourOutsideTheGridIsNoTarget)
+		{
+			ASSERT_THAT(IsNotNull(Farming));
+			Farmer->SetActorLocation(FVector(50.f, 50.f, 0.f));
+
+			Farming->AimAt(FVector(-1.f, 0.f, 0.f));
+
+			ASSERT_THAT(IsNull(Farming->GetTargetTile()));
 		}
 
 		TEST_METHOD(TargetChangeIsBroadcastOnlyWhenTheTileChanges)

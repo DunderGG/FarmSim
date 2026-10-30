@@ -116,8 +116,24 @@ void AFarmGrid::SpawnTiles()
 
 AFarmTile* AFarmGrid::GetTileAtLocation(const FVector& WorldLocation) const
 {
+	return GetTileAt(GetCoordinatesAt(WorldLocation));
+}
+
+FIntPoint AFarmGrid::GetCoordinatesAt(const FVector& WorldLocation) const
+{
 	const FVector Local = GetActorTransform().InverseTransformPosition(WorldLocation);
-	return GetTileAt(FIntPoint(FMath::FloorToInt(Local.X / TileSize), FMath::FloorToInt(Local.Y / TileSize)));
+	return FIntPoint(FMath::FloorToInt(Local.X / TileSize), FMath::FloorToInt(Local.Y / TileSize));
+}
+
+FVector2D AFarmGrid::ToGridDirection(const FVector& WorldDirection) const
+{
+	const FVector Local = GetActorTransform().InverseTransformVectorNoScale(WorldDirection);
+	return FVector2D(Local.X, Local.Y);
+}
+
+FVector AFarmGrid::ToWorldDirection(const FIntPoint& Step) const
+{
+	return GetActorTransform().TransformVectorNoScale(FVector(Step.X, Step.Y, 0.f)).GetSafeNormal();
 }
 
 AFarmTile* AFarmGrid::GetTileAt(const FIntPoint& Coordinates) const

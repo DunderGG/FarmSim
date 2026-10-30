@@ -11,9 +11,11 @@
 #include "Engine/World.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "EnhancedPlayerInput.h"
 #include "Farming/FarmingComponent.h"
 #include "Farming/FarmRestComponent.h"
 #include "Farming/FarmTargetHighlightComponent.h"
+#include "GameFramework/Controller.h"
 #include "GameFramework/PlayerController.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
@@ -127,6 +129,40 @@ void AFarmerCharacter::UnPossessed()
 		Subsystem->RemoveMappingContext(FarmingMappingContext);
 	}
 	Super::UnPossessed();
+}
+
+void AFarmerCharacter::DoMove(float Right, float Forward)
+{
+	const AController* CurrentController = GetController();
+	if (!CurrentController)
+	{
+		return;
+	}
+
+	// The same camera-relative direction the template's DoMove walks in.
+	const FRotationMatrix YawRotation(FRotator(0.f, CurrentController->GetControlRotation().Yaw, 0.f));
+	const FVector MoveDirection = YawRotation.GetUnitAxis(EAxis::X) * Forward + YawRotation.GetUnitAxis(EAxis::Y) * Right;
+	Farming->AimAt(MoveDirection);
+
+	if (IsTapToTurn(GetMoveHeldSeconds(), TapToTurnSeconds))
+	{
+		SetActorRotation(Farming->GetAimDirection().Rotation());
+		return;
+	}
+	Super::DoMove(Right, Forward);
+}
+
+float AFarmerCharacter::GetMoveHeldSeconds() const
+{
+	// Enhanced Input times every action from the moment it starts, and starts again on each press, so a tap is read here
+	// instead of with a Tap or Hold trigger on the template's IA_Move. That keeps the move action and the template as they
+	// are, and works the same for keys and the gamepad stick.
+	const UEnhancedInputLocalPlayerSubsystem* Subsystem = GetInputSubsystem();
+	const UEnhancedPlayerInput* PlayerInput = Subsystem ? Subsystem->GetPlayerInput() : nullptr;
+	const FInputActionInstance* MoveInstance = PlayerInput && MoveAction ? PlayerInput->FindActionInstanceData(MoveAction) : nullptr;
+
+	// Without an action instance, DoMove came from on-screen controls, which always walk.
+	return MoveInstance ? MoveInstance->GetElapsedTime() : TNumericLimits<float>::Max();
 }
 
 UEnhancedInputLocalPlayerSubsystem* AFarmerCharacter::GetInputSubsystem() const

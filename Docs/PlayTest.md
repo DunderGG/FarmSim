@@ -32,7 +32,6 @@ Checks for recent changes that haven't been confirmed in the editor yet. Each na
 
 ### Code clean-up, 2026-10-29
 
-- [x] **Tile highlight** (51819b4): a thin yellow frame sits on the tile in front of the farmer, follows every step and turn and disappears off the field. It shows over grass, tilled soil and crops, at midday and at night; it is unlit, so it stays visible in the dark.
 - [x] **Sleep and passing out** (758f81c, 9d77ee1): N starts the next day. Letting the clock reach 02:00 passes the farmer out into the next day.
 - [ ] **Messages** (c87081e): after sleeping, "You slept. Day N begins." and "Game saved." show as two lines. Up to three messages show at once, each fading after about three seconds.
    - Problem: If you Save, the save message appears. Then you sleep, and the sleep message appears. The save message remains. You sleep again, the save message appears and the save message is still there. Separate messages do not seem to fade out. It looks more like a log of messages that appears whenever a new message is sent.
@@ -44,6 +43,17 @@ Checks for recent changes that haven't been confirmed in the editor yet. Each na
 - [ ] **Lighting** (42f3a44): at High and at Epic, days look as before and nights are properly dark. Epic may differ slightly, since only Epic uses hardware ray tracing now.
    - I don't know how to test different graphic settings.
 - [x] **Content validation** (139e88d): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
+
+### Tile targeting, 2026-10-30
+
+Replaces the tile highlight check above: the frame now sits on a neighbouring tile chosen by the movement direction (GameDesign.md, section 6).
+
+- [ ] **Tap to turn** (TARGETING): a quick tap of W, A, S or D turns the farmer to face that way without stepping, and the frame moves to the tile next to the farmer's in that direction. Tapping two keys at once (W and D) turns diagonally, and the frame sits on the diagonal neighbour.
+- [ ] **Walking** (TARGETING): holding a key walks after a short moment, and the frame follows the direction of travel, one tile ahead of the farmer. When you let go, the frame stays where it was.
+- [ ] **Field edge** (TARGETING): standing on an edge tile and turning to face outwards hides the frame; turning back shows it again.
+- [ ] **Tools** (TARGETING): the tools act on the framed tile, never on the one the farmer stands on.
+- [ ] **Feel** (TARGETING): the delay before walking (0.15 s) doesn't feel sluggish. If it does, change Tap To Turn Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input) and note the value that feels right.
+- [ ] **Gamepad** (TARGETING), if you have one: a flick of the left stick turns, holding it walks, the same as the keys.
 
 ### Source folders, 2026-10-30
 

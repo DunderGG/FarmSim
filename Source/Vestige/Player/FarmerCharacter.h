@@ -45,6 +45,15 @@ public:
 	 */
 	TArray<FFarmKeyHint> GetActionKeyHints() const;
 
+	/**
+	 * Walks as the template does, and aims the farming component at the neighbouring tile in the movement direction. While
+	 * the move input has been held for less than TapToTurnSeconds, it only turns the farmer to face that tile.
+	 */
+	virtual void DoMove(float Right, float Forward) override;
+
+	/** True if a movement input held for HeldSeconds is still a tap, which turns the farmer in place instead of walking. */
+	static bool IsTapToTurn(float HeldSeconds, float TapSeconds) { return HeldSeconds < TapSeconds; }
+
 protected:
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
@@ -66,8 +75,18 @@ private:
 
 	UEnhancedInputLocalPlayerSubsystem* GetInputSubsystem() const;
 
+	/** How long the move input has been held, in seconds, or the largest float when DoMove comes from on-screen controls. */
+	float GetMoveHeldSeconds() const;
+
 	/** Shows the tool's held mesh in the hand, or nothing for an empty slot or a tool without one. */
 	void ShowHeldTool(const UFarmToolData* Tool);
+
+	/**
+	 * A movement input shorter than this, in seconds, turns the farmer to face the neighbouring tile without walking, so a
+	 * tile next to the farmer can be picked without leaving the farmer's own tile. Longer inputs walk, after this delay.
+	 */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming|Input", meta = (AllowPrivateAccess = "true", ClampMin = 0))
+	float TapToTurnSeconds = 0.15f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UFarmingComponent> Farming;

@@ -20,7 +20,8 @@ DECLARE_MULTICAST_DELEGATE(FOnFarmInventoryChanged);
 
 /**
  * Gives its owner farming tools and a tiny inventory.
- * Uses the tile directly in front of the owner, and tells the player what happened through UFarmFeedbackSubsystem.
+ * Works on the tile next to the owner's in the direction the owner aims, and tells the player what happened through
+ * UFarmFeedbackSubsystem.
  */
 UCLASS(ClassGroup = (Farming), meta = (BlueprintSpawnableComponent))
 class UFarmingComponent : public UActorComponent
@@ -37,7 +38,7 @@ public:
 	const UFarmToolData* GetCurrentTool() const { return Toolbar.GetCurrentTool(); }
 	const FFarmToolbar& GetToolbar() const { return Toolbar; }
 
-	/** Uses the tool in hand on the tile in front of the owner. Does nothing to the farm without a tile or a tool. */
+	/** Uses the tool in hand on the target tile. Does nothing to the farm without a target or a tool. */
 	void UseTool();
 
 	int32 GetSeeds() const { return Seeds; }
@@ -53,13 +54,26 @@ public:
 	 */
 	bool RestoreFromSaveData(const FFarmFarmingSaveData& Data);
 
-	/** The tile in front of the owner, or nullptr if it isn't facing one. Updated whenever the owner moves or turns. */
+	/**
+	 * Aims at the neighbouring tile in WorldDirection, snapped to one of the eight grid directions (diagonals included).
+	 * The owner's input calls it with the movement direction every frame it is held. A zero direction keeps the current aim,
+	 * so the target stays put when the farmer stops. Broadcasts OnTargetTileChanged when the target changes.
+	 */
+	void AimAt(const FVector& WorldDirection);
+
+	/** The aim as a world direction on the ground, of length 1, for turning the owner to face it. Zero without a grid. */
+	FVector GetAimDirection() const;
+
+	/**
+	 * The target tile: the neighbour of the owner's tile in the aimed direction, never the tile the owner stands on.
+	 * nullptr when that neighbour is outside the grid.
+	 */
 	const AFarmTile* GetTargetTile() const { return TargetTile.Get(); }
 
 	/** Broadcast whenever the current tool changes, including when a save is loaded. */
 	FOnFarmToolChanged OnToolChanged;
 
-	/** Broadcast when the tile in front of the owner changes, with nullptr when it stops facing one. */
+	/** Broadcast when the target tile changes, with nullptr when there stops being one. */
 	FOnFarmTargetTileChanged OnTargetTileChanged;
 
 	/** Broadcast when the seed or harvest count changes, including when a save is loaded. */
@@ -75,21 +89,18 @@ private:
 
 	/** Puts the tool with this ContentId in hand. Returns false, with the first slot in hand, if no slot holds it. */
 	bool RestoreCurrentTool(FName ToolContentId);
-	/** The tile ReachDistance in front of the owner right now, or nullptr. */
+
+	/** The neighbour of the owner's tile one AimStep away, or nullptr if it is outside the grid. */
 	AFarmTile* FindTargetTile() const;
 
 	/** Finds the target tile again and broadcasts OnTargetTileChanged if it changed. */
 	void UpdateTargetTile();
 
-	/** Bound to the owner's root component, so the target follows every move and turn without ticking. */
+	/** Bound to the owner's root component, so the target follows the owner from tile to tile without ticking. */
 	void FollowOwnerTransform(USceneComponent* UpdatedComponent, EUpdateTransformFlags UpdateTransformFlags, ETeleportType Teleport);
 
 	/** Tells the player what happened, through UFarmFeedbackSubsystem. */
 	void Notify(const FText& Message) const;
-
-	/** How far in front of the owner the targeted tile is, in cm. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", ClampMin = 0))
-	float ReachDistance = 100.f;
 
 	/** Seeds the farmer has when a game starts without a save. */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", ClampMin = 0))
@@ -105,6 +116,12 @@ private:
 	TObjectPtr<AFarmGrid> Grid;
 
 	TWeakObjectPtr<AFarmTile> TargetTile;
+
+	/** The grid step from the owner's tile to the target: X and Y each -1, 0 or 1, never both 0. */
+	FIntPoint AimStep = FIntPoint(1, 0);
+
+	/** The owner's tile when the target was last found, so moving within a tile does no work. */
+	FIntPoint OwnerCoordinates = FIntPoint::ZeroValue;
 
 	/** Crop asset the Seeds tool plants, picked by its ID (FarmCrop:Base.Turnip). */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming", meta = (AllowPrivateAccess = "true", AllowedTypes = "FarmCrop"))

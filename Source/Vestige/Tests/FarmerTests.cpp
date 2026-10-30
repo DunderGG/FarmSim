@@ -30,6 +30,16 @@ namespace FarmerTests
 			}
 		}
 
+		TEST_METHOD(OnlyAShortMoveInputIsATapToTurn)
+		{
+			constexpr float TapSeconds = 0.15f;
+
+			ASSERT_THAT(IsTrue(AFarmerCharacter::IsTapToTurn(0.f, TapSeconds)));
+			ASSERT_THAT(IsTrue(AFarmerCharacter::IsTapToTurn(0.14f, TapSeconds)));
+			ASSERT_THAT(IsFalse(AFarmerCharacter::IsTapToTurn(0.15f, TapSeconds)));
+			ASSERT_THAT(IsFalse(AFarmerCharacter::IsTapToTurn(2.f, TapSeconds)));
+		}
+
 		TEST_METHOD(ToolbarKeyHintsLeaveOutEmptySlots)
 		{
 			const AFarmerCharacter& Farmer = Spawner.SpawnActor<AFarmerCharacter>();

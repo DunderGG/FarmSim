@@ -126,7 +126,7 @@ Contents
 **Rules:**
 
 - Input actions (`IA_`) and mapping contexts (`IMC_`) become assets once there are more than a handful of keys or once players can rebind keys. Mapping contexts are added and removed by context (on foot, in a menu, driving a machine) with explicit priorities.
-- The character binds input to calls on the components that own the action (`UFarmingComponent::UseTool`); input code holds no game rules.
+- The character binds input to calls on the components that own the action (`UFarmingComponent::UseTool`); input code holds no game rules. Movement input also aims the farming component at a neighbouring tile (`AimAt`), and a short tap turns the farmer in place; the tap is read from the move action's elapsed time (`FInputActionInstance::GetElapsedTime`), so the template's `IA_Move` needs no extra trigger.
 - When the Gameplay Ability System arrives, follow Lyra: a `UFarmInputConfig` data asset maps each action to an input tag, and abilities activate by input tag, so new abilities don't need new binding code.
 - Key hints on screen come from the mappings, never hard-coded text ([ArchitectureAudit A-14](ArchitectureAudit.md)).
 - Player rebinding uses Enhanced Input's player-mappable key settings, saved with the settings ([section 17](#17-settings)).

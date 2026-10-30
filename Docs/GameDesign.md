@@ -114,6 +114,8 @@ The day should always offer more to do than there's time for, so choosing is the
 
 ### Tiles
 
+**Which tile you work on.** Tools act on a tile next to the one the farmer stands on, in one of the eight directions (diagonals included), chosen by the direction of the movement input. A quick tap of a movement key or the stick turns the farmer to face that neighbour without stepping; holding walks, and the target follows the direction of travel. With no input the target stays where it was. The targeted tile is outlined; past the edge of the field there is no target. Mouse and gamepad work the same way.
+
 A farm tile has a state (grass, tilled, planted), and on top of that:
 
 - **Water level:** watered tiles grow. Water is a resource (see below), not free.
@@ -339,6 +341,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-30 | Tools target the neighbouring tile in the movement direction, snapped to eight directions, and a tap turns the farmer in place ([section 6](#tiles)). Rejected: a crosshair in the middle of the screen, a mouse click on a tile, and the tile straight in front of where the farmer faces | Targeting by facing was fiddly: the third-person camera turns the farmer toward where it walks, so picking the tile beside you meant stepping and hoping. A screen-centre crosshair can't reach the tiles beside or behind the farmer, because the camera sits behind and above. A mouse click conflicts with mouse-look and needs a gamepad fallback anyway; it can be added on top of this later. Snapping works the same on keyboard and gamepad |
 | 2026-10-28 | The caretaker robot starts loyal rather than sceptical; trust changes must be visible; romance is an explicit opt-in the character can decline; the vertical slice has one complete caretaker arc ([section 8](#relationships)) | Makes relationships more than a gift checklist and fixes the clash between the caretaker's loyalty and the general robot attitude (audit G-11) |
 | 2026-10-28 | Set a first-release target with limits on maps, seasons, crops, characters, romance and systems, and named cut candidates (multiplayer, mod loading, animals, other cameras, extra faction hubs, extra scavenging) ([section 13](#first-release)) | A solo project needs a cut line, or "later" reads as a commitment (audit G-08) |
 | 2026-10-28 | The first season guarantees a start: starting seeds and purse, a basic crop always for sale that sells for at least twice its seed price, and town donations of fixed items separate from selling ([section 9](#economy)) | A poor harvest must never block the systems needed for a better one (audit G-07) |
