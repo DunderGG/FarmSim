@@ -338,6 +338,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-30 | The nomad is not a romance option. Their relationship with the sleeper is a lasting friendship that preserves both parties' boundaries and the nomad's choice to keep travelling; it does not end in marriage or moving to the farm | A travelling character should not be made to abandon the premise that defines them to fit the partner-home rule. Their platonic arc gives the cast a valuable model of intimacy and mutual support outside romance |
 | 2026-10-30 | Named the Iron Creed engineer Gage (Ironside Pioneer PR-520), established his pre-war sapper origin, hydraulic frame, 24-hour schedule, industrial gift tastes, 5-tier heart progression, and defined the Bastion hub unlocks (foundry, perimeter defense, smelting exchange, and frame conversion clues) | Fleshes out the engineer character sheet into a concrete playable arc with matching layout to the archivist and separates hub rewards from the core tech tree |
 | 2026-10-30 | The nomad maintains a small, consent-based and deliberately compartmentalized circuit of human contacts, not a route map to all surviving people. A compromised relay prompts their arc: they choose to build a voluntary network of safe stops, including the farm, without surrendering their freedom to travel or exposing contacts who have not agreed to be known | Makes the nomad's trade and news role concrete while preserving the rarity, isolation and agency of human survivors. The player can help create safe conditions but does not gain ownership of the circuit or become its rescuer |
 | 2026-10-30 | Named the Index archivist Cleo (Civitas Lexis CL-840), established her pre-war cataloger origins, field modifications, schedule, gift tastes, 5-tier heart progression, and defined the Archive hub unlocks (blueprints, lore codex, heritage seeds, and cognitive trial clues) while keeping core tech tree progression distinct | Fleshes out the archivist character sheet into a concrete playable arc and separates hub rewards from the core tech tree |
@@ -377,7 +378,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 - **Final names** for everything marked *(working name)*, in particular the coin, the caretaker and the robot makers.
 - **The engineer:** their name and model.
 - **The Index archivist:** their name and model.
-- **The nomad:** their name and whether they are a love interest.
+- **The nomad:** their name, gender and pronouns, and which circuit contacts become named on-screen characters.
 - **Whether Wellspring is the final town name**, along with the region's name, the world's name and the game title (shared with GameDesign).
 - **The sealed message:** what the parents' message says.
 - **The sibling:** their role, survival path, and when or whether the player meets them.
