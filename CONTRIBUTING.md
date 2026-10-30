@@ -133,7 +133,34 @@ Keep things light so big farms stay fast: a crop or small prop in the hundreds o
 
 The goal is that adding a crop, tool or item means adding data, not changing C++. That's also how mods will add content.
 
-The data asset types for this (`UFarmCropData` and friends) are planned but not built yet; see [Expected changes](Docs/Architecture.md#18-expected-changes). Building them is a good first contribution for a C++ developer. Once they exist, this section will explain step by step how to add a crop.
+Each crop and tool is a **data asset**: an asset in the Content Browser whose fields describe it. The game finds them through Unreal's *Asset Manager*, which scans set folders at startup, so the code holds no list of crops to edit. The design is in [Architecture.md, Designing for mods](Docs/Architecture.md#12-designing-for-mods).
+
+### Adding a crop
+
+1. **Make the meshes**, one per growth stage, from the day it's planted to ripe: a crop that takes 3 days has 4 meshes. Follow [Contributing art](#5-contributing-art), with the origin at the center of the base on the soil surface, and name them after the crop: `SM_Crop_Carrot_Stage0` ... `SM_Crop_Carrot_Ripe`. Import them into `Content/Farm/Meshes`.
+2. **Create the data asset.** In the Content Browser, open `Content/Farm/Crops`, right-click and choose *Miscellaneous > Data Asset*, pick **Farm Crop Data**, and name it `DA_Crop_Carrot`. It has to be in `Content/Farm/Crops` (or a folder inside it): that is the folder the Asset Manager scans for crops (`Config/DefaultGame.ini`).
+3. **Fill in its fields** (double-click the asset):
+
+   | Field | What to enter |
+   |---|---|
+   | Content Id | `Base.Carrot`: the namespace `Base` for the game's own content, a dot, and the crop's name, each starting with a capital letter, letters and digits only. Saves store this ID, so it **never changes** once the crop is in a release. It doesn't follow the asset's name, so renaming or moving the asset later is safe |
+   | Display Name | The name the player sees, such as *Carrot* |
+   | Days To Mature | Watered days until it can be harvested. It grows one stage per watered day |
+   | Growth Stage Meshes | The meshes from step 1, in order, one more than *Days To Mature* |
+   | Yield | Crops one harvest gives |
+   | Seasons, Water Need, Contamination Tolerance, Seed Price, Sell Price | Fill in what you intend. The game doesn't use them yet; they are there so crops don't need changing when seasons, contamination and money arrive |
+
+4. **Save it and check it.** Right-click the `Content/Farm/Crops` folder and choose *Validate Assets*: a missing or badly formed Content Id shows as an error. Restart the editor and check the Output Log for an "is used by more than one asset" error, which means another asset already has your ID.
+5. **Try it in the game.** For now the seeds plant one crop, chosen on the farmer: open `Content/ThirdPerson/Blueprints/BP_ThirdPersonCharacter`, select its **Farming** component, set **Seed Crop Id** to your crop, and play. Change it back before you commit, unless your pull request is meant to change the starting crop. Choosing between several seed kinds comes with the inventory ([Roadmap.md](Docs/Roadmap.md)).
+6. **Open a pull request** with the data asset, the meshes, their `.blend` source and a screenshot of each growth stage in the game.
+
+### Adding a tool
+
+Tools work the same way: a **Farm Tool Data** asset named `DA_Tool_<Name>` in `Content/Farm/Tools`, with a Content Id such as `Base.Sickle`, a held mesh (origin where the hand grips), and an *Action* chosen from the existing ones (till, plant, water, harvest). It appears in the game once it's added to **Toolbar Ids** on the farmer's Farming component; the first nine slots get the keys 1 to 9. A tool that needs a new kind of action needs C++, so open an issue first.
+
+### Mods
+
+Mods will add content the same way, with their own namespace instead of `Base` (`MyMod.BlueCorn`). How a mod is packaged and loaded isn't built yet; see [Architecture.md, Designing for mods](Docs/Architecture.md#12-designing-for-mods).
 
 ## 8. Ideas, bugs and feedback
 
