@@ -35,12 +35,13 @@ Checks for recent changes that haven't been confirmed in the editor yet. Each na
 - [x] **Sleep and passing out** (758f81c, 9d77ee1): N starts the next day. Letting the clock reach 02:00 passes the farmer out into the next day.
 - [ ] **Messages** (c87081e): after sleeping, "You slept. Day N begins." and "Game saved." show as two lines. Up to three messages show at once, each fading after about three seconds.
    - Problem: If you Save, the save message appears. Then you sleep, and the sleep message appears. The save message remains. You sleep again, the save message appears and the save message is still there. Separate messages do not seem to fade out. It looks more like a log of messages that appears whenever a new message is sent.
-- [ ] **Key hints** (6805d86, 812ea57): the bottom line reads "1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep   |   F9 New game". The tool names come from the tool data assets.
+- [x] **Key hints** (6805d86, 812ea57): the bottom line reads "1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep   |   F9 New game". The tool names come from the tool data assets.
    - This works, but we need a much better toolbar.
 - [x] **Clock** (812ea57): the status line shows the day, a 24-hour clock in 10-minute steps and the tool in hand.
 - [x] **Counts** (812ea57): planting lowers the seed count by one, and harvesting a ripe crop raises the harvest count by the crop's yield. Both update at once.
 - [x] **Old save** (9cdf0ac, 8fff295): your existing save loads with its day, inventory and planted crops. A save from before 2026-10-29 is copied to `Farm_Version0.sav` first. Each new day saves to whichever of `Farm.sav` and `Farm2.sav` doesn't hold the newest save.
-- [ ] **Lighting** (42f3a44): at High and at Epic, days look as before and nights are properly dark. Epic may differ slightly, since only Epic uses hardware ray tracing now. How: while playing, open the console (the key under Esc), type `scalability 2` for High, look at a day and a night, then `scalability 3` for Epic and look again ([Before you test](#1-before-you-test)). Let the clock run to get from day to night; sleeping (N) brings back the morning.
+- [ ] **Lighting** (42f3a44): at High and at Epic, days look as before and nights are properly dark. Epic may differ slightly, since only Epic uses hardware ray tracing now. **How: while playing, open the console (the key under Esc), type `scalability 2` for High, look at a day and a night, then `scalability 3` for Epic and look again ([Before you test](#1-before-you-test)).** Let the clock run to get from day to night; sleeping (N) brings back the morning.
+   - The key under escape is not working, do we need to enable a console keybinding?
 - [x] **Content validation** (139e88d): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
 
 ### Tile targeting, 2026-10-30
