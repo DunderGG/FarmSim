@@ -30,7 +30,7 @@ The faction's story should test what readiness is for, rather than ask the playe
 
 ## Open decisions
 
-- The character or characters who anchor the Bastion story, and whether either is already represented by the engineer.
+- [x] Gage (the engineer) anchors the Bastion introduction and transit route; additional characters representing contrasting Creed leadership styles can be developed for the hub interior.
 - The specific threat, mission and player choices for a future playable arc.
 - Final colors and artwork for the symbol.
 - Whether **Iron Creed** remains the final faction name.
