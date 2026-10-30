@@ -18,6 +18,15 @@ namespace FarmConfigTests
 			// warning each time. They only read the tilt of phones and motion controllers, so leaving them on costs nothing.
 			ASSERT_THAT(IsTrue(GetDefault<UInputSettings>()->bEnableMotionControls));
 		}
+
+		TEST_METHOD(TheConsoleOpensWithTildeAndSection)
+		{
+			// Tilde is the console key on a US keyboard; Section, the section sign, is the key under Esc on a Swedish one.
+			const TArray<FKey>& ConsoleKeys = GetDefault<UInputSettings>()->ConsoleKeys;
+
+			ASSERT_THAT(IsTrue(ConsoleKeys.Contains(EKeys::Tilde)));
+			ASSERT_THAT(IsTrue(ConsoleKeys.Contains(EKeys::Section)));
+		}
 	};
 }
 
