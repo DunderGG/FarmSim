@@ -56,9 +56,9 @@ Replaces the tile highlight check above: the frame now sits on a neighbouring ti
 
 Replaces the earlier messages check (c87081e), after David's note that messages stacked in one box read like a log.
 
-- [ ] **Separate boxes** (MESSAGES): every message shows in a small box of its own, stacked above the key hints with a gap between them. Sleeping shows "You slept. Day N begins." and "Game saved." as two boxes.
-- [ ] **Own timers** (MESSAGES): each box fades in, stays about three seconds and fades out on its own. Use a tool, wait a second and use it again: the first box fades a second before the second.
-- [ ] **At most three** (MESSAGES): with three boxes showing, a fourth message pushes out the oldest. Tilling and planting quickly is the easiest way to get there.
+- [ ] **Separate boxes** (826f80b): every message shows in a small box of its own, stacked above the key hints with a gap between them. Sleeping shows "You slept. Day N begins." and "Game saved." as two boxes.
+- [ ] **Own timers** (826f80b): each box fades in, stays about three seconds and fades out on its own. Use a tool, wait a second and use it again: the first box fades a second before the second.
+- [ ] **At most three** (826f80b): with three boxes showing, a fourth message pushes out the oldest. Tilling and planting quickly is the easiest way to get there.
 
 ### Source folders, 2026-10-30
 
