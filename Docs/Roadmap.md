@@ -38,7 +38,7 @@ A third-person farmer on a small field who can till, plant, water and harvest, w
 ### Project setup
 
 - [x] Unreal Engine 5.7 C++ project from the Third Person template
-- [x] Git with Git LFS for binary files, private GitHub repository
+- [x] Git with Git LFS for binary files, GitHub repository (public since October 2026)
 - [x] Test level `L_Farm` with a farm grid placed in it
 - [x] Disabled the VisualStudioTools plugin, which was missing from the engine and broke the build
 
