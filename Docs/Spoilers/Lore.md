@@ -283,9 +283,9 @@ Hob is the family's patched-together Hearthwell home robot, who kept the farm an
 
 An Iron Creed engineer visiting Wellspring through a parts-and-expertise exchange with the Bastion. The failing aquifer pump is their current assignment, not the limit of their skills. They work with Keeper operators and the sleeper to develop a repair plan; their character arc centers on learning to see cooperation as a form of readiness. See the [engineer character sheet](Characters/Engineer.md).
 
-#### **The Index archivist:**
+#### **The Index archivist: Cleo**
 
-A visiting researcher seeking Wellspring's legacy water-system records. Their exchange with the sleeper gives the player a reason and a route to visit the Archive; see the [archivist character sheet](Characters/Archivist.md).
+Cleo (Civitas Lexis CL-840) is a visiting Index researcher seeking Wellspring's legacy water-system records. Her exchange with the sleeper gives the player a reason and a route to visit the Archive; see the [archivist character sheet](Characters/Archivist.md).
 
 #### Other Robots
 
@@ -338,6 +338,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-30 | Named the Index archivist Cleo (Civitas Lexis CL-840), established her pre-war cataloger origins, field modifications, schedule, gift tastes, 5-tier heart progression, and defined the Archive hub unlocks (blueprints, lore codex, heritage seeds, and cognitive trial clues) while keeping core tech tree progression distinct | Fleshes out the archivist character sheet into a concrete playable arc and separates hub rewards from the core tech tree |
 | 2026-10-27 | Adopted Project Vestige as the internal working codename; its theme is the sleeper searching for traces of humankind in a world filled with robots, while the final public game title remains undecided | Gives the project a conceptual identity tied to the protagonist's journey without naming a specific gameplay genre |
 | 2026-10-27 | Defined concept symbols for the factions: the Iron Creed's braced shield, the Index's connected evidence within an open archive frame, and the Keepers' joined links with an open gap; drafted a story arc direction for each faction | Gives concept art and future faction stories a consistent visual and thematic starting point without equating membership with a robot model |
 | 2026-10-27 | The engineer identifies as a man and uses he/its pronouns; the Index archivist identifies as a woman and uses she/its pronouns. Their identities are independent of their frame designs | Establishes consistent character identities and pronouns for writing and concept art without treating chassis as biological gender |
