@@ -32,20 +32,23 @@ Checks for recent changes that haven't been confirmed in the editor yet. Each na
 
 ### Code clean-up, 2026-10-29
 
-- [ ] **Tile highlight** (51819b4): a thin yellow frame sits on the tile in front of the farmer, follows every step and turn and disappears off the field. It shows over grass, tilled soil and crops, at midday and at night; it is unlit, so it stays visible in the dark.
-- [ ] **Sleep and passing out** (758f81c, 9d77ee1): N starts the next day. Letting the clock reach 02:00 passes the farmer out into the next day.
+- [x] **Tile highlight** (51819b4): a thin yellow frame sits on the tile in front of the farmer, follows every step and turn and disappears off the field. It shows over grass, tilled soil and crops, at midday and at night; it is unlit, so it stays visible in the dark.
+- [x] **Sleep and passing out** (758f81c, 9d77ee1): N starts the next day. Letting the clock reach 02:00 passes the farmer out into the next day.
 - [ ] **Messages** (c87081e): after sleeping, "You slept. Day N begins." and "Game saved." show as two lines. Up to three messages show at once, each fading after about three seconds.
+   - Problem: If you Save, the save message appears. Then you sleep, and the sleep message appears. The save message remains. You sleep again, the save message appears and the save message is still there. Separate messages do not seem to fade out. It looks more like a log of messages that appears whenever a new message is sent.
 - [ ] **Key hints** (6805d86, 812ea57): the bottom line reads "1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep   |   F9 New game". The tool names come from the tool data assets.
-- [ ] **Clock** (812ea57): the status line shows the day, a 24-hour clock in 10-minute steps and the tool in hand.
-- [ ] **Counts** (812ea57): planting lowers the seed count by one, and harvesting a ripe crop raises the harvest count by the crop's yield. Both update at once.
-- [ ] **Old save** (9cdf0ac, 8fff295): your existing save loads with its day, inventory and planted crops. A save from before 2026-10-29 is copied to `Farm_Version0.sav` first. Each new day saves to whichever of `Farm.sav` and `Farm2.sav` doesn't hold the newest save.
+   - This works, but we need a much better toolbar.
+- [x] **Clock** (812ea57): the status line shows the day, a 24-hour clock in 10-minute steps and the tool in hand.
+- [x] **Counts** (812ea57): planting lowers the seed count by one, and harvesting a ripe crop raises the harvest count by the crop's yield. Both update at once.
+- [x] **Old save** (9cdf0ac, 8fff295): your existing save loads with its day, inventory and planted crops. A save from before 2026-10-29 is copied to `Farm_Version0.sav` first. Each new day saves to whichever of `Farm.sav` and `Farm2.sav` doesn't hold the newest save.
 - [ ] **Lighting** (42f3a44): at High and at Epic, days look as before and nights are properly dark. Epic may differ slightly, since only Epic uses hardware ray tracing now.
-- [ ] **Content validation** (139e88d): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
+   - I don't know how to test different graphic settings.
+- [x] **Content validation** (139e88d): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
 
 ### Source folders, 2026-10-30
 
-- [ ] **Solution** (adef4a7): after regenerating the project files, the solution shows `Core`, `Content`, `Time`, `Farming`, `Save`, `Player`, `UI`, `Template` and `Tests` under `Source/Vestige`.
-- [ ] **Editor start** (adef4a7): the editor opens `L_Farm` with no errors about missing classes, and the farmer Blueprint (`Content/ThirdPerson/Blueprints/BP_ThirdPersonCharacter`), `BP_FarmTile`, the crops and the tools open normally.
+- [x] **Solution** (adef4a7): after regenerating the project files, the solution shows `Core`, `Content`, `Time`, `Farming`, `Save`, `Player`, `UI`, `Template` and `Tests` under `Source/Vestige`.
+- [x] **Editor start** (adef4a7): the editor opens `L_Farm` with no errors about missing classes, and the farmer Blueprint (`Content/ThirdPerson/Blueprints/BP_ThirdPersonCharacter`), `BP_FarmTile`, the crops and the tools open normally.
 
 ### Editor chores
 
