@@ -10,20 +10,21 @@ Built with **Unreal Engine 5.7** (C++ first, Blueprints for content) and **Blend
 
 ## Getting started
 
-You need Windows 10 or 11, Unreal Engine 5.7, Git with **Git LFS**, and Visual Studio 2022 for C++ work.
+You need Windows 10 or 11, Unreal Engine 5.7, Git with **Git LFS**, and Visual Studio 2026 with the components in `.vsconfig` (the editor compiles the project's C++ the first time, even if you won't write code).
 
 ```
 git lfs install
 git clone https://github.com/DunderGG/ProjectVestige.git
 ```
 
-Then double-click `Vestige.uproject`, let Unreal build the C++ modules, open `Content/Maps/L_Farm` and press **Play**. [CONTRIBUTING.md](CONTRIBUTING.md) has the full setup, the controls and troubleshooting.
+Then double-click `Vestige.uproject`, let Unreal build the C++ modules, open `Content/Maps/L_Farm` and press **Play**. **[Docs/Setup.md](Docs/Setup.md)** walks through every step on a fresh PC, with troubleshooting; the controls are in [CONTRIBUTING.md](CONTRIBUTING.md#controls).
 
 ## Documentation
 
 | Document | What's in it |
 |---|---|
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Setup, project layout, and how to contribute code, art, audio and ideas |
+| [Docs/Setup.md](Docs/Setup.md) | Setting up a new Windows PC to build and run the project, step by step |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Project layout, and how to contribute code, art, audio and ideas |
 | [Docs/GameDesign.md](Docs/GameDesign.md) | What the game is, how it plays and why |
 | [Docs/Spoilers/Lore.md](Docs/Spoilers/Lore.md) | The story, the world and its characters (spoilers) |
 | [Docs/Roadmap.md](Docs/Roadmap.md) | What's done and what comes next |

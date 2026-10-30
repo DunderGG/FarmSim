@@ -82,6 +82,7 @@ A third-person farmer on a small field who can till, plant, water and harvest, w
 - [x] Architecture document with the ownership table, decision log, known gaps and expected changes
 - [x] Rules for designing the game so it can be modded later
 - [x] Contributing guide, and Git LFS for more file types
+- [x] Step-by-step setup guide for a new Windows PC (`Docs/Setup.md`)
 - [x] Game design document
 - [x] Lore document
 - [x] Licenses: GPL-3.0-or-later with an Unreal Engine permission for code, CC BY-NC-SA 4.0 for assets, and a credits file

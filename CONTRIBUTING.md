@@ -42,24 +42,9 @@ Not sure where you fit? Open an issue and say what you'd like to do.
 
 ## 2. Getting set up
 
-### What you need
+**[Docs/Setup.md](Docs/Setup.md)** walks you through it step by step on a fresh Windows PC: Git and Git LFS, cloning, Unreal Engine 5.7, Visual Studio with the components the engine needs, the first build, the automated tests, the formatter, Blender, and fixes for common first-build problems.
 
-| Tool | Version | Notes |
-|---|---|---|
-| Windows | 10 or 11 | The project is developed and built on Windows |
-| Unreal Engine | **5.7** | Install through the Epic Games Launcher. Other versions will ask to convert the project; don't |
-| Visual Studio | 2022 | Only for C++ work. Opening the project prompts you to install the components listed in `.vsconfig` (the "Game development with C++" workload) |
-| Git and **Git LFS** | Recent | All binary files (`.uasset`, `.umap`, `.fbx`, `.blend`, textures, audio) are stored in Git LFS |
-| Blender | Current release | Only for 3D art |
-
-### First run
-
-1. Install Git LFS once: `git lfs install`.
-2. Clone the repository. LFS files download with it; if you see small text files where assets should be, run `git lfs pull`.
-3. Double-click **`Vestige.uproject`**. The first time, Unreal offers to build the C++ modules; say yes. This takes a few minutes.
-   - If you will write C++, right-click `Vestige.uproject` and pick *Generate Visual Studio project files* first, then open `Vestige.sln` and build the **VestigeEditor** target in **Development Editor / Win64**.
-   - Always open the project through `Vestige.uproject` or the launcher's *My Projects* list. Opening the editor on its own and letting it auto-load the project can show a misleading "modules were built with a different engine version" error.
-4. Open the level **`Content/Maps/L_Farm`** and press **Play**.
+In short, you need Windows 10 or 11, Git with **Git LFS**, Unreal Engine **5.7** (never convert the project to another version), and Visual Studio 2026 with the components in `.vsconfig`. Visual Studio is needed even for content work, because the editor compiles the project's C++ module the first time it opens it.
 
 ### Controls
 
