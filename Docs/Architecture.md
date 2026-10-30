@@ -394,7 +394,7 @@ The layers are the source folders ([CodingGuidelines.md, section 14.1](CodingGui
 | `Player/` | `AFarmerCharacter` | `Core/` to `Save/` |
 | `UI/` | `AFarmHUD` and `SFarmHudWidget` | `Core/` to `Player/` |
 
-`Tests/` may include any layer. `Template/` holds Epic's template classes, which aren't maintained to our guide; it is outside the layers, and the farmer may include the template character it derives from.
+`Tests/` may include any layer, and no layer includes `Tests/`. `Template/` holds Epic's template classes, which aren't maintained to our guide but are checked like the rest. It is app-level wiring outside the layers: its files may include any layer (the template game mode names the HUD class), so only `Player/`, which derives the farmer from the template character, and `UI/` may include it. Otherwise a low layer could reach a high one through it.
 
 - **Lower layers never include or call higher layers.** They broadcast events, and the higher layer listens. Each owner's save struct lives with the owner, and `Save/` only gathers them.
 - **The test `Vestige.Architecture.IncludeDirection` enforces the order.** It reads the source and fails on a wrong-way include, on one of our headers included without its folder, and on a folder missing from its layer table. That table and this one must match.
