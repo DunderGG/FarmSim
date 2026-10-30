@@ -6,14 +6,14 @@
 #include "Components/LightComponent.h"
 #include "Components/PostProcessComponent.h"
 #include "Components/SkyLightComponent.h"
+#include "Core/FarmActorLookup.h"
+#include "Core/Vestige.h"
 #include "Engine/DirectionalLight.h"
 #include "Engine/SkyLight.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
-#include "Core/FarmActorLookup.h"
-#include "Time/FarmClockSaveData.h"
 #include "ProfilingDebugging/CpuProfilerTrace.h"
-#include "Core/Vestige.h"
+#include "Time/FarmClockSaveData.h"
 
 namespace FarmDayCycleLighting
 {

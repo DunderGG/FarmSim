@@ -3,8 +3,8 @@
 
 #include "UI/FarmHudWidget.h"
 
-#include "UI/FarmHUD.h"
 #include "Styling/CoreStyle.h"
+#include "UI/FarmHUD.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/SBoxPanel.h"
 #include "Widgets/SOverlay.h"

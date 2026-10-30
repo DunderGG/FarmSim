@@ -6,8 +6,8 @@
 #include "AssetRegistry/AssetData.h"
 #include "AssetRegistry/IAssetRegistry.h"
 #include "Content/FarmContentData.h"
-#include "ProfilingDebugging/CpuProfilerTrace.h"
 #include "Core/Vestige.h"
+#include "ProfilingDebugging/CpuProfilerTrace.h"
 
 TArray<FFarmDuplicateContentId> UFarmAssetManager::FindDuplicateContentIds(TConstArrayView<TPair<FPrimaryAssetId, FName>> Assets)
 {

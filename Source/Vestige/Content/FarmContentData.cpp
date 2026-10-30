@@ -3,8 +3,8 @@
 
 #include "Content/FarmContentData.h"
 
-#include "Engine/AssetManager.h"
 #include "Core/Vestige.h"
+#include "Engine/AssetManager.h"
 
 #if WITH_EDITOR
 #include "Misc/DataValidation.h"

@@ -4,10 +4,10 @@
 #if WITH_DEV_AUTOMATION_TESTS
 
 #include "Components/ActorTestSpawner.h"
-#include "CQTest.h"
 #include "Content/FarmAssetManager.h"
 #include "Content/FarmCropData.h"
 #include "Content/FarmToolData.h"
+#include "CQTest.h"
 
 // A namespace keeps the fixture's short name from hiding other declarations in unity builds.
 namespace FarmContentTests

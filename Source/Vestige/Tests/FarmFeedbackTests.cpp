@@ -4,9 +4,9 @@
 #if WITH_DEV_AUTOMATION_TESTS
 
 #include "Components/ActorTestSpawner.h"
+#include "Core/FarmFeedbackSubsystem.h"
 #include "CQTest.h"
 #include "Engine/World.h"
-#include "Core/FarmFeedbackSubsystem.h"
 
 #define LOCTEXT_NAMESPACE "FarmFeedbackTests"
 

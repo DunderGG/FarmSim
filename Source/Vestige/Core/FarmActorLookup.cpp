@@ -3,10 +3,10 @@
 
 #include "Core/FarmActorLookup.h"
 
+#include "Core/Vestige.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "GameFramework/Actor.h"
-#include "Core/Vestige.h"
 
 AActor* FarmActorLookup::FindSingle(const UWorld* World, TSubclassOf<AActor> ActorClass)
 {
