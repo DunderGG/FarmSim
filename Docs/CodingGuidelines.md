@@ -191,15 +191,16 @@ private:
 
 - **Include what you use** (IWYU). Each file includes the headers for what it uses directly. Do not rely on another header to bring something in.
 - In headers, **forward declare** pointer and reference types instead of including their headers. Include headers in the `.cpp`.
-- In a `.cpp`, include its own header first, then a blank line, then the rest in **alphabetical order**:
+- In a `.cpp`, include its own header first, then a blank line, then the rest in **alphabetical order** of their paths. Our headers are included by their folder path ([section 14.1](#141-source)):
 
 ```cpp
-#include "FarmHUD.h"
+#include "UI/FarmHUD.h"
 
+#include "Core/FarmFeedbackSubsystem.h"
 #include "Engine/GameViewportClient.h"
 #include "Engine/World.h"
-#include "FarmDayCycle.h"
-#include "FarmHudWidget.h"
+#include "Time/FarmDayCycle.h"
+#include "UI/FarmHudWidget.h"
 ```
 
 - Never include `Engine.h` or `EngineMinimal.h`.
@@ -434,26 +435,29 @@ Game rules get automated tests. They run in seconds without playing the game, an
 
 ### 14.1 Source
 
-```
-Source/Vestige/
-    Vestige.Build.cs, Vestige.h/.cpp   Module, log category
-    Vestige*.h/.cpp                     Template classes (character, game mode, player controller)
-    Farm*.h/.cpp                        Our gameplay code
-```
-
-The folder is flat while it is easy to find things in. **When finding or changing related code gets awkward** (related files are hard to spot, or a feature's files are scattered between others), move to feature folders the way Lyra does (`Character/`, `UI/`, `System/`...). File count is only a hint; somewhere around 20 of our own files is a good time to ask the question:
+The game is one module, `Vestige`, split into folders. **The folders are the architecture's layers** ([Architecture.md, section 14](Architecture.md#14-dependencies)), lowest first:
 
 ```
 Source/Vestige/
-    Farming/    Tiles, grid, crops, tools, farming component
-    Time/       Day cycle
-    Player/     Farmer character, player controller
-    UI/         HUD and widgets
-    Save/       Save game and save subsystem
-    Core/       Game mode, module, shared types
+    Vestige.Build.cs
+    Core/       Shared services that know no game rules: FarmActorLookup, UFarmFeedbackSubsystem, the module and log category
+    Content/    Content definitions: UFarmContentData and its subclasses, UFarmAssetManager
+    Time/       The day cycle and its save struct
+    Farming/    Tiles and tile state, the grid, the farming, rest and highlight components, the toolbar, their save structs
+    Save/       UFarmSaveGame and UFarmSaveSubsystem
+    Player/     The farmer character
+    UI/         The HUD and its widgets
+    Template/   Epic's template classes (character, game mode, player controller); not maintained to this guide
+    Tests/      CQTest tests
 ```
 
-Do that move in its own commit with no other changes. Include by path from the module's source root (`#include "Farming/FarmTile.h"`). The template's `PublicIncludePaths` entry `"Vestige"` already puts that root on the include path, so nothing needs to change in `Vestige.Build.cs`. Don't add each feature folder to `PublicIncludePaths`: bare includes like `"FarmTile.h"` hide where a file lives, and every added path is exposed to any other module that depends on ours. The game is a single module today; if a second module ever needs our headers, give the module a `Public/` and `Private/` split and move only the headers meant for other modules into `Public/`.
+- **A folder includes only from its own layer and the layers below it.** `Farming/` may include `Time/`, `Content/` and `Core/`, never `Save/`, `Player/` or `UI/`. When a lower layer needs to tell a higher one something, it broadcasts an event and the higher one listens ([Architecture.md, section 4](Architecture.md#4-how-systems-talk-to-each-other)). `Tests/` may include anything; `Template/` is exempt.
+- **The test `Vestige.Architecture.IncludeDirection` enforces this.** It fails on a wrong-way include, on one of our headers included without its folder, and on a file in a folder that isn't a layer yet.
+- **A new file goes in the folder of its layer.** Decide the owner first ([section 1](#1-ownership-and-separation-of-concerns)), then the layer. If a class doesn't fit any folder, or would have to include upward, that's a design question: raise it rather than bending the rule. A new folder is added to the layer table in the test and in Architecture.md section 14 in the same commit.
+- **A save struct lives with its owner** (`FFarmClockSaveData` in `Time/`), and `Save/` only gathers them, so saving never pulls a lower layer upward.
+- **Include our headers by their path from the module root**, own header included: `#include "Farming/FarmTile.h"`. The `"Vestige"` entry in `PublicIncludePaths` is what puts that root on the include path (a build without it fails), so keep it. Don't add the feature folders to the include path: bare includes like `"FarmTile.h"` hide where a file lives.
+- **Folders, not modules.** Splitting the game into several modules is a separate decision ([Architecture.md, section 9](Architecture.md#9-modules-and-plugins) and the decision log). If another module ever needs our headers, give the module a `Public/` and `Private/` split and move only the headers meant for it into `Public/`.
+- Move files between folders in a commit of its own, with no other change. Unreal names classes by module and name, not by folder, so moving a file never affects Blueprints, levels or saves. Regenerate the Visual Studio project files afterwards (right-click `Vestige.uproject` > Generate Visual Studio project files).
 
 ### 14.2 Content and asset naming
 
@@ -508,6 +512,7 @@ Before committing, check:
 - [ ] Changed files are formatted with clang-format.
 - [ ] New source files start with the copyright and SPDX license header.
 - [ ] Headers forward declare; `.cpp` files include what they use, own header first.
+- [ ] New files are in the folder of their layer, and includes only go to the same layer or lower ones (`Vestige.Architecture.IncludeDirection` passes).
 - [ ] Strong `UObject` references are `UPROPERTY() TObjectPtr<>`; non-owning ones are weak, deferred assets are soft. Pointers that can be null are checked.
 - [ ] Runtime state is private. Nothing new is exposed to Blueprints without a reason.
 - [ ] No magic numbers, no duplicated logic, no commented-out code, no stray debug messages.

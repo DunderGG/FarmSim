@@ -6,7 +6,7 @@ Instructions for AI coding agents working in this repository. Humans can read it
 
 - A cozy 3D farming and life-sim game, currently a small playable prototype.
 - Unreal Engine 5.7, C++ first, Blueprints for content. Art made in Blender.
-- Single game module `Vestige` in `Source/Vestige/`, built from the Third Person C++ template.
+- Single game module `Vestige` in `Source/Vestige/`, built from the Third Person C++ template, with its code in folders by architecture layer. Include our headers by folder path (`#include "Farming/FarmTile.h"`).
 - Main level: `/Game/Maps/L_Farm`. Our assets live under `Content/Farm/`. Blender sources in `Art/Blender/`, exports in `Art/Export/`.
 - Developed by one person (David) on Windows, in `C:\Unreal Projects\Vestige`. Open the editor via `Vestige.uproject`.
 
@@ -46,7 +46,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
 6. **Encapsulation.** Runtime state is private with getters. Don't add public mutable data members. Expose to Blueprints only when a Blueprint needs it or as a deliberate, commented modding extension point.
 7. **Communicate through delegates and small functions**, not by reaching into another class's state.
 8. **Keep it simple.** Small functions, early returns, named constants instead of magic numbers, no duplicated logic, no commented-out code, no new debug-only on-screen messages. Don't add Lyra machinery (Experiences, Game Features, Common UI) or replication unless asked. The Gameplay Ability System is adopted, starting with stamina, and is built only as `Docs/Systems.md` section 9 describes.
-9. **Dependencies point one way.** Game rules never call UI, audio or effects; presentation reads state and listens to events. No circular dependencies between classes.
+9. **Dependencies point one way.** Game rules never call UI, audio or effects; presentation reads state and listens to events. No circular dependencies between classes. The source folders are layers (`Core`, `Content`, `Time`, `Farming`, `Save`, `Player`, `UI`, lowest first): a lower folder never includes a higher one, new files go in the folder of their layer, and the test `Vestige.Architecture.IncludeDirection` enforces it (guidelines section 14.1).
 10. **Record design decisions.** A change that adds a system, moves a responsibility or makes a design choice updates `Docs/Architecture.md` (Part B and the decision log) in the same commit.
 11. **Design for mods.** Content (crops, tools, items) is data assets found through the Asset Manager, never hard-coded lists or enums. Content has namespaced IDs (`Base.Parsnip`). Saves store IDs and skip unknown content. See `Docs/Architecture.md`, section 12.
 12. **Performance is a requirement.** Ticking off by default; use events and timers instead of per-frame polling. Nothing in `Tick`, timers or UI bindings searches the world, loads assets, spawns, creates `UObject`s or rebuilds unchanged strings. Content is soft-referenced and never loaded synchronously during play. No debug drawing as a feature. Expensive loops and new-day work get a `TRACE_CPUPROFILER_EVENT_SCOPE`. Optimizations that cost readability need a measurement. Rules in `Docs/CodingGuidelines.md` section 12, budget in `Docs/Architecture.md` section 10.

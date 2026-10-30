@@ -79,7 +79,7 @@ Till the grass, plant seeds, water them each day, sleep, and harvest when the cr
 ```
 ProjectVestige/
     Vestige.uproject        The Unreal project
-    Source/Vestige/         Game C++ code (one module)
+    Source/Vestige/         Game C++ code (one module, in folders by layer; see CodingGuidelines.md 14.1)
     Content/                Unreal assets
         Farm/               Our game assets (meshes, materials, Blueprints)
         Maps/               Levels (L_Farm is the main one)

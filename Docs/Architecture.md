@@ -192,7 +192,7 @@ The usual Unreal split, and Epic's own recommendation, is **C++ for systems, Blu
 
 ## 9. Modules and plugins
 
-- The game is a **single runtime module** (`Vestige`). That's right for a project this size.
+- The game is a **single runtime module** (`Vestige`). That's right for a project this size. Inside it, the code is split into folders by architecture layer ([section 14](#14-dependencies)), with the dependency order checked by a test, which gives most of what separate modules would without their cost (decision log, 2026-10-30).
 - Add a separate module only for a concrete reason:
   - **`VestigeEditor`** (editor-only module): when we write editor tools, validators or custom detail panels, which must not ship in the game.
   - **`VestigeTests`**: if the tests outgrow `Source/Vestige/Tests/`.
@@ -382,16 +382,23 @@ flowchart TD
 
 Solid arrows are calls and dotted arrows labelled "reads" are reads. The other dotted arrows are events, drawn from the class that broadcasts to the one that listens; the listener is the one that knows about the broadcaster.
 
-Layers, from bottom to top:
+The layers are the source folders ([CodingGuidelines.md, section 14.1](CodingGuidelines.md#141-source)), from bottom to top:
 
-1. **Data**: `UFarmSaveGame`, each owner's save struct, content data assets (`UFarmContentData` and its subclasses), `FFarmTileState`, enums and other structs. None of these include an actor header.
-2. **Shared services that know no game rules**: `UFarmFeedbackSubsystem` (player messages), `UFarmAssetManager` (content checks at startup) and `FarmActorLookup`.
-3. **World state**: `AFarmTile`, `AFarmGrid`, `AFarmDayCycle`.
-4. **Player actions**: `UFarmingComponent`, `UFarmRestComponent`.
-5. **Saving**: `UFarmSaveSubsystem`.
-6. **Input and presentation**: `AFarmerCharacter`, `AFarmHUD`, `UFarmTargetHighlightComponent`.
+| Layer (folder) | Holds | May include |
+|---|---|---|
+| `Core/` | Shared services that know no game rules: `UFarmFeedbackSubsystem` (player messages), `FarmActorLookup`, the module and log category | Engine only |
+| `Content/` | Content definitions: `UFarmContentData`, `UFarmCropData`, `UFarmToolData`, and `UFarmAssetManager` (content checks at startup) | `Core/` |
+| `Time/` | `AFarmDayCycle` and `FFarmClockSaveData` | `Core/`, `Content/` |
+| `Farming/` | `AFarmTile` and `FFarmTileState`, `AFarmGrid`, `UFarmingComponent` and `FFarmToolbar`, `UFarmRestComponent`, `UFarmTargetHighlightComponent`, and their save structs | `Core/` to `Time/` |
+| `Save/` | `UFarmSaveGame` and `UFarmSaveSubsystem` | `Core/` to `Farming/` |
+| `Player/` | `AFarmerCharacter` | `Core/` to `Save/` |
+| `UI/` | `AFarmHUD` and `SFarmHudWidget` | `Core/` to `Player/` |
 
-Lower layers broadcast events; they never include or call higher layers. There are no exceptions today; any that appear are listed in [Known gaps](#17-known-gaps).
+`Tests/` may include any layer. `Template/` holds Epic's template classes, which aren't maintained to our guide; it is outside the layers, and the farmer may include the template character it derives from.
+
+- **Lower layers never include or call higher layers.** They broadcast events, and the higher layer listens. Each owner's save struct lives with the owner, and `Save/` only gathers them.
+- **The test `Vestige.Architecture.IncludeDirection` enforces the order.** It reads the source and fails on a wrong-way include, on one of our headers included without its folder, and on a folder missing from its layer table. That table and this one must match.
+- There are no exceptions today; any that appear are listed in [Known gaps](#17-known-gaps).
 
 ## 15. The day flow
 
@@ -434,6 +441,7 @@ Newest first. Add an entry whenever we make a choice that someone could reasonab
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-30 | The source is split into folders by architecture layer inside the one `Vestige` module, not into several modules: `Core`, `Content`, `Time`, `Farming`, `Save`, `Player`, `UI`, plus `Template` for Epic's code and `Tests`. A folder includes only from its own and lower layers, enforced by the test `Vestige.Architecture.IncludeDirection`. Each owner's save struct moved next to its owner so `Save/` is the only layer that gathers them. Revisit modules for an editor-only `VestigeEditor` module as soon as there is editor-only code; a gameplay module only for a boundary that has stopped moving and a concrete need, such as build times, reuse in another project or a mod plugin | A class's reflected path includes its module, so every later move between modules would mean redirects and a risk to saves and assets; the boundaries are still moving with the ability system, items and the inventory, and folder moves are free. Modules also cost export macros, `Build.cs` dependency lists and public/private header splits on every change. Lyra keeps its gameplay in one module, organized by folders. The one real benefit of modules, a dependency order the build enforces, comes from the include test without that cost |
 | 2026-10-29 | Epic's template code (`VestigeCharacter`, `VestigeGameMode`, `VestigePlayerController`) is not maintained to our guide: it keeps Epic's style and is deleted once nothing uses it. This is a documentation rule (`CodingGuidelines.md` section 2.2), not a code change | Tidying Epic's files in passing mixes their code with ours and churns files we mean to replace (Roadmap, before a public release). A file we change substantially is first brought up to the guide in its own commit |
 | 2026-10-29 | The toolbar stays fixed per farmer Blueprint (`ToolbarIds` on the farming component's defaults); only the tool in hand is saved | There are no items to put on a toolbar yet. When items exist the toolbar becomes part of the inventory and is saved with it; building that now would be a second inventory |
 | 2026-10-29 | Seeds, the harvest count and later money stay on `UFarmingComponent` until the inventory work moves them to an inventory component on the player state (section 18) | Moving two integers now means building a player state and an inventory component before the item design exists. They are private with getters and a save struct, so the move only touches the farming component and its save part |
@@ -498,4 +506,3 @@ Likely next steps as the game grows, with the design we intend. These aren't com
 - **Interaction** (doors, chests, NPCs, shipping bin) goes through an `IFarmInteractable` interface, so the farmer's interact key doesn't need to know every type.
 - **Seasons and weather** belong to the game state, or to the day cycle if they stay small. They broadcast changes like `OnNewDay`.
 - **Menus and inventory UI** move to UMG Widget Blueprints with C++ base classes.
-- **Source folders** split by feature (see [CodingGuidelines.md](CodingGuidelines.md#141-source)). There are now 20 headers and 38 source files of our own, so the question is due; it is David's call and a move-only commit.
