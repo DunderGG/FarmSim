@@ -5,6 +5,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "UI/FarmHudMessages.h"
 #include "FarmHUD.generated.h"
 
 class AFarmDayCycle;
@@ -38,23 +39,20 @@ public:
 	/** The key hints, built from the farmer's input mappings. Rebuilt when the toolbar or the pawn changes. */
 	const FText& GetControlsText() const { return ControlsText; }
 
-	/** The feedback messages showing now, oldest first, one per line. Rebuilt only when a message arrives or fades. */
-	const FText& GetMessagesText() const { return MessagesText; }
-	bool HasMessages() const { return !Messages.IsEmpty(); }
+	/** The feedback messages showing now, oldest first, each in its own box. Changes only when a message arrives or expires. */
+	const FFarmHudMessages& GetMessages() const { return Messages; }
+
+	/** How visible the message at Index is now, from 0 to 1, as it fades in and out. Cheap enough to read every frame. */
+	float GetMessageOpacity(int32 Index) const;
+
+	/** Most messages on screen at once, each in its own box. */
+	int32 GetMaxMessages() const { return MaxMessages; }
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
-	struct FMessage
-	{
-		FText Text;
-
-		/** World time, in seconds, when the message fades. */
-		double EndTime = 0.0;
-	};
-
 	/** Follows the new pawn's farming component and key hints. Bound to the controller's OnPossessedPawnChanged. */
 	UFUNCTION()
 	void FollowPawn(APawn* OldPawn, APawn* NewPawn);
@@ -69,19 +67,20 @@ private:
 
 	void RefreshControlsText();
 
-	/** Shows Message under the ones already showing for MessageDuration seconds. Bound to UFarmFeedbackSubsystem. */
+	/** Shows Message in a box of its own, under the ones already showing, for MessageDuration seconds. Bound to UFarmFeedbackSubsystem. */
 	void ShowMessage(const FText& Message);
 
-	/** Drops the messages whose time is up, and waits for the next one to fade. */
-	void RemoveFadedMessages();
+	/** Drops the messages whose time is up, and waits for the next one to expire. */
+	void RemoveExpiredMessages();
 
-	void RebuildMessagesText();
+	/** Tells the widget the list changed, and sets the timer for the next message to expire. */
+	void MessagesChanged();
 
-	/** How long feedback messages stay on screen, in seconds. */
+	/** How long each feedback message stays on screen, in seconds, fading in and out included. */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|HUD", meta = (AllowPrivateAccess = "true", ClampMin = 0.5))
 	float MessageDuration = 3.f;
 
-	/** Most messages on screen at once. A new message beyond this pushes out the oldest. */
+	/** Most messages on screen at once, each in its own box. A new message beyond this pushes out the oldest. */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|HUD", meta = (AllowPrivateAccess = "true", ClampMin = 1))
 	int32 MaxMessages = 3;
 
@@ -99,9 +98,8 @@ private:
 	mutable int32 StatusDay = INDEX_NONE;
 	mutable int32 StatusClockMinutes = INDEX_NONE;
 
-	TArray<FMessage> Messages;
-	FText MessagesText;
-	FTimerHandle FadeTimer;
+	FFarmHudMessages Messages;
+	FTimerHandle ExpireTimer;
 
 	TSharedPtr<SFarmHudWidget> HudWidget;
 };

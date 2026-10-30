@@ -30,6 +30,7 @@ namespace FarmHudStyle
 	constexpr float ScreenMargin = 24.f;
 	constexpr float LineSpacing = 4.f;
 	constexpr float MessageBottomMargin = 80.f;
+	constexpr float MessageSpacing = 6.f;
 	const FMargin PanelPadding(16.f, 10.f);
 	const FMargin MessagePadding(16.f, 8.f);
 }
@@ -80,24 +81,13 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 			]
 		]
 
-		// Feedback message, above the controls hint.
+		// Feedback messages, each in its own box, above the controls hint. AddMessageBoxes fills the list.
 		+ SOverlay::Slot()
 		.HAlign(HAlign_Center)
 		.VAlign(VAlign_Bottom)
 		.Padding(FMargin(0.f, 0.f, 0.f, FarmHudStyle::MessageBottomMargin))
 		[
-			SNew(SBorder)
-			.Visibility(this, &SFarmHudWidget::GetMessageVisibility)
-			.BorderImage(Backdrop)
-			.BorderBackgroundColor(FarmHudStyle::Backdrop)
-			.Padding(FarmHudStyle::MessagePadding)
-			[
-				SNew(STextBlock)
-				.Font(FCoreStyle::GetDefaultFontStyle(FarmHudStyle::BoldFont, FarmHudStyle::MessageFontSize))
-				.ColorAndOpacity(FarmHudStyle::Message)
-				.ShadowOffset(FarmHudStyle::ShadowOffset)
-				.Text(this, &SFarmHudWidget::GetMessageText)
-			]
+			SAssignNew(MessageList, SVerticalBox)
 		]
 
 		// Controls hint, bottom center.
@@ -114,6 +104,11 @@ void SFarmHudWidget::Construct(const FArguments& InArgs)
 		]
 	];
 	// clang-format on
+
+	if (const AFarmHUD* FarmHud = Hud.Get())
+	{
+		AddMessageBoxes(FarmHud->GetMaxMessages());
+	}
 }
 
 FText SFarmHudWidget::GetStatusText() const
@@ -134,14 +129,63 @@ FText SFarmHudWidget::GetControlsText() const
 	return FarmHud ? FarmHud->GetControlsText() : FText::GetEmpty();
 }
 
-FText SFarmHudWidget::GetMessageText() const
+void SFarmHudWidget::AddMessageBoxes(int32 Count)
 {
-	const AFarmHUD* FarmHud = Hud.Get();
-	return FarmHud ? FarmHud->GetMessagesText() : FText::GetEmpty();
+	const FSlateBrush* Backdrop = FCoreStyle::Get().GetBrush(FarmHudStyle::BackdropBrush);
+	for (int32 Index = 0; Index < Count; ++Index)
+	{
+		TSharedPtr<SBorder> MessageBox;
+		TSharedPtr<STextBlock> MessageText;
+
+		// clang-format off
+		MessageList->AddSlot()
+		.AutoHeight()
+		.HAlign(HAlign_Center)
+		.Padding(0.f, Index == 0 ? 0.f : FarmHudStyle::MessageSpacing, 0.f, 0.f)
+		[
+			SAssignNew(MessageBox, SBorder)
+			.Visibility(EVisibility::Collapsed)
+			.BorderImage(Backdrop)
+			.BorderBackgroundColor(this, &SFarmHudWidget::GetMessageBackdropColor, Index)
+			.ColorAndOpacity(this, &SFarmHudWidget::GetMessageContentTint, Index)
+			.Padding(FarmHudStyle::MessagePadding)
+			[
+				SAssignNew(MessageText, STextBlock)
+				.Font(FCoreStyle::GetDefaultFontStyle(FarmHudStyle::BoldFont, FarmHudStyle::MessageFontSize))
+				.ColorAndOpacity(FarmHudStyle::Message)
+				.ShadowOffset(FarmHudStyle::ShadowOffset)
+			]
+		];
+		// clang-format on
+
+		MessageBoxes.Add(MessageBox);
+		MessageTexts.Add(MessageText);
+	}
 }
 
-EVisibility SFarmHudWidget::GetMessageVisibility() const
+void SFarmHudWidget::RefreshMessages()
 {
 	const AFarmHUD* FarmHud = Hud.Get();
-	return FarmHud && FarmHud->HasMessages() ? EVisibility::HitTestInvisible : EVisibility::Collapsed;
+	const TArray<FFarmHudMessage> NoMessages;
+	const TArray<FFarmHudMessage>& Shown = FarmHud ? FarmHud->GetMessages().GetMessages() : NoMessages;
+	for (int32 Index = 0; Index < MessageBoxes.Num(); ++Index)
+	{
+		const bool bShown = Shown.IsValidIndex(Index);
+		MessageTexts[Index]->SetText(bShown ? Shown[Index].Text : FText::GetEmpty());
+		MessageBoxes[Index]->SetVisibility(bShown ? EVisibility::HitTestInvisible : EVisibility::Collapsed);
+	}
+}
+
+FSlateColor SFarmHudWidget::GetMessageBackdropColor(int32 Index) const
+{
+	const AFarmHUD* FarmHud = Hud.Get();
+	FLinearColor Color = FarmHudStyle::Backdrop;
+	Color.A *= FarmHud ? FarmHud->GetMessageOpacity(Index) : 0.f;
+	return Color;
+}
+
+FLinearColor SFarmHudWidget::GetMessageContentTint(int32 Index) const
+{
+	const AFarmHUD* FarmHud = Hud.Get();
+	return FLinearColor(1.f, 1.f, 1.f, FarmHud ? FarmHud->GetMessageOpacity(Index) : 0.f);
 }

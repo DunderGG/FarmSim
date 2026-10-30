@@ -33,8 +33,6 @@ Checks for recent changes that haven't been confirmed in the editor yet. Each na
 ### Code clean-up, 2026-10-29
 
 - [x] **Sleep and passing out** (758f81c, 9d77ee1): N starts the next day. Letting the clock reach 02:00 passes the farmer out into the next day.
-- [ ] **Messages** (c87081e): after sleeping, "You slept. Day N begins." and "Game saved." show as two lines. Up to three messages show at once, each fading after about three seconds.
-   - Problem: If you Save, the save message appears. Then you sleep, and the sleep message appears. The save message remains. You sleep again, the save message appears and the save message is still there. Separate messages do not seem to fade out. It looks more like a log of messages that appears whenever a new message is sent.
 - [x] **Key hints** (6805d86, 812ea57): the bottom line reads "1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep   |   F9 New game". The tool names come from the tool data assets.
    - This works, but we need a much better toolbar.
 - [x] **Clock** (812ea57): the status line shows the day, a 24-hour clock in 10-minute steps and the tool in hand.
@@ -53,6 +51,14 @@ Replaces the tile highlight check above: the frame now sits on a neighbouring ti
 - [ ] **Tools** (ce1f1dc): the tools act on the framed tile, never on the one the farmer stands on.
 - [ ] **Feel** (ce1f1dc): the delay before walking (0.15 s) doesn't feel sluggish. If it does, change Tap To Turn Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input) and note the value that feels right.
 - [ ] **Gamepad** (ce1f1dc), if you have one: a flick of the left stick turns, holding it walks, the same as the keys.
+
+### Message boxes, 2026-10-30
+
+Replaces the earlier messages check (c87081e), after David's note that messages stacked in one box read like a log.
+
+- [ ] **Separate boxes** (MESSAGES): every message shows in a small box of its own, stacked above the key hints with a gap between them. Sleeping shows "You slept. Day N begins." and "Game saved." as two boxes.
+- [ ] **Own timers** (MESSAGES): each box fades in, stays about three seconds and fades out on its own. Use a tool, wait a second and use it again: the first box fades a second before the second.
+- [ ] **At most three** (MESSAGES): with three boxes showing, a fourth message pushes out the oldest. Tilling and planting quickly is the easiest way to get there.
 
 ### Source folders, 2026-10-30
 

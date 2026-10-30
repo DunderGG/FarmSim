@@ -190,46 +190,45 @@ void AFarmHUD::RefreshControlsText()
 
 void AFarmHUD::ShowMessage(const FText& Message)
 {
-	if (Messages.Num() >= MaxMessages)
-	{
-		Messages.RemoveAt(0);
-	}
-	Messages.Add({Message, GetWorld()->GetTimeSeconds() + MessageDuration});
-	RebuildMessagesText();
-
-	// Every message lasts as long, so the oldest fades first; one timer for it is enough.
-	if (!GetWorldTimerManager().IsTimerActive(FadeTimer))
-	{
-		GetWorldTimerManager().SetTimer(FadeTimer, this, &AFarmHUD::RemoveFadedMessages, MessageDuration);
-	}
+	Messages.Add(Message, GetWorld()->GetTimeSeconds(), MaxMessages);
+	MessagesChanged();
 }
 
-void AFarmHUD::RemoveFadedMessages()
+void AFarmHUD::RemoveExpiredMessages()
 {
-	const double Now = GetWorld()->GetTimeSeconds();
-	const int32 FadedCount = Messages.IndexOfByPredicate(
-		[Now](const FMessage& Message)
-		{
-			return Message.EndTime > Now;
-		});
-	Messages.RemoveAt(0, FadedCount == INDEX_NONE ? Messages.Num() : FadedCount);
-	RebuildMessagesText();
-
-	if (!Messages.IsEmpty())
-	{
-		GetWorldTimerManager().SetTimer(FadeTimer, this, &AFarmHUD::RemoveFadedMessages, Messages[0].EndTime - Now);
-	}
+	Messages.RemoveExpired(GetWorld()->GetTimeSeconds(), MessageDuration);
+	MessagesChanged();
 }
 
-void AFarmHUD::RebuildMessagesText()
+void AFarmHUD::MessagesChanged()
 {
-	TArray<FText> Lines;
-	Lines.Reserve(Messages.Num());
-	for (const FMessage& Message : Messages)
+	if (HudWidget)
 	{
-		Lines.Add(Message.Text);
+		HudWidget->RefreshMessages();
 	}
-	MessagesText = FText::Join(FText::AsCultureInvariant(TEXT("\n")), Lines);
+
+	// Every message lives as long, so one timer for the oldest is enough; it is set again each time the list changes.
+	const TOptional<double> SecondsLeft = Messages.GetSecondsUntilNextExpiry(GetWorld()->GetTimeSeconds(), MessageDuration);
+	if (!SecondsLeft.IsSet())
+	{
+		GetWorldTimerManager().ClearTimer(ExpireTimer);
+		return;
+	}
+
+	// A timer with no time left would never fire, so it waits at least a frame.
+	constexpr float MinimumWaitSeconds = 0.001f;
+	GetWorldTimerManager().SetTimer(
+		ExpireTimer, this, &AFarmHUD::RemoveExpiredMessages, FMath::Max(MinimumWaitSeconds, static_cast<float>(SecondsLeft.GetValue())));
+}
+
+float AFarmHUD::GetMessageOpacity(int32 Index) const
+{
+	const TArray<FFarmHudMessage>& Shown = Messages.GetMessages();
+	if (!Shown.IsValidIndex(Index) || !GetWorld())
+	{
+		return 0.f;
+	}
+	return FFarmHudMessages::GetOpacity(Shown[Index].StartTime, GetWorld()->GetTimeSeconds(), MessageDuration);
 }
 
 #undef LOCTEXT_NAMESPACE

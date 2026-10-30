@@ -7,10 +7,13 @@
 #include "Widgets/SCompoundWidget.h"
 
 class AFarmHUD;
+class STextBlock;
+class SVerticalBox;
 
 /**
  * The farming HUD's layout, built in Slate so it needs no widget assets.
- * Shows the texts its AFarmHUD keeps. Its bindings run every frame, but only read text the HUD has already built.
+ * Shows the texts its AFarmHUD keeps, and each feedback message in a box of its own. Its bindings run every frame, but
+ * only read text the HUD has already built and each message box's opacity.
  */
 class SFarmHudWidget : public SCompoundWidget
 {
@@ -23,12 +26,26 @@ public:
 
 	void Construct(const FArguments& InArgs);
 
+	/** Shows the HUD's messages, one box each. The HUD calls it whenever a message arrives or expires. */
+	void RefreshMessages();
+
 private:
 	FText GetStatusText() const;
 	FText GetInventoryText() const;
 	FText GetControlsText() const;
-	FText GetMessageText() const;
-	EVisibility GetMessageVisibility() const;
+
+	/** The backdrop color of the message box at Index, faded to that message's opacity. */
+	FSlateColor GetMessageBackdropColor(int32 Index) const;
+
+	/** Fades everything inside the message box at Index, text and shadow alike, to that message's opacity. */
+	FLinearColor GetMessageContentTint(int32 Index) const;
+
+	/** Adds the boxes the messages show in, one per message the HUD can show at once. They are reused, never rebuilt. */
+	void AddMessageBoxes(int32 Count);
 
 	TWeakObjectPtr<const AFarmHUD> Hud;
+
+	TSharedPtr<SVerticalBox> MessageList;
+	TArray<TSharedPtr<SWidget>> MessageBoxes;
+	TArray<TSharedPtr<STextBlock>> MessageTexts;
 };
