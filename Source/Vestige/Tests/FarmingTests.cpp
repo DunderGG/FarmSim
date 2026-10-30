@@ -5,12 +5,12 @@
 
 #include "Components/ActorTestSpawner.h"
 #include "CQTest.h"
-#include "FarmCropData.h"
-#include "FarmerCharacter.h"
-#include "FarmGrid.h"
-#include "FarmingComponent.h"
-#include "FarmFarmingSaveData.h"
-#include "FarmTile.h"
+#include "Content/FarmCropData.h"
+#include "Player/FarmerCharacter.h"
+#include "Farming/FarmGrid.h"
+#include "Farming/FarmingComponent.h"
+#include "Farming/FarmFarmingSaveData.h"
+#include "Farming/FarmTile.h"
 
 // A namespace keeps the fixture's short name from hiding other declarations in unity builds.
 namespace FarmingTests

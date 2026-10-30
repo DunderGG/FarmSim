@@ -6,13 +6,13 @@
 #include "Algo/Reverse.h"
 #include "Components/ActorTestSpawner.h"
 #include "CQTest.h"
-#include "FarmCropData.h"
-#include "FarmDayCycle.h"
-#include "FarmGrid.h"
-#include "FarmingComponent.h"
-#include "FarmSaveGame.h"
-#include "FarmSaveSubsystem.h"
-#include "FarmTile.h"
+#include "Content/FarmCropData.h"
+#include "Time/FarmDayCycle.h"
+#include "Farming/FarmGrid.h"
+#include "Farming/FarmingComponent.h"
+#include "Save/FarmSaveGame.h"
+#include "Save/FarmSaveSubsystem.h"
+#include "Farming/FarmTile.h"
 
 // A namespace keeps the fixture's short name from hiding other declarations in unity builds.
 namespace FarmSaveTests
