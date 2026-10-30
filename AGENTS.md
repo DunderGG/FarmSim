@@ -16,6 +16,7 @@ Instructions for AI coding agents working in this repository. Humans can read it
 - **[Docs/Architecture.md](Docs/Architecture.md)** is the design: principles, where things go in Unreal's framework, who owns what, how systems talk, and the decision log.
 - **[Docs/Systems.md](Docs/Systems.md)**: best practice per game system (saving, content, input, UI, the Gameplay Ability System, AI, inventory...), from Epic's documentation and the Lyra sample. Read the guide for every system a change touches.
 - **[Docs/Roadmap.md](Docs/Roadmap.md)**: what's done and what's next. Tick items in the same commit that finishes them.
+- **[Docs/PlayTest.md](Docs/PlayTest.md)**: what David checks by hand in the editor: pending checks for recent changes and the smoke test.
 
 - **[LICENSING.md](LICENSING.md)**: code is GPL-3.0-or-later with an Unreal Engine linking permission, assets are CC BY-NC-SA 4.0, Epic template material is under the UE EULA. New source files start with the SPDX license header shown there. Never add third-party code or assets without checking they are under a license CONTRIBUTING.md accepts, and record their source and license in CREDITS.md and the path table in LICENSING.md.
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** covers setup, art and audio pipelines, and the workflow for outside contributors.
@@ -58,7 +59,8 @@ Follow the two Docs files for every change. The rules below are the ones most of
 - C++ can only be compiled on David's Windows machine with Unreal Engine installed. Cloud containers have no engine.
 - If you can build (for example in a session on David's PC), build the `VestigeEditor` target (Development Editor, Win64) before committing and fix every error and warning you introduced.
 - Run the `Vestige` automation tests when you can build.
-- If you can't build, say clearly that the change is uncompiled, and list what David should test in Play in Editor.
+- If you can't build, say clearly that the change is uncompiled.
+- **A change that needs a manual check** (visuals, feel, lighting, the HUD, input, saves on real files, performance, editor-only steps) adds it to `Docs/PlayTest.md`, section "Pending checks", in the same commit: a dated heading, the commit and what to look for. Game rules are always tested automatically, never by a manual check only.
 - Live Coding can't add new `UPROPERTY`s, `UFUNCTION`s or classes. Tell David when a change needs the editor closed and the project rebuilt.
 
 ## Git

@@ -342,18 +342,7 @@ Each is in the [decision log](Architecture.md#16-decision-log) with its reason.
 
 ### Play in Editor checklist (2026-10-29)
 
-None of this can be checked headless. Play `L_Farm` and look for:
-
-1. **Highlight:** a thin yellow frame around the tile in front of the farmer, following turns and steps, gone off the field. Check it over grass, tilled soil and crops, at midday and at night (it is unlit, so it should stay visible).
-2. **Sleep and passing out:** N starts the next day; letting the clock reach 02:00 passes the farmer out into the next day.
-3. **Messages:** "You slept. Day N begins." then "Game saved." as two lines, up to three lines at once, each fading after three seconds.
-4. **Key hints:** "1 Hoe   2 Seeds   3 Watering Can   4 Hand   |   E Use tool   |   N Sleep   |   F9 New game" (the tool names come from the data assets).
-5. **Clock:** 24-hour, in 10-minute steps, with the day number and the tool's name.
-6. **Counts:** seeds go down when planting, and the harvest count goes up by the crop's yield.
-7. **Old save:** the first start loads the existing save and writes `Saved/SaveGames/Farm_Version0.sav` as a backup, and the next new day saves to `Farm2.sav`. Planted tiles keep their turnips. F9 deletes `Farm.sav` and `Farm2.sav` and starts on day 1.
-8. **Lighting:** in Settings > Engine Scalability Settings, compare High (what new players start at, without hardware ray tracing) with Epic. Nights should be properly dark at both.
-9. **Content validation:** right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" errors.
-
+The checks for this clean-up moved to [PlayTest.md, Pending checks](PlayTest.md#2-pending-checks), the one place for manual testing in the editor.
 
 ## Review limits
 

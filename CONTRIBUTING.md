@@ -105,7 +105,7 @@ Read these before making larger changes:
 3. **Follow the coding guidelines.** Epic's naming (`AFarm...`, `UFarm...`, `bIsSomething`), tabs and braces on their own lines, small functions, no magic numbers. The repo's `.clang-format` handles formatting: enable *ClangFormat support* in Visual Studio and format the files you change.
 4. **Keep it fast.** Performance is a requirement: no ticking without a reason, no per-frame polling or searching, soft references for content and no loading during play. See [Performance](Docs/CodingGuidelines.md#12-performance) and the [budget](Docs/Architecture.md#10-performance-by-design).
 5. **Build for mods.** Content (crops, tools, items) is data, not hard-coded lists or enums. See [Designing for mods](Docs/Architecture.md#12-designing-for-mods).
-6. **Test it.** Game rule changes come with automated tests (CQTest, in `Source/Vestige/Tests/`). Run the `Vestige` tests from the editor's Test Automation window, and play the change in the editor.
+6. **Test it.** Game rule changes come with automated tests (CQTest, in `Source/Vestige/Tests/`). Run the `Vestige` tests from the editor's Test Automation window, and play the change in the editor, using the checks in [Docs/PlayTest.md](Docs/PlayTest.md). If your change needs a manual check, add it to that file's "Pending checks" in the same pull request.
 7. **No new warnings.** The build treats some warnings as errors, for example a local variable that hides a member (`Mesh` inside a character class).
 8. **Update the docs.** If your change adds a system, moves a responsibility or makes a design choice, update `Docs/Architecture.md` (the ownership table and the decision log) in the same pull request.
 

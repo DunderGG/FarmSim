@@ -493,7 +493,7 @@ Blender sources go in `Art/Blender/`, exported FBX files in `Art/Export/`, with 
 - **No pull requests.** Commits are made locally on `main` on David's machine. David reviews and pushes. Nobody else pushes.
 - Binary files (`.uasset`, `.umap`, `.blend`, `.fbx`, `.png`) go through Git LFS, as set up in `.gitattributes`.
 - Never commit `Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/` or `.vs/`.
-- Code must **compile and be play-tested** in the editor before it is pushed.
+- Code must **compile and be play-tested** in the editor before it is pushed. What to play-test is in [PlayTest.md](PlayTest.md).
 
 ## 16. Known deviations to clean up
 
@@ -522,6 +522,7 @@ Before committing, check:
 - [ ] Classes and non-obvious public members have `/** */` comments.
 - [ ] Changed game rules have tests, and the `Vestige` tests pass.
 - [ ] It compiles and works in Play in Editor.
+- [ ] Anything only a person can check is listed in [PlayTest.md, Pending checks](PlayTest.md#2-pending-checks); rules have automated tests, not only a manual check.
 - [ ] The commit message is clear and has no tool attribution lines.
 
 ## 18. Further reading
