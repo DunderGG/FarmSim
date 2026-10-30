@@ -21,7 +21,7 @@ The one place for what to check by hand in the editor.
 
   Every test logs `Result={Success}`. Two `LogAutomationTest: Error: Condition failed` lines at startup come from the engine and can be ignored.
 - **Start the game:** open `/Game/Maps/L_Farm` (Content Browser > `Content/Maps`, double-click), then Play (Alt+P) for Play in Editor. For what players get, and for any performance numbers, use the arrow next to Play > Standalone Game instead.
-- **Scalability:** Play in Editor uses the viewport's own setting: the viewport toolbar's Settings menu (top left of the viewport) > Engine Scalability Settings. New players start at **High**; **Epic** adds hardware ray tracing. Standalone and packaged builds use the game's settings.
+- **Graphics settings (scalability):** the quickest way, which works in Play in Editor and in Standalone Game, is the console. While playing, press the key under Esc, type `scalability 2` and press Enter for High, or `scalability 3` for Epic (0 is Low, 1 Medium). Everything switches at once. To see whether hardware ray tracing is on, type `r.Lumen.HardwareRayTracing` on its own: it prints 0 at High and 1 at Epic. New players start at **High**. The level viewport keeps its own setting between sessions (its Settings menu > Engine Scalability Settings); the console changes it too.
 - **Saves** live in `Saved/SaveGames/`: `Farm.sav` and `Farm2.sav` are the two slots saves alternate between, and `Farm_Version0.sav` is the backup of a save from before save versions. Before testing anything that writes saves, copy the folder somewhere safe, and copy it back afterwards to get your farm back. F9 in the game deletes both slots and starts a new game on day 1; the backups stay.
 - **Logs:** Window > Output Log. Our messages are under `LogVestige`; note any warning or error even if the game looks fine.
 - **Console:** the key under Esc opens it, for `stat fps`, `stat unit` and similar commands.
@@ -40,20 +40,19 @@ Checks for recent changes that haven't been confirmed in the editor yet. Each na
 - [x] **Clock** (812ea57): the status line shows the day, a 24-hour clock in 10-minute steps and the tool in hand.
 - [x] **Counts** (812ea57): planting lowers the seed count by one, and harvesting a ripe crop raises the harvest count by the crop's yield. Both update at once.
 - [x] **Old save** (9cdf0ac, 8fff295): your existing save loads with its day, inventory and planted crops. A save from before 2026-10-29 is copied to `Farm_Version0.sav` first. Each new day saves to whichever of `Farm.sav` and `Farm2.sav` doesn't hold the newest save.
-- [ ] **Lighting** (42f3a44): at High and at Epic, days look as before and nights are properly dark. Epic may differ slightly, since only Epic uses hardware ray tracing now.
-   - I don't know how to test different graphic settings.
+- [ ] **Lighting** (42f3a44): at High and at Epic, days look as before and nights are properly dark. Epic may differ slightly, since only Epic uses hardware ray tracing now. How: while playing, open the console (the key under Esc), type `scalability 2` for High, look at a day and a night, then `scalability 3` for Epic and look again ([Before you test](#1-before-you-test)). Let the clock run to get from day to night; sleeping (N) brings back the morning.
 - [x] **Content validation** (139e88d): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
 
 ### Tile targeting, 2026-10-30
 
 Replaces the tile highlight check above: the frame now sits on a neighbouring tile chosen by the movement direction (GameDesign.md, section 6).
 
-- [ ] **Tap to turn** (TARGETING): a quick tap of W, A, S or D turns the farmer to face that way without stepping, and the frame moves to the tile next to the farmer's in that direction. Tapping two keys at once (W and D) turns diagonally, and the frame sits on the diagonal neighbour.
-- [ ] **Walking** (TARGETING): holding a key walks after a short moment, and the frame follows the direction of travel, one tile ahead of the farmer. When you let go, the frame stays where it was.
-- [ ] **Field edge** (TARGETING): standing on an edge tile and turning to face outwards hides the frame; turning back shows it again.
-- [ ] **Tools** (TARGETING): the tools act on the framed tile, never on the one the farmer stands on.
-- [ ] **Feel** (TARGETING): the delay before walking (0.15 s) doesn't feel sluggish. If it does, change Tap To Turn Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input) and note the value that feels right.
-- [ ] **Gamepad** (TARGETING), if you have one: a flick of the left stick turns, holding it walks, the same as the keys.
+- [ ] **Tap to turn** (ce1f1dc): a quick tap of W, A, S or D turns the farmer to face that way without stepping, and the frame moves to the tile next to the farmer's in that direction. Tapping two keys at once (W and D) turns diagonally, and the frame sits on the diagonal neighbour.
+- [ ] **Walking** (ce1f1dc): holding a key walks after a short moment, and the frame follows the direction of travel, one tile ahead of the farmer. When you let go, the frame stays where it was.
+- [ ] **Field edge** (ce1f1dc): standing on an edge tile and turning to face outwards hides the frame; turning back shows it again.
+- [ ] **Tools** (ce1f1dc): the tools act on the framed tile, never on the one the farmer stands on.
+- [ ] **Feel** (ce1f1dc): the delay before walking (0.15 s) doesn't feel sluggish. If it does, change Tap To Turn Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input) and note the value that feels right.
+- [ ] **Gamepad** (ce1f1dc), if you have one: a flick of the left stick turns, holding it walks, the same as the keys.
 
 ### Source folders, 2026-10-30
 
