@@ -304,7 +304,7 @@ The nomad is a planned character; the other entries below are possible survival 
 
 #### The nomad
 
-A post-war-born human who travels between scattered settlements and trades unusual wasteland salvage. See the [nomad character sheet](Characters/Nomad.md).
+A post-war-born human who carries salvage and carefully verified news along a small, consent-based circuit between scattered survivors and trading stops. Their route knowledge does not reveal a hidden human society; contacts and locations remain compartmentalized unless their owners choose to share them. See the [nomad character sheet](Characters/Nomad.md).
 
 #### Other Humans
 
@@ -338,6 +338,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-30 | The nomad maintains a small, consent-based and deliberately compartmentalized circuit of human contacts, not a route map to all surviving people. A compromised relay prompts their arc: they choose to build a voluntary network of safe stops, including the farm, without surrendering their freedom to travel or exposing contacts who have not agreed to be known | Makes the nomad's trade and news role concrete while preserving the rarity, isolation and agency of human survivors. The player can help create safe conditions but does not gain ownership of the circuit or become its rescuer |
 | 2026-10-30 | Named the Index archivist Cleo (Civitas Lexis CL-840), established her pre-war cataloger origins, field modifications, schedule, gift tastes, 5-tier heart progression, and defined the Archive hub unlocks (blueprints, lore codex, heritage seeds, and cognitive trial clues) while keeping core tech tree progression distinct | Fleshes out the archivist character sheet into a concrete playable arc and separates hub rewards from the core tech tree |
 | 2026-10-30 | Established the engineer's early field-repair failure and recovery with a fellow engineer as formative backstory | Grounds his protective, maintenance-centered idea of readiness in experience and makes his initial distrust of human participation a personal double standard rather than a faction-wide rule |
 | 2026-10-27 | Adopted Project Vestige as the internal working codename; its theme is the sleeper searching for traces of humankind in a world filled with robots, while the final public game title remains undecided | Gives the project a conceptual identity tied to the protagonist's journey without naming a specific gameplay genre |
