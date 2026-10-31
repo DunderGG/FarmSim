@@ -161,6 +161,20 @@ The code changes that the slice's content depends on. Doing them first means add
 - [x] Seed and harvest counts become private, with a restore function for loading
 - [x] Tunable settings on the tile, grid and day cycle become protected or private
 
+**Logging** (chosen 2026-10-30: build on Unreal's logging instead of a logging tool of our own, which would rebuild what the engine has and lose the Output Log's filters and colours, the log files, crash reports and the `log` console command)
+
+- [ ] A logging guide in [Systems.md](Systems.md), written from Epic's logging documentation and Lyra's source, approved by David before any code (AGENTS rule 13). It covers:
+   - categories per system, named `LogFarm<System>` (`LogFarmSave`, `LogFarmHud`), each declared in its layer's folder
+   - which verbosity to use when (Error, Warning, Display, Log, Verbose, VeryVerbose)
+   - a small macro on top of `UE_LOGFMT` that adds the sending object's name and function to every line
+   - log volume: nothing logged every frame, `Verbose` for tracing
+   - setting a category's level with the `log` console command and in the `[Core.Log]` section of `DefaultEngine.ini`
+   - reading our lines in the Output Log: its filters, and Category Colorization Mode (Editor Preferences > General > Output Log), which gives each category its own colour
+   - the Visual Logger (Tools > Debug > Visual Logger) for debugging actors and gameplay over time
+- [ ] Split `LogVestige` into the per-system categories and move the existing `UE_LOG` calls to them
+- [ ] Add the sender macro and use it in those calls
+- [ ] A note in [PlayTest.md](PlayTest.md) on the colour preference and filtering the Output Log to our categories
+
 **Tests**
 
 - [x] Set up CQTest in the project
