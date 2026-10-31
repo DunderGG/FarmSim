@@ -38,19 +38,23 @@ Checks for recent changes that haven't been confirmed in the editor yet. Each na
 - [x] **Clock** (812ea57): the status line shows the day, a 24-hour clock in 10-minute steps and the tool in hand.
 - [x] **Counts** (812ea57): planting lowers the seed count by one, and harvesting a ripe crop raises the harvest count by the crop's yield. Both update at once.
 - [x] **Old save** (9cdf0ac, 8fff295): your existing save loads with its day, inventory and planted crops. A save from before 2026-10-29 is copied to `Farm_Version0.sav` first. Each new day saves to whichever of `Farm.sav` and `Farm2.sav` doesn't hold the newest save.
-- [ ] **Lighting** (42f3a44): at High and at Epic, days look as before and nights are properly dark. Epic may differ slightly, since only Epic uses hardware ray tracing now. **How: while playing, open the console (§, or see [Before you test](#1-before-you-test)), type `scalability 2` for High, look at a day and a night, then `scalability 3` for Epic and look again ([Before you test](#1-before-you-test)).** Let the clock run to get from day to night; sleeping (N) brings back the morning.
+- [x] **Lighting** (42f3a44): at High and at Epic, days look as before and nights are properly dark. Epic may differ slightly, since only Epic uses hardware ray tracing now. **How: while playing, open the console (§, or see [Before you test](#1-before-you-test)), type `scalability 2` for High, look at a day and a night, then `scalability 3` for Epic and look again ([Before you test](#1-before-you-test)).** Let the clock run to get from day to night; sleeping (N) brings back the morning.
 - [x] **Content validation** (139e88d): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
 
 ### Tile targeting, 2026-10-30
 
 Replaces the tile highlight check above: the frame now sits on a neighbouring tile chosen by the movement direction (GameDesign.md, section 6).
 
-- [ ] **Tap to turn** (ce1f1dc): a quick tap of W, A, S or D turns the farmer to face that way without stepping, and the frame moves to the tile next to the farmer's in that direction. Tapping two keys at once (W and D) turns diagonally, and the frame sits on the diagonal neighbour.
-- [ ] **Walking** (ce1f1dc): holding a key walks after a short moment, and the frame follows the direction of travel, one tile ahead of the farmer. When you let go, the frame stays where it was.
-- [ ] **Field edge** (ce1f1dc): standing on an edge tile and turning to face outwards hides the frame; turning back shows it again.
-- [ ] **Tools** (ce1f1dc): the tools act on the framed tile, never on the one the farmer stands on.
-- [ ] **Feel** (ce1f1dc): the delay before walking (0.15 s) doesn't feel sluggish. If it does, change Tap To Turn Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input) and note the value that feels right.
+- [x] **Tap to turn** (ce1f1dc): a quick tap of W, A, S or D turns the farmer to face that way without stepping, and the frame moves to the tile next to the farmer's in that direction. Tapping two keys at once (W and D) turns diagonally, and the frame sits on the diagonal neighbour.
+   - This works, but movement feels very janky when the character instantly changes direction. This can be smoothed out when we do more work on character movement.
+- [x] **Walking** (ce1f1dc): holding a key walks after a short moment, and the frame follows the direction of travel, one tile ahead of the farmer. When you let go, the frame stays where it was.
+   - Same problem. The movement feels janky when the character stands still for a moment before starting to walk.
+- [x] **Field edge** (ce1f1dc): standing on an edge tile and turning to face outwards hides the frame; turning back shows it again.
+- [x] **Tools** (ce1f1dc): the tools act on the framed tile, never on the one the farmer stands on.
+- [x] **Feel** (ce1f1dc): the delay before walking (0.15 s) doesn't feel sluggish. If it does, change Tap To Turn Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input) and note the value that feels right.
+   - I changed to 0.05 and it feels better now. The delay is still there, but it is short enough that the farmer feels responsive.
 - [ ] **Gamepad** (ce1f1dc), if you have one: a flick of the left stick turns, holding it walks, the same as the keys.
+   - Unable to test Gamepad support now. Save this for later, when we have a gamepad to test with.
 
 ### Message boxes, 2026-10-30
 
