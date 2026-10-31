@@ -77,6 +77,13 @@ Raises the cap from the message boxes checks above.
 - [ ] **Settings** (77a2218): Edit > Project Settings > Game > Farm HUD shows Max Messages (5) and Message Seconds (3). Changing them takes effect the next time you press Play, and is saved to `Config/DefaultGame.ini`; tell the agent the values you settle on.
 - [ ] **Log** (77a2218): every message also appears in the Output Log (Window > Output Log, filter on `LogVestige`) as `Feedback: ...`, so you can read messages that have already faded.
 
+### Unreal Engine 5.8.4 build, 2026-10-30
+
+The project now builds only with 5.8. The rest of the upgrade (assets, rendering, documents) is in [Roadmap.md, section 4.1, Engine](Roadmap.md#41-foundations).
+
+- [ ] **Editor start** (BUILD_COMMIT): double-clicking `Vestige.uproject` opens the 5.8 editor straight away, with no "Target Upgrade Required" or "missing modules" prompt, and the Output Log at start has no `LogVestige` errors.
+- [ ] **Walking** (de2e2c2): a tap of W, A, S or D still turns the farmer with barely a step, and holding a key walks as before.
+
 ### Item data assets, 2026-10-30
 
 Items exist as data but nothing in play uses them yet, so the game itself should behave exactly as before.
