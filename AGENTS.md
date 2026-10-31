@@ -62,7 +62,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
 - Run the `Vestige` automation tests when you can build.
 - If you can't build, say clearly that the change is uncompiled.
 - **A change that needs a manual check** (visuals, feel, lighting, the HUD, input, saves on real files, performance, editor-only steps) adds it to `Docs/PlayTest.md`, section "Pending checks", in the same commit: a dated heading, the commit and what to look for. Game rules are always tested automatically, never by a manual check only.
-- Live Coding can't add new `UPROPERTY`s, `UFUNCTION`s or classes. Tell David when a change needs the editor closed and the project rebuilt.
+- Live Coding can't add new `UPROPERTY`s, `UFUNCTION`s or classes, and a build can't run while the editor has the project open. Ask David to close the editor before such a change. When you built after your last source change, tell him the editor is safe to open; ask him to rebuild only when you couldn't build.
 
 ## Git
 

@@ -2,7 +2,7 @@
 
 The one place for what to check by hand in the editor.
 
-- **[Before you test](#1-before-you-test)**: rebuilding, the automated tests, starting the game and handling saves.
+- **[Before you test](#1-before-you-test)**: building, the automated tests, starting the game and handling saves.
 - **[Pending checks](#2-pending-checks)**: what recent changes still need you to look at. Work through it after pulling or building new code.
 - **[Smoke test](#3-smoke-test)**: a five-minute pass over every system, before pushing and at the end of each milestone.
 - **[What isn't manual](#4-what-isnt-manual)**: what the automated tests cover instead.
@@ -12,7 +12,7 @@ The one place for what to check by hand in the editor.
 ## 1. Before you test
 
 - **New or moved source files:** regenerate the Visual Studio project files (right-click `Vestige.uproject` in Explorer > Generate Visual Studio project files), so the solution shows them.
-- **C++ that adds classes, `UPROPERTY`s or `UFUNCTION`s:** close the editor and rebuild `VestigeEditor` (Development Editor, Win64) in Visual Studio. Live Coding can't add those; it only patches function bodies.
+- **Building:** an agent working on this PC builds `VestigeEditor` (Development Editor, Win64) and runs the tests before every commit, so after its changes the editor is ready to open; the agent says so. Rebuild yourself only after changing C++ yourself, after pulling code nobody built on this PC, or when the editor says the Vestige module is missing or out of date (answer Yes to rebuild it, no Visual Studio needed). For C++ that adds classes, `UPROPERTY`s or `UFUNCTION`s, close the editor and build in Visual Studio; Live Coding can't add those, it only patches function bodies.
 - **Run the automated tests first.** In the editor: Tools > Test Automation, filter on `Vestige`, tick it and press Start Tests. Or from a command prompt with the editor closed:
 
   ```
