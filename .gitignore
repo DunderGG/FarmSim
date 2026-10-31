@@ -11,3 +11,7 @@ DerivedDataCache/
 *.opensdf
 *.sdf
 *.blend1
+
+# Microsoft's Visual Studio integration plugin, which Visual Studio copies into a project on request. Each developer
+# installs it for themselves; the project doesn't list it, and it loads by default when present.
+Plugins/VisualStudioTools/
