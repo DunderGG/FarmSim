@@ -94,7 +94,7 @@ A third-person farmer on a small field who can till, plant, water and harvest, w
 
 Small things to finish before milestone 2 starts.
 
-- [ ] Play-test the 2026-10-29 code clean-up and the 2026-10-30 source folders in the editor: [PlayTest.md, Pending checks](PlayTest.md#2-pending-checks)
+- [x] Play-test the 2026-10-29 code clean-up and the 2026-10-30 source folders in the editor: [PlayTest.md, Pending checks](PlayTest.md#2-pending-checks)
 - [x] Play-test the latest changes: the HUD looks the same, sleeping saves the game, stopping and playing again restores the farm, and F9 starts a new game
 - [x] Force-push the rewritten Git history to GitHub
 - [x] Push the newer local commits (a normal `git push`)
