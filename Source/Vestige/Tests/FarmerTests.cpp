@@ -54,6 +54,19 @@ namespace FarmerTests
 			ASSERT_THAT(IsTrue(Movement->RotationRate.Yaw == FarmMovement::TurnDegreesPerSecond));
 		}
 
+		TEST_METHOD(TheFarmerBlueprintTurnsWithTheFarmMovementComponent)
+		{
+			const UClass* FarmerClass = LoadClass<AFarmerCharacter>(
+				nullptr, TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.BP_ThirdPersonCharacter_C"));
+			ASSERT_THAT(IsNotNull(FarmerClass));
+
+			// The Blueprint's rate is tuning, so any rate that turns at all passes.
+			const UFarmCharacterMovementComponent* Movement =
+				FarmerClass->GetDefaultObject<AFarmerCharacter>()->GetCharacterMovement<UFarmCharacterMovementComponent>();
+			ASSERT_THAT(IsNotNull(Movement));
+			ASSERT_THAT(IsTrue(Movement->RotationRate.Yaw > 0.f));
+		}
+
 		TEST_METHOD(ToolbarKeyHintsLeaveOutEmptySlots)
 		{
 			const AFarmerCharacter& Farmer = Spawner.SpawnActor<AFarmerCharacter>();
