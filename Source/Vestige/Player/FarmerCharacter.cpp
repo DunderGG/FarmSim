@@ -159,7 +159,12 @@ void AFarmerCharacter::DoMove(float Right, float Forward)
 
 float AFarmerCharacter::GetMoveInputScale(float HeldSeconds, float RampSeconds)
 {
-	return RampSeconds > 0.f ? FMath::Clamp(HeldSeconds / RampSeconds, 0.f, 1.f) : 1.f;
+	// Compared before dividing, so the endless hold of on-screen controls (TNumericLimits<float>::Max()) can't overflow.
+	if (RampSeconds <= 0.f || HeldSeconds >= RampSeconds)
+	{
+		return 1.f;
+	}
+	return FMath::Max(HeldSeconds / RampSeconds, 0.f);
 }
 
 float AFarmerCharacter::GetMoveHeldSeconds() const
