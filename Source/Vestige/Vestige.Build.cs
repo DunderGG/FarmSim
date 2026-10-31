@@ -21,6 +21,7 @@ public class Vestige : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {
 			"AssetRegistry",
 			"Slate",
+			"DeveloperSettings",
 			"SlateCore",
 			"UMG"
 		});

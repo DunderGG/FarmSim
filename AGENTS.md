@@ -35,6 +35,7 @@ Follow the two Docs files for every change. The rules below are the ones most of
    - `UFarmTargetHighlightComponent`: the frame around the targeted tile (presentation only).
    - `AFarmerCharacter`: input bindings (and the key hints that describe them), turning movement into the tile aim (the walk eases in, so a tap barely steps), and showing the current tool's held mesh only.
    - `AFarmHUD` / `SFarmHudWidget`: display only.
+   - `UFarmHudSettings`: how the HUD shows feedback messages (how many at once, for how long), in Project Settings.
    - `UFarmFeedbackSubsystem`: carries messages for the player from game code to the HUD. Game code calls `Notify`; it never calls the HUD.
    - `UFarmSaveSubsystem` / `UFarmSaveGame`: saving and loading.
    - `UFarmContentData`: base of every content data asset. Owns the `ContentId`, display name and loading through the Asset Manager.

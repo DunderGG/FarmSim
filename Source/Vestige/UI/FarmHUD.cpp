@@ -13,6 +13,7 @@
 #include "Player/FarmerCharacter.h"
 #include "Time/FarmDayCycle.h"
 #include "TimerManager.h"
+#include "UI/FarmHudSettings.h"
 #include "UI/FarmHudWidget.h"
 
 #define LOCTEXT_NAMESPACE "FarmHUD"
@@ -53,6 +54,10 @@ namespace FarmHudHints
 void AFarmHUD::BeginPlay()
 {
 	Super::BeginPlay();
+
+	const UFarmHudSettings& Settings = UFarmHudSettings::Get();
+	MaxMessages = Settings.GetMaxMessages();
+	MessageSeconds = Settings.GetMessageSeconds();
 
 	UGameViewportClient* Viewport = GetWorld() ? GetWorld()->GetGameViewport() : nullptr;
 	if (!PlayerOwner || !PlayerOwner->IsLocalController() || !Viewport)
@@ -196,7 +201,7 @@ void AFarmHUD::ShowMessage(const FText& Message)
 
 void AFarmHUD::RemoveExpiredMessages()
 {
-	Messages.RemoveExpired(GetWorld()->GetTimeSeconds(), MessageDuration);
+	Messages.RemoveExpired(GetWorld()->GetTimeSeconds(), MessageSeconds);
 	MessagesChanged();
 }
 
@@ -208,7 +213,7 @@ void AFarmHUD::MessagesChanged()
 	}
 
 	// Every message lives as long, so one timer for the oldest is enough; it is set again each time the list changes.
-	const TOptional<double> SecondsLeft = Messages.GetSecondsUntilNextExpiry(GetWorld()->GetTimeSeconds(), MessageDuration);
+	const TOptional<double> SecondsLeft = Messages.GetSecondsUntilNextExpiry(GetWorld()->GetTimeSeconds(), MessageSeconds);
 	if (!SecondsLeft.IsSet())
 	{
 		GetWorldTimerManager().ClearTimer(ExpireTimer);
@@ -228,7 +233,7 @@ float AFarmHUD::GetMessageOpacity(int32 Index) const
 	{
 		return 0.f;
 	}
-	return FFarmHudMessages::GetOpacity(Shown[Index].StartTime, GetWorld()->GetTimeSeconds(), MessageDuration);
+	return FFarmHudMessages::GetOpacity(Shown[Index].StartTime, GetWorld()->GetTimeSeconds(), MessageSeconds);
 }
 
 #undef LOCTEXT_NAMESPACE

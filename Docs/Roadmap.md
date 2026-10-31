@@ -317,6 +317,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 - [ ] Replace the Epic template code and content (character, animations, input) with our own
 - [ ] Main menu, settings and save slots
 - [ ] Music and sound effects
+- [ ] Settle how many feedback messages the HUD shows at once (Project Settings > Game > Farm HUD; five while the game is being built, 2026-10-30)
 - [ ] Final names for the game, the world, the town, the coin, the caretaker and the robot makers
 - [x] License headers (an SPDX line) in our own source files
 - [ ] A lawyer's check of the licensing setup

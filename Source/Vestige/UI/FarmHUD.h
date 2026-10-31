@@ -45,7 +45,7 @@ public:
 	/** How visible the message at Index is now, from 0 to 1, as it fades in and out. Cheap enough to read every frame. */
 	float GetMessageOpacity(int32 Index) const;
 
-	/** Most messages on screen at once, each in its own box. */
+	/** Most messages on screen at once, each in its own box, from UFarmHudSettings at BeginPlay. */
 	int32 GetMaxMessages() const { return MaxMessages; }
 
 protected:
@@ -67,7 +67,7 @@ private:
 
 	void RefreshControlsText();
 
-	/** Shows Message in a box of its own, under the ones already showing, for MessageDuration seconds. Bound to UFarmFeedbackSubsystem. */
+	/** Shows Message in a box of its own, under the ones already showing, for MessageSeconds. Bound to UFarmFeedbackSubsystem. */
 	void ShowMessage(const FText& Message);
 
 	/** Drops the messages whose time is up, and waits for the next one to expire. */
@@ -76,13 +76,9 @@ private:
 	/** Tells the widget the list changed, and sets the timer for the next message to expire. */
 	void MessagesChanged();
 
-	/** How long each feedback message stays on screen, in seconds, fading in and out included. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|HUD", meta = (AllowPrivateAccess = "true", ClampMin = 0.5))
-	float MessageDuration = 3.f;
-
-	/** Most messages on screen at once, each in its own box. A new message beyond this pushes out the oldest. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|HUD", meta = (AllowPrivateAccess = "true", ClampMin = 1))
-	int32 MaxMessages = 3;
+	// Read from UFarmHudSettings at BeginPlay and kept for the session, so the widget's boxes, made once, always match.
+	float MessageSeconds = 0.f;
+	int32 MaxMessages = 0;
 
 	TWeakObjectPtr<const AFarmDayCycle> DayCycle;
 	TWeakObjectPtr<UFarmingComponent> Farming;
