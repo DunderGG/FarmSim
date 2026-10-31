@@ -13,5 +13,5 @@ DerivedDataCache/
 *.blend1
 
 # Microsoft's Visual Studio integration plugin, which Visual Studio copies into a project on request. Each developer
-# installs it for themselves; the project doesn't list it, and it loads by default when present.
+# installs it for themselves; the project lists it as optional, so it is ignored where it is missing.
 Plugins/VisualStudioTools/
