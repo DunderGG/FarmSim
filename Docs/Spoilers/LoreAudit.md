@@ -100,7 +100,7 @@ At the time of the original review, the Iron Creed, Index and Keepers each ranke
 
 **Severity: High**
 
-**Status: Partially addressed (2026-10-27).** The engineer and Index archivist now have sequenced character-arc outlines with meaningful player involvement, character-owned choices and defined outcomes; both have optional romance arcs. The nomad has a fuller character outline, and Hob has a dedicated character sheet. Full implementation and playtesting are deferred until the game has a playable story slice.
+**Status: Partially addressed (2026-10-30).** The engineer, archivist and nomad now have dedicated character sheets, and each faction has a sheet with its practices, internal disagreements and story direction. Hob also has a dedicated sheet. The named characters have clearer wants and arcs, but several town characters and the sibling remain hooks, and none of these arcs has been implemented or playtested in a playable story slice.
 
 Hob has a last order, history and story beat. The administrator, clinic robot and mail carrier are described mainly by role, a comic or unsettling premise, and one secret or attitude. The engineer now has a sequenced arc outline, and the archivist has an arc outline built around consent and context; the nomad has a fuller character outline. The rest of the cast remains underdefined, and these arcs still need implementation and validation in a playable slice. The rare humans are mostly types of survival stories. The character template asks for wants and unlocks, but most entries do not yet provide them.
 
@@ -121,6 +121,8 @@ The parents' fate is described as a mystery uncovered through letters, recording
 ### L-09 — The tone has no guidance for handling its darkest material
 
 **Severity: Medium**
+
+**Status: Partially addressed (2026-10-30).** The faction sheets now include guardrails for portraying the human trials and their survivors. The lore still has no shared guidance for balancing comic relief with the broader story's violence, loss and medical vulnerability.
 
 The setting includes mass death, radiation sickness, a failing cryo pod, a family mystery, prejudice against humans, a human held as an exhibit, and a clinic robot fascinated by the player's body. These coexist with product-launch festivals, jingles and absurd advertisements. The document says the tone is serious with comic relief, but gives no rule for where humor is appropriate.
 
@@ -163,9 +165,86 @@ The file correctly marks many names as working names, but also uses them through
 2. [x] Define the fictional rules of Cinderium dust, radiation and land recovery (L-02; resolved 2026-10-27).
 3. [x] Explain infrastructure failure and Hob's maintenance limits (L-03; resolved 2026-10-27). Reconcile Hob's order and the town's crisis (L-04; resolved 2026-10-27).
 4. [ ] **L-07 partially addressed:** Character sheets outline the engineer's and archivist's arcs; implement and validate a complete arc once a playable story slice exists, and develop other characters as they become planned content. Clarify the sleeper's agency (L-10) and the family mystery payoff (L-08).
-5. [x] Set the human cast target and define why encounters are rare while global numbers remain unknown (L-05; resolved 2026-10-27). Define faction institutions and membership (L-06; resolved 2026-10-27). Set tone boundaries before expanding the cast (L-09).
+5. [x] Set the human cast target and define why encounters are rare while global numbers remain unknown (L-05; resolved 2026-10-27). Define faction institutions and membership (L-06; resolved 2026-10-27). [ ] Add shared tone guidance before expanding the cast (L-09; partially addressed by faction-specific safeguards).
 6. Establish a working-name and stable-ID policy before terms become content or save data (L-11).
 
 ## Review limits
 
 This is a narrative-document audit, not a line edit, originality clearance or test of how players respond to the story. Cross-checks were made against [GameDesign.md](../GameDesign.md), especially its pillars, character systems and milestone scope. The findings identify questions that the current lore leaves open; some may be intentional mysteries, but those should be explicitly distinguished from unresolved authoring decisions.
+
+## Follow-up audit (2026-10-30)
+
+**Scope:** Reviewed the current [Lore.md](Lore.md), all character and faction sheets in this folder, the spoiler index and the relevant character, farming and progression rules in [GameDesign.md](../GameDesign.md). This follow-up adds findings not covered by the original review; it does not replace that review or assess implementation.
+
+The new faction sheets materially improve writer usability: each faction now has a concrete social role, internal disagreement, relationships and guardrails. The character sheets also make the major arcs more actionable. The remaining new issues are concentrated in how those rules carry through to scenes and in a few unresolved links between lore and gameplay.
+
+### L-12 — Cleo's first consent choice is not fully informed
+
+**Severity: Medium**
+
+In [Archivist.md](Characters/Archivist.md), Cleo asks for an “unrestricted direct interface” to the sleeper's pod log and family rationing memories. The willing response immediately begins the scan; only the cautious response reveals that the Archive, Review Council and other researchers may access the data. The choice therefore permits sensitive access before the sleeper knows its scope, audience or handling, despite the Index sheet's rule that consent must be informed, ongoing and reversible.
+
+**Why it matters:** The first major choice in Cleo's consent-centered arc can reward agreement made without the information the scene later establishes as relevant. This weakens both the player's agency and the arc's ethical premise.
+
+**Recommended change:** Have Cleo disclose the requested data, intended access and storage before asking. Make the choices set explicit limits, include a real refusal, and establish that the sleeper can review or withdraw permission later.
+
+### L-13 — Gage's pressure-test summary contradicts its choice-specific outcomes
+
+**Severity: Medium**
+
+In [Engineer.md](Characters/Engineer.md), the arc summary says Gage chooses caution, stops the test and discovers a fractured shear pin. The scripted scene offers three different outcomes: emergency shutdown finds the pin fracture; pushing ahead ruptures a different gasket; stepped bleed-down stabilizes the system without damage.
+
+**Why it matters:** The summary makes one branch canonical even though the scene gives the player meaningful alternatives. Later scenes may consequently refer to damage, risk or lessons that did not occur in that playthrough.
+
+**Recommended change:** Make the arc summary explicitly branch-aware, or simplify the scene to one outcome. Carry each outcome into the repair cost and Gage's subsequent trust, accountability and dialogue rather than treating the branches as interchangeable.
+
+### L-14 — Gage's formative accident is dated before the documented Iron Creed era
+
+**Severity: Low**
+
+[Lore.md](Lore.md) places the present in Year 71 and says the Iron Creed and its hubs formed during Years 30–50 after the war. [Engineer.md](Characters/Engineer.md) dates Gage's formative Bastion accident to “seventy years ago,” placing it around Year 1, and describes it as early in his Bastion service. The documents do not establish that the Bastion existed before the Iron Creed or explain what Gage's role there was at that point.
+
+**Why it matters:** This is a chronology gap in a backstory that is central to Gage's beliefs and later choices.
+
+**Recommended change:** Date the incident within the established post-war timeline, or establish that the Bastion predates the Iron Creed and explain Gage's service there before the network formed.
+
+### L-15 — The frame-conversion hook does not preserve the trials' stated motive and victim-led response
+
+**Severity: Medium**
+
+[Lore.md](Lore.md) and [IronCreed.md](Factions/IronCreed.md) describe the conversions as abuse by a secret group whose stated motive was preparing humans to survive; most Creed members are unaware, and any response should begin with the harmed people's wishes. The [Gage sheet](Characters/Engineer.md) instead says he confronts “the radical commanders who mutilated human subjects.” The lore does not establish that the researchers were the Creed's anti-human radicals, whose defining belief is that humans should not get a second chance.
+
+**Why it matters:** Equating distinct motives without explanation can flatten the faction's internal conflict and assign responsibility more broadly than the lore intends. Framing the payoff primarily as Gage confronting commanders also risks making his action, rather than survivors' choices and needs, the center of the reveal.
+
+**Recommended change:** Clarify whether the researchers were members of the radical current and how their stated “preparation” rationale relates to it. Keep accountability specific, and define the affected characters' wishes and role in deciding what happens before scripting Gage's confrontation.
+
+### L-16 — Crop contamination rules stop before food safety
+
+**Severity: Medium**
+
+[Lore.md](Lore.md) says ordinary plants may take up small amounts of Cinderium compounds and that special crops store a mobile fraction which must be harvested and safely contained to remove contamination. [GameDesign.md](../GameDesign.md) says mutated crops can be harmful to eat and that eating harmful crops can expose the player, but the lore does not define how a player or character can distinguish unsafe food, whether ordinary produce from contaminated soil is safe, or whether cleanup crops are food or waste.
+
+**Why it matters:** Farming, food and environmental recovery share the same crops. Without a clear rule, dialogue and item descriptions can treat a crop as safe food while the gameplay treats it as a radiation hazard, or imply cleanup through harvest without clarifying safe disposal.
+
+**Recommended change:** Establish a compact writer-facing rule for edible versus hazardous crops, how contamination and mutation affect that status, and how cleanup crops are handled. Keep the specific detection or treatment mechanics open if they are not yet designed.
+
+### L-17 — The darker story lacks a paced reveal timeline
+
+**Severity: High**
+
+[Lore.md](Lore.md) says the Continuance Trials become hard to deny in the middle of the story, and the faction sheets describe optional investigation areas such as the Frame Conversion Wing and Cognitive Wing. The documents do not establish when the player first encounters these subjects, how early clues differ from later evidence, or how the reveals fit the opening's cozy farming and relationship experience. The [Gage sheet](Characters/Engineer.md) also introduces the frame-conversion investigation as a hub hook without a clear story-stage boundary.
+
+**Why it matters:** The trials, human captivity and other darker material can substantially change the emotional contract of the game. If these elements surface too soon or without gradual context, they may undermine the light, cozy opening; if clues and reveals are not sequenced, writers may disclose the central truth prematurely or make earlier content feel misleading rather than retrospectively meaningful.
+
+**Recommended change:** Treat discovery of the darker history as a long-term story goal. Keep the opening light and cozy, then let gameplay gradually complicate that impression through notes, recordings and other contextual clues before any full reveal. Set up a story-event timeline soon: identify the early, middle and late-game emotional tone; place the first hints, corroborating evidence and full disclosures; define the prerequisites and optionality of each reveal; and track what the player and characters know at each stage. The timeline should coordinate the frame conversions, cognitive integrations, living exhibit, family mystery and other major revelations without requiring every player to pursue every optional investigation.
+
+### Previous findings still open
+
+- **L-07 — Partially addressed:** Faction and character sheets now provide substantially more writing direction; implementation and playtesting of a complete arc, and development of the remaining planned cast, are still outstanding.
+- **L-08 — Open:** The parents' message and the observable threshold for the farm being “whole again” remain undecided.
+- **L-09 — Partially addressed:** The faction sheets' trial-specific safeguards do not yet establish shared tone rules for humor and other dark material.
+- **L-10 — Open:** The sleeper's personal wants, initial assumptions and player-expressed growth remain less defined than the surrounding characters' views of them.
+- **L-11 — Open:** Working names remain in use and there is still no concise policy distinguishing changeable display names from stable, save-facing IDs.
+- **L-17 — Open:** The darker story has no staged reveal plan or event timeline; its placement relative to the cozy opening and the player's gradual discovery remains to be decided.
+
+**Review limits:** This is a cross-document narrative and world-rule audit, not a technical or scientific validation of Cinderium, a gameplay playtest, or a judgment on final dialogue. The branch and agency findings identify authoring risks; testing whether their eventual treatment lands will require a playable story slice.
