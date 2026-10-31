@@ -116,9 +116,9 @@ Friendship progresses through 10 trust tiers (Hearts), visible to the player thr
 - **Dialogue:** Calls the player by their chosen name. Asks what things *meant* to people rather than just how they functioned.
 - **Key Event 1 — The Request:**
   - *Trigger:* Enter the Aquifer Station after reaching 3 Hearts on a clear day.
-  - *Scene:* Cleo asks to review the sleeper’s personal memories and scan their cryo pod records to resolve inconsistencies in the town's pre-war water distribution logs.
-  - *Choice:* The player can cooperate freely, refuse, or ask how the records will be stored and who will see them.
-  - *Outcome:* Cleo is caught off guard by the player's concern for data privacy. She admits she had regarded the data as public property and agrees to define terms before scanning anything.
+  - *Scene:* Before asking, Cleo states that she wants the pod's suspension and utility diagnostics and may also ask about the family's water-rationing cards. She explains that she would keep a temporary encrypted copy in her field folio, erase the raw scan after transcription, and submit only an excerpt the sleeper has reviewed and approved to the Archive Review Council and assigned water-systems researchers. Approved excerpts remain in the Archive's research collection only while permission stands; the sleeper can stop the scan or withdraw permission later, and Cleo will erase her copy and have the Archive remove its copies.
+  - *Choice:* The sleeper can allow technical diagnostics only, also agree to a voluntary interview about the family's rationing, or refuse all access. Either permission allows review of the proposed excerpt before it is shared; refusal does not count as withheld testimony.
+  - *Outcome:* Cleo follows the chosen scope and sharing limits. Her disclosure is careful but procedural: she still treats consent as a condition for valid collection rather than fully understanding the sleeper's ownership of the record. The encounter begins her shift from extracting data toward stewardship.
 - **Key Event 2 — The Incomplete Archive:**
   - *Trigger:* Reach 4 Hearts; speak with Cleo at the Town Hall records desk.
   - *Scene:* Cleo discovers that pre-war Civitas engineering diagrams of the pump do not match the physical pipe junctions in the ground. The manuals show a bypass valve that does not exist.
@@ -188,7 +188,8 @@ Visiting the Archive through Cleo’s storyline opens unique facilities that adh
    - Offers specialized heirloom crop seeds (decorative flowers and shade-tolerant species) that cannot be bought in commercial town shops.
 4. **Narrative Thread — The Cognitive Wing:**
    - In the deeper institutes of the Archive, the player can discover restricted records referencing the "living exhibit" and cognitive integration trials.
-   - This opens an optional investigation thread where the player and Cleo can confront the darker, unethical experiments conducted by Index extremists.
+   - This opens an optional investigation into the researchers and institutions responsible. The records do not establish that the researchers belonged to the Index's complete-observation current.
+   - The living exhibit decides what help, if any, they want and what may be shared. Cleo can support their choices and specific accountability; she does not decide their story for them. See the [story timeline](../StoryTimeline.md) for the planned reveal phases.
 
 ---
 
@@ -219,20 +220,21 @@ These scripts provide direct reference for dialogue tables, cinematic cues, and 
 > "I have encountered an eighty-four percent discrepancy between the Civitas municipal schematics and this station's actual piping manifold. According to the original municipal charter, this branch was designed to route twenty thousand hectoliters daily to the residential quadrant. Yet the physical flange appears to terminate in a sealed cap."
 > 
 > *(She steps closer, her scanner emitting a low diagnostic chime.)*  
-> "You were alive when this sector was operational. Hearthwell home pods recorded ambient regional broadcasts and utility telemetry to calibrate internal suspension timing. If you grant me unrestricted direct interface with your pod's diagnostic log—and submit to a brief retrospective interrogation regarding your family's water rationing cards—I can resolve this historical divergence."
+> "You were alive when this sector was operational. Hearthwell home pods recorded suspension timing and utility telemetry. Before I ask, my field protocol requires me to state the scope. I want to read those technical logs. I would also like to ask about your family's water-rationing cards, but only if you agree to an interview."
+>
+> *(She taps the edge of her folio, as if reciting a checklist.)*
+> "I would keep a temporary encrypted copy here while I compare it with the station records, then erase the raw scan after transcription. You would review any excerpt before I sent it to the Archive. Only the Review Council and researchers assigned to the water-system study would see an excerpt you approve; it would remain in the Archive's research collection only while your permission stands. You can stop the scan or withdraw later; I will erase my copy and have the Archive remove its copies. I will not record a refusal as withheld testimony. Which, if any, of those records may I access?"
 > 
 > **PLAYER DIALOGUE CHOICES:**
 > 
-> * **[Choice A — Willing Cooperation]:** *"Sure. Anything that helps us understand how the pumps were meant to run."*  
->   * **CLEO:** *(Nods briskly, her stylus scratching across vellum.)* "Admirable efficiency. The Archive values complete, unencumbered disclosure. I will prepare the optical link at once."
+> * **[Choice A — Technical Records Only]:** *"You may read the pod's technical logs, but don't ask me about my family's ration cards. I'll review any excerpt before you send it."*
+>   * **CLEO:** *(Nods briskly, her stylus poised above the vellum.)* "Understood: technical logs only, with your review before any excerpt is shared. I will not access personal memories or interview you about your family. You may narrow or withdraw that permission at any time; I will have any approved Archive copies removed."
 > 
-> * **[Choice B — Cautious Inquiry]:** *"Who gets to see those records once you've scanned them?"*  
->   * **CLEO:** *(Pauses, her lens turret giving a subtle twitch.)* "The Archive, naturally. The Review Council, field researchers, subsequent synthesizers of the Continuance... all Index fellows. Knowledge belongs in the collective repository, does it not?"  
->   * **PLAYER:** *"My family's personal rations aren't just technical data, Cleo. They're our private lives."*  
->   * **CLEO:** *(Lowers her stylus, silent for a three-second calculation cycle.)* "...Private. I see. From a computational perspective, personal habit is simply metadata that explains distribution curves. But... your vocal cadence indicates distress. Very well. I will restrict my scan strictly to hardware telemetry. You may review the raw log before I commit it to my folio."
+> * **[Choice B — Records and Interview]:** *"You may read the technical logs and ask me about the ration cards. I still want to review the exact excerpt before it goes to the Archive."*
+>   * **CLEO:** *(Her lens turret gives a subtle twitch.)* "Agreed. I will keep the interview within that subject, show you the excerpt, and send nothing until you approve it. You may correct it, narrow the permission, or withdraw it later; I will have any approved Archive copies removed."
 > 
-> * **[Choice C — Refusal / Defensiveness]:** *"I just woke up into a ruined world, and you want to dig through my dead family's receipts? Leave my pod alone."*  
->   * **CLEO:** *(Steps back slightly, her visor dimming by a fraction.)* "I... I see. My query was formulated on the premise that historical recovery is inherently beneficial. I did not intend to... stimulate traumatic recall. My apologies. I will rely solely on non-invasive ground-penetrating radar. Though I must record that primary witness testimony was withheld." *(She glances down at her folio, hesitating before closing it).*
+> * **[Choice C — Refusal]:** *"No. Don't access my pod or ask me about my family."*
+>   * **CLEO:** *(Steps back slightly, her visor dimming by a fraction.)* "Understood. I will use non-invasive ground-penetrating radar and will not record your refusal as a gap in your testimony." *(She closes her folio without making a note.)*
 
 ---
 
@@ -325,4 +327,3 @@ Cleo’s dialogue reflects her evolving understanding of local culture, seasonal
   *"Look at this pumpkin. Its cellular density and sugar content are identical to the pre-war agricultural registry baseline. For decades, the Index concluded that human farming without automated nitrogen synthesizers was unviable. You have disproved an entire generation of our peer-reviewed papers with your own hands. I am delighted."*
 - **Winter — The Great Clearance:**  
   *"A holiday born from an aggressive fiscal year-end inventory liquidation campaign... transformed into a festival of unreciprocated mutual gifting. I find it oddly touching. Here—I salvaged this pre-war brass pocket magnifying lens and polished the glass for you. Happy Great Clearance, sleeper."*
-

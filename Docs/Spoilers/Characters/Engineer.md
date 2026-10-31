@@ -29,7 +29,7 @@ Gage is an Iron Creed field engineer visiting Wellspring through a parts-and-exp
 ## 2. Worldview & Ideological Conflict
 
 - **Faction Standing:** A respected, voluntary veteran of the Iron Creed. He believes strength is an ethical duty to protect the network and its neighbors through discipline, preparedness, and relentless maintenance. He rejects the radical dominationist wing of the Creed, viewing bullies as undisciplined failures of character.
-- **Formative Backstory:** Early in his service at the Bastion, Gage rushed a turbine repair to meet a command deadline, misreading a stress crack. The subsequent secondary explosion crushed his lower frame and pinned him under tons of slag. A fellow field engineer refused orders to abandon him, cutting him free and hauling him to safety before returning together to rebuild the housing correctly. The incident permanently shaped him: he documented his failure, instituted rigorous double-check routines, and concluded that dependable partners and honest maintenance are what make a body ready for catastrophe.
+- **Formative Backstory:** Roughly five and a half decades after the war, early in his service at the Bastion, Gage rushed a turbine repair to meet a command deadline, misreading a stress crack. The subsequent secondary explosion crushed his lower frame and pinned him under tons of slag. A fellow field engineer refused orders to abandon him, cutting him free and hauling him to safety before returning together to rebuild the housing correctly. The incident permanently shaped him: he documented his failure, instituted rigorous double-check routines, and concluded that dependable partners and honest maintenance are what make a body ready for catastrophe.
 - **Initial View of Humans & the Sleeper:**
   - Gage has a major blind spot: he applies his lesson on partnership only to machines. He views a robot needing repair as normal mechanical interdependence, but views human biological need (hunger, sleep, physical vulnerability) as proof of intrinsic unreliability.
   - He blames humanity's pre-war habit of offloading decisions to automated systems for causing the Four Days. He initially views the sleeper as a fragile hazard who will either break a valve or get crushed in the machinery.
@@ -132,16 +132,20 @@ Friendship progresses across 10 trust tiers (Hearts), visible to the player thro
 - **Key Event 3 — The Controlled Pressure Test:**
   - *Trigger:* Reach 6 Hearts; enter the Aquifer Station basement.
   - *Scene:* A high-pressure hydrostatic test on the rebuilt manifold. Pressure climbs toward 80 bar. A Keeper operator notices an acoustic flutter and urges an immediate emergency shutdown to check the lower seals. Gage is under pressure to complete the test before evening and fears delaying will make his Bastion overhaul look incompetent.
-  - *The Dilemma:* Gage’s past trauma surfaces—rushing a job vs. trusting a partner's warning. He turns to the sleeper: *"If we abort now, the pressure drop wastes twelve hours of battery charge. But if that lower gasket yields, the pump room floods. What's your read, sleeper?"*
-  - *Player Choice:* The player can urge Gage to push through, support the Keeper operator's call to wait, or suggest a stepped bleed-down test to check the lower seals without venting full head pressure.
-  - *Outcome:* Gage chooses caution and halts the test. Upon inspecting the lower flange, they discover a hairline shear pin fracture that would have shattered under full load. Gage is visibly shaken, confiding his past Bastion disaster to the sleeper: *"A rushed repair pinned me under three tons of iron seventy years ago. A teammate pulled me out. Today... you and that Keeper operator just pulled this whole town out of the rubble. Thank you for holding the line."*
+  - *The Dilemma:* Gage’s past trauma surfaces—rushing a job vs. trusting a partner's warning. He turns to the sleeper: *"If we abort now, we lose today's certification window and delay startup until tomorrow. But if that lower gasket yields, the pump room floods. What's your read, sleeper?"*
+  - *Player Choice:* The player can urge Gage to push through, support the Keeper operator's call to stop, or suggest a stepped bleed-down test.
+  - *Branch Outcomes:*
+    - *Emergency abort:* Gage vents the line and inspects the lower flange. They find a hairline shear pin fracture before it fails under full load, and the back-surge contaminates the reservoir with silt. The pin must be replaced, the reservoir flushed and the test rescheduled. Gage admits that the Keeper operator was right and thanks the sleeper for backing the stop.
+    - *Push ahead:* Gage holds pressure despite the warning. A secondary gasket ruptures before the test is complete; the team shuts down, replaces the gasket, cleans the flooded floor and reschedules the test. Gage acknowledges that the player's encouragement did not make his decision safe, and takes responsibility for ignoring the operator.
+    - *Stepped bleed-down:* Gage follows the sleeper's procedure, easing the pressure to 65 bar until the chatter stops. The manifold passes without damage, contamination or additional repair.
+  - *Shared aftermath:* In each branch, Gage credits the Keeper operator for identifying the danger and tells the sleeper about the Bastion accident that shaped his fear of rushed repairs. The next report and dialogue preserve the chosen outcome and its consequences.
 
 ### Stage 4: Hearts 7–8 — The Bastion Route & Vulnerability
 - **Attitude:** Deep personal respect, emotional loyalty, shared vulnerability.
 - **Key Event 4 — The Dispatch to the Bastion:**
   - *Trigger:* Reach 8 Hearts; visit the workshop after 19:00.
   - *Scene:* Gage has drafted his formal report for Bastion High Command. Bastion doctrine encourages portraying the operation as an Iron Creed unilateral success, downplaying civilian and Keeper contributions to maintain political prestige.
-  - *Conflict:* Gage refuses to lie. He drafts a report that explicitly credits Keeper operators and the human sleeper with saving the facility.
+  - *Conflict:* Gage refuses to present a unilateral success. He records the pressure-test outcome accurately, including any damage and repair, and credits Keeper operators and the sleeper for their contributions.
   - *The Reveal:* The Bastion Command accepts the assessment and issues an official transit permit for the sleeper to inspect defense manufacturing lines. Gage gives the sleeper a reinforced convoy pass and maps a safe route through the hazardous Iron Ridge mountain passes.
   - *Hub Unlock:* Unlocks **The Bastion** on the world map. This unlock is purely story- and trust-driven; it does **not** require entering a romance.
 - **Romance Opt-In (Explicit Choice):**
@@ -188,7 +192,8 @@ Visiting the Bastion through Gage’s storyline opens unique facilities that adh
    - Trade bulky battlefield scrap and raw slag for refined structural steel beams, high-density tungsten ingots, and high-tensile fasteners.
 4. **Narrative Investigation Hook — Frame Conversion Wing:**
    - In the secluded medical bunkers of the Bastion, the player can discover sealed operating theaters and classified dossiers detailing the Iron Creed’s experimental "frame conversions" on surviving humans.
-   - This opens an optional narrative thread where Gage confronts the radical commanders who mutilated human subjects in the name of "readiness."
+   - This opens an optional investigation into the researchers and institutions responsible. Their work drew on the Creed's language of strength and survival, but the records do not establish that they belonged to its dominationist current.
+   - The harmed people decide whether they want safety, medical support, privacy, testimony, justice, no further contact or another response. Gage can help carry out their chosen response and support specific accountability; he does not decide what they need or confront anyone without their wishes.
 
 ---
 
@@ -245,7 +250,7 @@ These scripts provide direct reference for dialogue tables, cinematic cues, and 
 > 
 > **GAGE:**  
 > *(Braced against the steel support pillar, gripping the manual override wheel. His hydraulic servos are locked in place.)*  
-> "Negative! If we vent head pressure now, the back-surge will contaminate the clean water reservoir with forty tons of loose silt! Bastion command expects a completed hydrostatic certification today! If I abort, this station sits offline for another month!"
+> "Negative! If we vent head pressure now, the back-surge could contaminate the clean water reservoir with loose silt! Bastion command expects a completed hydrostatic certification today! If I abort, we lose today's test window and delay startup until tomorrow!"
 > 
 > **KEEPER OPERATOR:**  
 > "We're risking the entire pump room! You Iron Creed soldiers always think you can muscle through metal fatigue!"
@@ -258,18 +263,18 @@ These scripts provide direct reference for dialogue tables, cinematic cues, and 
 > 
 > * **[Choice A — Urge Emergency Abort / Side with Keeper]:** *"Vent the pressure, Gage! A flooded pump room ruins everything. We can re-test tomorrow!"*  
 >   * **GAGE:** *(Freezes for a split-second, then his voice drops to a grim, decisive snap.)* "Operator—crank the bleed wheel! All personnel, brace for venting!"  
->   * *(A deafening roar shakes the chamber as superheated steam and water blast through the relief flume. When the mist clears, Gage drops to one knee beside the lower flange. He reaches into the seam and pulls out a sheared steel pin, twisted like lead).*  
->   * "...The shear pin cracked. If we had held another ten seconds, that flange would have decapitated everyone in this trench. Operator... your call was accurate. Sleeper... thank you for cutting through my stubborn pride."
+>   * *(A deafening roar shakes the chamber as steam and water blast through the relief flume. The back-surge clouds the clean reservoir with silt. Once the line is depressurized, Gage inspects the lower flange and finds a cracked shear pin.)*
+>   * "...The pin was already fractured. Another ten seconds at full load could have thrown the flange. Operator, your warning was right. Sleeper... thank you for backing the stop. We replace the pin, flush the reservoir and retest tomorrow."
 > 
 > * **[Choice B — Support Gage's Push]:** *"Hold the pressure! We came too far to back down over valve chatter!"*  
 >   * **GAGE:** *(Tightens his grip on the wheel, grimacing.)* "Hold your stations! Five seconds... four... three..."  
 >   * *(A sharp `BANG` echoes through the pipes as a secondary gasket ruptures, spraying pressurized water across the floor before Gage slams the safety shutoff).*  
->   * "...Gasket sheared. We proved the turbine can take the head, but we tore up the seal. A messy success. You've got guts, sleeper... but courage doesn't change shear strength. We should have listened to the warning."
+>   * "...The gasket's gone. That was not a successful test. I ignored the operator's warning, and the decision was mine. We replace the seal, clean up the water and retest after the repair."
 > 
 > * **[Choice C — Propose Stepped Bleed-Down (Balanced Solution)]:** *"Don't dump full pressure! Step the bypass open by twenty percent—vent just enough head to save the gasket while keeping the turbine primed!"*  
 >   * **GAGE:** *(His optic flares with sudden comprehension.)* "Stepped dampening! Operator, crack the valve two turns, no more! Sleeper, lock the lower bypass dog!"  
 >   * *(The three work in perfect synchronization. The needle stabilizes smoothly at 65 bar. The chattering ceases).*  
->   * **GAGE:** *(Steps back, his heavy shoulders dropping as his cooling fans wind down.)* "...Pressure stabilized within safe operating limits. No blowout. No silt contamination. Look at that manifold, sleeper. That wasn't brute force. That was teamwork. Real, disciplined teamwork."
+>   * **GAGE:** *(Steps back, his heavy shoulders dropping as his cooling fans wind down.)* "...Pressure stabilized at sixty-five bar. The manifold passed without damage or silt contamination. Look at that, sleeper. That wasn't brute force. That was teamwork. Real, disciplined teamwork."
 
 ---
 
@@ -279,13 +284,27 @@ These scripts provide direct reference for dialogue tables, cinematic cues, and 
 
 > **GAGE:**  
 > *(Sitting on a heavy anvil block, holding a piece of coarse emery cloth. He slowly polishes a nick out of his steel forearm plating. The forge hearth casts deep orange shadows across his angular chest armor.)*  
-> "The Bastion courier took the dispatch an hour ago. Complete disclosure. I credited the Keeper crew with the bypass fabrication, and I logged your name as co-engineer for the manifold hydro-test."
+> "The Bastion courier took the dispatch an hour ago. Complete disclosure. I credited the Keeper crew with the bypass fabrication, and I logged what actually happened during the manifold test."
+>
+> **OUTCOME-SPECIFIC DIALOGUE:**
+>
+> * **[Emergency Abort]:** *"The report records the cracked shear pin, the silt cleanup, the Keeper operator's warning and your call to stop before the flange failed. We replace the pin, flush the reservoir and retest tomorrow. No one gets to call that caution cowardice."*
+>
+> * **[Push Ahead]:** *"The report records the gasket rupture, the cleanup and the extra repair time. I ignored the operator's warning and kept the pressure on. You backed my call, but the decision was mine. I won't file a damaged seal as a successful test."*
+>
+> * **[Stepped Bleed-Down]:** *"The report records the stepped bleed-down and a clean test at sixty-five bar. No part failed, no water was contaminated, and the Keeper operator's warning changed our procedure. I credited you for finding the third option."*
 > 
 > *(He stops polishing, looking down at his scarred metal hands.)*  
 > "Some of the commanders at the Bastion won't like it. They believe strength is solitary—that acknowledging reliance on anyone else, especially a human who woke up seventy years out of time, is a crack in the armor."
 > 
+> **OUTCOME-SPECIFIC REFLECTION:**
+>
+> * **[Emergency Abort]:** *"When you backed the operator and made me stop, I remembered that asking for help is not the same as failing."*
+> * **[Push Ahead]:** *"I let my fear of delay drown out a good warning. We can still work together, but next time I need to listen before someone gets hurt."*
+> * **[Stepped Bleed-Down]:** *"You and the operator found a safer method because you both understood different parts of the problem. That is what readiness should look like."*
+>
 > *(He looks up. His visor is tuned to a deep, warm amber.)*  
-> "They're wrong. A single iron girder is rigid, but under enough seismic load, it snaps. A truss bridge stands because multiple members carry the strain together. When you stood in that flooded trench beside me... I didn't see an obsolete biological. I saw the strongest brace I've ever leaned on."
+> "A single iron girder is rigid, but under enough seismic load, it snaps. A truss bridge stands because multiple members carry the strain together."
 > 
 > *(He sets the emery cloth down on the anvil with a soft clink).*  
 > "My tour in Wellspring is concluding soon. But... I find my internal priorities have shifted. I don't just want to fortify walls, sleeper. I want to build a perimeter around you."

@@ -182,6 +182,8 @@ The new faction sheets materially improve writer usability: each faction now has
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-30).** [Archivist.md](Characters/Archivist.md) now explains the requested data, temporary storage, intended audience, retention and withdrawal terms before the player chooses. The choices authorize technical records only, add a bounded family-rationing interview, or refuse access; the player reviews any excerpt before sharing, and refusal is not recorded as withheld testimony. Cleo's disclosure remains procedural so her character arc still develops toward understanding consent as ownership and stewardship, not just permission to collect.
+
 In [Archivist.md](Characters/Archivist.md), Cleo asks for an “unrestricted direct interface” to the sleeper's pod log and family rationing memories. The willing response immediately begins the scan; only the cautious response reveals that the Archive, Review Council and other researchers may access the data. The choice therefore permits sensitive access before the sleeper knows its scope, audience or handling, despite the Index sheet's rule that consent must be informed, ongoing and reversible.
 
 **Why it matters:** The first major choice in Cleo's consent-centered arc can reward agreement made without the information the scene later establishes as relevant. This weakens both the player's agency and the arc's ethical premise.
@@ -191,6 +193,8 @@ In [Archivist.md](Characters/Archivist.md), Cleo asks for an “unrestricted dir
 ### L-13 — Gage's pressure-test summary contradicts its choice-specific outcomes
 
 **Severity: Medium**
+
+**Status: Resolved (2026-10-30).** [Engineer.md](Characters/Engineer.md) now records three distinct outcomes: the emergency abort finds a fractured pin and requires a reservoir flush; pushing ahead ruptures a gasket and adds cleanup and repair; stepped bleed-down passes without damage. Gage's later report and reflection vary by branch, preserve his accountability and the Keeper operator's warning, and no longer make one outcome canonical.
 
 In [Engineer.md](Characters/Engineer.md), the arc summary says Gage chooses caution, stops the test and discovers a fractured shear pin. The scripted scene offers three different outcomes: emergency shutdown finds the pin fracture; pushing ahead ruptures a different gasket; stepped bleed-down stabilizes the system without damage.
 
@@ -202,7 +206,9 @@ In [Engineer.md](Characters/Engineer.md), the arc summary says Gage chooses caut
 
 **Severity: Low**
 
-[Lore.md](Lore.md) places the present in Year 71 and says the Iron Creed and its hubs formed during Years 30–50 after the war. [Engineer.md](Characters/Engineer.md) dates Gage's formative Bastion accident to “seventy years ago,” placing it around Year 1, and describes it as early in his Bastion service. The documents do not establish that the Bastion existed before the Iron Creed or explain what Gage's role there was at that point.
+**Status: Resolved (2026-10-30).** [Engineer.md](Characters/Engineer.md) now dates the accident to roughly five and a half decades after the war, after the Iron Creed and Bastion formed roughly three to five decades after it. The [IronCreed.md](Factions/IronCreed.md) summary uses the same relative date.
+
+[Lore.md](Lore.md) places the story about seven decades after the war and says the Iron Creed and its hubs formed roughly three to five decades after it. [Engineer.md](Characters/Engineer.md) now places Gage's formative Bastion accident roughly five and a half decades after the war, early in his Bastion service. This keeps the incident after the hub's formation without assigning an absolute current year.
 
 **Why it matters:** This is a chronology gap in a backstory that is central to Gage's beliefs and later choices.
 
@@ -211,6 +217,8 @@ In [Engineer.md](Characters/Engineer.md), the arc summary says Gage chooses caut
 ### L-15 — The frame-conversion hook does not preserve the trials' stated motive and victim-led response
 
 **Severity: Medium**
+
+**Status: Resolved (2026-10-30).** [Lore.md](Lore.md) and [IronCreed.md](Factions/IronCreed.md) now distinguish the conversion researchers' use of Creed readiness ideals from the dominationist current; their affiliation remains unknown. [Engineer.md](Characters/Engineer.md) reframes Gage as supporting responses chosen by the harmed people, with accountability aimed at responsible researchers and institutions rather than presumed faction-wide guilt.
 
 [Lore.md](Lore.md) and [IronCreed.md](Factions/IronCreed.md) describe the conversions as abuse by a secret group whose stated motive was preparing humans to survive; most Creed members are unaware, and any response should begin with the harmed people's wishes. The [Gage sheet](Characters/Engineer.md) instead says he confronts “the radical commanders who mutilated human subjects.” The lore does not establish that the researchers were the Creed's anti-human radicals, whose defining belief is that humans should not get a second chance.
 
@@ -222,6 +230,8 @@ In [Engineer.md](Characters/Engineer.md), the arc summary says Gage chooses caut
 
 **Severity: Medium**
 
+**Status: Resolved (2026-10-30).** [Lore.md](Lore.md) and [GameDesign.md](../GameDesign.md) now distinguish soil contamination, mutation and food toxicity: only crops explicitly defined as harmful can expose the player, and harmful crops must be identified before consumption. Cleanup crops are non-food, and their harvest must be contained rather than eaten, composted or burned. The exact warning mechanic remains open.
+
 [Lore.md](Lore.md) says ordinary plants may take up small amounts of Cinderium compounds and that special crops store a mobile fraction which must be harvested and safely contained to remove contamination. [GameDesign.md](../GameDesign.md) says mutated crops can be harmful to eat and that eating harmful crops can expose the player, but the lore does not define how a player or character can distinguish unsafe food, whether ordinary produce from contaminated soil is safe, or whether cleanup crops are food or waste.
 
 **Why it matters:** Farming, food and environmental recovery share the same crops. Without a clear rule, dialogue and item descriptions can treat a crop as safe food while the gameplay treats it as a radiation hazard, or imply cleanup through harvest without clarifying safe disposal.
@@ -231,6 +241,8 @@ In [Engineer.md](Characters/Engineer.md), the arc summary says Gage chooses caut
 ### L-17 — The darker story lacks a paced reveal timeline
 
 **Severity: High**
+
+**Status: Partially addressed (2026-10-30).** The new [StoryTimeline.md](StoryTimeline.md) establishes provisional early, middle and late phases, emotional pacing, knowledge guardrails, optionality and the parallel family thread. Exact quest prerequisites, survivor identities and wishes, and the final family-message payoff remain open until a playable story slice defines them.
 
 [Lore.md](Lore.md) says the Continuance Trials become hard to deny in the middle of the story, and the faction sheets describe optional investigation areas such as the Frame Conversion Wing and Cognitive Wing. The documents do not establish when the player first encounters these subjects, how early clues differ from later evidence, or how the reveals fit the opening's cozy farming and relationship experience. The [Gage sheet](Characters/Engineer.md) also introduces the frame-conversion investigation as a hub hook without a clear story-stage boundary.
 
@@ -245,6 +257,6 @@ In [Engineer.md](Characters/Engineer.md), the arc summary says Gage chooses caut
 - **L-09 — Partially addressed:** The faction sheets' trial-specific safeguards do not yet establish shared tone rules for humor and other dark material.
 - **L-10 — Open:** The sleeper's personal wants, initial assumptions and player-expressed growth remain less defined than the surrounding characters' views of them.
 - **L-11 — Open:** Working names remain in use and there is still no concise policy distinguishing changeable display names from stable, save-facing IDs.
-- **L-17 — Open:** The darker story has no staged reveal plan or event timeline; its placement relative to the cozy opening and the player's gradual discovery remains to be decided.
+- **L-17 — Partially addressed:** [StoryTimeline.md](StoryTimeline.md) establishes provisional phases, reveals and knowledge guardrails. Exact quest prerequisites and final character-specific outcomes still need the playable story slice.
 
 **Review limits:** This is a cross-document narrative and world-rule audit, not a technical or scientific validation of Cinderium, a gameplay playtest, or a judgment on final dialogue. The branch and agency findings identify authoring risks; testing whether their eventual treatment lands will require a playable story slice.

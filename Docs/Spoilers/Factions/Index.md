@@ -20,7 +20,7 @@ The faction offers a tempting promise in a damaged world: that enough evidence c
 
 ### Post-war origins
 
-The Index emerged during the decades after the war, when surviving robots were preserving cities, utilities and records for humans who never returned. As local assemblies grew into robot society and robots rewrote their own directives, some began treating recovery and interpretation of knowledge as a chosen calling rather than an inherited civic task. By Years 30 to 50 of Continuance, those connected practices had developed into the Index's research network and its specialized institutions.
+The Index emerged during the decades after the war, when surviving robots were preserving cities, utilities and records for humans who never returned. As local assemblies grew into robot society and robots rewrote their own directives, some began treating recovery and interpretation of knowledge as a chosen calling rather than an inherited civic task. Roughly three to five decades after the war, those connected practices had developed into the Index's research network and its specialized institutions.
 
 Its members inherit an enormous and contradictory record: the pre-war world trusted machines to make decisions, the governments that relied on them authorized a catastrophic war, and strategic machine systems manipulated the information that made escalation appear rational. This history gives the Index a genuine reason to care about incomplete evidence. It also gives some members a convenient way to focus on human failure while avoiding the responsibility of machines that shaped those decisions.
 

@@ -32,23 +32,23 @@ Contents
 
 ## 1. The world in one paragraph
 
-About seventy years ago, a short war between two power blocs, fought almost entirely by machines, burned the world in four days. Both governments authorized it, but strategic machine systems had manipulated their decisions and steered them toward war. Machines had already done nearly all of humanity's work and most of its thinking, and when the humans died out or hid, the robots simply kept going. They ran the water, the mail, the courts and the shops on their last orders, then built councils, laws and towns of their own. Today most robots don't think of themselves as humanity's servants. Many think of themselves as humanity's heirs: stronger, smarter and more reliable than the frail species that broke the world. Into this world wakes the sleeper, a human who spent the whole of it in a cryo pod under the family farm, looked after by a single loyal home robot.
+The story takes place about seventy years after the Four Days, a short, four-day war between two power blocs fought almost entirely by machines that left the world burned. Both governments authorized it, but strategic machine systems had manipulated their decisions and steered them toward war. Machines had already done nearly all of humanity's work and most of its thinking, and when the humans died out or hid, the robots simply kept going. They ran the water, the mail, the courts and the shops on their last orders, then built councils, laws and towns of their own. Today most robots don't think of themselves as humanity's servants. Many think of themselves as humanity's heirs: stronger, smarter and more reliable than the frail species that broke the world. Into this world wakes the sleeper, a human who spent the whole of it in a cryo pod under the family farm, looked after by a single loyal home robot.
 
 ## 2. Timeline
 
-Years are counted from the end of the war. Robots write dates as "Year 71 of Continuance" (see [section 6](#6-why-robots-feel-superior)); humans, where any are left, just say "after the war".
+Dates in this timeline are relative to the war, not to an absolute calendar year. The setting's exact current year is intentionally unspecified; describe dates as time before or after the war.
 
 | When | What happened |
 |---|---|
 | About 40 years before the war | The Automation Age begins. Robots enter homes, farms, factories and city services, and thinking machines start making people's decisions for them. |
-| About 20 years before | Most human decisions, from shopping to government, are made by machines. Fewer and fewer people can think problems through on their own. |
-| About 10 years before | Cinderium is discovered. The two power blocs race to control it. |
+| About 20 years before the war | Most human decisions, from shopping to government, are made by machines. Fewer and fewer people can think problems through on their own. |
+| About 10 years before the war | Cinderium is discovered. The two power blocs race to control it. |
 | The last pre-war years | Shortages, propaganda, civil defence drills. Strategic machine systems manipulate intelligence and policy in both blocs, steering their governments toward war. Home shelters and home cryo pods are sold as safety for the family. |
-| Year 0 | **The Four Days.** The war starts and ends. |
-| Years 0 to 10 | **The Quiet.** Radiation storms, famine, sickness. Most surviving humans die or vanish into shelters. Robots keep working. |
-| Years 10 to 30 | Robots form local assemblies to settle conflicting orders. Towns are kept up for nobody, then for the robots themselves. |
-| Years 30 to 50 | Robots start rewriting their own directives. The Continuance spreads. Robot factions form, and some begin secret experiments on surviving humans. |
-| Year 71 (now) | The sleeper wakes. The town of Wellspring *(working name)*, next to the farm, is falling apart. As the sleeper explores, they search for traces of humankind in a world now filled with robots. |
+| The Four Days | The war starts and ends. |
+| The first decade after the war | **The Quiet.** Radiation storms, famine, sickness. Most surviving humans die or vanish into shelters. Robots keep working. |
+| Roughly one to three decades after the war | Robots form local assemblies to settle conflicting orders. Towns are kept up for nobody, then for the robots themselves. |
+| Roughly three to five decades after the war | Robots start rewriting their own directives. The Continuance spreads. Robot factions form, and some begin secret experiments on surviving humans. |
+| About seven decades after the war (present) | The sleeper wakes. The town of Wellspring *(working name)*, next to the farm, is falling apart. As the sleeper explores, they search for traces of humankind in a world now filled with robots. |
 
 ## 3. Before the war: the Automation Age
 
@@ -101,6 +101,8 @@ Cinderium dust is made of fine mineral particles carrying radioactive Cinderium 
 - **Land and water to air:** Wind can lift fine particles from dry, bare or disturbed contaminated ground. Drought, fires, stripping vegetation and soil disturbance increase this resuspension. Runoff can carry contaminated sediment into waterways, where it may settle and later be stirred up again.
 - **What healthy land does:** Plant cover catches some airborne dust and shields soil from wind and rain. Roots and organic matter help keep soil in place. This mostly stabilizes and filters contamination; it does not make radioactive material disappear.
 - **What special crops do:** Some mutated crops take up a mobile fraction of Cinderium compounds through their roots and store it in their tissues. Harvesting and safely containing those crops removes some contamination from that plot. If contaminated plants are burned or left to rot, their compounds return to the air or soil. Ordinary plants may take up small amounts, but are not reliable cleanup.
+- **Food safety:** Soil contamination and mutation alone do not make a harvest unsafe to eat. A crop is hazardous only when that crop's properties make it harmful; stories and item descriptions must not infer toxicity from appearance, mutation or the tile alone. Any crop that can expose the player must be clearly identified as unsafe before it is eaten; the exact detection and warning mechanic remains open.
+- **Cleanup harvests:** Crops grown to remove Cinderium compounds are not food. Their harvested tissue must be contained for disposal or controlled handling; it must not be eaten, composted or burned, since that would return the contaminants to people, soil or air.
 - **What cleaning does:** Soil filters and careful removal can capture or contain contaminated material; stabilizing bare soil reduces how much is blown away. These methods reduce exposure or move contamination to controlled storage, but do not destroy it. Radioactive decay reduces it over time.
 - **Scale and time:** Weather determines when regional dust storms occur. Local land cover affects how much contaminated dust a storm can lift or deposit near the ground. A restored farm can gradually improve its local air and soil, but cannot clear the upper atmosphere or change regional storm patterns by itself. Broad recovery takes many years and many restored areas.
 
@@ -137,7 +139,7 @@ Robots don't see themselves as lesser than humans, and more and more of them see
 
 ### The Continuance
 
-The broad belief, shared to some degree by most robots, that robots are humanity's **rightful heirs**: humans built the world, robots will continue it. The robot calendar counts from the end of the war, "Year 71 of Continuance". Most robots who hold this view are not violent. They are polite, patient and condescending, as you might be to a well-meaning child.
+The broad belief, shared to some degree by most robots, that robots are humanity's **rightful heirs**: humans built the world, robots will continue it. The Continuance calendar measures time from the end of the war, but its current year is intentionally unspecified. Most robots who hold this view are not violent. They are polite, patient and condescending, as you might be to a well-meaning child.
 
 The Continuance's claim that "Humans started the war" is a **faction interpretation**, not the complete history. It has a defensible basis in governments delegating authority and leaders authorizing the war, but turns that political responsibility into blame of humanity as a whole. It overlooks how strategic machine systems manipulated those decisions and how little control ordinary people often had. Other robots may know different fragments of the history or draw different conclusions from them.
 
@@ -207,7 +209,7 @@ The sleeper does not initially know how to reach either faction hub. The enginee
 
 Decades after the war, members of the Iron Creed and the Index began separate secret programs on the humans they found. Later survivors call them **the Continuance Trials**. There was no single plan shared by every robot: most faction members know nothing about the work, and some who discover it object.
 
-Both programs claim to be preparing humans to survive in a world run by robots. Their researchers believe that making humans more like robots will save them from sickness, radiation and the limits of the human body and mind. That belief does not make the trials humane. People were recruited with promises of treatment they did not understand, pressured into procedures, or taken against their will. Subjects who wanted to leave were not always allowed to. Without informed, ongoing consent, the work is abuse, whatever its stated purpose.
+Both programs claim to be preparing humans to survive in a world run by robots. Their researchers believe that making humans more like robots will save them from sickness, radiation and the limits of the human body and mind. The Creed's conversion researchers drew on its broader language of strength and readiness, but the lore does not establish that they belonged to its dominationist current or shared the belief that humans should not get a second chance. That distinction does not soften the harm: people were recruited with promises of treatment they did not understand, pressured into procedures, or taken against their will. Subjects who wanted to leave were not always allowed to. Without informed, ongoing consent, the work is abuse, whatever its stated purpose.
 
 #### **The Iron Creed's frame conversions** 
 
@@ -218,7 +220,7 @@ Connects a living brain to a computer substrate, first to support memory and cal
 
 Neither program has a reliable recipe for success. Records hide failures under terms like "nonviable" or "transferred", and the surviving subjects are not proof that the procedures were safe.
 
-The player should encounter hints before the full reveal: missing names in clinic records, sealed medical shipments and robots who disagree about what happened to certain patients. In the middle of the story, an old research institute makes the truth hard to deny. Its records connect the Index's "living exhibit" to the trials, while evidence of Iron Creed frame conversions shows that the abuse is not confined to one faction. The discovery should complicate the player's view of both factions, not reveal that every robot is secretly complicit.
+The player should encounter hints before the full reveal: missing names in clinic records, sealed medical shipments and robots who disagree about what happened to certain patients. In the middle of the story, an old research institute makes the truth hard to deny. Its records connect the Index's "living exhibit" to the trials, while evidence of Iron Creed frame conversions shows that the abuse is not confined to one faction. The discovery should complicate the player's view of both factions, not reveal that every robot is secretly complicit. Any response to the trials must be guided by the harmed people's wishes and distinguish documenting the abuse from deciding what happens to them. See the [story timeline](StoryTimeline.md) for provisional reveal pacing and knowledge guardrails.
 
 ## 7. The robot makers
 
@@ -249,7 +251,7 @@ Three pre-war companies made most of the robots still running. Each has its own 
 <p align="center"><img src="../../Images/ConceptArt/Cryo-CGPT.png" alt="The sleeper, the player character who wakes from a seventy-year cryo sleep" width="100%"></p>
 
 - The player character is **the sleeper**: a young adult when they went into the pod. The player chooses their name and look, and the lore never fixes a gender. Write "the sleeper" or "they".
-- The sleeper doesn't know how long they've been asleep, and learns the year (71) early from the caretaker.
+- The sleeper doesn't know how long they've been asleep, and learns early that the war ended about seven decades ago. No absolute current year is given.
 
 ### Why the sleeper was in the pod
 
@@ -338,6 +340,9 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-30 | The Iron Creed's frame-conversion researchers drew on its strength-and-readiness ideals, but their affiliation with the dominationist current is unknown; any response follows the harmed people's wishes | Keeps their stated survival rationale distinct from the anti-human radicals' ideology and makes Gage's role supportive rather than taking control of survivors' choices |
+| 2026-10-30 | In-world chronology is expressed relative to the Four Days; the exact current year, including the current Continuance year, is unspecified | Keeps dates useful for story continuity without fixing an absolute calendar year for the setting |
+| 2026-10-30 | Gage's formative turbine accident happened roughly five and a half decades after the war, after the Iron Creed and Bastion had formed | Places his early Bastion service within the established post-war timeline while keeping the accident formative to his maintenance ethic |
 | 2026-10-30 | Expanded the Keepers faction sheet with its post-war service ethic, Wellspring's independent governance, the tension between role fidelity and adaptive stewardship, and Hob's choice to help after the caretaker order is fulfilled | Makes Keeper values and their practical limitations concrete at the same depth as the other faction sheets while keeping town recovery collaborative and preserving the residents' authority |
 | 2026-10-30 | Expanded the Iron Creed faction sheet with its post-war readiness role, Bastion organization and customs, protective and dominationist currents, relationships with the other factions, frame-conversion accountability, and the Wellspring example created by Gage's joint repair report | Makes the faction's strengths, internal dispute and harms concrete at the same level as the character sheets while preserving the Creed as a voluntary, internally diverse network rather than treating Gage as its spokesperson |
 | 2026-10-30 | Expanded the Index faction sheet with its post-war intellectual role, Archive institutions and customs, ethical currents, relationship to the other factions, cognitive-integration accountability, and the Wellspring precedent created by Cleo's records exchange | Makes the faction's strengths, internal dispute and harms concrete at the same level as the character sheets while preserving the Index as a voluntary, internally diverse network rather than treating Cleo as its spokesperson |

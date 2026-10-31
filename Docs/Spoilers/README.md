@@ -3,6 +3,7 @@
 The documents in this folder reveal the story, its secrets and the characters' backstories. Skip them if you want to discover the game by playing it.
 
 - [Lore.md](Lore.md): the world's history, the factions, the characters, the money and the companies.
+- [StoryTimeline.md](StoryTimeline.md): the provisional story phases, reveal pacing and character knowledge guardrails.
 - [LoreAudit.md](LoreAudit.md): a critical review of lore coherence, characters, tone and writer-facing gaps.
 - [Characters/Engineer.md](Characters/Engineer.md): the engineer's character sheet.
 - [Characters/Hob.md](Characters/Hob.md): Hob's character sheet.

@@ -124,7 +124,8 @@ A farm tile has a state (grass, tilled, planted), and on top of that:
 ### Crops
 
 - Each crop is a data asset with a namespaced ID (`Base.Carrot`). It defines its seasons, growth stages, water needs, radiation tolerance, yield and value.
-- **Mutated crops** are a special kind: they grow in irradiated soil and can be useful (more yield, special effects, rare ingredients) or risky (harmful to eat, unpredictable). A normal crop in irradiated soil may also mutate.
+- **Mutated crops** are a special kind: they grow in irradiated soil and can be useful (more yield, special effects, rare ingredients) or risky (unpredictable). Mutation alone does not make food unsafe; each crop's content defines whether it is harmful to eat. Contaminated soil alone does not make an otherwise safe crop harmful.
+- **Food safety:** A crop that can expose the player when eaten must be clearly identified as unsafe before consumption. The exact detection and warning mechanic is open. Crops grown to remove contamination are not food; their harvest must be contained for disposal or controlled handling, never eaten, composted or burned.
 - Crops that span several seasons and regrowing crops come later.
 
 ### Water
@@ -341,6 +342,7 @@ Newest first. Add an entry whenever a design choice is made or reversed. Never d
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-30 | Crop toxicity is explicit per crop, not inferred from mutation or soil; cleanup crops are non-food and their harvest must be contained. Any harmful food must be identified before consumption; the exact warning mechanic remains open | Keeps farming and food rules consistent without making all mutated or irradiated-soil produce hazardous, and prevents cleanup from returning captured contamination to the farm |
 | 2026-10-30 | Tools target the neighbouring tile in the movement direction, snapped to eight directions, and a tap turns the farmer in place ([section 6](#tiles)). Rejected: a crosshair in the middle of the screen, a mouse click on a tile, and the tile straight in front of where the farmer faces | Targeting by facing was fiddly: the third-person camera turns the farmer toward where it walks, so picking the tile beside you meant stepping and hoping. A screen-centre crosshair can't reach the tiles beside or behind the farmer, because the camera sits behind and above. A mouse click conflicts with mouse-look and needs a gamepad fallback anyway; it can be added on top of this later. Snapping works the same on keyboard and gamepad |
 | 2026-10-28 | The caretaker robot starts loyal rather than sceptical; trust changes must be visible; romance is an explicit opt-in the character can decline; the vertical slice has one complete caretaker arc ([section 8](#relationships)) | Makes relationships more than a gift checklist and fixes the clash between the caretaker's loyalty and the general robot attitude (audit G-11) |
 | 2026-10-28 | Set a first-release target with limits on maps, seasons, crops, characters, romance and systems, and named cut candidates (multiplayer, mod loading, animals, other cameras, extra faction hubs, extra scavenging) ([section 13](#first-release)) | A solo project needs a cut line, or "later" reads as a commitment (audit G-08) |
