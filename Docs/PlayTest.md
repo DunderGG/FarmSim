@@ -100,6 +100,14 @@ Items exist as data but nothing in play uses them yet, so the game itself should
 - [x] **Solution** (adef4a7): after regenerating the project files, the solution shows `Core`, `Content`, `Time`, `Farming`, `Save`, `Player`, `UI`, `Template` and `Tests` under `Source/Vestige`.
 - [x] **Editor start** (adef4a7): the editor opens `L_Farm` with no errors about missing classes, and the farmer Blueprint (`Content/ThirdPerson/Blueprints/BP_ThirdPersonCharacter`), `BP_FarmTile`, the crops and the tools open normally.
 
+### Tile highlight material, 2026-10-31
+
+After the upgrade to 5.8 the frame drew dark, because its engine material wasn't flagged for instanced meshes and 5.8 draws the default grey material instead. It now uses `Content/Farm/Materials/M_TileHighlight`, made by script, so the editor hasn't shown it yet.
+
+- [ ] **Bright frame** (COMMIT): in Play in Editor and in Standalone Game, the frame around the targeted tile is bright yellow by day and still clearly visible at night, as before the upgrade.
+- [ ] **No warning** (COMMIT): the Output Log (Window > Output Log) has no "missing usage flag" warning after playing.
+- [ ] **Asset** (COMMIT): `M_TileHighlight` opens in the material editor with Blend Mode Opaque, Shading Model Unlit and Usage > Used with Instanced Static Meshes ticked, and the editor doesn't ask to save it.
+
 ### Editor chores
 
 Changes only the editor can make safely. The steps are in [Roadmap.md, Housekeeping](Roadmap.md#3-housekeeping): re-saving the template Blueprints and `L_Farm`, moving `BP_FarmTile` and the materials with redirectors fixed, and regenerating the Android File Server token if it was ever used. After each one, run the [smoke test](#3-smoke-test).
@@ -113,7 +121,7 @@ About five minutes in `L_Farm`, in Play in Editor at High. Run it before pushing
 3. **Growing:** water a planted tile and sleep (N), a few times. The crop grows one stage per watered night, and a tile left dry doesn't grow. Harvest the ripe crop with the hand; the harvest count goes up.
 4. **Day and night:** let the clock run through an evening (it moves about one hour every 40 seconds unless the level's day cycle is set faster). The sun sets with warm light, the night is properly dark with faint moonlight, and at 02:00 the farmer passes out into the next day.
 5. **Saving:** sleep ("Game saved."), stop the game and play again. The day, seeds, harvest count, tool in hand and every tile, crops included, come back.
-6. **Highlight:** walk along the field edge and turn. The frame follows the tile in front of you and disappears off the field.
+6. **Highlight:** walk along the field edge and turn. The frame is bright yellow, by day and at night, follows the tile in front of you and disappears off the field.
 7. **Performance:** in the console, `stat fps` and `stat unit`. In a busy part of the farm, by day and by night, the frame stays under 16.6 ms (60 fps), and sleeping shows no visible hitch ([Architecture.md, section 10](Architecture.md#10-performance-by-design)). Play in Editor adds its own cost, so check a doubtful number in Standalone Game. For a hitch on the new day, start the game with `-trace=default` and open the trace in Unreal Insights (`Engine\Binaries\Win64\UnrealInsights.exe`): `AFarmDayCycle::StartNextDay` shows the whole new day, with the tiles, the save and the load inside it.
 
 Put the save folder back afterwards if you want your farm as it was.

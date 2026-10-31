@@ -9,6 +9,8 @@
 #include "Farming/FarmingComponent.h"
 #include "Farming/FarmTargetHighlightComponent.h"
 #include "Farming/FarmTile.h"
+#include "Materials/Material.h"
+#include "Materials/MaterialInterface.h"
 #include "Player/FarmerCharacter.h"
 
 // A namespace keeps the fixture's short name from hiding other declarations in unity builds.
@@ -112,6 +114,23 @@ namespace FarmTargetingTests
 
 			Farmer->SetActorLocation(FVector(-500.f, -500.f, 0.f));
 			ASSERT_THAT(IsTrue(Highlight->bHiddenInGame));
+		}
+
+		/**
+		 * Without the instanced mesh usage saved on the asset, the game draws the engine's default material instead.
+		 * The editor sets a missing flag in memory and marks it dirty, so a dirty flag fails too.
+		 */
+		TEST_METHOD(HighlightMaterialIsSavedForInstancedMeshes)
+		{
+			const UFarmTargetHighlightComponent* Highlight = Farmer->FindComponentByClass<UFarmTargetHighlightComponent>();
+			ASSERT_THAT(IsNotNull(Highlight));
+			UMaterialInterface* Material = Highlight->GetMaterial(0);
+			ASSERT_THAT(IsNotNull(Material));
+			UMaterial* BaseMaterial = Material->GetMaterial();
+			ASSERT_THAT(IsNotNull(BaseMaterial));
+
+			ASSERT_THAT(IsTrue(Material->GetUsageByFlag(MATUSAGE_InstancedStaticMeshes)));
+			ASSERT_THAT(IsFalse(BaseMaterial->IsUsageFlagDirty(MATUSAGE_InstancedStaticMeshes)));
 		}
 	};
 }

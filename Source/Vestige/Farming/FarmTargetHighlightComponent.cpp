@@ -29,7 +29,7 @@ UFarmTargetHighlightComponent::UFarmTargetHighlightComponent()
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("/Engine/BasicShapes/Cube.Cube"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> UnlitMaterial(
-		TEXT("/Engine/EngineDebugMaterials/DebugMeshMaterial.DebugMeshMaterial"));
+		TEXT("/Game/Farm/Materials/M_TileHighlight.M_TileHighlight"));
 	SetStaticMesh(CubeMesh.Object);
 	HighlightMaterial = UnlitMaterial.Object;
 

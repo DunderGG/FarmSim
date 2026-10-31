@@ -36,8 +36,8 @@ private:
 	void ShowOn(const AFarmTile* Tile);
 
 	/**
-	 * Material for the frame. It needs a vector parameter called Color. The default is the engine's unlit mesh material,
-	 * so the frame stays visible at night; a project material can replace it.
+	 * Material for the frame: unlit, so the frame stays visible at night, with a vector parameter called Color.
+	 * It must have Used with Instanced Static Meshes set and saved, or the game draws the engine's default material instead.
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UMaterialInterface> HighlightMaterial;

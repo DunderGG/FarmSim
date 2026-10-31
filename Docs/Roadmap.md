@@ -259,7 +259,8 @@ The code changes that the slice's content depends on. Doing them first means add
 
 - [ ] An inventory or hotbar for several seed and crop types, built in UMG with C++ base classes
 - [ ] Input actions as assets once there are more keys than the prototype's handful *(decide when)*
-- [ ] A project material for the tile highlight frame (`M_TileHighlight`, unlit), replacing the engine material it uses today
+- [x] A project material for the tile highlight frame (`M_TileHighlight`, unlit), replacing the engine material it uses today
+   - Done 2026-10-31, earlier than planned: in 5.8 the engine material drew as the default grey material (Architecture.md, decision log)
 - [ ] Meshes for the new crops, the sprinkler, the shipping bin, the water source and the bed
 
 ## 5. Milestone 3 and later
