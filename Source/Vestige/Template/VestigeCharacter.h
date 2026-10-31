@@ -52,7 +52,7 @@ protected:
 public:
 
 	/** Constructor */
-	AVestigeCharacter();	
+	AVestigeCharacter(const FObjectInitializer& ObjectInitializer);	
 
 protected:
 

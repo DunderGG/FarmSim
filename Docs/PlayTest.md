@@ -43,18 +43,22 @@ Checks for recent changes that haven't been confirmed in the editor yet. Each na
 
 ### Tile targeting, 2026-10-30
 
-Replaces the tile highlight check above: the frame now sits on a neighbouring tile chosen by the movement direction (GameDesign.md, section 6).
+Replaces the tile highlight check above: the frame now sits on a neighbouring tile chosen by the movement direction (GameDesign.md, section 6). The tap, walking and feel checks moved to [Smooth turning](#smooth-turning-2026-10-30) below; the results that led to it are in commit 8932448.
 
-- [x] **Tap to turn** (ce1f1dc): a quick tap of W, A, S or D turns the farmer to face that way without stepping, and the frame moves to the tile next to the farmer's in that direction. Tapping two keys at once (W and D) turns diagonally, and the frame sits on the diagonal neighbour.
-   - This works, but movement feels very janky when the character instantly changes direction. This can be smoothed out when we do more work on character movement.
-- [x] **Walking** (ce1f1dc): holding a key walks after a short moment, and the frame follows the direction of travel, one tile ahead of the farmer. When you let go, the frame stays where it was.
-   - Same problem. The movement feels janky when the character stands still for a moment before starting to walk.
 - [x] **Field edge** (ce1f1dc): standing on an edge tile and turning to face outwards hides the frame; turning back shows it again.
 - [x] **Tools** (ce1f1dc): the tools act on the framed tile, never on the one the farmer stands on.
-- [x] **Feel** (ce1f1dc): the delay before walking (0.15 s) doesn't feel sluggish. If it does, change Tap To Turn Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input) and note the value that feels right.
-   - I changed to 0.05 and it feels better now. The delay is still there, but it is short enough that the farmer feels responsive.
-- [ ] **Gamepad** (ce1f1dc), if you have one: a flick of the left stick turns, holding it walks, the same as the keys.
+- [ ] **Gamepad** (ce1f1dc), if you have one: a flick of the left stick turns the farmer with barely a step, and holding it walks, the same as the keys.
    - Unable to test Gamepad support now. Save this for later, when we have a gamepad to test with.
+
+### Smooth turning, 2026-10-30
+
+Replaces the tap to turn, walking and feel checks of the tile targeting change, after David's notes that turns snapped round and the farmer stood still before walking. Walking now eases in over 0.15 s from a press, and every turn goes through the movement component at 900 degrees per second (GameDesign.md, section 6).
+
+- [ ] **Tap** (TURNING): a quick tap of W, A, S or D turns the farmer smoothly toward that tile, with no pop, and he moves no more than a few centimetres. The frame moves to the neighbouring tile in that direction, and after a tap he is still on his own tile.
+- [ ] **Walking** (TURNING): holding a key walks at once, with no pause before he starts, and the frame stays one tile ahead in the direction of travel.
+- [ ] **No double turn** (TURNING): turn the camera to an angle to the field (about 30 degrees) and tap or walk. The farmer turns once, without snapping one way and sliding back.
+- [ ] **Settling** (TURNING): after walking at an angle and letting go, he finishes turning to face the framed tile.
+- [ ] **Tuning** (TURNING): if a tap moves too far or the walk feels slow to start, change Move Ramp Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input; lower walks sooner, higher keeps taps smaller). If turns feel slow or too snappy, change Rotation Rate Z on its Character Movement component (Details panel, select CharacterMovement, Character Movement (Rotation Settings)). Note the values that feel right. The old Tap To Turn Seconds setting is gone; the Blueprint drops your 0.05 the next time it's saved.
 
 ### Message boxes, 2026-10-30
 

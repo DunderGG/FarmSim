@@ -34,7 +34,7 @@ class AFarmerCharacter : public AVestigeCharacter
 	GENERATED_BODY()
 
 public:
-	AFarmerCharacter();
+	AFarmerCharacter(const FObjectInitializer& ObjectInitializer);
 
 	/** The toolbar keys in slot order, each named after the tool in its slot. Empty slots are left out. */
 	TArray<FFarmKeyHint> GetToolbarKeyHints() const;
@@ -46,13 +46,16 @@ public:
 	TArray<FFarmKeyHint> GetActionKeyHints() const;
 
 	/**
-	 * Walks as the template does, and aims the farming component at the neighbouring tile in the movement direction. While
-	 * the move input has been held for less than TapToTurnSeconds, it only turns the farmer to face that tile.
+	 * Walks as the template does, and aims the farming component at the neighbouring tile in the movement direction. The
+	 * walk ramps in over MoveRampSeconds from a press, so a tap turns the farmer toward the tile with barely a step.
 	 */
 	virtual void DoMove(float Right, float Forward) override;
 
-	/** True if a movement input held for HeldSeconds is still a tap, which turns the farmer in place instead of walking. */
-	static bool IsTapToTurn(float HeldSeconds, float TapSeconds) { return HeldSeconds < TapSeconds; }
+	/**
+	 * How much of a movement input held for HeldSeconds reaches the movement component: rising evenly from 0 at the press
+	 * to 1 after RampSeconds.
+	 */
+	static float GetMoveInputScale(float HeldSeconds, float RampSeconds);
 
 protected:
 	virtual void PostInitializeComponents() override;
@@ -82,11 +85,11 @@ private:
 	void ShowHeldTool(const UFarmToolData* Tool);
 
 	/**
-	 * A movement input shorter than this, in seconds, turns the farmer to face the neighbouring tile without walking, so a
-	 * tile next to the farmer can be picked without leaving the farmer's own tile. Longer inputs walk, after this delay.
+	 * Seconds from a movement press until the farmer walks at full strength. A tap shorter than this moves him a few
+	 * centimetres, so a tile next to him can be picked without leaving his own tile, while a held key walks at once.
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|Input", meta = (AllowPrivateAccess = "true", ClampMin = 0))
-	float TapToTurnSeconds = 0.15f;
+	float MoveRampSeconds = 0.15f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UFarmingComponent> Farming;

@@ -15,6 +15,7 @@
 #include "Farming/FarmingComponent.h"
 #include "Farming/FarmRestComponent.h"
 #include "Farming/FarmTargetHighlightComponent.h"
+#include "Player/FarmCharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/PlayerController.h"
 #include "InputAction.h"
@@ -35,8 +36,12 @@ namespace FarmerMesh
 	const FName HandSocket(TEXT("hand_r"));
 }
 
-AFarmerCharacter::AFarmerCharacter()
+AFarmerCharacter::AFarmerCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UFarmCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
+	// Set here because the template's constructor sets its own rate after the movement component is created.
+	GetCharacterMovement()->RotationRate = FRotator(0.f, FarmMovement::TurnDegreesPerSecond, 0.f);
+
 	Farming = CreateDefaultSubobject<UFarmingComponent>(TEXT("Farming"));
 	Rest = CreateDefaultSubobject<UFarmRestComponent>(TEXT("Rest"));
 	TargetHighlight = CreateDefaultSubobject<UFarmTargetHighlightComponent>(TEXT("TargetHighlight"));
@@ -143,25 +148,30 @@ void AFarmerCharacter::DoMove(float Right, float Forward)
 	const FRotationMatrix YawRotation(FRotator(0.f, CurrentController->GetControlRotation().Yaw, 0.f));
 	const FVector MoveDirection = YawRotation.GetUnitAxis(EAxis::X) * Forward + YawRotation.GetUnitAxis(EAxis::Y) * Right;
 	Farming->AimAt(MoveDirection);
-
-	if (IsTapToTurn(GetMoveHeldSeconds(), TapToTurnSeconds))
+	if (UFarmCharacterMovementComponent* Movement = GetCharacterMovement<UFarmCharacterMovementComponent>())
 	{
-		SetActorRotation(Farming->GetAimDirection().Rotation());
-		return;
+		Movement->SetIdleFacing(Farming->GetAimDirection());
 	}
-	Super::DoMove(Right, Forward);
+
+	const float InputScale = GetMoveInputScale(GetMoveHeldSeconds(), MoveRampSeconds);
+	Super::DoMove(Right * InputScale, Forward * InputScale);
+}
+
+float AFarmerCharacter::GetMoveInputScale(float HeldSeconds, float RampSeconds)
+{
+	return RampSeconds > 0.f ? FMath::Clamp(HeldSeconds / RampSeconds, 0.f, 1.f) : 1.f;
 }
 
 float AFarmerCharacter::GetMoveHeldSeconds() const
 {
-	// Enhanced Input times every action from the moment it starts, and starts again on each press, so a tap is read here
-	// instead of with a Tap or Hold trigger on the template's IA_Move. That keeps the move action and the template as they
-	// are, and works the same for keys and the gamepad stick.
+	// Enhanced Input times every action from the moment it starts, and starts again on each press, so the ramp is read here
+	// instead of from a modifier on the template's IA_Move. That keeps the move action and the template as they are, and
+	// works the same for keys and the gamepad stick.
 	const UEnhancedInputLocalPlayerSubsystem* Subsystem = GetInputSubsystem();
 	const UEnhancedPlayerInput* PlayerInput = Subsystem ? Subsystem->GetPlayerInput() : nullptr;
 	const FInputActionInstance* MoveInstance = PlayerInput && MoveAction ? PlayerInput->FindActionInstanceData(MoveAction) : nullptr;
 
-	// Without an action instance, DoMove came from on-screen controls, which always walk.
+	// Without an action instance, DoMove came from on-screen controls, which walk at full strength.
 	return MoveInstance ? MoveInstance->GetElapsedTime() : TNumericLimits<float>::Max();
 }
 
