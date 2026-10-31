@@ -83,7 +83,7 @@ The project now builds only with 5.8. The rest of the upgrade (assets, rendering
 
 - [ ] **Editor start** (674adff): double-clicking `Vestige.uproject` opens the 5.8 editor straight away, with no "Target Upgrade Required" or "missing modules" prompt, and the Output Log at start has no `LogVestige` errors.
 - [ ] **Walking** (de2e2c2): a tap of W, A, S or D still turns the farmer with barely a step, and holding a key walks as before.
-- [ ] **Visual Studio plugin** (VSTOOLS_COMMIT): close the editor, build `VestigeEditor` in Visual Studio (it wasn't built after this change, because the editor was open) and open the editor. Edit > Plugins, search "Visual Studio": Visual Studio Integration Tools is listed under the project's plugins and ticked, and Visual Studio's Blueprint references still work.
+- [ ] **Visual Studio plugin** (d1397be): close the editor, build `VestigeEditor` in Visual Studio (it wasn't built after this change, because the editor was open) and open the editor. Edit > Plugins, search "Visual Studio": Visual Studio Integration Tools is listed under the project's plugins and ticked, and Visual Studio's Blueprint references still work.
 
 ### Item data assets, 2026-10-30
 
