@@ -104,9 +104,9 @@ Items exist as data but nothing in play uses them yet, so the game itself should
 
 After the upgrade to 5.8 the frame drew dark, because its engine material wasn't flagged for instanced meshes and 5.8 draws the default grey material instead. It now uses `Content/Farm/Materials/M_TileHighlight`, made by script, so the editor hasn't shown it yet.
 
-- [ ] **Bright frame** (COMMIT): in Play in Editor and in Standalone Game, the frame around the targeted tile is bright yellow by day and still clearly visible at night, as before the upgrade.
-- [ ] **No warning** (COMMIT): the Output Log (Window > Output Log) has no "missing usage flag" warning after playing.
-- [ ] **Asset** (COMMIT): `M_TileHighlight` opens in the material editor with Blend Mode Opaque, Shading Model Unlit and Usage > Used with Instanced Static Meshes ticked, and the editor doesn't ask to save it.
+- [ ] **Bright frame** (97b21f0): in Play in Editor and in Standalone Game, the frame around the targeted tile is bright yellow by day and still clearly visible at night, as before the upgrade.
+- [ ] **No warning** (97b21f0): the Output Log (Window > Output Log) has no "missing usage flag" warning after playing.
+- [ ] **Asset** (97b21f0): `M_TileHighlight` opens in the material editor with Blend Mode Opaque, Shading Model Unlit and Usage > Used with Instanced Static Meshes ticked, and the editor doesn't ask to save it.
 
 ### Editor chores
 
