@@ -81,10 +81,10 @@ Raises the cap from the message boxes checks above.
 
 Items exist as data but nothing in play uses them yet, so the game itself should behave exactly as before.
 
-- [ ] **Validation** (this commit): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
-- [ ] **Item assets** (this commit): `Content/Farm/Items` has `DA_Item_Turnip` and `DA_Item_TurnipSeeds`. Opening the seeds shows one **Farm Seed Fragment** under Fragments, with Crop Id `FarmCrop:Base.Turnip`; its Crop Id picker lists only crops. Pressing + on Fragments offers the fragment classes to pick from.
-- [ ] **Turnip crop** (this commit): `DA_Crop_Turnip` shows Harvest Item Id `FarmItem:Base.Turnip` and Yield under Farming > Harvest, and no Seed Price or Sell Price.
-- [ ] **No change in play** (this commit): planting, growing and harvesting a turnip work as in the [smoke test](#3-smoke-test).
+- [ ] **Validation** (46bf244): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
+- [ ] **Item assets** (46bf244): `Content/Farm/Items` has `DA_Item_Turnip` and `DA_Item_TurnipSeeds`. Opening the seeds shows one **Farm Seed Fragment** under Fragments, with Crop Id `FarmCrop:Base.Turnip`; its Crop Id picker lists only crops. Pressing + on Fragments offers the fragment classes to pick from.
+- [ ] **Turnip crop** (46bf244): `DA_Crop_Turnip` shows Harvest Item Id `FarmItem:Base.Turnip` and Yield under Farming > Harvest, and no Seed Price or Sell Price.
+- [ ] **No change in play** (46bf244): planting, growing and harvesting a turnip work as in the [smoke test](#3-smoke-test).
 
 ### Source folders, 2026-10-30
 
