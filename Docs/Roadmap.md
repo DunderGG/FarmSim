@@ -27,9 +27,10 @@ Contents
 - **Done:** milestone 1, the playable prototype, plus the project's documents and rules.
 - **Now:** the code follows the guidelines and the architecture (both audits' code reviews are closed, 2026-10-29). Next: play-test that clean-up, the editor housekeeping steps in [section 3](#3-housekeeping), then the rest of the milestone 2 foundations.
 - **Next up**, in order:
-  1. The inventory on the player state (item data assets are done).
-  2. The Gameplay Ability System and stamina ([section 4.3](#43-stamina-and-late-nights)).
-  3. The interaction interface (`IFarmInteractable`) and the bed.
+  1. Upgrade to Unreal Engine 5.8.4 ([section 4.1, Engine](#41-foundations)), before more systems depend on engine APIs.
+  2. The inventory on the player state (item data assets are done).
+  3. The Gameplay Ability System and stamina ([section 4.3](#43-stamina-and-late-nights)).
+  4. The interaction interface (`IFarmInteractable`) and the bed.
 
 ## 2. Milestone 1: playable prototype (done)
 
@@ -123,6 +124,18 @@ Small things to finish before milestone 2 starts.
 ### 4.1 Foundations
 
 The code changes that the slice's content depends on. Doing them first means adding a crop, tool or item later is a new data asset, not new code. Details in [Architecture.md sections 12, 17 and 18](Architecture.md#17-known-gaps).
+
+**Engine** (added 2026-10-30: David is installing Unreal Engine 5.8.4)
+
+- [ ] Upgrade the project to Unreal Engine 5.8.4 and verify it, in its own commits and before new systems such as the inventory and the Gameplay Ability System:
+   - one way only: an asset saved in 5.8 no longer opens in 5.7, so commit the upgrade only once it is verified, and contributors need 5.8 from then on
+   - read the release notes for 5.8 and its hotfixes for changes to the APIs and plugins we use (Asset Manager, data validation, Enhanced Input, CQTest, Slate, developer settings, save games) and for the Gameplay Ability System we are about to adopt
+   - switch the engine association in `Vestige.uproject` (right-click it > Switch Unreal Engine version), regenerate the project files, and update the toolchain if the engine asks for a newer Visual Studio, MSVC or Windows SDK
+   - a clean build of `VestigeEditor` with no errors or warnings, deprecation warnings included, and fix what the new engine deprecates
+   - all `Vestige` automation tests pass
+   - open the editor, check the Output Log at start for errors, run Validate Assets on `Content/Farm`, and re-save assets only where the editor asks for it
+   - the [smoke test](PlayTest.md#3-smoke-test) in Play in Editor and in Standalone Game, with the lighting and performance checks, since rendering defaults can change between versions
+   - update every document that names Unreal Engine 5.7 (`AGENTS.md`, `README.md`, `CONTRIBUTING.md`, `Docs/Setup.md`, `Docs/CodingGuidelines.md`, `Docs/Architecture.md`, `Docs/Systems.md`, `Docs/PlayTest.md`), and add a decision log entry
 
 **Content as data**
 
