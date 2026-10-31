@@ -4,7 +4,7 @@
 
 The nomad is a rare, recurring human visitor who trades unusual wasteland salvage and carefully verified news. They keep a small, fragile circuit of consent-based contacts between scattered survivors, and know the wasteland's routes better than most robots. Their story asks whether independence has to mean carrying every responsibility alone.
 
-<p align="center"><img src="../../../Images/ConceptArt/NomadF-CGPT.png" alt="The nomad, a rare human visitor who trades unusual wasteland salvage and news" width="100%"></p>
+<p align="center"><img src="../../../Images/ConceptArt/NomadF-CGPT.png" alt="The nomad, a human visitor who trades unusual wasteland salvage and news" width="100%"></p>
 
 ## 1. Character Identity
 

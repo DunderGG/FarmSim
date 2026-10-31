@@ -90,7 +90,7 @@ The day should always offer more to do than there's time for, so choosing is the
 
 - Restore the town facility by facility.
 - Climb the tech tree from hand tools to a fully automated farm.
-- Deepen relationships, find the rare humans, and possibly marry.
+- Deepen relationships, find the humans, and possibly marry.
 - Open up wasteland zones further from home.
 
 ## 5. Time, days and seasons
@@ -276,7 +276,7 @@ Third-person farmer, a grid of tiles, tilling, planting, watering, harvesting, a
 
 ### Next: vertical slice
 
-One full 28-day season that proves the farming core. It covers three pillars in a small form (*Bring the land back*, *Old hands, new machines* and *Your pace*) and starts a fourth with one relationship: the caretaker robot. It does not test the robot town, rare humans, exploration, combat or survival needs. Those get their own proof in later milestones, and the slice should not be read as validating them.
+One full 28-day season that proves the farming core. It covers three pillars in a small form (*Bring the land back*, *Old hands, new machines* and *Your pace*) and starts a fourth with one relationship: the caretaker robot. It does not test the robot town, humans, exploration, combat or survival needs. Those get their own proof in later milestones, and the slice should not be read as validating them.
 
 Content:
 
@@ -306,7 +306,7 @@ The minimum complete game. Everything beyond these limits is a stretch goal. The
 | Maps | The farm, the robot town, 2 wasteland zones |
 | Seasons | 4 of 28 days |
 | Crops | About 16 (4 per season), 3 of them mutated |
-| Characters | About 10 robots and 2 rare humans |
+| Characters | About 10 robots and 2 humans |
 | Romance | 3 love interests with full arcs |
 | Systems | Farming, water, radiation, energy and land health, the tech tree, town restoration, simple combat, the survival needs setting |
 
@@ -323,7 +323,7 @@ Roughly in order, to be planned when we get there. Cut candidates in this list a
 - Buildings and machines placed on the farm grid, house decoration.
 - Survival needs and the setting to switch them off.
 - Combat, hostile robots at night, the first wasteland zone.
-- Scavenging, rare humans, more zones.
+- Scavenging, humans, more zones.
 - Animals.
 - Other camera angles.
 - Mod loading and a mod kit.

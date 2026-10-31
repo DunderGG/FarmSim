@@ -110,7 +110,7 @@ Small things to finish before milestone 2 starts.
 
 ## 4. Milestone 2: vertical slice
 
-**Goal:** one full 28-day season that proves the farming core and a first relationship with the caretaker robot. The town, rare humans, exploration, combat and survival needs are tested in later milestones. See [GameDesign.md section 13](GameDesign.md#13-scope-and-milestones).
+**Goal:** one full 28-day season that proves the farming core and a first relationship with the caretaker robot. The town, humans, exploration, combat and survival needs are tested in later milestones. See [GameDesign.md section 13](GameDesign.md#13-scope-and-milestones).
 
 **Done when** a player can start a new game, meet the caretaker robot, grow three or four crops (one of them mutated) in soil with water and radiation to manage, run out of stamina, pay for staying up late, set up a sprinkler, sell the harvest, and play through to the end of the season, and playtests meet the experience criteria in [GameDesign.md section 13](GameDesign.md#next-vertical-slice).
 
@@ -294,7 +294,7 @@ Roughly in the order from [GameDesign.md section 13](GameDesign.md#13-scope-and-
 ### Story
 
 - [ ] The family mystery: letters, recordings and Hob's returning memories
-- [ ] The rare humans, about four to six, each found as a story moment
+- [ ] The humans, about four to six, each found as a story moment
 - [ ] The parents' sealed message, delivered when the farm is whole again
 - [ ] The opening: waking from the cryo pod under the farmhouse
 

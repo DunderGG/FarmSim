@@ -205,7 +205,7 @@ The sleeper does not initially know how to reach either faction hub. The enginee
 
 ### The human enhancement trials
 
-Decades after the war, members of the Iron Creed and the Index began separate secret programs on the rare humans they found. Later survivors call them **the Continuance Trials**. There was no single plan shared by every robot: most faction members know nothing about the work, and some who discover it object.
+Decades after the war, members of the Iron Creed and the Index began separate secret programs on the humans they found. Later survivors call them **the Continuance Trials**. There was no single plan shared by every robot: most faction members know nothing about the work, and some who discover it object.
 
 Both programs claim to be preparing humans to survive in a world run by robots. Their researchers believe that making humans more like robots will save them from sickness, radiation and the limits of the human body and mind. That belief does not make the trials humane. People were recruited with promises of treatment they did not understand, pressured into procedures, or taken against their will. Subjects who wanted to leave were not always allowed to. Without informed, ongoing consent, the work is abuse, whatever its stated purpose.
 
@@ -261,7 +261,7 @@ Three pre-war companies made most of the robots still running. Each has its own 
 
 - It is a mystery the player uncovers over the whole game, through letters, recordings, photographs and the caretaker's patchy memory, found on the farm and in the wasteland.
 - What is fixed: the parents stayed above ground, and they are gone. Whether they died on the farm, left for a shelter or went looking for a second pod is told piece by piece.
-- **Optional story thread:** a sibling who was away when the war started may still be alive as one of the [rare humans](#rare-humans).
+- **Optional story thread:** a sibling who was away when the war started may still be alive as one of the [humans](#humans).
 
 ## 10. Characters
 
@@ -338,6 +338,7 @@ Newest first. Add an entry whenever a lore choice is made or reversed. Never del
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-30 | Expanded the Index faction sheet with its post-war intellectual role, Archive institutions and customs, ethical currents, relationship to the other factions, cognitive-integration accountability, and the Wellspring precedent created by Cleo's records exchange | Makes the faction's strengths, internal dispute and harms concrete at the same level as the character sheets while preserving the Index as a voluntary, internally diverse network rather than treating Cleo as its spokesperson |
 | 2026-10-30 | The nomad is not a romance option. Their relationship with the sleeper is a lasting friendship that preserves both parties' boundaries and the nomad's choice to keep travelling; it does not end in marriage or moving to the farm | A travelling character should not be made to abandon the premise that defines them to fit the partner-home rule. Their platonic arc gives the cast a valuable model of intimacy and mutual support outside romance |
 | 2026-10-30 | Named the Iron Creed engineer Gage (Ironside Pioneer PR-520), established his pre-war sapper origin, hydraulic frame, 24-hour schedule, industrial gift tastes, 5-tier heart progression, and defined the Bastion hub unlocks (foundry, perimeter defense, smelting exchange, and frame conversion clues) | Fleshes out the engineer character sheet into a concrete playable arc with matching layout to the archivist and separates hub rewards from the core tech tree |
 | 2026-10-30 | The nomad maintains a small, consent-based and deliberately compartmentalized circuit of human contacts, not a route map to all surviving people. A compromised relay prompts their arc: they choose to build a voluntary network of safe stops, including the farm, without surrendering their freedom to travel or exposing contacts who have not agreed to be known | Makes the nomad's trade and news role concrete while preserving the rarity, isolation and agency of human survivors. The player can help create safe conditions but does not gain ownership of the circuit or become its rescuer |
