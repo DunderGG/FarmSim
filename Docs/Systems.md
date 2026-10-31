@@ -63,7 +63,7 @@ Contents
 
 ## 2. Content and the Asset Manager
 
-**Status:** built for crops and tools (`UFarmContentData`, `UFarmCropData`, `UFarmToolData`). `UFarmContentData::IsDataValid` checks the ID format, and `UFarmAssetManager` reports duplicate IDs after the initial asset scan. The ID redirect list is deferred until an ID has to change.
+**Status:** built for crops, tools and items (`UFarmContentData`, `UFarmCropData`, `UFarmToolData`, `UFarmItemData`). `UFarmContentData::IsDataValid` checks the ID format, and `UFarmAssetManager` reports duplicate IDs after the initial asset scan. The ID redirect list is deferred until an ID has to change.
 
 **References:** Epic's "Asset Management" and "Data Assets" pages (`UPrimaryDataAsset`, primary asset types in Project Settings > Asset Manager, asset bundles, `UAssetManager::LoadPrimaryAsset`); Lyra's `ULyraAssetManager` (a project subclass that loads global game data at startup) and its data assets (`ULyraPawnData`, `ULyraExperienceDefinition`, `ULyraInventoryItemDefinition`).
 
@@ -177,20 +177,39 @@ Contents
 
 ## 8. Inventory and items
 
-**Status:** planned. Seeds and harvest counts are integers on `UFarmingComponent` today; items as data assets are milestone 2.
+**Status:** milestone 2, in two steps. **Item definitions** (`UFarmItemData` and its fragments) are built as designed below, approved by David on 2026-10-30, with two items so far: `Base.TurnipSeeds` and `Base.Turnip`. **The inventory** (a component on the player state) is designed in its own step before its code; until then seeds and the harvest count stay integers on `UFarmingComponent`, and nothing in the game reads items yet.
 
-**References:** Lyra's inventory: `ULyraInventoryItemDefinition` (an item made of **fragments**, small objects each adding one aspect such as an icon, a stack size or equipment), `ULyraInventoryItemInstance` (one item the player has, with stats), `ULyraInventoryManagerComponent` (the list) and a separate equipment manager.
+**References:** Epic's "Data Assets" and "Asset Management" pages, and `UAssetManager::InitializeAssetBundlesFromMetadata`, which also follows instanced subobjects, so a soft reference inside a fragment joins its item's asset bundles. Lyra's inventory (`Source/LyraGame/Inventory`): `ULyraInventoryItemDefinition` (an item made of **fragments**, small `DefaultToInstanced, EditInlineNew` objects each adding one aspect such as a pickup icon, a quick bar icon, stats or equipment, found with `FindFragmentByClass`), `ULyraInventoryItemInstance` (one item the player has, with stats), `ULyraInventoryManagerComponent` (the list) and a separate equipment manager.
 
-**Rules:**
+**What we take from Lyra and what we skip:**
 
-- **Definitions are data assets** (`UFarmItemData`, a `UFarmContentData` subclass), found by ID. Seeds, crops, tools and materials are items.
-- **Compose items from fragments** as Lyra does, rather than a deep class hierarchy: a seed is an item with a "plants crop X" fragment, a food has a "restores stamina" fragment. New item kinds then need a new fragment, not a new subclass of everything. Fragments are instanced `UObject`s inside the definition (`UPROPERTY(EditDefaultsOnly, Instanced)`).
+- **Take:** fragments for what only some items have; `FindFragmentByClass` as the one way to ask for one; definitions without runtime state; the inventory as a component apart from equipment (the tool in hand).
+- **Skip:** definitions as Blueprint classes (Lyra's items are `TSubclassOf<ULyraInventoryItemDefinition>`). Ours are data assets of a primary asset type, found by `ContentId` like crops and tools, so saves and mods name them the same way ([section 2](#2-content-and-the-asset-manager)).
+- **Skip until needed:** item instance objects and `OnInstanceCreated` (only for items with their own state, such as a tool's durability); stats as tag stacks (Lyra counts ammo that way; our stacks are an ID and a count); the replicated `FFastArraySerializer` list (single-player).
+
+**Rules for item definitions:**
+
+- **One asset per item:** `UFarmItemData`, a `UFarmContentData` subclass of primary asset type `FarmItem`, named `DA_Item_<Name>` in `Content/Farm/Items`, always cooked. Seeds, harvested crops, materials and later tools and food are items.
+- **What every item has** sits on `UFarmItemData`: the ID and display name from the base class, `MaxStackSize` (how many fit in one inventory slot; 1 for items that don't stack) and `SellPrice` (what selling one pays; unused until there is currency). Nothing else goes on the base class.
+- **What only some items have is a fragment:** a subclass of the abstract `UFarmItemFragment` (`DefaultToInstanced, EditInlineNew`), in the item's `Fragments` list (`UPROPERTY(EditDefaultsOnly, Instanced)`). Code asks with `FindFragment<T>()`, a linear search over the few fragments an item has. A new kind of item is a new fragment, never a subclass of `UFarmItemData` and never a `switch` over item types.
+- **The first fragment is `UFarmSeedFragment`:** its `CropId` (`FPrimaryAssetId`, limited to `FarmCrop`) is the crop that planting the item grows.
+- **Crops name the item they yield:** `UFarmCropData::HarvestItemId` (`FPrimaryAssetId`, limited to `FarmItem`). `Yield` stays on the crop, because how many grow is the crop's rule.
+- **Prices belong to items, not crops.** `SeedPrice` and `SellPrice` leave `UFarmCropData` (both unused and zero on the turnip): the sell price is on the harvested item and on the seed item. What a shop charges is the shop's stock data, decided when shops are built, so two shops can price the same item differently.
+- **Content refers to content by ID,** never by a hard pointer ([section 2](#2-content-and-the-asset-manager), pitfalls), so loading a seed item doesn't load its crop's meshes, and a missing crop is a skipped ID rather than a broken asset.
+- **Fragments come with the system that reads them:** a tool fragment (naming a `FarmTool` ID) when the toolbar becomes part of the inventory, a food fragment with stamina, a placeable fragment with placement ([section 16](#16-placing-objects-and-building)), and an icon (a soft texture in the `Visuals` bundle) and description with the inventory screen. Item category tags wait for the shipping bin or gifts.
+- **Data validation** (`IsDataValid`) on top of the ID check: `MaxStackSize` at least 1, no empty fragment entries, at most one fragment of each class, and each fragment checks its own fields (a seed's `CropId` is set and names a crop the Asset Manager knows). `HarvestItemId` on a crop is checked the same way.
+- **Loading:** items have no meshes or textures yet, so a definition is a few hundred bytes. Which definitions are loaded, and when, is the inventory's decision; the rule from [CodingGuidelines.md, section 12](CodingGuidelines.md#12-performance) stands: an item that can enter the inventory during play (a harvest) has its definition loaded beforehand, never synchronously at that moment.
+
+**Rules for the inventory** (to be designed in full in its own step, then approved):
+
 - **The inventory is a component on the player state** ([Architecture.md, section 18](Architecture.md#18-expected-changes)), so it outlives the pawn. It stores stacks of item IDs and counts, plus per-item state only where an item needs it.
 - The inventory broadcasts changes; UI and the toolbar listen.
 - Saves store item IDs, counts and slot positions.
 
 **Pitfalls:**
 
+- A field on `UFarmItemData` that only some items use (a crop ID, a stamina value). It belongs in a fragment.
+- Two fragments of the same class on one item: `FindFragment` would only ever see the first. Validation rejects it.
 - One `UObject` per item in the inventory when a stack (ID and count) would do; instances only for items with their own state.
 - Skip Lyra's replicated `FFastArraySerializer` list until multiplayer is real.
 

@@ -11,7 +11,7 @@
 class UStaticMesh;
 
 /**
- * The definition of one crop: how it grows, how it looks and what it is worth, plus the ID and name every content asset has.
+ * The definition of one crop: how it grows, how it looks and what its harvest gives, plus the ID and name every content asset has.
  * One asset per crop, found through the Asset Manager by its ContentId. Holds no runtime state; tiles do.
  */
 UCLASS()
@@ -26,8 +26,21 @@ public:
 	int32 GetDaysToMature() const { return DaysToMature; }
 	int32 GetYield() const { return Yield; }
 
+	/** The item a harvest gives (FarmItem:Base.Turnip). */
+	const FPrimaryAssetId& GetHarvestItemId() const { return HarvestItemId; }
+
 	/** The mesh for a crop that has grown for GrowthDays days, or nullptr if that stage has no mesh or it isn't loaded. */
 	UStaticMesh* GetGrowthStageMesh(int32 GrowthDays) const;
+
+#if WITH_EDITOR
+	/** Reports a HarvestItemId that is empty, of another content type, or names no item. */
+	virtual EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
+#endif
+
+#if WITH_DEV_AUTOMATION_TESTS
+	/** For tests only. Crops get their harvest item in the editor. */
+	void SetHarvestItemIdForTests(const FPrimaryAssetId& InHarvestItemId) { HarvestItemId = InHarvestItemId; }
+#endif
 
 protected:
 	virtual FPrimaryAssetType GetContentType() const override { return AssetType; }
@@ -56,15 +69,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|Visuals", meta = (AllowPrivateAccess = "true", AssetBundles = "Visuals"))
 	TArray<TSoftObjectPtr<UStaticMesh>> GrowthStageMeshes;
 
-	/** Crops the player gets from one harvest. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|Economy", meta = (AllowPrivateAccess = "true", ClampMin = 1))
+	/** The item one harvest gives, Yield times. Prices belong to that item. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming|Harvest", meta = (AllowPrivateAccess = "true", AllowedTypes = "FarmItem"))
+	FPrimaryAssetId HarvestItemId;
+
+	/** How many of the harvest item one harvest gives. */
+	UPROPERTY(EditDefaultsOnly, Category = "Farming|Harvest", meta = (AllowPrivateAccess = "true", ClampMin = 1))
 	int32 Yield = 1;
-
-	/** Price of one seed. Not used yet: there is no currency. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|Economy", meta = (AllowPrivateAccess = "true", ClampMin = 0))
-	int32 SeedPrice = 0;
-
-	/** Price one harvested crop sells for. Not used yet: there is no currency. */
-	UPROPERTY(EditDefaultsOnly, Category = "Farming|Economy", meta = (AllowPrivateAccess = "true", ClampMin = 0))
-	int32 SellPrice = 0;
 };

@@ -29,6 +29,13 @@ public:
 #if WITH_EDITOR
 	/** Reports a missing or badly formed ContentId, so a mistake shows up when the asset is saved or validated. */
 	virtual EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
+
+	/**
+	 * For data validation of a property that names other content: says what is wrong with Id as a reference to content of
+	 * ExpectedType (unset, another type, or no asset has it), as the end of a sentence that starts with the property's name.
+	 * Empty when Id names a known asset of that type.
+	 */
+	static TOptional<FText> FindContentReferenceError(const FPrimaryAssetId& Id, const FPrimaryAssetType& ExpectedType);
 #endif
 
 	/** Built from the content type and ContentId, so renaming or moving the asset keeps the ID. Invalid while ContentId is empty. */

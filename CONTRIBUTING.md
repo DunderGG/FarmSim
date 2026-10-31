@@ -133,7 +133,7 @@ Keep things light so big farms stay fast: a crop or small prop in the hundreds o
 
 The goal is that adding a crop, tool or item means adding data, not changing C++. That's also how mods will add content.
 
-Each crop and tool is a **data asset**: an asset in the Content Browser whose fields describe it. The game finds them through Unreal's *Asset Manager*, which scans set folders at startup, so the code holds no list of crops to edit. The design is in [Architecture.md, Designing for mods](Docs/Architecture.md#12-designing-for-mods).
+Each crop, tool and item is a **data asset**: an asset in the Content Browser whose fields describe it. The game finds them through Unreal's *Asset Manager*, which scans set folders at startup, so the code holds no list of crops to edit. The design is in [Architecture.md, Designing for mods](Docs/Architecture.md#12-designing-for-mods).
 
 ### Adding a crop
 
@@ -147,16 +147,21 @@ Each crop and tool is a **data asset**: an asset in the Content Browser whose fi
    | Display Name | The name the player sees, such as *Carrot* |
    | Days To Mature | Watered days until it can be harvested. It grows one stage per watered day |
    | Growth Stage Meshes | The meshes from step 1, in order, one more than *Days To Mature* |
-   | Yield | Crops one harvest gives |
-   | Seasons, Water Need, Contamination Tolerance, Seed Price, Sell Price | Fill in what you intend. The game doesn't use them yet; they are there so crops don't need changing when seasons, contamination and money arrive |
+   | Harvest Item Id | The item a harvest gives, such as `FarmItem:Base.Carrot`. Make that item first, as in [Adding an item](#adding-an-item); prices belong to it |
+   | Yield | How many of that item one harvest gives |
+   | Seasons, Water Need, Contamination Tolerance | Fill in what you intend. The game doesn't use them yet; they are there so crops don't need changing when seasons and contamination arrive |
 
-4. **Save it and check it.** Right-click the `Content/Farm/Crops` folder and choose *Validate Assets*: a missing or badly formed Content Id shows as an error. Restart the editor and check the Output Log for an "is used by more than one asset" error, which means another asset already has your ID.
+4. **Save it and check it.** Right-click the `Content/Farm/Crops` folder and choose *Validate Assets*: a missing or badly formed Content Id, or a Harvest Item Id that names no item, shows as an error. Restart the editor and check the Output Log for an "is used by more than one asset" error, which means another asset already has your ID.
 5. **Try it in the game.** For now the seeds plant one crop, chosen on the farmer: open `Content/Farm/Blueprints/BP_Farmer`, select its **Farming** component, set **Seed Crop Id** to your crop, and play. Change it back before you commit, unless your pull request is meant to change the starting crop. Choosing between several seed kinds comes with the inventory ([Roadmap.md](Docs/Roadmap.md)).
 6. **Open a pull request** with the data asset, the meshes, their `.blend` source and a screenshot of each growth stage in the game.
 
 ### Adding a tool
 
 Tools work the same way: a **Farm Tool Data** asset named `DA_Tool_<Name>` in `Content/Farm/Tools`, with a Content Id such as `Base.Sickle`, a held mesh (origin where the hand grips), and an *Action* chosen from the existing ones (till, plant, water, harvest). It appears in the game once it's added to **Toolbar Ids** on the farmer's Farming component; the first nine slots get the keys 1 to 9. A tool that needs a new kind of action needs C++, so open an issue first.
+
+### Adding an item
+
+Items are what the player carries: seeds, harvested crops, materials. Each is a **Farm Item Data** asset named `DA_Item_<Name>` in `Content/Farm/Items`, with a Content Id such as `Base.Carrot` (an item and a crop may share a name; they are different kinds of content), a display name, *Max Stack Size* (1 for items that don't stack) and *Sell Price*. What only some items have is a **fragment**: under *Fragments*, press + and pick a fragment class. A seed item has a **Farm Seed Fragment** whose *Crop Id* names the crop it plants (`FarmCrop:Base.Carrot`). So a new crop usually comes with two items, its seeds and its harvest. Validate the `Content/Farm/Items` folder afterwards as in step 4 above. The game doesn't use items yet; the inventory will. A kind of item that needs a new fragment needs C++, so open an issue first.
 
 ### Mods
 

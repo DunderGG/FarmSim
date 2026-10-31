@@ -27,7 +27,7 @@ Contents
 - **Done:** milestone 1, the playable prototype, plus the project's documents and rules.
 - **Now:** the code follows the guidelines and the architecture (both audits' code reviews are closed, 2026-10-29). Next: play-test that clean-up, the editor housekeeping steps in [section 3](#3-housekeeping), then the rest of the milestone 2 foundations.
 - **Next up**, in order:
-  1. Item data assets (`UFarmItemData`), with the inventory on the player state.
+  1. The inventory on the player state (item data assets are done).
   2. The Gameplay Ability System and stamina ([section 4.3](#43-stamina-and-late-nights)).
   3. The interaction interface (`IFarmInteractable`) and the bed.
 
@@ -129,7 +129,8 @@ The code changes that the slice's content depends on. Doing them first means add
 - [x] Crop data assets (`UFarmCropData`) found through the Asset Manager: ID, name, seasons, growth stage meshes, days to mature (one stage per watered day), water need, contamination tolerance, yield, seed price and sell price
 - [x] The current turnip becomes the first crop asset, `Base.Turnip`, and its settings move off the tile Blueprint
 - [x] Tool data assets (`UFarmToolData`), replacing the hard-coded tool list (`EFarmTool`)
-- [ ] Item data assets (`UFarmItemData`) for seeds, harvested crops and other things the player can carry
+- [x] Item data assets (`UFarmItemData`) for seeds, harvested crops and other things the player can carry, built from fragments ([Systems.md section 8](Systems.md#8-inventory-and-items)): `Base.TurnipSeeds` and `Base.Turnip`, and the turnip crop names its harvest item
+   - The crop's seed and sell prices moved to items on 2026-10-30 (decision log)
 - [x] All content uses namespaced IDs (`Base.<Name>`) in a `ContentId` property that also builds the asset's primary asset ID, with data validation of the format and a startup check for duplicate IDs ([Architecture.md section 5](Architecture.md#5-data-and-content))
 - [ ] An ID redirect list, once an ID first has to change (deferred, see the decision log)
 

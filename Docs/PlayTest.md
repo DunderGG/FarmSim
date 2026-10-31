@@ -77,6 +77,15 @@ Raises the cap from the message boxes checks above.
 - [ ] **Settings** (77a2218): Edit > Project Settings > Game > Farm HUD shows Max Messages (5) and Message Seconds (3). Changing them takes effect the next time you press Play, and is saved to `Config/DefaultGame.ini`; tell the agent the values you settle on.
 - [ ] **Log** (77a2218): every message also appears in the Output Log (Window > Output Log, filter on `LogVestige`) as `Feedback: ...`, so you can read messages that have already faded.
 
+### Item data assets, 2026-10-30
+
+Items exist as data but nothing in play uses them yet, so the game itself should behave exactly as before.
+
+- [ ] **Validation** (this commit): right-click `Content/Farm` > Validate Assets reports no errors, and the Output Log at editor start has no "is used by more than one asset" error.
+- [ ] **Item assets** (this commit): `Content/Farm/Items` has `DA_Item_Turnip` and `DA_Item_TurnipSeeds`. Opening the seeds shows one **Farm Seed Fragment** under Fragments, with Crop Id `FarmCrop:Base.Turnip`; its Crop Id picker lists only crops. Pressing + on Fragments offers the fragment classes to pick from.
+- [ ] **Turnip crop** (this commit): `DA_Crop_Turnip` shows Harvest Item Id `FarmItem:Base.Turnip` and Yield under Farming > Harvest, and no Seed Price or Sell Price.
+- [ ] **No change in play** (this commit): planting, growing and harvesting a turnip work as in the [smoke test](#3-smoke-test).
+
 ### Source folders, 2026-10-30
 
 - [x] **Solution** (adef4a7): after regenerating the project files, the solution shows `Core`, `Content`, `Time`, `Farming`, `Save`, `Player`, `UI`, `Template` and `Tests` under `Source/Vestige`.

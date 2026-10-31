@@ -7,6 +7,7 @@
 #include "Engine/AssetManager.h"
 
 #if WITH_EDITOR
+#include "AssetRegistry/AssetData.h"
 #include "Misc/DataValidation.h"
 #endif
 
@@ -86,6 +87,28 @@ EDataValidationResult UFarmContentData::IsDataValid(FDataValidationContext& Cont
 		Result = EDataValidationResult::Invalid;
 	}
 	return Result;
+}
+
+TOptional<FText> UFarmContentData::FindContentReferenceError(const FPrimaryAssetId& Id, const FPrimaryAssetType& ExpectedType)
+{
+	if (!Id.IsValid())
+	{
+		return FText::Format(LOCTEXT("ContentReferenceUnset", "is empty. Pick the {0} it names."), FText::FromName(ExpectedType.GetName()));
+	}
+	if (Id.PrimaryAssetType != ExpectedType)
+	{
+		return FText::Format(LOCTEXT("ContentReferenceWrongType", "names {0}, which isn't a {1}."), FText::FromString(Id.ToString()),
+			FText::FromName(ExpectedType.GetName()));
+	}
+
+	FAssetData Asset;
+	const UAssetManager* AssetManager = UAssetManager::GetIfInitialized();
+	if (AssetManager && !AssetManager->GetPrimaryAssetData(Id, Asset))
+	{
+		return FText::Format(LOCTEXT("ContentReferenceUnknown", "names {0}, which no asset has. Check the ID and that asset's Content Id."),
+			FText::FromString(Id.ToString()));
+	}
+	return {};
 }
 #endif
 
