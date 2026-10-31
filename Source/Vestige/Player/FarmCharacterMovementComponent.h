@@ -9,8 +9,8 @@
 
 namespace FarmMovement
 {
-	/** How fast the farmer turns, in degrees per second: a half turn takes a fifth of a second. */
-	constexpr float TurnDegreesPerSecond = 900.f;
+	/** How fast the farmer turns, in degrees per second: a half turn takes a third of a second. */
+	constexpr float TurnDegreesPerSecond = 540.f;
 }
 
 /**

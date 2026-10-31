@@ -89,7 +89,7 @@ private:
 	 * centimetres, so a tile next to him can be picked without leaving his own tile, while a held key walks at once.
 	 */
 	UPROPERTY(EditDefaultsOnly, Category = "Farming|Input", meta = (AllowPrivateAccess = "true", ClampMin = 0))
-	float MoveRampSeconds = 0.15f;
+	float MoveRampSeconds = 0.25f;
 
 	UPROPERTY(VisibleAnywhere, Category = "Farming")
 	TObjectPtr<UFarmingComponent> Farming;
