@@ -73,9 +73,9 @@ Replaces the earlier messages check (c87081e), after David's note that messages 
 
 Raises the cap from the message boxes checks above.
 
-- [ ] **At most five** (HUDCAP): with five boxes showing, a sixth message pushes out the oldest. Tilling and planting quickly along a row is the easiest way to get there. The boxes stay clear of the key hints and the status line.
-- [ ] **Settings** (HUDCAP): Edit > Project Settings > Game > Farm HUD shows Max Messages (5) and Message Seconds (3). Changing them takes effect the next time you press Play, and is saved to `Config/DefaultGame.ini`; tell the agent the values you settle on.
-- [ ] **Log** (HUDCAP): every message also appears in the Output Log (Window > Output Log, filter on `LogVestige`) as `Feedback: ...`, so you can read messages that have already faded.
+- [ ] **At most five** (77a2218): with five boxes showing, a sixth message pushes out the oldest. Tilling and planting quickly along a row is the easiest way to get there. The boxes stay clear of the key hints and the status line.
+- [ ] **Settings** (77a2218): Edit > Project Settings > Game > Farm HUD shows Max Messages (5) and Message Seconds (3). Changing them takes effect the next time you press Play, and is saved to `Config/DefaultGame.ini`; tell the agent the values you settle on.
+- [ ] **Log** (77a2218): every message also appears in the Output Log (Window > Output Log, filter on `LogVestige`) as `Feedback: ...`, so you can read messages that have already faded.
 
 ### Source folders, 2026-10-30
 
