@@ -54,11 +54,11 @@ Replaces the tile highlight check above: the frame now sits on a neighbouring ti
 
 Replaces the tap to turn, walking and feel checks of the tile targeting change, after David's notes that turns snapped round and the farmer stood still before walking. Walking now eases in over 0.15 s from a press, and every turn goes through the movement component at 900 degrees per second (GameDesign.md, section 6).
 
-- [ ] **Tap** (TURNING): a quick tap of W, A, S or D turns the farmer smoothly toward that tile, with no pop, and he moves no more than a few centimetres. The frame moves to the neighbouring tile in that direction, and after a tap he is still on his own tile.
-- [ ] **Walking** (TURNING): holding a key walks at once, with no pause before he starts, and the frame stays one tile ahead in the direction of travel.
-- [ ] **No double turn** (TURNING): turn the camera to an angle to the field (about 30 degrees) and tap or walk. The farmer turns once, without snapping one way and sliding back.
-- [ ] **Settling** (TURNING): after walking at an angle and letting go, he finishes turning to face the framed tile.
-- [ ] **Tuning** (TURNING): if a tap moves too far or the walk feels slow to start, change Move Ramp Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input; lower walks sooner, higher keeps taps smaller). If turns feel slow or too snappy, change Rotation Rate Z on its Character Movement component (Details panel, select CharacterMovement, Character Movement (Rotation Settings)). Note the values that feel right. The old Tap To Turn Seconds setting is gone; the Blueprint drops your 0.05 the next time it's saved.
+- [ ] **Tap** (a3e118b): a quick tap of W, A, S or D turns the farmer smoothly toward that tile, with no pop, and he moves no more than a few centimetres. The frame moves to the neighbouring tile in that direction, and after a tap he is still on his own tile.
+- [ ] **Walking** (a3e118b): holding a key walks at once, with no pause before he starts, and the frame stays one tile ahead in the direction of travel.
+- [ ] **No double turn** (a3e118b): turn the camera to an angle to the field (about 30 degrees) and tap or walk. The farmer turns once, without snapping one way and sliding back.
+- [ ] **Settling** (a3e118b): after walking at an angle and letting go, he finishes turning to face the framed tile.
+- [ ] **Tuning** (a3e118b): if a tap moves too far or the walk feels slow to start, change Move Ramp Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input; lower walks sooner, higher keeps taps smaller). If turns feel slow or too snappy, change Rotation Rate Z on its Character Movement component (Details panel, select CharacterMovement, Character Movement (Rotation Settings)). Note the values that feel right. The old Tap To Turn Seconds setting is gone; the Blueprint drops your 0.05 the next time it's saved.
 
 ### Message boxes, 2026-10-30
 
