@@ -56,8 +56,7 @@ namespace FarmerTests
 
 		TEST_METHOD(TheFarmerBlueprintTurnsWithTheFarmMovementComponent)
 		{
-			const UClass* FarmerClass = LoadClass<AFarmerCharacter>(
-				nullptr, TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.BP_ThirdPersonCharacter_C"));
+			const UClass* FarmerClass = LoadClass<AFarmerCharacter>(nullptr, TEXT("/Game/Farm/Blueprints/BP_Farmer.BP_Farmer_C"));
 			ASSERT_THAT(IsNotNull(FarmerClass));
 
 			// The Blueprint's rate is tuning, so any rate that turns at all passes.

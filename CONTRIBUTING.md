@@ -151,7 +151,7 @@ Each crop and tool is a **data asset**: an asset in the Content Browser whose fi
    | Seasons, Water Need, Contamination Tolerance, Seed Price, Sell Price | Fill in what you intend. The game doesn't use them yet; they are there so crops don't need changing when seasons, contamination and money arrive |
 
 4. **Save it and check it.** Right-click the `Content/Farm/Crops` folder and choose *Validate Assets*: a missing or badly formed Content Id shows as an error. Restart the editor and check the Output Log for an "is used by more than one asset" error, which means another asset already has your ID.
-5. **Try it in the game.** For now the seeds plant one crop, chosen on the farmer: open `Content/ThirdPerson/Blueprints/BP_ThirdPersonCharacter`, select its **Farming** component, set **Seed Crop Id** to your crop, and play. Change it back before you commit, unless your pull request is meant to change the starting crop. Choosing between several seed kinds comes with the inventory ([Roadmap.md](Docs/Roadmap.md)).
+5. **Try it in the game.** For now the seeds plant one crop, chosen on the farmer: open `Content/Farm/Blueprints/BP_Farmer`, select its **Farming** component, set **Seed Crop Id** to your crop, and play. Change it back before you commit, unless your pull request is meant to change the starting crop. Choosing between several seed kinds comes with the inventory ([Roadmap.md](Docs/Roadmap.md)).
 6. **Open a pull request** with the data asset, the meshes, their `.blend` source and a screenshot of each growth stage in the game.
 
 ### Adding a tool

@@ -25,7 +25,8 @@ struct FFarmKeyHint
 
 /**
  * The template's third person character plus farming.
- * Reparent BP_ThirdPersonCharacter to this class so it keeps its mesh, animation and movement input.
+ * BP_Farmer (Content/Farm/Blueprints) is the farmer in the game: the template's character Blueprint, reparented to this
+ * class so it keeps its mesh, animation and movement input.
  * Owns the farming key bindings, and describes them for the HUD's key hints.
  */
 UCLASS()

@@ -58,7 +58,7 @@ Replaces the tap to turn, walking and feel checks of the tile targeting change, 
 - [ ] **Walking** (a3e118b): holding a key walks at once, with no pause before he starts, and the frame stays one tile ahead in the direction of travel.
 - [ ] **No double turn** (a3e118b): turn the camera to an angle to the field (about 30 degrees) and tap or walk. The farmer turns once, without snapping one way and sliding back.
 - [ ] **Settling** (a3e118b): after walking at an angle and letting go, he finishes turning to face the framed tile.
-- [x] **Tuning** (a3e118b): if a tap moves too far or the walk feels slow to start, change Move Ramp Seconds on `BP_ThirdPersonCharacter` (Details panel, Farming > Input; lower walks sooner, higher keeps taps smaller). If turns feel slow or too snappy, change Rotation Rate Z on its Character Movement component (Details panel, select CharacterMovement, Character Movement (Rotation Settings)). Note the values that feel right.
+- [x] **Tuning** (a3e118b): if a tap moves too far or the walk feels slow to start, change Move Ramp Seconds on `BP_Farmer` in `Content/Farm/Blueprints` (Details panel, Farming > Input; lower walks sooner, higher keeps taps smaller). If turns feel slow or too snappy, change Rotation Rate Z on its Character Movement component (Details panel, select CharacterMovement, Character Movement (Rotation Settings)). Note the values that feel right.
    - David tuned them in play on 2026-10-30 (300 degrees per second and 0.5 s felt heavy; 540 and 0.25 feel good), and they are now the C++ defaults. Still open for more tuning.
 
 ### Message boxes, 2026-10-30

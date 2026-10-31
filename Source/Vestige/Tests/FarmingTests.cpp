@@ -31,8 +31,7 @@ namespace FarmingTests
 			Grid = &Spawner.SpawnActor<AFarmGrid>();
 			Grid->DispatchBeginPlay();
 
-			UClass* FarmerClass = LoadClass<AFarmerCharacter>(
-				nullptr, TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter.BP_ThirdPersonCharacter_C"));
+			UClass* FarmerClass = LoadClass<AFarmerCharacter>(nullptr, TEXT("/Game/Farm/Blueprints/BP_Farmer.BP_Farmer_C"));
 			ASSERT_THAT(IsNotNull(FarmerClass));
 			Farmer = &Spawner.SpawnActor<AFarmerCharacter>(FActorSpawnParameters(), FarmerClass);
 			Farmer->DispatchBeginPlay();
